@@ -56,6 +56,10 @@ Estados permitidos para este registro:
 | DEC-043 | Queja, doble entrega, violacion de supresion o P0 matan la ola | VERIFIED | Contrato de salud M7 | Un riesgo critico no puede degradarse a simple extension | M7 |
 | DEC-044 | T0 nace exactamente en 100 primeras entregas validas y es append-only | VERIFIED | Plan aprobado y migracion 009 | Antes de T0 cualquier forecast permanece escenario | M7 |
 | DEC-045 | Una oportunidad cuenta en T0 sólo desde `QUALIFIED` y con los siete campos estrictos | VERIFIED | Plan aprobado y prueba de transiciones | Actividad y reuniones no inflan pipeline | M7 |
+| DEC-046 | El mes contractual requiere evidencia live `OPERATING` para cada día calendario | VERIFIED | Plan aprobado y migración 010 | Un día faltante o desconocido impide cerrar el mes | M8 |
+| DEC-047 | Leads de email y precotización suman a la meta pero conservan denominadores separados | VERIFIED | Definición contractual y modelo 010 | La captación no infla la conversión outbound | M8 |
+| DEC-048 | Un reporte se emite sólo con aprobación de Jorge ligada a ID y hash | VERIFIED | Migración 010 y gate adversarial | Evidencia lista no equivale a reporte emitido | M8 |
+| DEC-049 | La recuperación sigue diagnóstico fijo y permite una sola variable activa | VERIFIED | Plan de recuperación y migración 010 | Volumen no existe como variable experimental | M8 |
 
 ## Jerarquia de evidencia
 

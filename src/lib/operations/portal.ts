@@ -231,9 +231,11 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         { key: "limite", label: "Límite" },
       ],
       rows: [
-        row("report-system", "LOCAL_PASS", { capa: "Sistema", metrica: "Gates locales M0 a M7", valor: "PASS local", limite: "No equivale a producción" }),
+        row("report-system", "LOCAL_PASS", { capa: "Sistema", metrica: "Gates locales M0 a M8", valor: "PASS local", limite: "No equivale a producción" }),
         row("report-activity", "ZERO", { capa: "Actividad", metrica: "Entregas válidas", valor: "0", limite: "T0 no calculado" }),
         row("report-t0", "UNKNOWN", { capa: "Baseline", metrica: "T0", valor: "No existe", limite: "Requiere exactamente 100 primeras entregas válidas" }),
+        row("report-contractual", "UNKNOWN", { capa: "Contrato", metrica: "Primer mes completo", valor: "No iniciado", limite: "Requiere todos los días operativos con evidencia live" }),
+        row("report-recovery", "HOLD", { capa: "Recuperación", metrica: "Experimento activo", valor: "Ninguno", limite: "Una variable por vez, sólo después del diagnóstico" }),
         row("report-outcome", "ZERO", { capa: "Resultado", metrica: "Leads contractuales", valor: "0", limite: "Sin campaña real" }),
       ],
     },
@@ -329,11 +331,14 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     client.from("rollout_waves").select("id,campaign_id,wave_number,status,planned_recipient_count,scheduled_for,previous_observation_id,passed_at,extended_at,killed_at").eq("organization_id", organizationId).order("wave_number", { ascending: false }),
     client.from("rollout_health_observations").select("id,campaign_id,source_kind,source_id,decision,evidence_class,delivered_count,hard_bounce_count,spam_complaint_count,unknown_count,observed_at").eq("organization_id", organizationId).order("observed_at", { ascending: false }),
     client.from("commercial_baselines").select("id,campaign_id,valid_first_deliveries,substantive_replies,positive_replies,strict_leads,held_meetings,qualified_opportunities,cutoff_at,evidence_class").eq("organization_id", organizationId).order("cutoff_at", { ascending: false }),
+    client.from("contractual_monthly_reports").select("id,campaign_id,period_start,period_end_exclusive,report_due_on,generated_on,generated_on_time,operational_days,delivered_messages,substantive_replies,positive_replies,email_strict_leads,prequote_strict_leads,total_strict_leads,target_strict_leads,target_met,held_meetings,qualified_opportunities,delivered_proposals,closed_won,first_payments_mxn,client_sla_breaches,snapshot_sha256").eq("organization_id", organizationId).order("period_start", { ascending: false }),
+    client.from("contractual_report_issuances").select("id,report_id,issued_at,issued_by").eq("organization_id", organizationId).order("issued_at", { ascending: false }),
+    client.from("recovery_experiments").select("id,campaign_id,report_id,variable,hypothesis_code,sample_size,status,approved_at,started_at,completed_at,killed_at").eq("organization_id", organizationId).order("created_at", { ascending: false }),
   ]);
   const failed = results.find((result) => result.error);
   if (failed?.error) throw new Error(`PORTAL_QUERY_FAILED:${failed.error.code ?? "UNKNOWN"}`);
 
-  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult] = results;
+  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult, monthlyReportsResult, reportIssuancesResult, recoveryExperimentsResult] = results;
   const accounts = asRows(accountsResult.data);
   const contacts = asRows(contactsResult.data);
   const messages = asRows(messagesResult.data);
@@ -343,6 +348,9 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const rolloutWaves = asRows(rolloutWavesResult.data);
   const rolloutHealth = asRows(rolloutHealthResult.data);
   const baselines = asRows(baselinesResult.data);
+  const monthlyReports = asRows(monthlyReportsResult.data);
+  const reportIssuances = asRows(reportIssuancesResult.data);
+  const recoveryExperiments = asRows(recoveryExperimentsResult.data);
   const leads = asRows(leadsResult.data);
   const opportunities = asRows(opportunitiesResult.data);
   const meetings = asRows(meetingsResult.data);
@@ -455,6 +463,11 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const contractualLeads = leads.filter((lead) => lead.contractual_qualified === true).length;
   const wonProjects = opportunities.filter((opportunity) => opportunity.stage === "CLOSED_WON").length;
   const latestBaseline = baselines[0];
+  const latestMonthlyReport = monthlyReports[0];
+  const latestMonthlyIssuance = latestMonthlyReport
+    ? reportIssuances.find((issuance) => textValue(issuance.report_id) === textValue(latestMonthlyReport.id))
+    : undefined;
+  const activeRecovery = recoveryExperiments.find((experiment) => experiment.status === "READY" || experiment.status === "RUNNING");
 
   const base = getSyntheticOperationsPortal();
   return {
@@ -507,6 +520,22 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
               ? `${textValue(latestBaseline.strict_leads, "0")} leads, ${textValue(latestBaseline.positive_replies, "0")} respuestas positivas`
               : "No existe",
             limite: latestBaseline ? `Corte ${dateValue(latestBaseline.cutoff_at)}` : "No calcular antes de 100 entregas válidas",
+          }),
+          row("live-contractual", latestMonthlyReport ? (latestMonthlyIssuance ? "ISSUED" : "EVIDENCE_READY") : "UNKNOWN", {
+            capa: "Contrato",
+            metrica: "Leads estrictos del mes completo",
+            valor: latestMonthlyReport
+              ? `${textValue(latestMonthlyReport.total_strict_leads, "0")}/${textValue(latestMonthlyReport.target_strict_leads, "10")}`
+              : "No existe",
+            limite: latestMonthlyReport
+              ? `${textValue(latestMonthlyReport.operational_days)} días. ${latestMonthlyIssuance ? `Emitido ${dateValue(latestMonthlyIssuance.issued_at)}` : "Pendiente de aprobación"}`
+              : "Requiere mes calendario completo y evidencia diaria live",
+          }),
+          row("live-recovery", activeRecovery ? textValue(activeRecovery.status) : "HOLD", {
+            capa: "Recuperación",
+            metrica: "Experimento activo",
+            valor: activeRecovery ? `${textValue(activeRecovery.variable)}. ${textValue(activeRecovery.hypothesis_code)}` : "Ninguno",
+            limite: activeRecovery ? `${textValue(activeRecovery.sample_size)} observaciones` : "Una variable por vez después del diagnóstico",
           }),
           row("live-outcome", "LIVE", { capa: "Resultado", metrica: "Leads contractuales", valor: String(contractualLeads), limite: "Requiere evidencia estricta" }),
         ],

@@ -1,0 +1,102 @@
+{
+  "verification_status": "PASS",
+  "global_gate": "EXTEND",
+  "evidence_class": "synthetic_demo",
+  "external_side_effects": 0,
+  "real_contractual_reports": 0,
+  "real_recovery_experiments": 0,
+  "contractual_month_status": "NOT_STARTED",
+  "checks_passed": 15,
+  "checks_failed": 0,
+  "hypothetical_live_fixture": {
+    "report": {
+      "periodStart": "2026-07-01",
+      "periodEndExclusive": "2026-08-01",
+      "evidenceClass": "live",
+      "operationalDays": 31,
+      "deliveredMessages": 200,
+      "substantiveReplies": 24,
+      "positiveReplies": 12,
+      "emailStrictLeads": 6,
+      "prequoteStrictLeads": 2,
+      "heldMeetings": 5,
+      "qualifiedOpportunities": 3,
+      "deliveredProposals": 2,
+      "closedWon": 1,
+      "firstPaymentsMxn": 100000,
+      "clientSlaBreaches": 0,
+      "totalStrictLeads": 8,
+      "targetStrictLeads": 10,
+      "targetMet": false,
+      "replyRatePerDelivered": 0.12,
+      "positiveReplyRatePerDelivered": 0.06,
+      "emailStrictLeadRatePerDelivered": 0.03,
+      "meetingPerStrictLeadRate": 0.625,
+      "opportunityPerHeldMeetingRate": 0.6
+    },
+    "firstRecoveryAction": "VERIFY_DENOMINATORS",
+    "readyRecoveryAction": "READY_FOR_ONE_VARIABLE_EXPERIMENT"
+  },
+  "checks": [
+    {
+      "id": "M7_GLOBAL_GATE_EXTEND",
+      "pass": true
+    },
+    {
+      "id": "ZERO_REAL_DELIVERIES",
+      "pass": true
+    },
+    {
+      "id": "ZERO_REAL_WAVES",
+      "pass": true
+    },
+    {
+      "id": "MONTHLY_REPORT_NOT_AVAILABLE",
+      "pass": true
+    },
+    {
+      "id": "FULL_CALENDAR_MONTH",
+      "pass": true
+    },
+    {
+      "id": "CHANNEL_DENOMINATORS_SEPARATE",
+      "pass": true
+    },
+    {
+      "id": "TARGET_NOT_INVENTED",
+      "pass": true
+    },
+    {
+      "id": "RECOVERY_STARTS_WITH_DENOMINATORS",
+      "pass": true
+    },
+    {
+      "id": "ONE_VARIABLE_ONLY_AFTER_DIAGNOSIS",
+      "pass": true
+    },
+    {
+      "id": "DAILY_LIVE_TRUTH_PERSISTED",
+      "pass": true
+    },
+    {
+      "id": "BUSINESS_CALENDAR_EVIDENCE",
+      "pass": true
+    },
+    {
+      "id": "COUNTED_ITEMS_PERSISTED",
+      "pass": true
+    },
+    {
+      "id": "ISSUANCE_APPROVAL_REQUIRED",
+      "pass": true
+    },
+    {
+      "id": "ONE_ACTIVE_EXPERIMENT",
+      "pass": true
+    },
+    {
+      "id": "APPEND_ONLY_EVIDENCE",
+      "pass": true
+    }
+  ]
+}
