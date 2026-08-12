@@ -64,6 +64,20 @@ jobs:
       - name: Snapshot clean source tree and bind commit
         run: node scripts/security-evidence-gate.mjs snapshot --repo . --expected-commit "$GITHUB_SHA" --evidence security-evidence/source.json --context github_actions
       - run: npm ci
+      - name: Generate and validate CycloneDX SBOM
+        run: |
+          npm sbom --offline --sbom-format cyclonedx > sbom.raw.cdx.json
+          node scripts/security-evidence-gate.mjs sbom --repo . --expected-commit "$GITHUB_SHA" --source-snapshot security-evidence/source.json --raw sbom.raw.cdx.json --output sbom.cdx.json --evidence security-evidence/sbom.json --context github_actions
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: cyclonedx-sbom-${{ github.sha }}
+          path: |
+            sbom.raw.cdx.json
+            sbom.cdx.json
+            security-evidence/source.json
+            security-evidence/sbom.json
+          if-no-files-found: error
+          retention-days: 30
       - run: npm run verify:rtm
       - run: npm run verify:data
       - run: npm run verify:secrets
@@ -90,21 +104,6 @@ jobs:
             sleep 1
           done
           npm run verify:performance:smoke
-      - name: Generate and validate CycloneDX SBOM
-        run: |
-          npm sbom --offline --sbom-format cyclonedx > sbom.raw.cdx.json
-          node scripts/security-evidence-gate.mjs sbom --repo . --expected-commit "$GITHUB_SHA" --source-snapshot security-evidence/source.json --raw sbom.raw.cdx.json --output sbom.cdx.json --evidence security-evidence/sbom.json --context github_actions
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: cyclonedx-sbom-${{ github.sha }}
-          path: |
-            sbom.raw.cdx.json
-            sbom.cdx.json
-            security-evidence/source.json
-            security-evidence/sbom.json
-          if-no-files-found: error
-          retention-days: 30
-
   database-and-recovery:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -167,6 +166,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      - name: Install pinned k6 with verified archive checksum
+        run: |
+          archive="$RUNNER_TEMP/k6-v1.6.1-linux-amd64.tar.gz"
+          curl --fail --location --silent --show-error \
+            --output "$archive" \
+            https://github.com/grafana/k6/releases/download/v1.6.1/k6-v1.6.1-linux-amd64.tar.gz
+          echo "68df4958a1b089dc6f70a234e07c7ec818922f83b261ca24f3abf79882b13343  $archive" | sha256sum --check --strict
+          tar --extract --gzip --file "$archive" --directory "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/k6-v1.6.1-linux-amd64" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/k6-v1.6.1-linux-amd64/k6" version
       - name: Enterprise frontend and multipath load smoke
         run: npm run verify:m23:frontend:smoke
       - run: npm run test:e2e
@@ -203,6 +212,10 @@ jobs:
         run: node scripts/security-evidence-gate.mjs snapshot --repo . --expected-commit "$GITHUB_SHA" --evidence security-evidence/source.json --context github_actions
       - run: npm ci
       - run: npm run build
+      - name: Restore generated source shim and revalidate the clean snapshot
+        run: |
+          git restore --source "$GITHUB_SHA" -- next-env.d.ts
+          node scripts/security-evidence-gate.mjs verify-snapshot --repo . --expected-commit "$GITHUB_SHA" --source-snapshot security-evidence/source.json --allow-prefix security-evidence --context github_actions
       - name: Start fail-closed synthetic application
         run: |
           nohup npm run start > /tmp/ennco-next.log 2>&1 &
@@ -224,7 +237,7 @@ jobs:
           cmd_options: "-J zap-report.json"
       - name: Gate ZAP JSON and bind evidence to commit
         if: always()
-        run: node scripts/security-evidence-gate.mjs zap --repo . --expected-commit "$GITHUB_SHA" --source-snapshot security-evidence/source.json --input zap-report.json --evidence security-evidence/zap.json --context github_actions --authenticated false --expected-target http://127.0.0.1:3000 --target-class synthetic_localhost
+        run: node scripts/security-evidence-gate.mjs zap --repo . --expected-commit "$GITHUB_SHA" --source-snapshot security-evidence/source.json --input zap-report.json --evidence security-evidence/zap.json --allow-prefix report_json.json --allow-prefix report_md.md --allow-prefix report_html.html --context github_actions --authenticated false --expected-target http://127.0.0.1:3000 --target-class synthetic_localhost
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:

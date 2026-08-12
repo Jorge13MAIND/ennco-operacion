@@ -5,6 +5,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSy
 import { dirname, extname, join, resolve } from "node:path";
 import {
   assessSarifDocuments,
+  assessWorktreeDrift,
   assessZapJson,
   auditCiConfiguration,
   buildEvidenceManifest,
@@ -26,6 +27,14 @@ function requiredArgument(name) {
   const value = argument(name);
   if (!value) throw new Error(`ARGUMENT_REQUIRED:${name}`);
   return value;
+}
+
+function argumentsFor(name) {
+  return process.argv.flatMap((value, index) => value === name ? [process.argv[index + 1]] : [])
+    .map((value) => {
+      if (!value || value.startsWith("--")) throw new Error(`ARGUMENT_VALUE_MISSING:${name}`);
+      return value;
+    });
 }
 
 function readJson(path, code) {
@@ -55,21 +64,60 @@ function sourceIdentity(repo, expected) {
   };
 }
 
+function buildEnvironmentViolations(repo) {
+  const envFiles = readdirSync(repo, { withFileTypes: true })
+    .filter((entry) => entry.name.startsWith(".env") && entry.name !== ".env.example")
+    .map((entry) => entry.name)
+    .sort();
+  const environmentVariables = Object.keys(process.env)
+    .filter((name) => name === "NODE_ENV" || /^(ENNCO_|NEXT_PUBLIC_|SUPABASE_|VERCEL_)/.test(name))
+    .sort();
+  return { envFiles, environmentVariables };
+}
+
 function sourceState(repo, expected) {
+  const violations = buildEnvironmentViolations(repo);
   return {
     ...sourceIdentity(repo, expected),
-    sourceTreeClean: git(repo, ["status", "--porcelain"]).length === 0,
+    sourceTreeClean: git(repo, ["status", "--porcelain"]).length === 0
+      && violations.envFiles.length === 0
+      && violations.environmentVariables.length === 0,
+    buildEnvironmentClean: violations.envFiles.length === 0 && violations.environmentVariables.length === 0,
+    buildEnvironmentViolations: violations,
   };
 }
 
-function sourceStateFromSnapshot(repo, expected, path, context) {
+function changedWorktreePaths(repo) {
+  const tracked = git(repo, ["diff", "--name-only", "HEAD", "--"]);
+  const untracked = git(repo, ["ls-files", "--others", "--exclude-standard"]);
+  return [...new Set([...tracked.split("\n"), ...untracked.split("\n")].filter(Boolean))].sort();
+}
+
+function repoRelativePath(repo, path) {
+  const absolute = resolve(repo, path);
+  const prefix = `${repo}/`;
+  if (absolute !== repo && !absolute.startsWith(prefix)) throw new Error("ARTIFACT_PATH_OUTSIDE_REPOSITORY");
+  return absolute === repo ? "." : absolute.slice(prefix.length);
+}
+
+function sourceStateFromSnapshot(repo, expected, path, context, allowedPaths = []) {
   const snapshot = readJson(path, "SOURCE_SNAPSHOT_JSON_INVALID");
   const current = sourceIdentity(repo, expected);
   if (snapshot.schema_version !== "1.0.0") throw new Error("SOURCE_SNAPSHOT_SCHEMA_INVALID");
   if (snapshot.source_commit !== current.sourceCommit) throw new Error("SOURCE_SNAPSHOT_COMMIT_MISMATCH");
   if (snapshot.source_tree !== current.sourceTree) throw new Error("SOURCE_SNAPSHOT_TREE_MISMATCH");
   if (snapshot.source_tree_clean !== true) throw new Error("SOURCE_SNAPSHOT_NOT_CLEAN");
+  if (snapshot.build_environment_clean !== true) throw new Error("SOURCE_SNAPSHOT_BUILD_ENVIRONMENT_NOT_CLEAN");
   if (snapshot.execution_context !== context) throw new Error("SOURCE_SNAPSHOT_CONTEXT_MISMATCH");
+  const environmentViolations = buildEnvironmentViolations(repo);
+  if (environmentViolations.envFiles.length > 0 || environmentViolations.environmentVariables.length > 0) {
+    throw new Error(`SOURCE_BUILD_ENVIRONMENT_DRIFT:${[
+      ...environmentViolations.envFiles.map((value) => `file:${value}`),
+      ...environmentViolations.environmentVariables.map((value) => `variable:${value}`),
+    ].join(",")}`);
+  }
+  const drift = assessWorktreeDrift(changedWorktreePaths(repo), [repoRelativePath(repo, path), ...allowedPaths]);
+  if (drift.status !== "PASS") throw new Error(`SOURCE_WORKTREE_DRIFT:${drift.unexpected_paths.join(",")}`);
   return { sourceCommit: current.sourceCommit, sourceTree: current.sourceTree, sourceTreeClean: true };
 }
 
@@ -112,6 +160,8 @@ function gateSourceSnapshot(repo, state, context) {
     source_commit: state.sourceCommit,
     source_tree: state.sourceTree,
     source_tree_clean: state.sourceTreeClean,
+    build_environment_clean: state.buildEnvironmentClean,
+    build_environment_violations: state.buildEnvironmentViolations,
     execution_context: context,
     evidence_class: context === "github_actions" ? "REMOTE_CI_SOURCE_SNAPSHOT" : "LOCAL_SOURCE_SNAPSHOT",
     status: state.sourceTreeClean ? "PASS" : "FAIL",
@@ -216,11 +266,21 @@ try {
     if (mode === "snapshot") {
       gateSourceSnapshot(repo, directState, context);
     } else {
-      const snapshotPath = argument("--source-snapshot");
+      const snapshotPath = mode === "verify-snapshot" ? requiredArgument("--source-snapshot") : argument("--source-snapshot");
+      const modeArtifactPaths = mode === "sbom"
+        ? [requiredArgument("--raw"), requiredArgument("--output"), requiredArgument("--evidence")]
+        : mode === "sarif" || mode === "zap"
+          ? [requiredArgument("--input"), requiredArgument("--evidence")]
+          : mode === "verify-snapshot"
+            ? [argument("--allow-prefix")].filter(Boolean)
+            : [];
+      const allowedPaths = [...modeArtifactPaths, ...argumentsFor("--allow-prefix")]
+        .map((value) => repoRelativePath(repo, value));
       const state = snapshotPath
-        ? sourceStateFromSnapshot(repo, expectedCommit, resolve(repo, snapshotPath), context)
+        ? sourceStateFromSnapshot(repo, expectedCommit, resolve(repo, snapshotPath), context, allowedPaths)
         : directState;
-      if (mode === "sbom") gateSbom(repo, state, context);
+      if (mode === "verify-snapshot") emit({ status: "PASS", source_commit: state.sourceCommit, source_tree: state.sourceTree, source_tree_clean: true });
+      else if (mode === "sbom") gateSbom(repo, state, context);
       else if (mode === "sarif") gateSarif(repo, state, context);
       else if (mode === "zap") gateZap(repo, state, context);
       else throw new Error("MODE_INVALID");

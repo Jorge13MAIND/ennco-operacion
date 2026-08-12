@@ -1,13 +1,121 @@
 import assert from "node:assert/strict";
+import { execFileSync, spawnSync } from "node:child_process";
+import { cpSync, mkdirSync, mkdtempSync, symlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join, resolve } from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import {
   assessSarifDocuments,
+  assessWorktreeDrift,
   assessZapJson,
   auditCiConfiguration,
   canonicalJson,
   normalizeCycloneDx,
   sha256,
 } from "./enterprise-security-evidence.mjs";
+
+test("worktree drift only permits exact declared artifact roots", () => {
+  assert.equal(assessWorktreeDrift([
+    "evidence/m23/source.json",
+    "evidence/m23/report.json",
+  ], ["evidence/m23"]).status, "PASS");
+  const trackedDrift = assessWorktreeDrift([
+    "evidence/m23/source.json",
+    "src/app/page.tsx",
+  ], ["evidence/m23"]);
+  assert.equal(trackedDrift.status, "FAIL");
+  assert.deepEqual(trackedDrift.unexpected_paths, ["src/app/page.tsx"]);
+  assert.equal(assessWorktreeDrift(["evidence/m230/escape.json"], ["evidence/m23"]).status, "FAIL");
+});
+
+test("source snapshot CLI rejects tracked or untracked drift created after a clean snapshot", () => {
+  const fixture = mkdtempSync(join(tmpdir(), "ennco-source-snapshot-"));
+  const libraryDirectory = dirname(fileURLToPath(import.meta.url));
+  mkdirSync(join(fixture, "scripts", "lib"), { recursive: true });
+  cpSync(resolve(libraryDirectory, "../security-evidence-gate.mjs"), join(fixture, "scripts", "security-evidence-gate.mjs"));
+  cpSync(resolve(libraryDirectory, "enterprise-security-evidence.mjs"), join(fixture, "scripts", "lib", "enterprise-security-evidence.mjs"));
+  writeFileSync(join(fixture, "package.json"), '{"name":"fixture","version":"1.0.0"}\n', "utf8");
+  execFileSync("git", ["init", "--quiet"], { cwd: fixture });
+  execFileSync("git", ["config", "user.email", "qa@ennco.invalid"], { cwd: fixture });
+  execFileSync("git", ["config", "user.name", "ENNCO QA"], { cwd: fixture });
+  execFileSync("git", ["add", "."], { cwd: fixture });
+  execFileSync("git", ["commit", "--quiet", "-m", "fixture"], { cwd: fixture });
+  const commit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: fixture, encoding: "utf8" }).trim();
+  execFileSync("node", [
+    "scripts/security-evidence-gate.mjs", "snapshot", "--repo", ".", "--expected-commit", commit,
+    "--evidence", "evidence/source.json", "--context", "local",
+  ], { cwd: fixture });
+  writeFileSync(join(fixture, "unexpected.txt"), "drift\n", "utf8");
+  const result = spawnSync("node", [
+    "scripts/security-evidence-gate.mjs", "verify-snapshot", "--repo", ".", "--expected-commit", commit,
+    "--source-snapshot", "evidence/source.json", "--allow-prefix", "evidence", "--context", "local",
+  ], { cwd: fixture, encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /SOURCE_WORKTREE_DRIFT:unexpected\.txt/);
+});
+
+test("source snapshot CLI rejects ignored Next environment drift and application variables", () => {
+  const fixture = mkdtempSync(join(tmpdir(), "ennco-source-env-"));
+  const libraryDirectory = dirname(fileURLToPath(import.meta.url));
+  mkdirSync(join(fixture, "scripts", "lib"), { recursive: true });
+  cpSync(resolve(libraryDirectory, "../security-evidence-gate.mjs"), join(fixture, "scripts", "security-evidence-gate.mjs"));
+  cpSync(resolve(libraryDirectory, "enterprise-security-evidence.mjs"), join(fixture, "scripts", "lib", "enterprise-security-evidence.mjs"));
+  writeFileSync(join(fixture, ".gitignore"), ".env*\n!.env.example\nevidence/\n", "utf8");
+  writeFileSync(join(fixture, ".env.example"), "NEXT_PUBLIC_EXAMPLE=placeholder\n", "utf8");
+  writeFileSync(join(fixture, "package.json"), '{"name":"fixture","version":"1.0.0"}\n', "utf8");
+  execFileSync("git", ["init", "--quiet"], { cwd: fixture });
+  execFileSync("git", ["config", "user.email", "qa@ennco.invalid"], { cwd: fixture });
+  execFileSync("git", ["config", "user.name", "ENNCO QA"], { cwd: fixture });
+  execFileSync("git", ["add", "."], { cwd: fixture });
+  execFileSync("git", ["commit", "--quiet", "-m", "fixture"], { cwd: fixture });
+  const commit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: fixture, encoding: "utf8" }).trim();
+  execFileSync("node", [
+    "scripts/security-evidence-gate.mjs", "snapshot", "--repo", ".", "--expected-commit", commit,
+    "--evidence", "evidence/source.json", "--context", "local",
+  ], { cwd: fixture });
+  writeFileSync(join(fixture, ".env.local"), "NEXT_PUBLIC_M23_DRIFT=enabled\n", "utf8");
+  const ignoredFile = spawnSync("node", [
+    "scripts/security-evidence-gate.mjs", "verify-snapshot", "--repo", ".", "--expected-commit", commit,
+    "--source-snapshot", "evidence/source.json", "--allow-prefix", "evidence", "--context", "local",
+  ], { cwd: fixture, encoding: "utf8" });
+  assert.equal(ignoredFile.status, 1);
+  assert.match(ignoredFile.stderr, /SOURCE_BUILD_ENVIRONMENT_DRIFT:file:\.env\.local/);
+  const inheritedVariable = spawnSync("node", [
+    "scripts/security-evidence-gate.mjs", "snapshot", "--repo", ".", "--expected-commit", commit,
+    "--evidence", "evidence/second.json", "--context", "local",
+  ], { cwd: fixture, encoding: "utf8", env: { ...process.env, NEXT_PUBLIC_M23_DRIFT: "enabled" } });
+  assert.equal(inheritedVariable.status, 1);
+  assert.match(inheritedVariable.stdout, /NEXT_PUBLIC_M23_DRIFT/);
+  assert.doesNotMatch(inheritedVariable.stdout, /enabled/);
+});
+
+test("source snapshot CLI rejects an ignored Next environment symlink", () => {
+  const fixture = mkdtempSync(join(tmpdir(), "ennco-source-env-link-"));
+  const external = mkdtempSync(join(tmpdir(), "ennco-source-env-target-"));
+  const libraryDirectory = dirname(fileURLToPath(import.meta.url));
+  mkdirSync(join(fixture, "scripts", "lib"), { recursive: true });
+  cpSync(resolve(libraryDirectory, "../security-evidence-gate.mjs"), join(fixture, "scripts", "security-evidence-gate.mjs"));
+  cpSync(resolve(libraryDirectory, "enterprise-security-evidence.mjs"), join(fixture, "scripts", "lib", "enterprise-security-evidence.mjs"));
+  writeFileSync(join(fixture, ".gitignore"), ".env*\n!.env.example\nevidence/\n", "utf8");
+  writeFileSync(join(fixture, ".env.example"), "NEXT_PUBLIC_EXAMPLE=placeholder\n", "utf8");
+  writeFileSync(join(fixture, "package.json"), '{"name":"fixture","version":"1.0.0"}\n', "utf8");
+  execFileSync("git", ["init", "--quiet"], { cwd: fixture });
+  execFileSync("git", ["config", "user.email", "qa@ennco.invalid"], { cwd: fixture });
+  execFileSync("git", ["config", "user.name", "ENNCO QA"], { cwd: fixture });
+  execFileSync("git", ["add", "."], { cwd: fixture });
+  execFileSync("git", ["commit", "--quiet", "-m", "fixture"], { cwd: fixture });
+  const commit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: fixture, encoding: "utf8" }).trim();
+  writeFileSync(join(external, "environment"), "NEXT_PUBLIC_M23_DRIFT=symlinked-secret\n", "utf8");
+  symlinkSync(join(external, "environment"), join(fixture, ".env.local"));
+  const result = spawnSync("node", [
+    "scripts/security-evidence-gate.mjs", "snapshot", "--repo", ".", "--expected-commit", commit,
+    "--evidence", "evidence/source.json", "--context", "local",
+  ], { cwd: fixture, encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.match(result.stdout, /\.env\.local/);
+  assert.doesNotMatch(result.stdout, /symlinked-secret/);
+});
 
 function sbom(overrides = {}) {
   return {

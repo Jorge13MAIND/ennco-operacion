@@ -31,6 +31,22 @@ export function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
 }
 
+export function assessWorktreeDrift(changedPaths, allowedPaths = []) {
+  const changed = [...new Set(requireArray(changedPaths, "WORKTREE_CHANGED_PATHS_INVALID"))]
+    .map((value) => requireNonEmptyString(value, "WORKTREE_CHANGED_PATH_INVALID"))
+    .sort();
+  const allowed = [...new Set(requireArray(allowedPaths, "WORKTREE_ALLOWED_PATHS_INVALID"))]
+    .map((value) => requireNonEmptyString(value, "WORKTREE_ALLOWED_PATH_INVALID").replace(/\/$/, ""))
+    .sort();
+  const unexpected = changed.filter((path) => !allowed.some((root) => path === root || path.startsWith(`${root}/`)));
+  return {
+    status: unexpected.length === 0 ? "PASS" : "FAIL",
+    changed_paths: changed,
+    allowed_paths: allowed,
+    unexpected_paths: unexpected,
+  };
+}
+
 export function canonicalize(value) {
   if (Array.isArray(value)) return value.map(canonicalize);
   if (!isRecord(value)) return value;
@@ -293,13 +309,17 @@ export function auditCiConfiguration(workflow) {
     ["CODEQL_COMMIT_ARTIFACT", "codeql-evidence-${{ github.sha }}"],
     ["SOURCE_SNAPSHOT_GATE", "security-evidence-gate.mjs snapshot"],
     ["SOURCE_SNAPSHOT_BINDING", "--source-snapshot security-evidence/source.json"],
+    ["POST_BUILD_SOURCE_RESTORE", 'git restore --source "$GITHUB_SHA" -- next-env.d.ts'],
     ["SBOM_OFFLINE", "npm sbom --offline --sbom-format cyclonedx"],
     ["SBOM_EVIDENCE_GATE", "security-evidence-gate.mjs sbom"],
     ["SBOM_COMMIT_ARTIFACT", "cyclonedx-sbom-${{ github.sha }}"],
+    ["K6_PINNED_VERSION", "k6-v1.6.1-linux-amd64.tar.gz"],
+    ["K6_ARCHIVE_CHECKSUM", "68df4958a1b089dc6f70a234e07c7ec818922f83b261ca24f3abf79882b13343"],
     ["ZAP_FAIL_ACTION", "fail_action: true"],
     ["ZAP_JSON_REPORT", "-J zap-report.json"],
     ["ZAP_EVIDENCE_GATE", "security-evidence-gate.mjs zap"],
     ["ZAP_EXPECTED_TARGET", "--expected-target http://127.0.0.1:3000"],
+    ["ZAP_GENERATED_REPORT_ALLOWLIST", "--allow-prefix report_html.html"],
     ["ZAP_COMMIT_ARTIFACT", "zap-evidence-${{ github.sha }}"],
     ...REQUIRED_DATABASE_GATES.map((token) => [`DATABASE_GATE_${token}`, `npm run ${token}`]),
   ];
