@@ -1,5 +1,13 @@
 import type { OperationsAccessContext } from "@/lib/auth/authorization";
 import { INITIAL_MILESTONES } from "@/lib/control-room/snapshot";
+import {
+  CONTROL_CADENCE_CODES,
+  createUnknownControlCadenceHealth,
+  isExternalSendAllowedWithCadence,
+  parseControlCadenceReadModel,
+  type ControlCadenceCode,
+  type ControlCadenceHealth,
+} from "@/lib/operations/cadence";
 import { civilDateValue, parseCapacityReadModel } from "@/lib/operations/capacity";
 import { operationsHealthResultSchema } from "@/lib/operations/sla";
 import { parseResearchPortalReadModel } from "@/lib/research/portal";
@@ -7,6 +15,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const OPERATION_MODULE_KEYS = [
   "alertas",
+  "cadencia",
   "respuestas",
   "leads",
   "empresas",
@@ -24,6 +33,7 @@ export type OperationModuleKey = (typeof OPERATION_MODULE_KEYS)[number];
 
 export const OPERATION_MODULE_LABELS: Record<OperationModuleKey, string> = {
   alertas: "Alertas e incidentes",
+  cadencia: "Cadencia",
   respuestas: "Respuestas",
   leads: "Leads",
   empresas: "Empresas",
@@ -92,6 +102,7 @@ export type OperationsPortalSnapshot = {
       outreachEligibleRecords: 0;
       blockers: string[];
     };
+    cadence: ControlCadenceHealth;
   };
   nextActions: PortalRow[];
   modules: Record<OperationModuleKey, PortalModule>;
@@ -104,6 +115,11 @@ function row(id: string, status: string, values: Record<string, string>): Portal
 }
 
 export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
+  const generatedAt = new Date().toISOString();
+  const cadenceHealth = createUnknownControlCadenceHealth({
+    reasonCode: "CONTROL_CADENCE_NOT_LIVE_IN_SYNTHETIC_DEMO",
+    evaluatedAt: generatedAt,
+  });
   const modules: Record<OperationModuleKey, PortalModule> = {
     alertas: {
       title: "Alertas e incidentes",
@@ -125,6 +141,26 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         evidencia: "Sin evento real ni entrega de alerta",
         accion: "Sin acción live",
       })],
+    },
+    cadencia: {
+      title: "Cadencia del Control Room",
+      description: "Las cinco cadencias se verifican por periodo. Evidencia automática, sesión humana, asistencia y entrega externa permanecen separadas.",
+      emptyState: "No existe una lectura live completa de las cinco cadencias.",
+      columns: [
+        { key: "cadencia", label: "Cadencia" },
+        { key: "configuracion", label: "Configuración" },
+        { key: "responsable", label: "Responsable" },
+        { key: "proxima", label: "Próxima ocurrencia" },
+        { key: "vence", label: "Vence" },
+        { key: "ejecucion", label: "Ejecución" },
+        { key: "cumplimiento", label: "Cumplimiento" },
+        { key: "evidencia", label: "Evidencia" },
+        { key: "asistencia", label: "Asistencia" },
+        { key: "entrega", label: "Entrega externa" },
+        { key: "brecha", label: "Brecha" },
+        { key: "siguiente", label: "Siguiente acción" },
+      ],
+      rows: buildControlCadenceRows(cadenceHealth),
     },
     respuestas: {
       title: "Bandeja de respuestas",
@@ -334,7 +370,7 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
 
   return {
     evidenceClass: "synthetic_demo",
-    generatedAt: new Date().toISOString(),
+    generatedAt,
     realTruth: {
       newLeads: 0,
       pendingReplies: 0,
@@ -381,6 +417,7 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
           "ANNEX_A_MISSING",
         ],
       },
+      cadence: cadenceHealth,
     },
     nextActions: [
       row("next-annex", "BLOCKED_EXTERNAL", { objective: "Importar y conciliar Anexo A", due: "Al recibirlo", owner: "Teckel + ENNCO" }),
@@ -408,6 +445,39 @@ function dateValue(value: unknown): string {
   if (typeof value !== "string") return "Sin fecha";
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? "Sin fecha" : new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" }).format(date);
+}
+
+const CONTROL_CADENCE_LABELS: Record<ControlCadenceCode, string> = {
+  CONTROL_ROOM_DAILY_UPDATE: "Actualización automática diaria",
+  INTERNAL_DAILY_REVIEW: "Revisión interna diaria",
+  STAGING_WEEKLY_DEMO: "Demo semanal",
+  ENNCO_TECKEL_WEEKLY_MEETING: "Reunión semanal ENNCO y Teckel",
+  EXECUTIVE_MONTHLY_REVIEW: "Revisión ejecutiva mensual",
+};
+
+export function buildControlCadenceRows(health: ControlCadenceHealth): PortalRow[] {
+  const byCode = new Map(health.cadences.map((item) => [item.code, item]));
+  return CONTROL_CADENCE_CODES.map((code) => {
+    const item = byCode.get(code);
+    const unknown = health.state === "UNKNOWN" || !item;
+    const status = unknown
+      ? "UNKNOWN"
+      : item.breach_severity ?? (item.compliance_status === "BREACHED" ? "BREACHED" : item.compliance_status);
+    return row(`cadence-${code.toLowerCase()}`, status, {
+      cadencia: CONTROL_CADENCE_LABELS[code],
+      configuracion: unknown ? "UNKNOWN" : item.config_state,
+      responsable: unknown || !item.owner_user_id ? "Sin responsable verificado" : `Usuario ${item.owner_user_id.slice(0, 8)}`,
+      proxima: unknown || !item.next_occurrence_at ? "Sin horario verificado" : dateValue(item.next_occurrence_at),
+      vence: unknown || !item.due_at ? "Sin vencimiento verificado" : dateValue(item.due_at),
+      ejecucion: unknown ? "UNKNOWN" : item.execution_status,
+      cumplimiento: unknown ? "UNKNOWN" : item.compliance_status,
+      evidencia: unknown ? "UNKNOWN" : item.evidence_state,
+      asistencia: unknown ? "UNKNOWN" : item.attendance_state,
+      entrega: unknown ? "UNKNOWN" : item.delivery_state,
+      brecha: unknown ? "UNKNOWN" : item.breach_severity ?? "Sin P0/P1",
+      siguiente: unknown ? health.reason_code ?? "Verificar lectura completa" : item.next_action,
+    });
+  });
 }
 
 export function sumFirstPaymentsMxn(payments: Array<Record<string, unknown>>): number {
@@ -467,6 +537,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
 
   const client = await createSupabaseServerClient();
   const organizationId = access.organizationId;
+  const evaluatedAt = new Date().toISOString();
   const monthParts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "America/Mexico_City",
     year: "numeric",
@@ -516,7 +587,13 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       .limit(100),
     client.rpc("evaluate_operations_health", {
       target_organization_id: organizationId,
-      target_evaluated_at: new Date().toISOString(),
+      target_evaluated_at: evaluatedAt,
+    }),
+  ]);
+  const cadencePromise = Promise.allSettled([
+    client.rpc("evaluate_control_cadence_health", {
+      target_organization_id: organizationId,
+      target_evaluated_at: evaluatedAt,
     }),
   ]);
   const results = await Promise.all([
@@ -557,6 +634,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const [capacitySchedulesSettled, capacityEvaluationSettled] = await capacityPromise;
   const [researchAccountsSettled, researchCandidatesSettled, researchDedupeSettled, researchAssessmentSettled] = await researchPromise;
   const [approvalRequestsSettled, operationalSlaSettled, operationsIncidentsSettled, operationsHealthSettled] = await operationsPromise;
+  const [cadenceHealthSettled] = await cadencePromise;
   const capacitySchedulesResult = capacitySchedulesSettled.status === "fulfilled" && !capacitySchedulesSettled.value.error
     ? capacitySchedulesSettled.value
     : null;
@@ -592,6 +670,13 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     && operationalSlaResult !== null
     && operationsIncidentsResult !== null
     && operationsHealthParsed.success;
+  const cadenceRpcAvailable = cadenceHealthSettled.status === "fulfilled" && !cadenceHealthSettled.value.error;
+  const cadenceHealth = parseControlCadenceReadModel({
+    rpcAvailable: cadenceRpcAvailable,
+    rpcData: cadenceRpcAvailable ? cadenceHealthSettled.value.data : null,
+    expectedOrganizationId: organizationId,
+    evaluatedAt,
+  });
   const accounts = asRows(accountsResult.data);
   const contacts = asRows(contactsResult.data);
   const messages = asRows(messagesResult.data);
@@ -854,11 +939,11 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     },
     health: {
       killSwitch: controls?.global_kill_switch !== false,
-      externalSendAllowed: controls?.external_send_allowed === true
+      externalSendAllowed: isExternalSendAllowedWithCadence(controls?.external_send_allowed === true
         && controls?.global_kill_switch === false
         && operationsReadReady
         && operationsHealth?.state === "HEALTHY"
-        && operationsHealth.operator_assignment === "ACTIVE",
+        && operationsHealth.operator_assignment === "ACTIVE", cadenceHealth),
       replySync,
       openP0: operationsHealth?.open_p0 ?? openP0,
       openP1: operationsHealth?.open_p1 ?? openP1,
@@ -888,11 +973,13 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
         outreachEligibleRecords: 0,
         blockers: researchBlockers,
       },
+      cadence: cadenceHealth,
     },
     nextActions: nextActionRows,
     modules: {
       ...base.modules,
       alertas: { ...base.modules.alertas, rows: incidentRows },
+      cadencia: { ...base.modules.cadencia, rows: buildControlCadenceRows(cadenceHealth) },
       respuestas: { ...base.modules.respuestas, rows: replyRows },
       leads: { ...base.modules.leads, rows: leadRows },
       empresas: { ...base.modules.empresas, rows: accountRows },

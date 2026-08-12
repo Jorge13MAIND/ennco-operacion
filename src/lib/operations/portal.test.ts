@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  buildControlCadenceRows,
   evaluateReplySync,
+  getSyntheticOperationsPortal,
   isOpenIncident,
   isStrictQualifiedOpportunity,
   sumFirstPaymentsMxn,
@@ -89,5 +91,19 @@ describe("evaluateReplySync", () => {
       last_synced_at: null,
       watch_expires_at: null,
     }], evaluatedAt)).toBe("HOLD");
+  });
+});
+
+describe("control cadence portal fallback", () => {
+  it("renders all five synthetic cadences as UNKNOWN without invented facts", () => {
+    const snapshot = getSyntheticOperationsPortal();
+    const rows = buildControlCadenceRows(snapshot.health.cadence);
+
+    expect(snapshot.health.externalSendAllowed).toBe(false);
+    expect(snapshot.health.cadence.state).toBe("UNKNOWN");
+    expect(rows).toHaveLength(5);
+    expect(rows.every((item) => item.status === "UNKNOWN")).toBe(true);
+    expect(rows.every((item) => item.values.responsable === "Sin responsable verificado")).toBe(true);
+    expect(rows.every((item) => item.values.proxima === "Sin horario verificado")).toBe(true);
   });
 });

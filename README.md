@@ -74,6 +74,9 @@ Este comando valida:
 
 `verify:m4` agrega:
 
+- Cinco cadencias exactas del Control Room, políticas versionadas, ocurrencias, catch-up, evidencia, asistencia, delivery, breaches y watchdog.
+- Módulo `cadencia` fail closed. Horarios, responsables, canales y ejecución live siguen bloqueados.
+
 - Webhook Gmail con OIDC, HMAC, replay e idempotencia.
 - Sync de history paginado con full sync obligatorio ante cursor vencido.
 - Respuesta, auto reply, hard bounce, baja y evento ambiguo.

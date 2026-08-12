@@ -26,9 +26,15 @@ export default async function OperationModulePage({ params }: { params: Promise<
       </div>
       {snapshot.evidenceClass === "synthetic_demo" && module !== "roadmap" && module !== "aprobaciones" ? (
         <div className="notice operations-disclosure">
-          <strong>{module === "entrega" ? "Estado local, sin entrega real." : "Ejemplo operativo."}</strong>
+          <strong>{module === "entrega"
+            ? "Estado local, sin entrega real."
+            : module === "cadencia"
+              ? "Cadencia live no comprobada."
+              : "Ejemplo operativo."}</strong>
           <p>{module === "entrega"
             ? "EVIDENCE_READY sólo describe el paquete local. UAT, capacitación, transferencia y aceptación ENNCO permanecen en cero."
+            : module === "cadencia"
+              ? "Las cinco cadencias permanecen UNKNOWN. No se inventan horarios, responsables, asistencia ni entregas externas."
             : "Los renglones marcados SIMULACION no son empresas, respuestas, leads ni oportunidades reales."}</p>
         </div>
       ) : null}

@@ -2,7 +2,9 @@
 
 Snapshot: 12 de agosto de 2026, America/Mexico_City.
 
-Estado actual: `EXTEND`.
+Estado local: `PASS LOCAL`.
+
+Estado live: `BLOCKED_EXTERNAL`.
 
 Este contrato cierra la ambigüedad de PLAN-CONTROL-CADENCE-001. No prueba asistencia humana, canales externos ni operación live.
 
@@ -92,3 +94,15 @@ El rollback M022 instala primero un control fail closed, revoca DML y RPCs de es
 - Reuniones y revisiones realmente realizadas.
 
 Ninguno de estos bloqueos impide construir y probar el contrato local con datos sintéticos.
+
+## Evidencia de implementación
+
+M022 implementa el contrato en PostgreSQL local y el portal. El runner prueba forward, concurrencia, rollback, reapply y schema diff. La auditoría adversarial cubre evidencia sintética, completion tardío, ventanas omitidas, asistencia dividida, backdating, mitigación incompleta, owners inactivos, watchdog sin política y fallas de heartbeat.
+
+Comando:
+
+```bash
+bash supabase/tests/run-control-room-cadence-gate.sh
+```
+
+Reporte: `docs/evidence/M4-control-cadence-local-gate-report.md`.

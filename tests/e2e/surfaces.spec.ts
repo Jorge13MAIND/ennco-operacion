@@ -108,6 +108,13 @@ test("operations modules preserve synthetic disclosure and an empty operational 
   await expect(page.getByText("0 destinatarios reales")).toBeVisible();
   await expect(page.getByText("HOLD", { exact: true })).toBeVisible();
 
+  await page.goto("/operacion/cadencia");
+  await expect(page.getByRole("heading", { level: 1, name: "Cadencia del Control Room" })).toBeVisible();
+  await expect(page.getByText("Las cinco cadencias permanecen UNKNOWN. No se inventan horarios, responsables, asistencia ni entregas externas.")).toBeVisible();
+  await expect(page.getByText("Actualización automática diaria")).toBeVisible();
+  await expect(page.getByText("Reunión semanal ENNCO y Teckel")).toBeVisible();
+  await expect(page.getByText("Sin horario verificado").first()).toBeVisible();
+
   await page.goto("/operacion/roadmap");
   await expect(page.getByText("M6. Primer correo")).toBeVisible();
   await expect(page.getByText("Resolver evidencia externa. Mantener HOLD y cero destinatarios hasta que los 30 gates live estén en PASS.")).toBeVisible();

@@ -11,7 +11,7 @@ import {
 } from "@/components/OperationsActions";
 
 function StatusBadge({ value }: { value: string }) {
-  const blocked = /BLOCK|HOLD|REJECT|ZERO|QUARANTIN/i.test(value);
+  const blocked = /BLOCK|HOLD|REJECT|ZERO|QUARANTIN|UNKNOWN|DEGRADED|INCOMPLETE|BREACH|^P[01]$/i.test(value);
   return <span className={`status ${blocked ? "blocked" : ""}`}>{value}</span>;
 }
 

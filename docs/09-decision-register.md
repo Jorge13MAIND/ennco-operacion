@@ -77,6 +77,9 @@ Estados permitidos para este registro:
 | DEC-064 | M021 sólo puede declarar PASS LOCAL para retención | VERIFIED | Runner forward concurrency rollback reapply y auditoría independiente | PITR scheduler y proveedores reales permanecen BLOCKED_EXTERNAL | M2 |
 | DEC-065 | Un restore sólo queda reconciliado con el conjunto completo de tombstones auténticos | VERIFIED | Manifiesto server-side, cardinalidad, SHA256, tenant y cero residuos | Subsets y manifiestos fabricados producen UNKNOWN sin mutación | M2 |
 | DEC-066 | La evidencia de primer pago se conserva sin origen personal | VERIFIED | Snapshot canónico con monto y fecha; source y texto se redactan | Mantiene integridad financiera sin retener PII de contacto | M2 |
+| DEC-067 | El Control Room tiene exactamente cinco cadencias canónicas | VERIFIED | M022 y gate adversarial | No se inventan días u horas ausentes; configuración incompleta es UNKNOWN | M4 |
+| DEC-068 | Cadencia sintética nunca autoriza outbound real | VERIFIED | Trigger de mensajes, health system y negativos M022 | Puede probar mecánica local y permitir DRY_RUN, pero outbound_release queda BLOCKED | M4 |
+| DEC-069 | El reconciler tiene un watchdog independiente | VERIFIED | RPC service_role idempotente e incidente P1 | Sin política o heartbeat stale crea alerta en vez de fallar silenciosamente | M4 |
 
 ## Jerarquia de evidencia
 

@@ -74,6 +74,15 @@ export default async function OperationsPage() {
           </strong>
           <span>{snapshot.health.research.outreachState}. {snapshot.health.research.outreachEligibleRecords} autorizados</span>
         </div>
+        <div>
+          <span>Cadencia</span>
+          <strong className={`status ${snapshot.health.cadence.state !== "HEALTHY" || snapshot.health.cadence.outbound_release !== "ALLOWED" ? "blocked" : ""}`}>
+            {snapshot.health.cadence.state}. {snapshot.health.cadence.cadence_count}/{snapshot.health.cadence.required_cadence_count} cadencias
+          </strong>
+          <span>{snapshot.health.cadence.last_reconciled_at
+            ? `Heartbeat ${snapshot.health.cadence.heartbeat_state}. Última reconciliación ${new Intl.DateTimeFormat("es-MX", { dateStyle: "short", timeStyle: "short" }).format(new Date(snapshot.health.cadence.last_reconciled_at))}`
+            : snapshot.health.cadence.reason_code ?? "Sin evidencia"}</span>
+        </div>
       </section>
 
       <div className="operations-dashboard-grid">
@@ -90,6 +99,7 @@ export default async function OperationsPage() {
           <div className="panel-head"><h2>Operar</h2></div>
           <div className="quick-links">
             <Link href={"/operacion/alertas" as Route}><strong>Atender incidente</strong><span>Acusar, contener y documentar recuperación</span></Link>
+            <Link href={"/operacion/cadencia" as Route}><strong>Revisar cadencia</strong><span>Validar ocurrencias, evidencia, asistencia y entrega</span></Link>
             <Link href={"/operacion/respuestas" as Route}><strong>Responder interés</strong><span>Revisar bandeja y detener secuencias</span></Link>
             <Link href={"/operacion/leads" as Route}><strong>Calificar lead</strong><span>Aplicar definición contractual estricta</span></Link>
             <Link href={"/operacion/pipeline" as Route}><strong>Actualizar oportunidad</strong><span>Registrar valor y siguiente acción</span></Link>
