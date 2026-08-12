@@ -20,7 +20,7 @@ function sha256(value: string | Buffer): string {
 }
 
 function git(args: string[], encoding?: BufferEncoding): string | Buffer {
-  return execFileSync("git", args, { cwd: repo, encoding });
+  return execFileSync("git", args, { cwd: repo, encoding, maxBuffer: 128 * 1024 * 1024 });
 }
 
 async function exists(path: string): Promise<boolean> {
