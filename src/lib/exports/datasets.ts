@@ -36,6 +36,31 @@ function makeArtifact(dataset: ExportArtifact["datasetKey"], filename: string, c
   };
 }
 
+export function buildCompaniesContactsExportRows(accountsValue: unknown, contactsValue: unknown): DbRow[] {
+  const accounts = rows(accountsValue);
+  const contacts = rows(contactsValue);
+  const contactsByAccount = new Map<string, DbRow[]>();
+  for (const contact of contacts) {
+    const accountId = String(contact.account_id);
+    contactsByAccount.set(accountId, [...(contactsByAccount.get(accountId) ?? []), contact]);
+  }
+  return accounts.flatMap((account) => {
+    const accountContacts = contactsByAccount.get(String(account.id)) ?? [null];
+    return accountContacts.map((contact) => ({
+      evidence_class: "live",
+      account_name: account.legal_name,
+      domain: account.primary_domain,
+      state: account.state,
+      sector: account.sector,
+      source_confidence: account.source_confidence,
+      contact_name: contact?.full_name,
+      role_title: contact?.role_title,
+      normalized_email: contact?.normalized_email,
+      verified: contact?.verified,
+    }));
+  });
+}
+
 export async function createExportArtifact(dataset: ExportDataset, access: OperationsAccessContext): Promise<ExportArtifact> {
   if (access.evidenceClass === "synthetic_demo") {
     if (dataset === "companies-contacts") {
@@ -59,22 +84,7 @@ export async function createExportArtifact(dataset: ExportDataset, access: Opera
       client.from("contacts").select("id,account_id,full_name,role_title,normalized_email,verified").eq("organization_id", organizationId).eq("is_deleted", false).order("full_name"),
     ]);
     if (accountsResult.error || contactsResult.error) throw new Error("EXPORT_QUERY_FAILED");
-    const accountById = new Map(rows(accountsResult.data).map((account) => [String(account.id), account]));
-    const data = rows(contactsResult.data).map((contact) => {
-      const account = accountById.get(String(contact.account_id));
-      return {
-        evidence_class: "live",
-        account_name: account?.legal_name,
-        domain: account?.primary_domain,
-        state: account?.state,
-        sector: account?.sector,
-        source_confidence: account?.source_confidence,
-        contact_name: contact.full_name,
-        role_title: contact.role_title,
-        normalized_email: contact.normalized_email,
-        verified: contact.verified,
-      };
-    });
+    const data = buildCompaniesContactsExportRows(accountsResult.data, contactsResult.data);
     return makeArtifact("companies_contacts", "ennco-empresas-contactos.csv", [
       "evidence_class", "account_name", "domain", "state", "sector", "source_confidence",
       "contact_name", "role_title", "normalized_email", "verified",

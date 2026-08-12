@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "status": "PASS",
+  "started_at_utc": "2026-08-12T06:44:32Z",
+  "finished_at_utc": "2026-08-12T06:44:34Z",
+  "duration_seconds": 2,
+  "scope": "local_disposable_postgresql_and_synthetic_objects",
+  "postgres_version": "postgres (PostgreSQL) 16.13 (Homebrew)",
+  "database_backup": {
+    "format": "pg_dump_custom",
+    "sha256": "d6184a38f7afbd4bca233fed203ad369bbee652da7a292c8102ee72a09dc3ca5",
+    "restored_to_separate_database": true,
+    "row_counts_match": true,
+    "row_checksums_match": true
+  },
+  "object_backup": {
+    "format": "tar_gzip",
+    "sha256": "125d824d9485e3c51014861d2e06800a3a9c3b239dc755bedc9be75546acfdcd",
+    "restored_to_separate_directory": true,
+    "content_checksums_match": true,
+    "database_manifest_matches_filesystem": true
+  },
+  "controls": {
+    "mktemp_used": true,
+    "unix_socket_only": true,
+    "network_listener_disabled": true,
+    "real_provider_used": false,
+    "real_credentials_used": false,
+    "real_pii_used": false,
+    "external_sends": 0,
+    "audit_log_append_only_source": true,
+    "audit_log_append_only_restore": true,
+    "duplicate_idempotency_rejected_source": true,
+    "duplicate_idempotency_rejected_restore": true,
+    "invalid_qualified_lead_rejected_source": true,
+    "invalid_qualified_lead_rejected_restore": true,
+    "invariants_match": true
+  },
+  "limits": {
+    "production_pitr_proven": false,
+    "production_rpo_15m_proven": false,
+    "production_rto_4h_proven": false,
+    "supabase_restore_proven": false,
+    "production_storage_restore_proven": false,
+    "statement": "PASS proves only a local logical backup and synthetic object restore drill. It does not prove production PITR, RPO 15m, RTO 4h, Supabase recovery, or production Storage recovery."
+  }
+}

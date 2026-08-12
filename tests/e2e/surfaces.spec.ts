@@ -104,6 +104,13 @@ test("operations modules preserve synthetic disclosure and strict empty pipeline
   await page.goto("/operacion/roadmap");
   await expect(page.getByText("M6. Primer correo")).toBeVisible();
   await expect(page.getByText("Resolver evidencia externa. Mantener HOLD y cero destinatarios hasta que los 30 gates live estén en PASS.")).toBeVisible();
+
+  await page.goto("/operacion/entrega");
+  await expect(page.getByRole("heading", { level: 1, name: "Hardening y entrega" })).toBeVisible();
+  await expect(page.getByText("5/6 criterios locales")).toBeVisible();
+  await expect(page.getByText("0/10")).toBeVisible();
+  await expect(page.getByText("0 aceptaciones")).toBeVisible();
+  await expect(page.getByText("No equivale a entrega ENNCO")).toBeVisible();
 });
 
 test("synthetic exports are private, empty and explicitly labeled", async ({ request }) => {

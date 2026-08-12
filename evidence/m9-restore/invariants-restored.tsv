@@ -1,0 +1,10 @@
+single_synthetic_organization	t	organizations=1
+tenant_key_present	t	organization_id required in every operational fixture table
+synthetic_addresses_only	t	messages=2
+no_external_sends	t	messages=2
+suppression_fixture_present	t	suppression_entries=1
+strict_qualified_lead	t	qualified_leads=1
+outbox_not_delivered	t	outbox_events=1
+idempotency_unique	t	message_and_outbox_keys_unique
+object_manifest_shape	t	object_records=2
+audit_evidence_synthetic	t	audit_events=2

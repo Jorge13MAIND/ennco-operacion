@@ -60,6 +60,11 @@ Estados permitidos para este registro:
 | DEC-047 | Leads de email y precotización suman a la meta pero conservan denominadores separados | VERIFIED | Definición contractual y modelo 010 | La captación no infla la conversión outbound | M8 |
 | DEC-048 | Un reporte se emite sólo con aprobación de Jorge ligada a ID y hash | VERIFIED | Migración 010 y gate adversarial | Evidencia lista no equivale a reporte emitido | M8 |
 | DEC-049 | La recuperación sigue diagnóstico fijo y permite una sola variable activa | VERIFIED | Plan de recuperación y migración 010 | Volumen no existe como variable experimental | M8 |
+| DEC-050 | M9 local puede ser `EVIDENCE_READY`, pero el gate global permanece `EXTEND` | VERIFIED | Arquitectura M9 y delegación AVA | Preparación no se comunica como entrega o aceptación | M9 |
+| DEC-051 | Sólo un `ennco_admin` autenticado puede aceptar el paquete final live | VERIFIED | Migración 011 y gate adversarial | Service role, Teckel y fixtures no pueden aceptar | M9 live |
+| DEC-052 | La aceptación está ligada a paquete, manifest y statement exactos | VERIFIED | Migración 011 y prueba de deriva | Reintento idéntico es idempotente, cambio de statement se rechaza | M9 |
+| DEC-053 | El segundo restore local es evidencia de harness, no de PITR, RPO o RTO productivo | VERIFIED | `evidence/m9-restore` | Continuidad live conserva gate separado | M9 live |
+| DEC-054 | Empresas sin contactos deben preservarse en export | VERIFIED | Corrección y pruebas de `buildCompaniesContactsExportRows` | El inventario de investigación no desaparece por falta de contacto | M9 |
 
 ## Jerarquia de evidencia
 

@@ -33,7 +33,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 case "$EVIDENCE_DIR" in
-  "$REPO_ROOT/evidence/m2-restore"|"$REPO_ROOT/evidence/m2-restore/"*|/tmp/ennco-m2-* ) ;;
+  "$REPO_ROOT/evidence/m2-restore"|"$REPO_ROOT/evidence/m2-restore/"*|"$REPO_ROOT/evidence/m9-restore"|"$REPO_ROOT/evidence/m9-restore/"*|/tmp/ennco-m2-* ) ;;
   *)
     echo "Evidence dir fuera del alcance permitido: $EVIDENCE_DIR" >&2
     exit 2

@@ -13,6 +13,7 @@ export const OPERATION_MODULE_KEYS = [
   "aprobaciones",
   "reportes",
   "exportaciones",
+  "entrega",
 ] as const;
 
 export type OperationModuleKey = (typeof OPERATION_MODULE_KEYS)[number];
@@ -28,6 +29,7 @@ export const OPERATION_MODULE_LABELS: Record<OperationModuleKey, string> = {
   aprobaciones: "Aprobaciones",
   reportes: "Reportes",
   exportaciones: "Exportaciones",
+  entrega: "Entrega",
 };
 
 export type PortalColumn = { key: string; label: string };
@@ -231,7 +233,7 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         { key: "limite", label: "Límite" },
       ],
       rows: [
-        row("report-system", "LOCAL_PASS", { capa: "Sistema", metrica: "Gates locales M0 a M8", valor: "PASS local", limite: "No equivale a producción" }),
+        row("report-system", "LOCAL_PASS", { capa: "Sistema", metrica: "Gates locales M0 a M9", valor: "PASS local", limite: "No equivale a producción ni aceptación" }),
         row("report-activity", "ZERO", { capa: "Actividad", metrica: "Entregas válidas", valor: "0", limite: "T0 no calculado" }),
         row("report-t0", "UNKNOWN", { capa: "Baseline", metrica: "T0", valor: "No existe", limite: "Requiere exactamente 100 primeras entregas válidas" }),
         row("report-contractual", "UNKNOWN", { capa: "Contrato", metrica: "Primer mes completo", valor: "No iniciado", limite: "Requiere todos los días operativos con evidencia live" }),
@@ -254,6 +256,23 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         row("export-commercial", sampleBadge, { paquete: "Pipeline y atribución", formato: "CSV", contenido: "Etapas, evidencia y pagos", estado: "Contrato listo, sin datos live" }),
       ],
     },
+    entrega: {
+      title: "Hardening y entrega",
+      description: "Preparación local, evidencia live y aceptación final permanecen separadas.",
+      emptyState: "No hay un paquete de entrega live.",
+      columns: [
+        { key: "entregable", label: "Entregable" },
+        { key: "evidencia", label: "Evidencia" },
+        { key: "valor", label: "Estado real" },
+        { key: "limite", label: "Límite" },
+      ],
+      rows: [
+        row("handoff-local", "IN_PROGRESS", { entregable: "Paquete M9 local", evidencia: "5/6 criterios locales", valor: "Falta congelar commit fuente", limite: "No equivale a entrega ENNCO" }),
+        row("handoff-live", "EXTEND", { entregable: "Gates live", evidencia: "0/10", valor: "No iniciados", limite: "Requiere infraestructura, UAT y operación autorizada" }),
+        row("handoff-training", "NOT_STARTED", { entregable: "Capacitación ENNCO", evidencia: "0 sesiones live", valor: "Guion listo", limite: "El guion no prueba capacitación" }),
+        row("handoff-acceptance", "BLOCKED", { entregable: "Aceptación final", evidencia: "0 aceptaciones", valor: "No aceptado", limite: "Sólo un ennco_admin puede aceptar un paquete live" }),
+      ],
+    },
   };
 
   return {
@@ -273,13 +292,13 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
       killSwitch: true,
       externalSendAllowed: false,
       replySync: "HOLD",
-      openP0: 10,
-      openP1: 4,
+      openP0: 11,
+      openP1: 7,
     },
     nextActions: [
       row("next-annex", "BLOCKED_EXTERNAL", { objective: "Importar y conciliar Anexo A", due: "Al recibirlo", owner: "Teckel + ENNCO" }),
       row("next-model", "BLOCKED_EXTERNAL", { objective: "Validar modelo y rangos", due: "Antes de publicar", owner: "Paco" }),
-      row("next-m4", "IN_PROGRESS", { objective: "Completar portal y eventos de buzón", due: "M4", owner: "Teckel" }),
+      row("next-m9", "BLOCKED_EXTERNAL", { objective: "Ejecutar gates live de entrega y aceptación", due: "M9", owner: "ENNCO + Teckel" }),
     ],
     modules,
   };
@@ -334,11 +353,16 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     client.from("contractual_monthly_reports").select("id,campaign_id,period_start,period_end_exclusive,report_due_on,generated_on,generated_on_time,operational_days,delivered_messages,substantive_replies,positive_replies,email_strict_leads,prequote_strict_leads,total_strict_leads,target_strict_leads,target_met,held_meetings,qualified_opportunities,delivered_proposals,closed_won,first_payments_mxn,client_sla_breaches,snapshot_sha256").eq("organization_id", organizationId).order("period_start", { ascending: false }),
     client.from("contractual_report_issuances").select("id,report_id,issued_at,issued_by").eq("organization_id", organizationId).order("issued_at", { ascending: false }),
     client.from("recovery_experiments").select("id,campaign_id,report_id,variable,hypothesis_code,sample_size,status,approved_at,started_at,completed_at,killed_at").eq("organization_id", organizationId).order("created_at", { ascending: false }),
+    client.from("handoff_packages").select("id,source_commit_sha,manifest_sha256,evidence_class,status,created_at,sealed_at,accepted_at").eq("organization_id", organizationId).order("created_at", { ascending: false }),
+    client.from("handoff_artifacts").select("id,package_id,artifact_key,required,evidence_class,verified_at").eq("organization_id", organizationId),
+    client.from("handoff_readiness_checks").select("id,package_id,check_code,status,evidence_class,observed_at").eq("organization_id", organizationId),
+    client.from("handoff_training_records").select("id,package_id,audience_role,status,evidence_class,scheduled_at,held_at").eq("organization_id", organizationId),
+    client.from("final_acceptances").select("id,package_id,accepted_by,accepted_at").eq("organization_id", organizationId),
   ]);
   const failed = results.find((result) => result.error);
   if (failed?.error) throw new Error(`PORTAL_QUERY_FAILED:${failed.error.code ?? "UNKNOWN"}`);
 
-  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult, monthlyReportsResult, reportIssuancesResult, recoveryExperimentsResult] = results;
+  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult, monthlyReportsResult, reportIssuancesResult, recoveryExperimentsResult, handoffPackagesResult, handoffArtifactsResult, handoffChecksResult, handoffTrainingResult, finalAcceptancesResult] = results;
   const accounts = asRows(accountsResult.data);
   const contacts = asRows(contactsResult.data);
   const messages = asRows(messagesResult.data);
@@ -351,6 +375,11 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const monthlyReports = asRows(monthlyReportsResult.data);
   const reportIssuances = asRows(reportIssuancesResult.data);
   const recoveryExperiments = asRows(recoveryExperimentsResult.data);
+  const handoffPackages = asRows(handoffPackagesResult.data);
+  const handoffArtifacts = asRows(handoffArtifactsResult.data);
+  const handoffChecks = asRows(handoffChecksResult.data);
+  const handoffTraining = asRows(handoffTrainingResult.data);
+  const finalAcceptances = asRows(finalAcceptancesResult.data);
   const leads = asRows(leadsResult.data);
   const opportunities = asRows(opportunitiesResult.data);
   const meetings = asRows(meetingsResult.data);
@@ -468,6 +497,14 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     ? reportIssuances.find((issuance) => textValue(issuance.report_id) === textValue(latestMonthlyReport.id))
     : undefined;
   const activeRecovery = recoveryExperiments.find((experiment) => experiment.status === "READY" || experiment.status === "RUNNING");
+  const latestHandoff = handoffPackages[0];
+  const latestHandoffId = textValue(latestHandoff?.id, "");
+  const latestHandoffChecks = handoffChecks.filter((check) => textValue(check.package_id) === latestHandoffId);
+  const localHandoffPasses = latestHandoffChecks.filter((check) => check.status === "PASS" && check.evidence_class === "synthetic_demo").length;
+  const liveHandoffPasses = latestHandoffChecks.filter((check) => check.status === "PASS" && check.evidence_class === "live").length;
+  const latestHandoffArtifacts = handoffArtifacts.filter((artifact) => textValue(artifact.package_id) === latestHandoffId).length;
+  const liveTrainingHeld = handoffTraining.filter((training) => textValue(training.package_id) === latestHandoffId && training.status === "HELD" && training.evidence_class === "live").length;
+  const finalAcceptance = finalAcceptances.find((acceptance) => textValue(acceptance.package_id) === latestHandoffId);
 
   const base = getSyntheticOperationsPortal();
   return {
@@ -541,6 +578,35 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
         ],
       },
       exportaciones: { ...base.modules.exportaciones, rows: [] },
+      entrega: {
+        ...base.modules.entrega,
+        rows: latestHandoff ? [
+          row("live-handoff-package", textValue(latestHandoff.status), {
+            entregable: "Paquete de entrega",
+            evidencia: `${latestHandoffArtifacts} artefactos. Manifest ${textValue(latestHandoff.manifest_sha256).slice(0, 12)}`,
+            valor: textValue(latestHandoff.status),
+            limite: latestHandoff.evidence_class === "live" ? "Paquete live" : "Paquete sintético. No aceptable",
+          }),
+          row("live-handoff-checks", liveHandoffPasses === 10 ? "PASS" : "EXTEND", {
+            entregable: "Criterios de readiness",
+            evidencia: `${localHandoffPasses}/6 locales y ${liveHandoffPasses}/10 live`,
+            valor: liveHandoffPasses === 10 ? "Listos para aceptación" : "Incompletos",
+            limite: "UNKNOWN nunca cuenta como verde",
+          }),
+          row("live-handoff-training", liveTrainingHeld > 0 ? "PASS" : "NOT_STARTED", {
+            entregable: "Capacitación ENNCO",
+            evidencia: `${liveTrainingHeld} sesiones live realizadas`,
+            valor: liveTrainingHeld > 0 ? "Evidencia disponible" : "No realizada",
+            limite: "Requiere operador ENNCO autenticado",
+          }),
+          row("live-handoff-acceptance", finalAcceptance ? "ACCEPTED" : "BLOCKED", {
+            entregable: "Aceptación final",
+            evidencia: finalAcceptance ? `Aceptada ${dateValue(finalAcceptance.accepted_at)}` : "0 aceptaciones",
+            valor: finalAcceptance ? "Aceptado" : "No aceptado",
+            limite: "Sólo ennco_admin y manifest exacto",
+          }),
+        ] : [],
+      },
     },
   };
 }

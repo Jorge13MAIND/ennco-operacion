@@ -31,6 +31,7 @@ jobs:
       - run: npm run verify:m6-readiness
       - run: npm run verify:m7-readiness
       - run: npm run verify:m8-readiness
+      - run: npm run verify:m9-readiness
       - run: npm run verify:audit
       - run: npm run verify
       - run: npm run sbom > sbom.cdx.json
@@ -63,12 +64,21 @@ jobs:
       - run: npm run verify:first-send-db
       - run: npm run verify:scaling-db
       - run: npm run verify:monthly-reporting-db
+      - run: npm run verify:handoff-db
       - run: npm run capture:m2-restore
+      - run: npm run capture:m9-restore
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: m2-recovery-evidence
           path: evidence/m2-restore
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: m9-recovery-evidence
+          path: evidence/m9-restore
           if-no-files-found: error
           retention-days: 30
 
