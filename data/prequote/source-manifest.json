@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0.0",
+  "model_version": "ENNCO-PREQ-2026-08-DRAFT-02",
+  "snapshot_date": "2026-08-11",
+  "approval_status": "DRAFT_REVIEW_REQUIRED",
+  "sources": [
+    {
+      "source_id": "SRC-HISTORY-001",
+      "kind": "historical_workbook",
+      "sha256": "8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac",
+      "locator": "clientes.xlsx, Hoja1, rows 9-28",
+      "use": "installed price per kWp",
+      "limitations": "No eligible project exceeds 54.825 kWp. Two high outliers are excluded from automatic calibration."
+    },
+    {
+      "source_id": "SRC-PROPOSAL-001",
+      "kind": "anonymous_proposal",
+      "sha256": "70c33ef0485113bc423f9a04d82e7f2c8ed75d3f2894cec4a54266c02ea50e31",
+      "locator": "pages 4-7",
+      "use": "capacity, production, effective energy rate and installed price",
+      "limitations": "Commercial proposal, not as-built evidence."
+    },
+    {
+      "source_id": "SRC-PROPOSAL-002",
+      "kind": "anonymous_proposal",
+      "sha256": "3b994a707428d52e16730e989bbf1695694bf0e1201c3cde151d3291c40f444b",
+      "locator": "pages 4-7",
+      "use": "capacity, production, effective energy rate and installed price",
+      "limitations": "Commercial proposal, not as-built evidence."
+    },
+    {
+      "source_id": "SRC-PROPOSAL-003",
+      "kind": "anonymous_proposal",
+      "sha256": "f0cd7ecce55cfca16784dc4e41bc7d18fee8ab403493834907803ac398dcfef9",
+      "locator": "pages 2-5",
+      "use": "capacity, production, effective energy rate and installed price",
+      "limitations": "The displayed capacity and module count times module wattage differ. The case remains review-only."
+    },
+    {
+      "source_id": "SRC-PROPOSAL-004",
+      "kind": "anonymous_proposal",
+      "sha256": "be4785467e65faef1da66f003e045ec7adc0827c2ed48b07b8718e269f976753",
+      "locator": "slides 2 and 6",
+      "use": "capacity, bimonthly consumption, bimonthly production and installed price",
+      "limitations": "Production period is inferred as bimonthly from the paired consumption label."
+    },
+    {
+      "source_id": "SRC-LONGI-001",
+      "kind": "manufacturer_datasheet",
+      "url": "https://static.longi.com/LR_7_72_HVHF_640_670_M_30_30_and_15_V01_EN_Draft_20a92baffa.pdf",
+      "observed_at": "2026-08-11",
+      "use": "650 W module dimensions, 2382 x 1134 mm",
+      "limitations": "Manufacturer draft datasheet. Final engineering must verify the exact purchased module."
+    },
+    {
+      "source_id": "SRC-CFE-001",
+      "kind": "official_tariff_methodology",
+      "url": "https://app.cfe.mx/Aplicaciones/CCFE/Tarifas/TarifasCRENegocio/Tarifas/GranDemandaMTO.aspx",
+      "observed_at": "2026-08-11",
+      "use": "tariff is multi-component and cannot be represented by a single universal MXN per kWh value",
+      "limitations": "The receipt and region are required for a technical calculation."
+    }
+  ]
+}

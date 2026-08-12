@@ -7,6 +7,11 @@ const dedicated = {
   NEXT_PUBLIC_ENNCO_ORGANIZATION_ID: "11111111-1111-4111-8111-111111111111",
 };
 
+const prequoteSecrets = {
+  ENNCO_PREQUOTE_INGEST_SECRET: "synthetic-ingest-secret-at-least-32-characters",
+  ENNCO_PDF_SIGNING_SECRET: "synthetic-pdf-secret-at-least-32-characters",
+};
+
 describe("runtime configuration", () => {
   it("keeps local synthetic mode fail closed for external actions", () => {
     const config = getRuntimeConfig({});
@@ -17,6 +22,8 @@ describe("runtime configuration", () => {
       requireMfa: false,
       externalSendAllowed: false,
       globalKillSwitch: true,
+      publicSurfaceReleased: false,
+      privacyNoticeApproved: false,
     });
     expect(hasDedicatedSupabase(config)).toBe(false);
   });
@@ -60,6 +67,39 @@ describe("runtime configuration", () => {
         ENNCO_REQUIRE_MFA: "false",
       }),
     ).toThrow("MFA_REQUIRED_IN_PRODUCTION");
+  });
+
+  it("requires both server-only prequote secrets in production", () => {
+    expect(() =>
+      getRuntimeConfig({
+        ...dedicated,
+        NEXT_PUBLIC_APP_ENV: "production",
+        ENNCO_DEMO_MODE: "false",
+        ENNCO_REQUIRE_MFA: "true",
+      }),
+    ).toThrow("PREQUOTE_SERVER_SECRETS_REQUIRED_IN_PRODUCTION");
+
+    const config = getRuntimeConfig({
+      ...dedicated,
+      ...prequoteSecrets,
+      NEXT_PUBLIC_APP_ENV: "production",
+      ENNCO_DEMO_MODE: "false",
+      ENNCO_REQUIRE_MFA: "true",
+    });
+    expect(config.pdfSigningSecret).toBe(prequoteSecrets.ENNCO_PDF_SIGNING_SECRET);
+  });
+
+  it("keeps the public surface closed until demo is off and privacy is approved", () => {
+    expect(() =>
+      getRuntimeConfig({
+        ...dedicated,
+        ...prequoteSecrets,
+        NEXT_PUBLIC_APP_ENV: "production",
+        ENNCO_DEMO_MODE: "false",
+        ENNCO_REQUIRE_MFA: "true",
+        ENNCO_PUBLIC_SURFACE_RELEASED: "true",
+      }),
+    ).toThrow("PUBLIC_SURFACE_RELEASE_GATES_INCOMPLETE");
   });
 
   it("infers production from the deployment platform and rejects a platform downgrade", () => {

@@ -66,6 +66,7 @@ export type PrequoteInput = {
   zone: Zone;
   contact: ContactInput;
   consent: boolean;
+  privacyNoticeVersion: string;
   receiptUploadId?: string;
   attribution?: AttributionInput;
 };
@@ -80,15 +81,21 @@ export type PrequoteAssumption = {
 };
 
 export type PrequoteEstimate = {
+  estimateKind: "SOLAR_RANGE" | "SERVICE_REVIEW";
   capacityKwp: { min: number; max: number };
   investmentMxn: { min: number; max: number };
   roofAreaM2: { min: number; max: number };
-  estimatedMonthlyKwh: number;
-  verdict: "OUT_OF_SCOPE" | "COMMERCIAL" | "INDUSTRIAL_REVIEW";
+  estimatedMonthlyKwh: { min: number; max: number };
+  panelCount: { min: number; max: number };
+  verdict: "OUT_OF_SCOPE" | "COMMERCIAL_REVIEW" | "INDUSTRIAL_REVIEW" | "TECHNICAL_REVIEW";
+  evidenceConfidence: "SOURCE_RANGE" | "EXTRAPOLATED_REVIEW_REQUIRED" | "TECHNICAL_REVIEW_REQUIRED";
+  strictLeadStatus: "DOES_NOT_COUNT_WITHOUT_HUMAN_EVIDENCE";
   modelVersion: string;
   modelStatus: "DRAFT_REVIEW_REQUIRED" | "APPROVED" | "EXPIRED";
+  modelValidUntil: string;
   calculatedAt: string;
   assumptions: PrequoteAssumption[];
+  limitations: string[];
   disclaimer: string;
 };
 

@@ -1,0 +1,60 @@
+[
+  {
+    "case_id": "ANON-PROP-001",
+    "source_id": "SRC-PROPOSAL-001",
+    "monthly_consumption_kwh": 4840,
+    "effective_energy_rate_mxn_per_kwh": 3.29,
+    "coverage_pct_for_test": 90,
+    "capacity_kwp": 39,
+    "monthly_production_kwh": 4720,
+    "installed_price_mxn_including_tax": 796880.11,
+    "module_count": 60,
+    "module_wp": 650,
+    "review_flags": []
+  },
+  {
+    "case_id": "ANON-PROP-002",
+    "source_id": "SRC-PROPOSAL-002",
+    "monthly_consumption_kwh": 4177,
+    "effective_energy_rate_mxn_per_kwh": 3.28,
+    "coverage_pct_for_test": 90,
+    "capacity_kwp": 32.5,
+    "monthly_production_kwh": 3920,
+    "installed_price_mxn_including_tax": 700214.2,
+    "module_count": 50,
+    "module_wp": 650,
+    "review_flags": []
+  },
+  {
+    "case_id": "ANON-PROP-003",
+    "source_id": "SRC-PROPOSAL-003",
+    "monthly_consumption_kwh": 5000,
+    "effective_energy_rate_mxn_per_kwh": 3.02,
+    "coverage_pct_for_test": 100,
+    "source_coverage_pct": 110,
+    "capacity_kwp": 35.48,
+    "monthly_production_kwh": 5500,
+    "installed_price_mxn_including_tax": 687334.8,
+    "module_count": 56,
+    "module_wp": 645,
+    "review_flags": [
+      "SOURCE_CAPACITY_DIFFERS_FROM_MODULE_COUNT_TIMES_WATTAGE",
+      "SOURCE_COVERAGE_EXCEEDS_PUBLIC_INPUT_MAX"
+    ]
+  },
+  {
+    "case_id": "ANON-PROP-004",
+    "source_id": "SRC-PROPOSAL-004",
+    "monthly_consumption_kwh": 6750,
+    "effective_energy_rate_mxn_per_kwh": 2.8422333333,
+    "coverage_pct_for_test": 92.5,
+    "capacity_kwp": 44.64,
+    "monthly_production_kwh": 6250,
+    "installed_price_mxn_including_tax": 898680.25,
+    "module_count": 72,
+    "module_wp": 620,
+    "review_flags": [
+      "BIMONTHLY_PRODUCTION_PERIOD_INFERRED_FROM_CONTEXT"
+    ]
+  }
+]

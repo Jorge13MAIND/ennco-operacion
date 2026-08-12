@@ -7,9 +7,13 @@ const runtimeSchema = z.object({
   requireMfa: z.boolean(),
   externalSendAllowed: z.boolean(),
   globalKillSwitch: z.boolean(),
+  publicSurfaceReleased: z.boolean(),
+  privacyNoticeApproved: z.boolean(),
   supabaseUrl: z.url().optional(),
   supabasePublishableKey: z.string().min(20).optional(),
   organizationId: z.uuid().optional(),
+  prequoteIngestSecret: z.string().min(32).optional(),
+  pdfSigningSecret: z.string().min(32).optional(),
 });
 
 export type RuntimeConfig = z.infer<typeof runtimeSchema>;
@@ -45,12 +49,16 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     requireMfa: envBoolean(environment.ENNCO_REQUIRE_MFA, appEnv !== "development"),
     externalSendAllowed: envBoolean(environment.ENNCO_ALLOW_EXTERNAL_SEND, false),
     globalKillSwitch: envBoolean(environment.ENNCO_GLOBAL_KILL_SWITCH, true),
+    publicSurfaceReleased: envBoolean(environment.ENNCO_PUBLIC_SURFACE_RELEASED, false),
+    privacyNoticeApproved: envBoolean(environment.ENNCO_PRIVACY_NOTICE_APPROVED, false),
     supabaseUrl: environment.NEXT_PUBLIC_SUPABASE_URL || undefined,
     supabasePublishableKey:
       environment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
       environment.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
       undefined,
     organizationId: environment.NEXT_PUBLIC_ENNCO_ORGANIZATION_ID || undefined,
+    prequoteIngestSecret: environment.ENNCO_PREQUOTE_INGEST_SECRET || undefined,
+    pdfSigningSecret: environment.ENNCO_PDF_SIGNING_SECRET || undefined,
   });
 
   const configuredValues = [config.supabaseUrl, config.supabasePublishableKey, config.organizationId];
@@ -68,8 +76,22 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
   if (config.appEnv === "production" && !config.requireMfa) {
     throw new Error("MFA_REQUIRED_IN_PRODUCTION");
   }
+  if (config.appEnv === "production" && (!config.prequoteIngestSecret || !config.pdfSigningSecret)) {
+    throw new Error("PREQUOTE_SERVER_SECRETS_REQUIRED_IN_PRODUCTION");
+  }
+  if (config.publicSurfaceReleased && (config.demoMode || !config.privacyNoticeApproved)) {
+    throw new Error("PUBLIC_SURFACE_RELEASE_GATES_INCOMPLETE");
+  }
 
   return config;
+}
+
+export function getPdfSigningSecret(config: RuntimeConfig): string {
+  if (config.pdfSigningSecret) return config.pdfSigningSecret;
+  if (config.demoMode && config.appEnv !== "production") {
+    return "ennco-local-synthetic-pdf-secret-only";
+  }
+  throw new Error("PDF_SIGNING_SECRET_REQUIRED");
 }
 
 export function hasDedicatedSupabase(config: RuntimeConfig): config is RuntimeConfig & {

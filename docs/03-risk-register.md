@@ -25,3 +25,7 @@
 | R-021 | P0 | Proveedor trata datos sin aprobación | DPA, región, subprocesadores o borrado desconocidos | BOM, revisión legal y gate antes de datos reales | Jorge y ENNCO | BLOCKED_EXTERNAL |
 | R-022 | P0 | Configuración de despliegue degrada seguridad | Producción arranca como demo o sin MFA | Inferencia de plataforma, config completa y pruebas fail closed | Product Engineering | MITIGATED_LOCAL |
 | R-023 | P0 | Borrado o legal hold no se ejecutan conforme a evidencia | Estado técnico falsificado, hold ignorado o PII queda en relaciones | Cuatro ojos, transición service-only, lock, anonimización, tombstone y pruebas adversariales | Product Engineering | MITIGATED_LOCAL |
+| R-024 | P0 | Banda industrial parece precio observado | Resultado de 100 kWp o más no revela extrapolación | Rango amplio, etiqueta explícita, modelo draft y aprobación de Paco | Paco | MITIGATED_LOCAL |
+| R-025 | P0 | Captura real opera con aviso incompleto | Aviso draft o versión de consentimiento ausente | Runtime fail closed, versión persistida y revisión legal antes de release | ENNCO | BLOCKED_EXTERNAL |
+| R-026 | P1 | Analítica almacena PII | Propiedad arbitraria o valor con correo llega a base | Allowlist estricta, regex, HMAC, RLS y pruebas centinela | Product Engineering | MITIGATED_LOCAL |
+| R-027 | P0 | Recibo se carga sin antivirus real | Input de archivo se habilita antes del scanner | Input deshabilitado y gate de cuarentena hasta proveedor aprobado | Product Engineering | BLOCKED_EXTERNAL |

@@ -7,6 +7,7 @@ Sistema comercial E2E de ENNCO. Este repositorio contiene la experiencia públic
 - M0: paquete interno completo y auditado. Gate global `EXTEND` por insumos externos faltantes.
 - M1: golden path local `PASS` con datos sintéticos y cero efectos externos.
 - M2: seguridad, Storage, audit allowlist, retención y restore local en `PASS`. Gate global `EXTEND` hasta validar proveedor, legal, secretos, antivirus, PITR y RTO.
+- M3: captación, precotizador, PDF, persistencia y analítica local en `PASS`. Gate global `EXTEND` hasta aprobar modelo, aviso, antivirus y Supabase real.
 - Producción, DNS, compras y contacto externo: bloqueados hasta aprobación explícita.
 
 ## Desarrollo local
@@ -24,6 +25,7 @@ npm run dev
 ```bash
 npm run verify:m0m1
 npm run verify:m2
+npm run verify:m3
 ```
 
 Este comando valida:
@@ -44,6 +46,13 @@ Este comando valida:
 - Backup lógico y restore separado de base y objetos sintéticos.
 - Evidencia explícita de que PITR, RPO de 15 minutos y RTO de cuatro horas aún no están probados.
 
+`verify:m3` agrega:
+
+- Backtest de cuatro propuestas anónimas y checksum de fuentes locales.
+- Captura HMAC, consentimiento versionado, idempotencia, replay y rate limit.
+- Analítica allowlist sin nombre, correo, teléfono, empresa ni propiedades arbitrarias.
+- PDF temporal privado y QA de landing, privacidad y resultado.
+
 ## Operación local
 
 1. Ejecuta `npm install`.
@@ -54,14 +63,14 @@ Este comando valida:
 6. Ejecuta el golden path. Debe mostrar ocho etapas, cero efectos externos y estado `COMPLETED`.
 7. Repite con la misma llave. Debe mostrar `DUPLICATE`.
 
-El endpoint sintético devuelve 404 en producción. El assistant devuelve 503 hasta su release gate. La precotización usa exclusivamente un modelo draft y datos sintéticos.
+El endpoint sintético devuelve 404 en producción. El assistant devuelve 503 hasta su release gate. La precotización usa exclusivamente un modelo draft y datos sintéticos. La superficie pública y el aviso legal permanecen en `HOLD`.
 
 ## Acceso y documentos
 
 - `/operacion` usa demo local sólo cuando `ENNCO_DEMO_MODE=true` y el ambiente no es producción.
 - Fuera del demo, la sesión se valida con claims firmados, membresía de organización y MFA AAL2.
 - La aplicación web no necesita ni expone una llave `service_role`.
-- Los documentos aceptados entran en cuarentena con path opaco y checksum. No quedan legibles hasta que un scanner autorizado registre resultado limpio.
+- El diseño de documentos usa cuarentena, path opaco y checksum. La carga pública permanece deshabilitada hasta conectar un scanner autorizado y Storage real.
 
 ## Bloqueos humanos visibles
 
@@ -70,6 +79,7 @@ El endpoint sintético devuelve 404 en producción. El assistant devuelve 503 ha
 - Evidencia de primer pago y constancia de inicio acumulativa.
 - Aprobación de compras, dominios, DNS, credenciales, producción y primer envío.
 - Validación técnica de Paco para cualquier modelo de precotización.
+- Revisión legal del aviso de privacidad y aprobación de su versión final.
 
 Ninguno bloquea el trabajo interno seguro. Todos bloquean la acción externa que les corresponde.
 

@@ -1,0 +1,268 @@
+{
+  "generated_at": "2026-08-12T04:01:44.006Z",
+  "evidence_class": "local_source_audit",
+  "verdict": "PASS",
+  "model_version": "ENNCO-PREQ-2026-08-DRAFT-02",
+  "model_release_status": "DRAFT_REVIEW_REQUIRED",
+  "model_approval_required_by": "Paco",
+  "source_count": 7,
+  "local_binary_sources_verified": 5,
+  "historical_summary": {
+    "rows": 20,
+    "solar_rows": 18,
+    "max_solar_capacity_kwp": 54.825,
+    "projects_at_or_above_100_kwp": 0
+  },
+  "checks": [
+    {
+      "id": "MODEL_VERSION_MATCH",
+      "status": "PASS",
+      "details": "ENNCO-PREQ-2026-08-DRAFT-02"
+    },
+    {
+      "id": "MODEL_REMAINS_REVIEW_GATED",
+      "status": "PASS",
+      "details": "DRAFT_REVIEW_REQUIRED/DRAFT_REVIEW_REQUIRED"
+    },
+    {
+      "id": "MODEL_APPROVER_IS_PACO",
+      "status": "PASS",
+      "details": "Paco"
+    },
+    {
+      "id": "MODEL_HAS_EXPIRY",
+      "status": "PASS",
+      "details": "2026-09-10T23:59:59-06:00"
+    },
+    {
+      "id": "MODEL_NOT_EXPIRED_AT_SNAPSHOT",
+      "status": "PASS",
+      "details": "2026-08-11 -> 2026-09-10T23:59:59-06:00"
+    },
+    {
+      "id": "MODEL_SOURCE_MANIFEST_PATH",
+      "status": "PASS",
+      "details": "data/prequote/source-manifest.json"
+    },
+    {
+      "id": "SOURCE_IDS_UNIQUE",
+      "status": "PASS",
+      "details": "7 ids"
+    },
+    {
+      "id": "SOURCES_HAVE_INTEGRITY_POINTER",
+      "status": "PASS",
+      "details": "7 sources"
+    },
+    {
+      "id": "CALIBRATION_SOURCE_COVERAGE",
+      "status": "PASS",
+      "details": "4 cases"
+    },
+    {
+      "id": "LOCAL_SOURCE_HASH_SRC-HISTORY-001",
+      "status": "PASS",
+      "details": "clientes....xlsx PASS"
+    },
+    {
+      "id": "LOCAL_SOURCE_HASH_SRC-PROPOSAL-001",
+      "status": "PASS",
+      "details": "2.0 PROPUESTA Portales.pdf PASS"
+    },
+    {
+      "id": "LOCAL_SOURCE_HASH_SRC-PROPOSAL-002",
+      "status": "PASS",
+      "details": "2.0 PROPUESTA Vallejo.pdf PASS"
+    },
+    {
+      "id": "LOCAL_SOURCE_HASH_SRC-PROPOSAL-003",
+      "status": "PASS",
+      "details": "ENNCO - PROPUESTA TOYOTA GUANAJUATO.pdf PASS"
+    },
+    {
+      "id": "LOCAL_SOURCE_HASH_SRC-PROPOSAL-004",
+      "status": "PASS",
+      "details": "ENNCO - PROPUESTA DE PROYECTO vol.2.pptx PASS"
+    },
+    {
+      "id": "HISTORY_ROW_COUNT",
+      "status": "PASS",
+      "details": "20"
+    },
+    {
+      "id": "HISTORY_SOLAR_COUNT",
+      "status": "PASS",
+      "details": "18"
+    },
+    {
+      "id": "HISTORY_MAX_CAPACITY",
+      "status": "PASS",
+      "details": "54.825 kWp"
+    },
+    {
+      "id": "NO_MATCHING_100_KWP_HISTORY",
+      "status": "PASS",
+      "details": "54.825 kWp max"
+    },
+    {
+      "id": "INDUSTRIAL_TIER_MARKED_EXTRAPOLATED",
+      "status": "PASS",
+      "details": "100 kWp tier"
+    },
+    {
+      "id": "BACKTEST_CASE_COUNT",
+      "status": "PASS",
+      "details": "4"
+    },
+    {
+      "id": "BACKTEST_CAPACITY_ENVELOPE",
+      "status": "PASS",
+      "details": "4/4"
+    },
+    {
+      "id": "BACKTEST_INVESTMENT_ENVELOPE",
+      "status": "PASS",
+      "details": "4/4"
+    },
+    {
+      "id": "SOURCE_INCONSISTENCIES_PRESERVED",
+      "status": "PASS",
+      "details": "Toyota capacity and bimonthly period flags retained"
+    },
+    {
+      "id": "PUBLIC_CASES_ANONYMIZED",
+      "status": "PASS",
+      "details": "anonymous case ids only"
+    },
+    {
+      "id": "RANGES_ORDERED",
+      "status": "PASS",
+      "details": "all min <= max"
+    }
+  ],
+  "backtests": [
+    {
+      "case_id": "ANON-PROP-001",
+      "source_id": "SRC-PROPOSAL-001",
+      "input_monthly_spend_mxn": 15923.6,
+      "predicted_capacity_kwp": {
+        "min": 26.737,
+        "max": 44.507
+      },
+      "source_capacity_kwp": 39,
+      "capacity_pass": true,
+      "predicted_investment_mxn": {
+        "min": 427798.21,
+        "max": 1068166.96
+      },
+      "source_investment_mxn": 796880.11,
+      "investment_pass": true,
+      "module_derived_capacity_kwp": 39,
+      "source_review_flags": []
+    },
+    {
+      "case_id": "ANON-PROP-002",
+      "source_id": "SRC-PROPOSAL-002",
+      "input_monthly_spend_mxn": 13700.56,
+      "predicted_capacity_kwp": {
+        "min": 23.005,
+        "max": 38.293
+      },
+      "source_capacity_kwp": 32.5,
+      "capacity_pass": true,
+      "predicted_investment_mxn": {
+        "min": 368074.75,
+        "max": 919043.78
+      },
+      "source_investment_mxn": 700214.2,
+      "investment_pass": true,
+      "module_derived_capacity_kwp": 32.5,
+      "source_review_flags": []
+    },
+    {
+      "case_id": "ANON-PROP-003",
+      "source_id": "SRC-PROPOSAL-003",
+      "input_monthly_spend_mxn": 15100,
+      "predicted_capacity_kwp": {
+        "min": 28.172,
+        "max": 46.894
+      },
+      "source_capacity_kwp": 35.48,
+      "capacity_pass": true,
+      "predicted_investment_mxn": {
+        "min": 450746.27,
+        "max": 1125465.84
+      },
+      "source_investment_mxn": 687334.8,
+      "investment_pass": true,
+      "module_derived_capacity_kwp": 36.12,
+      "source_review_flags": [
+        "SOURCE_CAPACITY_DIFFERS_FROM_MODULE_COUNT_TIMES_WATTAGE",
+        "SOURCE_COVERAGE_EXCEEDS_PUBLIC_INPUT_MAX"
+      ]
+    },
+    {
+      "case_id": "ANON-PROP-004",
+      "source_id": "SRC-PROPOSAL-004",
+      "input_monthly_spend_mxn": 19185.07,
+      "predicted_capacity_kwp": {
+        "min": 33.109,
+        "max": 55.112
+      },
+      "source_capacity_kwp": 44.64,
+      "capacity_pass": true,
+      "predicted_investment_mxn": {
+        "min": 529737.15,
+        "max": 1322697.72
+      },
+      "source_investment_mxn": 898680.25,
+      "investment_pass": true,
+      "module_derived_capacity_kwp": 44.64,
+      "source_review_flags": [
+        "BIMONTHLY_PRODUCTION_PERIOD_INFERRED_FROM_CONTEXT"
+      ]
+    }
+  ],
+  "local_source_verification": [
+    {
+      "source_id": "SRC-HISTORY-001",
+      "file_name": "clientes....xlsx",
+      "expected_sha256": "8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac",
+      "observed_sha256": "8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac",
+      "status": "PASS"
+    },
+    {
+      "source_id": "SRC-PROPOSAL-001",
+      "file_name": "2.0 PROPUESTA Portales.pdf",
+      "expected_sha256": "70c33ef0485113bc423f9a04d82e7f2c8ed75d3f2894cec4a54266c02ea50e31",
+      "observed_sha256": "70c33ef0485113bc423f9a04d82e7f2c8ed75d3f2894cec4a54266c02ea50e31",
+      "status": "PASS"
+    },
+    {
+      "source_id": "SRC-PROPOSAL-002",
+      "file_name": "2.0 PROPUESTA Vallejo.pdf",
+      "expected_sha256": "3b994a707428d52e16730e989bbf1695694bf0e1201c3cde151d3291c40f444b",
+      "observed_sha256": "3b994a707428d52e16730e989bbf1695694bf0e1201c3cde151d3291c40f444b",
+      "status": "PASS"
+    },
+    {
+      "source_id": "SRC-PROPOSAL-003",
+      "file_name": "ENNCO - PROPUESTA TOYOTA GUANAJUATO.pdf",
+      "expected_sha256": "f0cd7ecce55cfca16784dc4e41bc7d18fee8ab403493834907803ac398dcfef9",
+      "observed_sha256": "f0cd7ecce55cfca16784dc4e41bc7d18fee8ab403493834907803ac398dcfef9",
+      "status": "PASS"
+    },
+    {
+      "source_id": "SRC-PROPOSAL-004",
+      "file_name": "ENNCO - PROPUESTA DE PROYECTO vol.2.pptx",
+      "expected_sha256": "be4785467e65faef1da66f003e045ec7adc0827c2ed48b07b8718e269f976753",
+      "observed_sha256": "be4785467e65faef1da66f003e045ec7adc0827c2ed48b07b8718e269f976753",
+      "status": "PASS"
+    }
+  ],
+  "limitations": [
+    "Four proposals are commercial proposals, not as-built evidence.",
+    "No delivered historical project in the supplied workbook reaches 100 kWp.",
+    "An approved model and a technical receipt review remain mandatory before live use."
+  ]
+}

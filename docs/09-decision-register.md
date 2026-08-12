@@ -37,6 +37,9 @@ Estados permitidos para este registro:
 | DEC-024 | El assistant y WhatsApp Cloud API no bloquean el primer correo | VERIFIED | Orden de desarrollo aprobado | Se construyen despues del nucleo comercial | M4 en adelante |
 | DEC-025 | El Control Room es la vista operativa del cliente; GitHub sigue siendo la evidencia tecnica | VERIFIED | Plan aprobado | Evita tableros duplicados y estados manuales contradictorios | UAT M4 |
 | DEC-026 | No se garantiza una venta; se garantizan controles, evidencia y medicion honesta | VERIFIED | Contrato y plan aprobado | La meta de leads se reporta con denominadores y limites | Reporte mensual |
+| DEC-027 | El modelo industrial se publica como rango extrapolado mientras no exista histórico entregado de 100 kWp o más | VERIFIED | Auditoría de 20 proyectos y cuatro propuestas | Prohíbe presentar la banda como precio final o calibración industrial observada | Aprobación de modelo M3 |
+| DEC-028 | El aviso `DRAFT-2026-08-11` no habilita producción | VERIFIED | Runtime fail closed y gate legal | `ENNCO_PUBLIC_SURFACE_RELEASED` no puede activarse sin aviso aprobado | Revisión legal M3 |
+| DEC-029 | La analítica pública usa allowlist y rechaza PII | VERIFIED | Migración 005 y gate adversarial | No se aceptan propiedades libres, correo, nombre, teléfono, empresa ni UTM libre | Canary M3 |
 
 ## Jerarquia de evidencia
 

@@ -1,7 +1,43 @@
 import { z } from "zod";
 
+import modelDraft from "../../../data/prequote/model-draft-v2.json";
 import { NEED_TYPES, TARIFFS, ZONES } from "@/lib/domain/types";
-import type { PrequoteAssumption, PrequoteEstimate, PrequoteInput, Tariff } from "@/lib/domain/types";
+import type { PrequoteAssumption, PrequoteEstimate, PrequoteInput } from "@/lib/domain/types";
+import { PRIVACY_NOTICE_VERSION } from "@/lib/privacy/notice";
+
+const numericRangeSchema = z.object({
+  min: z.number().finite().nonnegative(),
+  max: z.number().finite().positive(),
+}).refine((value) => value.max >= value.min, "INVALID_RANGE");
+
+const prequoteModelSchema = z.object({
+  version: z.string().min(1),
+  status: z.enum(["DRAFT_REVIEW_REQUIRED", "APPROVED", "EXPIRED"]),
+  sourceDate: z.iso.date(),
+  validUntil: z.iso.datetime({ offset: true }),
+  effectiveEnergyRateMxnPerKwh: numericRangeSchema,
+  monthlyYieldKwhPerKwp: numericRangeSchema,
+  moduleWp: numericRangeSchema,
+  roofAreaM2PerKwp: numericRangeSchema,
+  investmentMxnPerKwp: z.array(z.object({
+    minKwp: z.number().nonnegative(),
+    min: z.number().positive(),
+    max: z.number().positive(),
+    evidenceStatus: z.enum([
+      "EXTRAPOLATED_NO_MATCHING_HISTORY",
+      "OBSERVED_30_TO_55_KWP",
+      "OBSERVED_SMALL_PROJECTS",
+    ]),
+  }).refine((tier) => tier.max >= tier.min, "INVALID_INVESTMENT_RANGE")).min(1),
+  publicInputMonthlySpendStrictLeadThresholdMxn: z.number().positive(),
+  industrialCapacityThresholdKwp: z.number().positive(),
+  modelApprovalRequiredBy: z.string().min(1),
+  sourceManifestPath: z.string().min(1),
+});
+
+export type PrequoteModel = z.infer<typeof prequoteModelSchema>;
+
+export const DRAFT_PREQUOTE_MODEL: PrequoteModel = prequoteModelSchema.parse(modelDraft);
 
 export const prequoteInputSchema = z.object({
   needType: z.enum(NEED_TYPES),
@@ -20,6 +56,7 @@ export const prequoteInputSchema = z.object({
     phone: z.string().trim().min(8).max(30),
   }),
   consent: z.literal(true),
+  privacyNoticeVersion: z.literal(PRIVACY_NOTICE_VERSION),
   receiptUploadId: z.string().uuid().optional(),
   attribution: z
     .object({
@@ -31,91 +68,156 @@ export const prequoteInputSchema = z.object({
     .optional(),
 });
 
-type PrequoteModel = {
-  version: string;
-  status: "DRAFT_REVIEW_REQUIRED" | "APPROVED" | "EXPIRED";
-  sourceDate: string;
-  peakSunHours: number;
-  performanceRatio: number;
-  daysPerMonth: number;
-  moduleWp: number;
-  roofAreaM2PerKwp: number;
-  tariffMxnPerKwh: Record<Tariff, number>;
-  investmentMxnPerKwp: Array<{ minKwp: number; value: number }>;
-  uncertaintyPct: number;
-};
+const zeroRange = { min: 0, max: 0 } as const;
 
-export const DRAFT_PREQUOTE_MODEL: PrequoteModel = {
-  version: "ENNCO-PREQ-2026-08-DRAFT-01",
-  status: "DRAFT_REVIEW_REQUIRED",
-  sourceDate: "2026-08-11",
-  peakSunHours: 5.5,
-  performanceRatio: 0.8,
-  daysPerMonth: 30.4,
-  moduleWp: 600,
-  roofAreaM2PerKwp: 6.5,
-  tariffMxnPerKwh: {
-    GDMTH: 2.7,
-    GDMTO: 2.45,
-    PDBT: 4.6,
-    UNKNOWN: 3.3,
-  },
-  investmentMxnPerKwp: [
-    { minKwp: 250, value: 9_250 },
-    { minKwp: 100, value: 11_500 },
-    { minKwp: 30, value: 14_000 },
-    { minKwp: 0, value: 17_000 },
-  ],
-  uncertaintyPct: 0.15,
-};
-
-function investmentPerKwp(capacityKwp: number, model: PrequoteModel): number {
-  return model.investmentMxnPerKwp.find((tier) => capacityKwp >= tier.minKwp)?.value ?? 17_000;
+function isSolarSizingRequest(input: PrequoteInput): boolean {
+  return input.needType === "SOLAR_NEW";
 }
 
-function range(value: number, uncertaintyPct: number): { min: number; max: number } {
-  return {
-    min: Math.max(0, value * (1 - uncertaintyPct)),
-    max: value * (1 + uncertaintyPct),
-  };
+function selectInvestmentTier(capacityMaxKwp: number, model: PrequoteModel) {
+  return [...model.investmentMxnPerKwp]
+    .sort((left, right) => right.minKwp - left.minKwp)
+    .find((tier) => capacityMaxKwp >= tier.minKwp) ?? model.investmentMxnPerKwp.at(-1)!;
 }
 
-function assumptions(model: PrequoteModel, tariff: Tariff): PrequoteAssumption[] {
-  const source = "Modelo preliminar ENNCO. Requiere validación de Paco antes de producción.";
+function assumptions(model: PrequoteModel, tariff: PrequoteInput["tariff"]): PrequoteAssumption[] {
   return [
-    { key: "hsp", label: "Horas sol pico", value: model.peakSunHours, unit: "h/día", source, sourceDate: model.sourceDate },
-    { key: "pr", label: "Rendimiento del sistema", value: model.performanceRatio, unit: "ratio", source, sourceDate: model.sourceDate },
-    { key: "module", label: "Potencia del módulo", value: model.moduleWp, unit: "Wp", source, sourceDate: model.sourceDate },
-    { key: "area", label: "Área por capacidad", value: model.roofAreaM2PerKwp, unit: "m²/kWp", source, sourceDate: model.sourceDate },
-    { key: "tariff", label: "Costo efectivo de energía", value: model.tariffMxnPerKwh[tariff], unit: "MXN/kWh", source, sourceDate: model.sourceDate },
+    {
+      key: "effective_rate",
+      label: "Costo efectivo observado",
+      value: `${model.effectiveEnergyRateMxnPerKwh.min.toFixed(2)} a ${model.effectiveEnergyRateMxnPerKwh.max.toFixed(2)}`,
+      unit: "MXN/kWh",
+      source: "Cuatro propuestas anónimas ENNCO. La tarifa CFE seleccionada requiere recibo para cálculo técnico.",
+      sourceDate: model.sourceDate,
+    },
+    {
+      key: "monthly_yield",
+      label: "Producción mensual observada",
+      value: `${model.monthlyYieldKwhPerKwp.min} a ${model.monthlyYieldKwhPerKwp.max}`,
+      unit: "kWh/kWp",
+      source: "Cuatro propuestas anónimas ENNCO de 2026.",
+      sourceDate: model.sourceDate,
+    },
+    {
+      key: "module",
+      label: "Potencia de módulo observada",
+      value: `${model.moduleWp.min} a ${model.moduleWp.max}`,
+      unit: "Wp",
+      source: "Propuestas ENNCO y ficha técnica LONGi Hi-MO X10 650 W.",
+      sourceDate: model.sourceDate,
+    },
+    {
+      key: "area",
+      label: "Área preliminar de ingeniería",
+      value: `${model.roofAreaM2PerKwp.min} a ${model.roofAreaM2PerKwp.max}`,
+      unit: "m²/kWp",
+      source: "Dimensión física del módulo más margen preliminar de acceso y separación.",
+      sourceDate: model.sourceDate,
+    },
+    {
+      key: "tariff",
+      label: "Tarifa declarada",
+      value: tariff,
+      unit: "revisión",
+      source: "Entrada del solicitante. CFE publica cargos por energía, capacidad y otros componentes.",
+      sourceDate: model.sourceDate,
+    },
   ];
 }
 
-export function calculatePrequote(input: PrequoteInput, model: PrequoteModel = DRAFT_PREQUOTE_MODEL): PrequoteEstimate {
-  const pricePerKwh = model.tariffMxnPerKwh[input.tariff];
-  const estimatedMonthlyKwh = input.monthlySpendMxn / pricePerKwh;
-  const monthlyProductionPerKwp = model.peakSunHours * model.daysPerMonth * model.performanceRatio;
-  const targetKwh = estimatedMonthlyKwh * (input.coverageTargetPct / 100);
-  const grossCapacityKwp = targetKwh / monthlyProductionPerKwp;
-  const newCapacityKwp = Math.max(0, grossCapacityKwp - input.existingCapacityKwp);
-  const investment = newCapacityKwp * investmentPerKwp(newCapacityKwp, model);
-  const area = newCapacityKwp * model.roofAreaM2PerKwp;
+function modelStatusAt(model: PrequoteModel, now: Date): PrequoteEstimate["modelStatus"] {
+  return now.getTime() > new Date(model.validUntil).getTime() ? "EXPIRED" : model.status;
+}
 
-  let verdict: PrequoteEstimate["verdict"] = "INDUSTRIAL_REVIEW";
-  if (input.monthlySpendMxn < 8_000) verdict = "OUT_OF_SCOPE";
-  else if (newCapacityKwp < 100) verdict = "COMMERCIAL";
-
-  return {
-    capacityKwp: range(newCapacityKwp, model.uncertaintyPct),
-    investmentMxn: range(investment, model.uncertaintyPct),
-    roofAreaM2: range(area, model.uncertaintyPct),
-    estimatedMonthlyKwh,
-    verdict,
+export function calculatePrequote(
+  input: PrequoteInput,
+  model: PrequoteModel = DRAFT_PREQUOTE_MODEL,
+  now: Date = new Date(),
+): PrequoteEstimate {
+  const calculatedAt = now.toISOString();
+  const shared = {
+    strictLeadStatus: "DOES_NOT_COUNT_WITHOUT_HUMAN_EVIDENCE" as const,
     modelVersion: model.version,
-    modelStatus: model.status,
-    calculatedAt: new Date().toISOString(),
+    modelStatus: modelStatusAt(model, now),
+    modelValidUntil: model.validUntil,
+    calculatedAt,
     assumptions: assumptions(model, input.tariff),
     disclaimer:
-      "Estimación preliminar. No constituye oferta, garantía, beneficio fiscal definitivo ni compromiso de instalación. Requiere revisión del recibo y visita técnica.",
+      "Estimación preliminar. No constituye oferta, precio final, garantía, beneficio fiscal definitivo ni compromiso de instalación. Requiere recibo, revisión y visita técnica.",
+  };
+
+  if (!isSolarSizingRequest(input)) {
+    return {
+      ...shared,
+      estimateKind: "SERVICE_REVIEW",
+      capacityKwp: zeroRange,
+      investmentMxn: zeroRange,
+      roofAreaM2: zeroRange,
+      estimatedMonthlyKwh: zeroRange,
+      panelCount: zeroRange,
+      verdict: "TECHNICAL_REVIEW",
+      evidenceConfidence: "TECHNICAL_REVIEW_REQUIRED",
+      limitations: [
+        "Este servicio no se dimensiona automáticamente.",
+        "El equipo técnico ENNCO debe validar alcance, garantías, precio y fecha antes de una propuesta.",
+      ],
+    };
+  }
+
+  const targetFraction = input.coverageTargetPct / 100;
+  const estimatedMonthlyKwh = {
+    min: input.monthlySpendMxn / model.effectiveEnergyRateMxnPerKwh.max,
+    max: input.monthlySpendMxn / model.effectiveEnergyRateMxnPerKwh.min,
+  };
+  const capacityKwp = {
+    min: Math.max(
+      0,
+      (estimatedMonthlyKwh.min * targetFraction) / model.monthlyYieldKwhPerKwp.max - input.existingCapacityKwp,
+    ),
+    max: Math.max(
+      0,
+      (estimatedMonthlyKwh.max * targetFraction) / model.monthlyYieldKwhPerKwp.min - input.existingCapacityKwp,
+    ),
+  };
+  const investmentTier = selectInvestmentTier(capacityKwp.max, model);
+  const investmentMxn = {
+    min: capacityKwp.min * investmentTier.min,
+    max: capacityKwp.max * investmentTier.max,
+  };
+  const roofAreaM2 = {
+    min: capacityKwp.min * model.roofAreaM2PerKwp.min,
+    max: capacityKwp.max * model.roofAreaM2PerKwp.max,
+  };
+  const panelCount = {
+    min: Math.ceil((capacityKwp.min * 1000) / model.moduleWp.max),
+    max: Math.ceil((capacityKwp.max * 1000) / model.moduleWp.min),
+  };
+  const extrapolated = capacityKwp.max >= model.industrialCapacityThresholdKwp;
+
+  let verdict: PrequoteEstimate["verdict"] = "COMMERCIAL_REVIEW";
+  if (input.monthlySpendMxn < 8_000) verdict = "OUT_OF_SCOPE";
+  else if (
+    input.monthlySpendMxn > model.publicInputMonthlySpendStrictLeadThresholdMxn
+    && extrapolated
+  ) verdict = "INDUSTRIAL_REVIEW";
+
+  return {
+    ...shared,
+    estimateKind: "SOLAR_RANGE",
+    capacityKwp,
+    investmentMxn,
+    roofAreaM2,
+    estimatedMonthlyKwh,
+    panelCount,
+    verdict,
+    evidenceConfidence: extrapolated ? "EXTRAPOLATED_REVIEW_REQUIRED" : "SOURCE_RANGE",
+    limitations: [
+      "Las referencias disponibles no superan 54.825 kWp. Un proyecto industrial requiere validación específica.",
+      "La tarifa CFE no se reduce a un precio universal por kWh. El recibo define el cálculo técnico.",
+      "El área incluye un margen preliminar. No sustituye levantamiento, estructura ni sembrado.",
+      investmentTier.evidenceStatus === "EXTRAPOLATED_NO_MATCHING_HISTORY"
+        ? "La banda industrial es una extrapolación y requiere validación técnica."
+        : "La banda de inversión se apoya en referencias anónimas de ENNCO.",
+    ],
   };
 }

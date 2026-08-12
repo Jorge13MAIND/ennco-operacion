@@ -1,0 +1,46 @@
+{
+  "version": "ENNCO-PREQ-2026-08-DRAFT-02",
+  "status": "DRAFT_REVIEW_REQUIRED",
+  "sourceDate": "2026-08-11",
+  "validUntil": "2026-09-10T23:59:59-06:00",
+  "effectiveEnergyRateMxnPerKwh": {
+    "min": 2.8,
+    "max": 3.35
+  },
+  "monthlyYieldKwhPerKwp": {
+    "min": 115,
+    "max": 160
+  },
+  "moduleWp": {
+    "min": 620,
+    "max": 650
+  },
+  "roofAreaM2PerKwp": {
+    "min": 5.2,
+    "max": 7.3
+  },
+  "investmentMxnPerKwp": [
+    {
+      "minKwp": 100,
+      "min": 14000,
+      "max": 27000,
+      "evidenceStatus": "EXTRAPOLATED_NO_MATCHING_HISTORY"
+    },
+    {
+      "minKwp": 30,
+      "min": 16000,
+      "max": 24000,
+      "evidenceStatus": "OBSERVED_30_TO_55_KWP"
+    },
+    {
+      "minKwp": 0,
+      "min": 16000,
+      "max": 29000,
+      "evidenceStatus": "OBSERVED_SMALL_PROJECTS"
+    }
+  ],
+  "publicInputMonthlySpendStrictLeadThresholdMxn": 20000,
+  "industrialCapacityThresholdKwp": 100,
+  "modelApprovalRequiredBy": "Paco",
+  "sourceManifestPath": "data/prequote/source-manifest.json"
+}

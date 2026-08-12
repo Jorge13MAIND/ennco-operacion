@@ -19,12 +19,62 @@ test("application surfaces return the security header baseline", async ({ reques
   });
 });
 
-test("diagnostic calculates a synthetic range", async ({ page }) => {
+test("diagnostic calculates a synthetic range and returns a private PDF", async ({ page, request }) => {
   await page.goto("/diagnostico");
   await page.getByRole("button", { name: "Generar referencia" }).click();
   await expect(page.getByText(/ENN-PRE-/)).toBeVisible();
-  await expect(page.getByText("DRAFT_REVIEW_REQUIRED")).toBeVisible();
-  await expect(page.getByText("synthetic_demo", { exact: true })).toBeVisible();
+  await expect(page.getByText("Esta solicitud todavía no cuenta como lead contractual.")).toBeVisible();
+  await expect(page.getByText(/Evidencia: synthetic_demo\. Persistencia: SYNTHETIC_NOT_PERSISTED\./)).toBeVisible();
+
+  const pdfUrl = await page.getByRole("link", { name: "Descargar PDF" }).getAttribute("href");
+  expect(pdfUrl).toBeTruthy();
+  const pdf = await request.get(pdfUrl!);
+  expect(pdf.status()).toBe(200);
+  expect(pdf.headers()["content-type"]).toBe("application/pdf");
+  expect(pdf.headers()["cache-control"]).toBe("private, no-store");
+  expect((await pdf.body()).subarray(0, 4).toString()).toBe("%PDF");
+
+  const tampered = await request.get(`${pdfUrl}x`);
+  expect(tampered.status()).toBe(401);
+});
+
+test("diagnostic honeypot accepts without creating a visible result", async ({ request }) => {
+  const response = await request.post("/api/v1/prequotes", {
+    headers: { "Idempotency-Key": `m3-honeypot-${crypto.randomUUID()}` },
+    data: { website: "bot.invalid" },
+  });
+  expect(response.status()).toBe(202);
+  await expect(response.json()).resolves.toEqual({ status: "ACCEPTED" });
+});
+
+test("conversion analytics accepts only the PII-free allowlist", async ({ request }) => {
+  const valid = {
+    eventName: "DIAGNOSTIC_VIEWED",
+    sessionId: crypto.randomUUID(),
+    correlationId: null,
+    path: "/diagnostico",
+    properties: {},
+    occurredAt: new Date().toISOString(),
+  };
+  const accepted = await request.post("/api/v1/events", {
+    headers: { "Idempotency-Key": `m3-analytics-${crypto.randomUUID()}` },
+    data: valid,
+  });
+  expect(accepted.status()).toBe(202);
+  await expect(accepted.json()).resolves.toMatchObject({ persistence_status: "SYNTHETIC_NOT_PERSISTED" });
+
+  const rejected = await request.post("/api/v1/events", {
+    headers: { "Idempotency-Key": `m3-analytics-${crypto.randomUUID()}` },
+    data: { ...valid, properties: { email: "person@example.com" } },
+  });
+  expect(rejected.status()).toBe(400);
+});
+
+test("privacy notice is visible and explicitly remains a legal draft", async ({ page }) => {
+  await page.goto("/privacidad");
+  await expect(page.getByRole("heading", { level: 1, name: "Aviso de privacidad integral" })).toBeVisible();
+  await expect(page.getByText("No aprobado para producción.")).toBeVisible();
+  await expect(page.getByText("Versión DRAFT-2026-08-11.")).toBeVisible();
 });
 
 test("control room never presents setup as live commercial truth", async ({ page }) => {
