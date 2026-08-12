@@ -1,0 +1,211 @@
+{
+  "verification_status": "PASS",
+  "local_m9_status": "EVIDENCE_READY",
+  "global_m9_gate": "EXTEND",
+  "evidence_class": "synthetic_demo",
+  "source_commit_sha": "49e1b994d160292b14a61826e95b9c5d3bb45504",
+  "handoff_manifest_sha256": "7bf1fc0379c9c496c183bccbd875b32ddc816acd8a5ebc1d47104123680bae4e",
+  "external_side_effects": 0,
+  "real_client_uat_sessions": 0,
+  "real_client_training_sessions": 0,
+  "real_final_acceptances": 0,
+  "real_access_transfers": 0,
+  "production_restores_proven": 0,
+  "local_restore_drills_proven": 2,
+  "checks_passed": 17,
+  "checks_failed": 0,
+  "local_criteria": [
+    {
+      "code": "SOURCE_PACKAGE_LOCAL",
+      "status": "PASS",
+      "evidenceClass": "synthetic_demo",
+      "evidenceReference": "docs/evidence/M9-handoff-verification.json#SOURCE_PACKAGE_LOCAL"
+    },
+    {
+      "code": "EXPORT_REIMPORT_LOCAL",
+      "status": "PASS",
+      "evidenceClass": "synthetic_demo",
+      "evidenceReference": "docs/evidence/M9-handoff-verification.json#EXPORT_REIMPORT_LOCAL"
+    },
+    {
+      "code": "SECOND_RESTORE_LOCAL",
+      "status": "PASS",
+      "evidenceClass": "synthetic_demo",
+      "evidenceReference": "docs/evidence/M9-handoff-verification.json#SECOND_RESTORE_LOCAL"
+    },
+    {
+      "code": "SECURITY_REGRESSION_LOCAL",
+      "status": "PASS",
+      "evidenceClass": "synthetic_demo",
+      "evidenceReference": "docs/evidence/M9-handoff-verification.json#SECURITY_REGRESSION_LOCAL"
+    },
+    {
+      "code": "RUNBOOK_INDEX_LOCAL",
+      "status": "PASS",
+      "evidenceClass": "synthetic_demo",
+      "evidenceReference": "docs/evidence/M9-handoff-verification.json#RUNBOOK_INDEX_LOCAL"
+    },
+    {
+      "code": "TRAINING_SCRIPT_LOCAL",
+      "status": "PASS",
+      "evidenceClass": "synthetic_demo",
+      "evidenceReference": "docs/evidence/M9-handoff-verification.json#TRAINING_SCRIPT_LOCAL"
+    }
+  ],
+  "live_criteria": [
+    {
+      "code": "SOURCE_CONTROL_OWNERSHIP",
+      "status": "EXTEND",
+      "evidenceClass": "live",
+      "evidenceReference": null
+    },
+    {
+      "code": "PRODUCTION_ACCESS_TRANSFER",
+      "status": "EXTEND",
+      "evidenceClass": "live",
+      "evidenceReference": null
+    },
+    {
+      "code": "PROVIDER_INVENTORY_ACCEPTED",
+      "status": "EXTEND",
+      "evidenceClass": "live",
+      "evidenceReference": null
+    },
+    {
+      "code": "SECOND_RESTORE_LIVE",
+      "status": "EXTEND",
+      "evidenceClass": "live",
+      "evidenceReference": null
+    },
+    {
+      "code": "SECURITY_AUDIT_LIVE",
+      "status": "EXTEND",
+      "evidenceClass": "live",
+      "evidenceReference": null
+    },
+    {
+      "code": "UAT_CLIENT",
+      "status": "EXTEND",
+      "evidenceClass": "live",
+      "evidenceReference": null
+    },
+    {
+      "code": "TRAINING_OPERATOR_LIVE",
+      "status": "EXTEND",
+      "evidenceClass": "live",
+      "evidenceReference": null
+    },
+    {
+      "code": "EXPORT_REIMPORT_LIVE",
+      "status": "EXTEND",
+      "evidenceClass": "live",
+      "evidenceReference": null
+    },
+    {
+      "code": "RUNBOOK_WALKTHROUGH",
+      "status": "EXTEND",
+      "evidenceClass": "live",
+      "evidenceReference": null
+    },
+    {
+      "code": "ZERO_P0_P1",
+      "status": "EXTEND",
+      "evidenceClass": "live",
+      "evidenceReference": null
+    }
+  ],
+  "decision": {
+    "localEvidenceReady": true,
+    "readyForClientAcceptance": false,
+    "accepted": false,
+    "gate": "EXTEND",
+    "missingLocal": [],
+    "missingLive": [
+      "SOURCE_CONTROL_OWNERSHIP",
+      "PRODUCTION_ACCESS_TRANSFER",
+      "PROVIDER_INVENTORY_ACCEPTED",
+      "SECOND_RESTORE_LIVE",
+      "SECURITY_AUDIT_LIVE",
+      "UAT_CLIENT",
+      "TRAINING_OPERATOR_LIVE",
+      "EXPORT_REIMPORT_LIVE",
+      "RUNBOOK_WALKTHROUGH",
+      "ZERO_P0_P1"
+    ],
+    "reasons": [
+      "La preparación local no puede convertirse en aceptación del cliente.",
+      "Faltan 10 criterios live.",
+      "Hay 11 P0 y 7 P1 abiertos."
+    ]
+  },
+  "checks": [
+    {
+      "id": "M8_GLOBAL_GATE_EXTEND",
+      "pass": true
+    },
+    {
+      "id": "SOURCE_COMMIT_EXISTS",
+      "pass": true
+    },
+    {
+      "id": "SOURCE_ARCHIVE_REPRODUCIBLE",
+      "pass": true
+    },
+    {
+      "id": "SOURCE_ARCHIVE_MANIFEST_MATCH",
+      "pass": true
+    },
+    {
+      "id": "COMPANIES_EXPORT_REIMPORT",
+      "pass": true
+    },
+    {
+      "id": "ACCOUNT_WITHOUT_CONTACT_PRESERVED",
+      "pass": true
+    },
+    {
+      "id": "PIPELINE_EXPORT_REIMPORT",
+      "pass": true
+    },
+    {
+      "id": "SYNTHETIC_EXPORTS_ONLY",
+      "pass": true
+    },
+    {
+      "id": "NO_REAL_ENNCO_DATA",
+      "pass": true
+    },
+    {
+      "id": "NO_EXTERNAL_EFFECTS",
+      "pass": true
+    },
+    {
+      "id": "HANDOFF_DB_CONTRACT",
+      "pass": true
+    },
+    {
+      "id": "ENNCO_ADMIN_ACCEPTANCE_ONLY",
+      "pass": true
+    },
+    {
+      "id": "ACCEPTANCE_APPEND_ONLY",
+      "pass": true
+    },
+    {
+      "id": "ROLLBACK_RESTORES_M8",
+      "pass": true
+    },
+    {
+      "id": "ADVERSARIAL_DB_GATE",
+      "pass": true
+    },
+    {
+      "id": "RUNBOOK_INDEX_COMPLETE",
+      "pass": true
+    },
+    {
+      "id": "SECOND_RESTORE_EVIDENCE",
+      "pass": true
+    }
+  ]
+}

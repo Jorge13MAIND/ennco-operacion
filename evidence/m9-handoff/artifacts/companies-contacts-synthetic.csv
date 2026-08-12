@@ -1,0 +1,3 @@
+﻿"evidence_class","account_name","contact_name","role_title","normalized_email","verified"
+"synthetic_demo","Cuenta sintética sin contacto","","","","false"
+"synthetic_demo","Cuenta sintética con contacto","Persona sintética","CEO","synthetic@example.invalid","true"
