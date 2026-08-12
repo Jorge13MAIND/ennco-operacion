@@ -48,6 +48,10 @@ Estados permitidos para este registro:
 | DEC-035 | El assistant inicial es determinista y sólo responde intenciones documentadas | VERIFIED | Transcripts, límites vinculantes y eval suite | Unknown, comercial, legal y técnico escalan; prompt injection se rechaza | M5 |
 | DEC-036 | Los 24 mensajes permanecen DRAFT_REVIEW_REQUIRED y el manifest en HOLD | VERIFIED | Campaign package M5 | Ningún copy, destinatario, buzón o volumen queda autorizado por existir en código | M5 |
 | DEC-037 | Las referencias anónimas no son casos de éxito hasta verificar outcome y permiso | VERIFIED | Histórico, propuestas y corrección de Jorge | Publicación bloqueada y outcome false | M5 |
+| DEC-038 | M6 usa 30 gates live exactos y ningún `PASS_LOCAL` habilita correo | VERIFIED | Migración 008 y paquete de readiness | Una prueba local puede validar el control, pero release permanece `EXTEND` | M6 |
+| DEC-039 | El primer lote contiene exactamente cinco cuentas y congela destinatario buzón secuencia y hashes | VERIFIED | Migración 008 y gate PostgreSQL | Cualquier deriva posterior bloquea la cola | M6 |
+| DEC-040 | La aprobación explícita de primer envío es append-only y debe coincidir con actor campaña y hash | VERIFIED | Migración 008 y prueba adversarial | Una autorización genérica o editada no cuenta | M6 |
+| DEC-041 | Falta de datos de Postmaster se conserva como `UNKNOWN` | VERIFIED | Guías oficiales Gmail y diseño fail closed | Un dashboard vacío nunca se convierte en señal verde | M6 |
 
 ## Jerarquia de evidencia
 

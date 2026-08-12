@@ -10,6 +10,7 @@ Sistema comercial E2E de ENNCO. Este repositorio contiene la experiencia públic
 - M3: captación, precotizador, PDF, persistencia y analítica local en `PASS`. Gate global `EXTEND` hasta aprobar modelo, aviso, antivirus y Supabase real.
 - M4: portal operativo, Gmail push, respuestas, calificación, pipeline y exportaciones locales en `PASS`. Gate global `EXTEND` hasta provisionar proveedores y ejecutar UAT ENNCO.
 - M5: secuencia, manifest, assistant acotado y shadow canary acelerado local en `PASS`. Gate global `EXTEND` porque han transcurrido cero de 14 días reales.
+- M6: paquete de primer envío, 30 gates, lote inmutable y bloqueo SQL local en `PASS`. Gate global `EXTEND`, campaña `HOLD`, cero destinatarios y cero envíos.
 - Producción, DNS, compras y contacto externo: bloqueados hasta aprobación explícita.
 
 ## Desarrollo local
@@ -30,6 +31,7 @@ npm run verify:m2
 npm run verify:m3
 npm run verify:m4
 npm run verify:m5
+npm run verify:m6
 ```
 
 Este comando valida:
@@ -75,6 +77,17 @@ Este comando valida:
 - Canary acelerado de 14 escenarios con hash chain y cero efectos externos.
 - Gate SQL que impide convertir evidencia sintética en `PASS`.
 - Forward, rollback y reapply de la persistencia del canary.
+
+`verify:m6` agrega:
+
+- Paquete de readiness con 30 gates exactos y cero evidencia live inventada.
+- Ledger de dominios que conserva disponibilidad, propiedad y DNS como desconocidos.
+- Cinco destinatarios `.invalid` para render y pruebas sin efectos externos.
+- Lote máximo de cinco cuentas con destinatario, buzón, secuencia y hashes congelados.
+- Aprobación append-only enlazada al hash del manifiesto.
+- Revalidación de supresión, DNS, reputación, canary, copy, horario y runtime antes de cola.
+- Bloqueo de `QUEUED`, `SENDING`, `SENT` y `DELIVERED` por fuera del gate.
+- Forward, rollback y reapply del gate de primer envío.
 
 ## Operación local
 

@@ -32,6 +32,10 @@
     "verify:m5-canary": "node --experimental-strip-types scripts/m5-shadow-canary.mts --repo .",
     "capture:m5-evidence": "node scripts/verify-campaign-package.mjs --repo . --write-evidence && node --experimental-strip-types scripts/m5-shadow-canary.mts --repo . --write-evidence",
     "capture:m5-browser": "node scripts/capture-m5-browser-evidence.mjs --repo .",
+    "verify:m6-readiness": "node scripts/verify-first-send-readiness.mjs --repo .",
+    "capture:m6-evidence": "node scripts/verify-first-send-readiness.mjs --repo . --write-evidence",
+    "capture:m6-browser": "node scripts/capture-m6-browser-evidence.mjs --repo .",
+    "verify:first-send-db": "supabase/tests/run-first-send-release-gate.sh",
     "verify:prequote-model": "node scripts/verify-prequote-model.mjs --repo .",
     "verify:restore": "bash scripts/m2-verify-local-recovery.sh",
     "capture:m2-restore": "bash scripts/m2-local-backup-restore-drill.sh --repo . --evidence-dir ./evidence/m2-restore && bash scripts/m2-verify-restore-evidence.sh --repo . --evidence-dir ./evidence/m2-restore",
@@ -42,7 +46,8 @@
     "verify:m2": "npm run verify:rtm && npm run verify:data && npm run verify:secrets && npm run verify:db && npm run verify:storage && npm run verify:retention && npm run verify:restore && npm run verify:audit && npm run verify && npm run test:e2e",
     "verify:m3": "npm run verify:rtm && npm run verify:data && npm run verify:secrets && npm run verify:prequote-model && npm run verify:db && npm run verify:storage && npm run verify:retention && npm run verify:prequote-db && npm run verify:analytics-db && npm run verify:restore && npm run verify:audit && npm run verify && npm run test:e2e",
     "verify:m4": "npm run verify:rtm && npm run verify:data && npm run verify:secrets && npm run verify:prequote-model && npm run verify:db && npm run verify:storage && npm run verify:retention && npm run verify:prequote-db && npm run verify:analytics-db && npm run verify:gmail-db && npm run verify:restore && npm run verify:audit && npm run verify && npm run test:e2e",
-    "verify:m5": "npm run verify:rtm && npm run verify:data && npm run verify:secrets && npm run verify:campaign && npm run verify:m5-canary && npm run verify:db && npm run verify:storage && npm run verify:retention && npm run verify:prequote-db && npm run verify:analytics-db && npm run verify:gmail-db && npm run verify:canary-db && npm run verify:restore && npm run verify:audit && npm run verify && npm run test:e2e"
+    "verify:m5": "npm run verify:rtm && npm run verify:data && npm run verify:secrets && npm run verify:campaign && npm run verify:m5-canary && npm run verify:db && npm run verify:storage && npm run verify:retention && npm run verify:prequote-db && npm run verify:analytics-db && npm run verify:gmail-db && npm run verify:canary-db && npm run verify:restore && npm run verify:audit && npm run verify && npm run test:e2e",
+    "verify:m6": "npm run verify:m5 && npm run verify:m6-readiness && npm run verify:first-send-db"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",

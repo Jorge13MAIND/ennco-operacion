@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_class": "synthetic_demo",
+  "external_send_allowed": false,
+  "recipients": [
+    { "account_id": "synthetic-account-1", "account": "Planta Sintética Uno", "first_name": "Ana", "email": "ana@planta-uno.invalid", "variant": "executive", "observed_signal": "una ampliación simulada de capacidad", "source_name": "fixture local" },
+    { "account_id": "synthetic-account-2", "account": "Planta Sintética Dos", "first_name": "Beto", "email": "beto@planta-dos.invalid", "variant": "maintenance", "observed_signal": "una revisión simulada de mantenimiento", "source_name": "fixture local" },
+    { "account_id": "synthetic-account-3", "account": "Planta Sintética Tres", "first_name": "Carla", "email": "carla@planta-tres.invalid", "variant": "procurement", "observed_signal": "una licitación simulada", "source_name": "fixture local" },
+    { "account_id": "synthetic-account-4", "account": "Planta Sintética Cuatro", "first_name": "Diego", "email": "diego@planta-cuatro.invalid", "variant": "executive", "observed_signal": "una expansión simulada de planta", "source_name": "fixture local" },
+    { "account_id": "synthetic-account-5", "account": "Planta Sintética Cinco", "first_name": "Elena", "email": "elena@planta-cinco.invalid", "variant": "maintenance", "observed_signal": "una revisión simulada de infraestructura", "source_name": "fixture local" }
+  ]
+}
+

@@ -26,6 +26,9 @@ jobs:
       - run: npm run verify:rtm
       - run: npm run verify:data
       - run: npm run verify:secrets
+      - run: npm run verify:campaign
+      - run: npm run verify:m5-canary
+      - run: npm run verify:m6-readiness
       - run: npm run verify:audit
       - run: npm run verify
       - run: npm run sbom > sbom.cdx.json
@@ -51,6 +54,11 @@ jobs:
       - run: npm run verify:db
       - run: npm run verify:storage
       - run: npm run verify:retention
+      - run: npm run verify:prequote-db
+      - run: npm run verify:analytics-db
+      - run: npm run verify:gmail-db
+      - run: npm run verify:canary-db
+      - run: npm run verify:first-send-db
       - run: npm run capture:m2-restore
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()

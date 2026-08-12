@@ -149,13 +149,17 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         { key: "campana", label: "Campaña" },
         { key: "manifiesto", label: "Manifiesto" },
         { key: "canary", label: "Canary" },
+        { key: "gates", label: "Gate de liberación" },
+        { key: "lote", label: "Primer lote" },
         { key: "envio", label: "Envío" },
       ],
       rows: [row("campaign-synthetic-1", sampleBadge, {
         campana: "Piloto CEO a CEO",
         manifiesto: "DRAFT",
-        canary: "Pendiente",
-        envio: "BLOQUEADO",
+        canary: "0/14 días reales",
+        gates: "0/30 gates live",
+        lote: "0 destinatarios reales",
+        envio: "HOLD",
       })],
     },
     pipeline: {
@@ -315,15 +319,19 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     client.from("approvals").select("id,subject_type,decision,decided_at").eq("organization_id", organizationId).order("decided_at", { ascending: false }).limit(100),
     client.from("incidents").select("id,severity,status,title,opened_at").eq("organization_id", organizationId).in("status", ["OPEN", "ACKNOWLEDGED", "MITIGATED"]),
     client.from("mailbox_sync_cursors").select("mailbox_id,status,last_synced_at,last_error_code,watch_expires_at").eq("organization_id", organizationId),
+    client.from("campaign_release_gates").select("id,campaign_id,gate_code,status,evidence_class,observed_at,valid_until").eq("organization_id", organizationId).order("gate_code", { ascending: true }),
+    client.from("first_send_batches").select("id,campaign_id,status,recipient_count,account_count,scheduled_for,approved_at,released_at,killed_at,kill_reason_code").eq("organization_id", organizationId).order("created_at", { ascending: false }),
   ]);
   const failed = results.find((result) => result.error);
   if (failed?.error) throw new Error(`PORTAL_QUERY_FAILED:${failed.error.code ?? "UNKNOWN"}`);
 
-  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult] = results;
+  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult] = results;
   const accounts = asRows(accountsResult.data);
   const contacts = asRows(contactsResult.data);
   const messages = asRows(messagesResult.data);
   const events = asRows(eventsResult.data);
+  const releaseGates = asRows(releaseGatesResult.data);
+  const firstSendBatches = asRows(firstSendBatchesResult.data);
   const leads = asRows(leadsResult.data);
   const opportunities = asRows(opportunitiesResult.data);
   const meetings = asRows(meetingsResult.data);
@@ -368,12 +376,22 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     modelo: "Ver resultado versionado",
     estado: `Creada ${dateValue(prequote.created_at)}`,
   }));
-  const campaignRows = asRows(campaignsResult.data).map((campaign) => row(textValue(campaign.id), textValue(campaign.status), {
-    campana: textValue(campaign.name),
-    manifiesto: textValue(campaign.manifest_sha256).slice(0, 12),
-    canary: textValue(campaign.shadow_canary_decision, "Pendiente"),
-    envio: controls?.external_send_allowed === true && controls?.global_kill_switch === false ? "HABILITADO" : "BLOQUEADO",
-  }));
+  const campaignRows = asRows(campaignsResult.data).map((campaign) => {
+    const campaignId = textValue(campaign.id);
+    const gates = releaseGates.filter((gate) => textValue(gate.campaign_id) === campaignId);
+    const passedGates = gates.filter((gate) => gate.status === "PASS" && gate.evidence_class === "live").length;
+    const batch = firstSendBatches.find((candidate) => textValue(candidate.campaign_id) === campaignId);
+    const runtimeOpen = controls?.external_send_allowed === true && controls?.global_kill_switch === false;
+    const releaseReady = gates.length === 30 && passedGates === 30 && batch?.status === "READY";
+    return row(campaignId, textValue(campaign.status), {
+      campana: textValue(campaign.name),
+      manifiesto: textValue(campaign.manifest_sha256).slice(0, 12),
+      canary: textValue(campaign.shadow_canary_decision, "Pendiente"),
+      gates: `${passedGates}/${gates.length || 30} gates live`,
+      lote: batch ? `${textValue(batch.status)}. ${textValue(batch.recipient_count, "0")} destinatarios` : "Sin lote aprobado",
+      envio: runtimeOpen && releaseReady ? "LISTO EN VENTANA" : "HOLD",
+    });
+  });
   const pipelineRows = opportunities.filter((opportunity) =>
     opportunity.economic_buyer === true
     && opportunity.active_pain === true
@@ -400,7 +418,12 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     responsable: "Usuario autenticado",
     estado: textValue(approval.decision),
     impacto: dateValue(approval.decided_at),
-  }));
+  })).concat(releaseGates.map((gate) => row(textValue(gate.id), textValue(gate.status), {
+    decision: textValue(gate.gate_code),
+    responsable: gate.gate_code === "EXPLICIT_SEND_APPROVAL_JORGE" ? "Jorge" : "Dueño del gate",
+    estado: textValue(gate.status),
+    impacto: gate.status === "PASS" ? `Evidencia ${dateValue(gate.observed_at)}` : "Mantiene el primer envío en HOLD",
+  })));
   const overdueTasks = tasks.filter((task) => task.status === "OPEN" && new Date(textValue(task.due_at, "2999-01-01")).getTime() < Date.now());
   const openP0 = incidents.filter((incident) => incident.severity === "P0").length;
   const openP1 = incidents.filter((incident) => incident.severity === "P1").length;

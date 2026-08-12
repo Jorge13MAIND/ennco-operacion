@@ -1,0 +1,166 @@
+{
+  "verification_status": "PASS",
+  "release_decision": "EXTEND",
+  "evidence_class": "synthetic_demo",
+  "real_recipients": 0,
+  "external_side_effects": 0,
+  "checks_passed": 22,
+  "checks_failed": 0,
+  "packet_sha256": "f505d8ae74469f14db6416ea315cfb120591bda1609fbd8645b35ba401f1477d",
+  "domain_ledger_sha256": "d7ac84580e573a16c7b0023491cd94906fb4e5ca56cdb2f387745540c442174a",
+  "fixture_sha256": "87cc9ccaca20025d813109bcf760179259a38f685349177b788befd53d9cfaeb",
+  "checks": [
+    {
+      "id": "PACKET_HOLD",
+      "status": "PASS",
+      "observed": {
+        "status": "HOLD",
+        "release_decision": "EXTEND"
+      }
+    },
+    {
+      "id": "PACKET_SYNTHETIC",
+      "status": "PASS",
+      "observed": "synthetic_demo"
+    },
+    {
+      "id": "ZERO_REAL_RECIPIENTS",
+      "status": "PASS",
+      "observed": {
+        "recipients": 0,
+        "accounts": 0
+      }
+    },
+    {
+      "id": "RUNTIME_FAIL_CLOSED",
+      "status": "PASS",
+      "observed": {
+        "external_send_allowed": false,
+        "global_kill_switch": true,
+        "mailbox_kill_switch": true,
+        "external_side_effect_budget": 0
+      }
+    },
+    {
+      "id": "EXACT_GATE_COVERAGE",
+      "status": "PASS",
+      "observed": {
+        "expected": 30,
+        "actual": 30
+      }
+    },
+    {
+      "id": "MIGRATION_GATE_COVERAGE",
+      "status": "PASS",
+      "observed": {
+        "expected": 30,
+        "actual": 30
+      }
+    },
+    {
+      "id": "NO_DUPLICATE_GATES",
+      "status": "PASS",
+      "observed": 30
+    },
+    {
+      "id": "VALID_GATE_STATUSES",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "GATE_EVIDENCE_SHAPE",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "NO_LIVE_PASS_EVIDENCE",
+      "status": "PASS",
+      "observed": []
+    },
+    {
+      "id": "BLOCKERS_PRESENT",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "MANIFEST_HASH_MATCHES_LOCAL",
+      "status": "PASS",
+      "observed": {
+        "expected": "e423bdfb9446b1c5988133626353b0cc5bcb53a212b25fc9cbd752d686deb0da",
+        "observed": "e423bdfb9446b1c5988133626353b0cc5bcb53a212b25fc9cbd752d686deb0da"
+      }
+    },
+    {
+      "id": "SEQUENCE_HASH_MATCHES_LOCAL",
+      "status": "PASS",
+      "observed": {
+        "expected": "6d67db19633e5749a55b545e9b1a09b1ac25688234bf402b881618514c48738e",
+        "observed": "6d67db19633e5749a55b545e9b1a09b1ac25688234bf402b881618514c48738e"
+      }
+    },
+    {
+      "id": "SEND_WINDOW_FROZEN",
+      "status": "PASS",
+      "observed": {
+        "timezone": "America/Mexico_City",
+        "window_start": "09:30",
+        "window_end": "11:30",
+        "scheduled_for": null
+      }
+    },
+    {
+      "id": "DOMAIN_AVAILABILITY_NOT_INVENTED",
+      "status": "PASS",
+      "observed": {
+        "availability_checked": false,
+        "purchase_authorized": false
+      }
+    },
+    {
+      "id": "FOUR_DOMAIN_CANDIDATES",
+      "status": "PASS",
+      "observed": [
+        "enncoindustrial.com",
+        "enncoenergia.com",
+        "enncoindustrial.com.mx",
+        "enncoenergia.com.mx"
+      ]
+    },
+    {
+      "id": "NO_DOMAIN_OWNERSHIP_CLAIM",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "NO_DNS_PASS_CLAIM",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "SYNTHETIC_FIXTURE_FIVE",
+      "status": "PASS",
+      "observed": 5
+    },
+    {
+      "id": "SYNTHETIC_FIXTURE_INVALID_TLD",
+      "status": "PASS",
+      "observed": [
+        "ana@planta-uno.invalid",
+        "beto@planta-dos.invalid",
+        "carla@planta-tres.invalid",
+        "diego@planta-cuatro.invalid",
+        "elena@planta-cinco.invalid"
+      ]
+    },
+    {
+      "id": "SYNTHETIC_FIXTURE_UNIQUE_ACCOUNTS",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "SYNTHETIC_FIXTURE_GROUNDED_FIELDS",
+      "status": "PASS",
+      "observed": true
+    }
+  ]
+}

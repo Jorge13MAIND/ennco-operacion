@@ -1,6 +1,6 @@
 import type { ControlRoomSnapshot, Milestone } from "@/lib/domain/types";
 
-const UPDATED_AT = "2026-08-11T23:15:00-06:00";
+const UPDATED_AT = "2026-08-11T23:40:00-06:00";
 
 export const INITIAL_MILESTONES: Milestone[] = [
   {
@@ -116,12 +116,17 @@ export const INITIAL_MILESTONES: Milestone[] = [
     name: "Primer correo",
     owner: "Teckel Revenue Operations",
     status: "BLOCKED",
-    gate: null,
+    gate: "EXTEND",
     dueDate: "2026-09-16",
     acceptance: "Cinco correos aprobados, monitoreados y revisados durante 24 horas.",
-    evidence: [],
-    blocker: "Producción, DNS, reputación, manifest y aprobación explícita.",
-    nextAction: "Mantener HOLD hasta cumplir todos los gates.",
+    evidence: [
+      "docs/evidence/M6-first-send-readiness.json",
+      "supabase/tests/008_first_send_release_gate.sql",
+      "data/release/domain-readiness-ledger-v1.json",
+      "data/release/first-send-readiness-v1.json",
+    ],
+    blocker: "Anexo A, contrato ejecutado, legal, dominios, DNS, 35 días, canary live, cinco cuentas y aprobación explícita.",
+    nextAction: "Resolver evidencia externa. Mantener HOLD y cero destinatarios hasta que los 30 gates live estén en PASS.",
     updatedAt: UPDATED_AT,
   },
   {
