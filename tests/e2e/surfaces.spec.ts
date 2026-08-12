@@ -38,6 +38,7 @@ test("diagnostic calculates a synthetic range and returns a private PDF", async 
   expect(pdf.status()).toBe(200);
   expect(pdf.headers()["content-type"]).toBe("application/pdf");
   expect(pdf.headers()["cache-control"]).toBe("private, no-store");
+  expect(pdf.headers()["x-robots-tag"]).toBe("noindex, nofollow, noarchive");
   expect((await pdf.body()).subarray(0, 4).toString()).toBe("%PDF");
 
   const tampered = await request.get(`${pdfUrl}x`);
@@ -79,8 +80,8 @@ test("conversion analytics accepts only the PII-free allowlist", async ({ reques
 test("privacy notice is visible and explicitly remains a legal draft", async ({ page }) => {
   await page.goto("/privacidad");
   await expect(page.getByRole("heading", { level: 1, name: "Aviso de privacidad integral" })).toBeVisible();
-  await expect(page.getByText("No aprobado para producción.")).toBeVisible();
-  await expect(page.getByText("Versión DRAFT-2026-08-11.")).toBeVisible();
+  await expect(page.getByText("No publicado.")).toBeVisible();
+  await expect(page.getByText("Versión 2026-08-11-v1.")).toBeVisible();
 });
 
 test("control room never presents setup as live commercial truth", async ({ page }) => {

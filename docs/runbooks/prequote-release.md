@@ -8,7 +8,7 @@ Liberar una versión de precotización sólo cuando el código, el modelo, la pr
 
 1. La versión candidata tiene hash y source manifest.
 2. Paco registra aprobación, fecha y vigencia.
-3. El aviso de privacidad tiene versión aprobada por ENNCO y revisión legal documentada.
+3. El aviso de privacidad tiene versión y SHA256 del contenido aprobados por ENNCO, con revisión legal documentada.
 4. El proyecto Supabase es exclusivo de ENNCO.
 5. Los secretos viven en vault y la configuración privada de base usa el mismo secreto HMAC.
 6. `ENNCO_DEMO_MODE=false`.
@@ -37,6 +37,7 @@ Liberar una versión de precotización sólo cuando el código, el modelo, la pr
 8. Inspeccionar outbox y audit log. No deben contener PII.
 9. Descargar y renderizar el PDF en desktop y móvil.
 10. Ejecutar la suite E2E completa.
+11. Ejecutar `npm run verify:privacy-notice` y confirmar que el hash coincide con `ENNCO_PRIVACY_NOTICE_APPROVED_SHA256`.
 
 ## Documentos
 
@@ -62,6 +63,7 @@ La carga permanece deshabilitada hasta que todos estos puntos tengan PASS:
 6. UAT de Paco `PASS`.
 7. UAT de ENNCO `PASS`.
 8. Aprobación explícita de publicación.
-9. `ENNCO_PUBLIC_SURFACE_RELEASED=true` sólo después de los ocho puntos anteriores.
+9. Configurar `ENNCO_PUBLIC_SURFACE_RELEASED_AT`, `ENNCO_PRIVACY_NOTICE_APPROVED_VERSION` y `ENNCO_PRIVACY_NOTICE_APPROVED_SHA256` con los valores exactos aprobados.
+10. `ENNCO_PUBLIC_SURFACE_RELEASED=true` sólo después de los nueve puntos anteriores.
 
 Si cualquier punto falla, regresar a `EXTEND`. Un estado desconocido nunca es `PASS`.

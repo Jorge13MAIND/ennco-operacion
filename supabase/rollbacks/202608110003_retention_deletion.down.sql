@@ -1,55 +1,27 @@
 begin;
 
-drop policy if exists legal_holds_privileged_read on public.legal_holds;
-drop policy if exists legal_holds_admin_insert on public.legal_holds;
-drop policy if exists legal_holds_admin_update on public.legal_holds;
-drop policy if exists deletion_batches_privileged_read on public.deletion_batches;
-drop policy if exists deletion_batches_teckel_insert on public.deletion_batches;
-drop policy if exists deletion_batches_admin_update on public.deletion_batches;
-drop policy if exists deletion_items_privileged_read on public.deletion_items;
-drop policy if exists deletion_tombstones_privileged_read on public.deletion_tombstones;
+-- Privacy rollback is logical and fail closed. Retention journals, holds,
+-- deletion items and tombstones are evidence and must survive every rollback.
+create or replace function app.m003_retention_rollback_fail_closed()
+returns trigger language plpgsql set search_path=pg_catalog as $$
+begin raise exception 'M003_RETENTION_CONTROL_UNAVAILABLE'; end $$;
 
-drop trigger if exists legal_holds_updated_at on public.legal_holds;
-drop trigger if exists deletion_batches_updated_at on public.deletion_batches;
-drop trigger if exists deletion_items_updated_at on public.deletion_items;
-drop trigger if exists legal_holds_transition on public.legal_holds;
-drop trigger if exists legal_holds_actor on public.legal_holds;
-drop trigger if exists deletion_batches_transition on public.deletion_batches;
-drop trigger if exists deletion_batches_actor on public.deletion_batches;
-drop trigger if exists deletion_items_transition on public.deletion_items;
-drop trigger if exists legal_holds_audit on public.legal_holds;
-drop trigger if exists deletion_batches_audit on public.deletion_batches;
-drop trigger if exists deletion_items_audit on public.deletion_items;
-drop trigger if exists deletion_tombstones_audit on public.deletion_tombstones;
+drop trigger if exists legal_holds_m003_rollback_fail_closed on public.legal_holds;
+create trigger legal_holds_m003_rollback_fail_closed before insert or update or delete on public.legal_holds
+for each row execute function app.m003_retention_rollback_fail_closed();
+drop trigger if exists deletion_batches_m003_rollback_fail_closed on public.deletion_batches;
+create trigger deletion_batches_m003_rollback_fail_closed before insert or update or delete on public.deletion_batches
+for each row execute function app.m003_retention_rollback_fail_closed();
+drop trigger if exists deletion_items_m003_rollback_fail_closed on public.deletion_items;
+create trigger deletion_items_m003_rollback_fail_closed before insert or update or delete on public.deletion_items
+for each row execute function app.m003_retention_rollback_fail_closed();
+drop trigger if exists deletion_tombstones_m003_rollback_fail_closed on public.deletion_tombstones;
+create trigger deletion_tombstones_m003_rollback_fail_closed before insert or update or delete on public.deletion_tombstones
+for each row execute function app.m003_retention_rollback_fail_closed();
 
-drop function if exists app.execute_contact_deletion(uuid);
-drop function if exists app.assess_contact_deletion(uuid);
-drop function if exists app.create_contact_deletion_item(uuid, uuid, timestamptz);
-drop function if exists app.is_contact_under_legal_hold(uuid, uuid);
-drop function if exists app.enforce_deletion_item_transition();
-drop function if exists app.enforce_deletion_batch_transition();
-drop function if exists app.enforce_deletion_batch_actor();
-drop function if exists app.enforce_legal_hold_transition();
-drop function if exists app.enforce_legal_hold_actor();
-drop function if exists app.capture_retention_audit_event();
-drop function if exists app.retention_audit_snapshot(text, jsonb);
-
-drop table if exists public.deletion_tombstones;
-drop table if exists public.deletion_items;
-drop table if exists public.deletion_batches;
-drop table if exists public.legal_holds;
-
-drop index if exists public.contacts_organization_id_id_unique;
-
-drop type if exists public.restoration_status;
-drop type if exists public.legal_hold_reason_code;
-drop type if exists public.deletion_reason_code;
-drop type if exists public.deletion_item_status;
-drop type if exists public.deletion_batch_status;
-drop type if exists public.legal_hold_status;
-
--- Contact anonymization and audit evidence are intentionally irreversible.
--- The tombstone explicitly states that raw data cannot be restored.
--- The tightened organization user privacy policy is also intentionally preserved.
+revoke insert,update,delete,truncate on public.legal_holds,public.deletion_batches,public.deletion_items,public.deletion_tombstones from authenticated,service_role;
+revoke all on function app.create_contact_deletion_item(uuid,uuid,timestamptz) from public,authenticated,service_role;
+revoke all on function app.assess_contact_deletion(uuid) from public,authenticated,service_role;
+revoke all on function app.execute_contact_deletion(uuid) from public,authenticated,service_role;
 
 commit;

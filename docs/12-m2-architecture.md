@@ -78,7 +78,7 @@ Z1, el contrato relacional de Z2 y un drill local de Z4 existen con datos sinté
 | Resend y Telegram | Notificaciones | BLOCKED_EXTERNAL | Outbox y delivery ledger existen | Cuenta ENNCO, DPA, región y destino pendientes |
 | Sentry y Checkly | Error, trazas y sintéticos | BLOCKED_EXTERNAL | Variables vacías y BOM | Cuenta, DPA, región, scrub y retención pendientes |
 | KMS y vault | Cifrado y custodia de secretos | BLOCKED_EXTERNAL | Arquitectura y BOM | Cuenta, región, llaves, rotación y offboarding pendientes |
-| PITR y backup externo | RPO, RTO y recuperación | VERIFIED para restore lógico local; BLOCKED_EXTERNAL para producción | `evidence/m2-restore/summary.json` | PITR, RPO 15m, RTO 4h y Storage real no probados |
+| PITR y backup externo | RPO, RTO y recuperación | VERIFIED para restore lógico y replay parcial local; BLOCKED_EXTERNAL para producción | `evidence/m2-restore/summary.json`; `docs/evidence/M2-retention-live-local-gate-report.md` | PITR, journal externo autenticado, RPO 15m, RTO 4h y Storage real no probados |
 
 ## Flujo E2E y transacciones
 
@@ -132,7 +132,7 @@ La migración prueba RLS en PostgreSQL local. La aplicación verifica claims fir
 - Tokens OAuth: KMS previsto, no existe llave.
 - PII en logs: prohibida. Audit log usa allowlist local. Falta scrub real en observabilidad externa.
 - Upload: magic bytes, tamaño, checksum, path opaco, Storage privado y cuarentena pasan localmente. Antivirus real no está conectado.
-- Backup: restore lógico y de objetos sintéticos pasa localmente. RPO de 15 minutos y RTO de cuatro horas no pueden declararse.
+- Backup: restore lógico, restore de objetos y replay parcial del grafo sintético pasan localmente. No es un PITR real y no prueba un journal externo independiente. RPO de 15 minutos y RTO de cuatro horas no pueden declararse.
 - Migraciones: PostgreSQL local validó core, Storage, rollback y reaplicación. Auth, Storage, PITR y restore integral en proveedor siguen pendientes.
 
 ## Evidencia exacta
@@ -141,6 +141,7 @@ La migración prueba RLS en PostgreSQL local. La aplicación verifica claims fir
 - `supabase/migrations/202608110001_core.sql`: esquema core, RLS, integridad tenant, supresión, outbox, DLQ, audit log y roles.
 - `supabase/migrations/202608110002_secure_document_storage.sql`: Storage privado, cuarentena y audit allowlist.
 - `evidence/m2-restore/summary.json`: restore local separado con límites explícitos de producción.
+- `docs/evidence/M2-retention-live-local-gate-report.md`: M021 PASS LOCAL para política, borrado integral, propagación fail closed y replay parcial.
 - `docs/04-bill-of-materials.md`: todos los proveedores en `UNKNOWN` o `BLOCKED`, sin compra autorizada.
 - `docs/10-data-processing-inventory.md`: finalidades, categorías, destinos y gaps legales.
 - `docs/11-retention-policy.md`: defaults y controles locales de legal hold y eliminación verificados.
@@ -150,7 +151,7 @@ La migración prueba RLS en PostgreSQL local. La aplicación verifica claims fir
 
 1. Revalidar Auth, RLS, audit allowlist y Storage en proyecto aislado ENNCO.
 2. Conectar antivirus real y signed URLs; magic bytes y cuarentena ya pasan localmente.
-3. Integrar scheduler, proveedores y restore administrado con re-aplicación de tombstones. El registro de legal holds y borrado local ya pasan.
+3. Revalidar M021 en Supabase aislado e integrar scheduler, ACK reales de proveedores y PITR administrado con journal externo autenticado. El control local sintético ya pasa.
 4. Aprobar base legal, aviso de privacidad, DPA, región y subprocesadores.
 5. Configurar PITR y backup de Storage, ejecutar restore y re-aplicar tombstones.
 6. Rotar credenciales expuestas y custodiar secretos en vault aprobado.

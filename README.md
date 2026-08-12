@@ -17,6 +17,7 @@ Sistema comercial E2E de ENNCO. Este repositorio contiene la experiencia públic
 - Checkpoint de hardening actual: evidencia comercial relacional, supresión privada, bajas one-click, operación canónica, atribución automática y comisión transaccional pasan en PostgreSQL desechable. Sigue pendiente el canary en Supabase aislado y todos los gates live.
 - Capacidad operativa: política versionada de dos proyectos industriales por mes, reserva exclusiva de CLOSED_WON, alertas y estado UNKNOWN ante cierres sin fecha pasan forward, concurrencia, rollback y reapply en PostgreSQL desechable.
 - Research Workbench: contratos, nueve endpoints, portal y base M019 pasan localmente. M019 revoca DML directo, exige AAL2, evidencia ligada al sujeto, revisión de dos personas, deduplicación, supresión e inventario 75/150 siempre en `RESEARCH_ONLY_HOLD`. El lote determinista concilia 27 semillas, 21 investigables y 6 en cuarentena, pero no se ha ejecutado contra una base externa. Hay cero contactos, cero elegibles y cero outreach.
+- Indexación pública: sólo diagnóstico y privacidad pueden abrirse mediante release explícito. Raíz, portal, auth, APIs y PDFs permanecen privados. La aprobación legal exige versión y SHA256 exactos del contenido canónico, y el mismo artefacto puede volver inmediatamente a HOLD.
 - Producción, DNS, compras y contacto externo: bloqueados hasta aprobación explícita.
 
 ## Desarrollo local
@@ -28,6 +29,8 @@ npm run dev
 ```
 
 `ENNCO_DEMO_MODE=true` permite datos sintéticos exclusivamente fuera de producción. Producción falla si no existe un proyecto Supabase dedicado, organización, MFA y configuración completa.
+
+La superficie pública permanece cerrada por default. Antes de cualquier publicación se requieren `ENNCO_PUBLIC_SURFACE_RELEASED_AT`, la versión aprobada del aviso y su SHA256 exacto. `npm run verify:privacy-notice` recalcula el snapshot legal usado por la página.
 
 ## Verificación
 
@@ -58,8 +61,9 @@ Este comando valida:
 - Storage privado, aislamiento por organización, cuarentena y rollback.
 - Audit log con allowlist y pruebas centinela sin PII.
 - Legal holds, doble aprobación, borrado transaccional y tombstones sin PII.
+- M021 local: política versionada, borrado integral, propagación fail closed, restore parcial, replay, rollback y reapply.
 - Backup lógico y restore separado de base y objetos sintéticos.
-- Evidencia explícita de que PITR, RPO de 15 minutos y RTO de cuatro horas aún no están probados.
+- Evidencia explícita de que PITR, scheduler, proveedores reales, RPO de 15 minutos y RTO de cuatro horas aún no están probados.
 
 `verify:m3` agrega:
 

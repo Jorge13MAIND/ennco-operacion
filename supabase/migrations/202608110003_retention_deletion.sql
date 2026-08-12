@@ -1,16 +1,26 @@
 begin;
 
-create type public.legal_hold_status as enum ('ACTIVE', 'RELEASED');
-create type public.deletion_batch_status as enum ('DRAFT', 'APPROVED', 'IN_PROGRESS', 'COMPLETED', 'FAILED', 'CANCELLED');
-create type public.deletion_item_status as enum ('PENDING', 'ELIGIBLE', 'INELIGIBLE_RETENTION', 'BLOCKED_HOLD', 'EXECUTED', 'FAILED');
-create type public.deletion_reason_code as enum ('RETENTION_EXPIRED', 'DATA_SUBJECT_REQUEST', 'SYNTHETIC_TEST');
-create type public.legal_hold_reason_code as enum ('LEGAL', 'CONTRACTUAL', 'INCIDENT', 'DISPUTE');
-create type public.restoration_status as enum ('NOT_REQUESTED', 'NOT_POSSIBLE', 'METADATA_ONLY_VERIFIED');
+do $$ begin
+  if to_regclass('public.legal_holds') is not null then execute 'drop trigger if exists legal_holds_m003_rollback_fail_closed on public.legal_holds'; end if;
+  if to_regclass('public.deletion_batches') is not null then execute 'drop trigger if exists deletion_batches_m003_rollback_fail_closed on public.deletion_batches'; end if;
+  if to_regclass('public.deletion_items') is not null then execute 'drop trigger if exists deletion_items_m003_rollback_fail_closed on public.deletion_items'; end if;
+  if to_regclass('public.deletion_tombstones') is not null then execute 'drop trigger if exists deletion_tombstones_m003_rollback_fail_closed on public.deletion_tombstones'; end if;
+end $$;
+drop function if exists app.m003_retention_rollback_fail_closed();
 
-create unique index contacts_organization_id_id_unique
+do $$ begin
+  if not exists(select 1 from pg_type where typnamespace='public'::regnamespace and typname='legal_hold_status') then create type public.legal_hold_status as enum ('ACTIVE','RELEASED'); end if;
+  if not exists(select 1 from pg_type where typnamespace='public'::regnamespace and typname='deletion_batch_status') then create type public.deletion_batch_status as enum ('DRAFT','APPROVED','IN_PROGRESS','COMPLETED','FAILED','CANCELLED'); end if;
+  if not exists(select 1 from pg_type where typnamespace='public'::regnamespace and typname='deletion_item_status') then create type public.deletion_item_status as enum ('PENDING','ELIGIBLE','INELIGIBLE_RETENTION','BLOCKED_HOLD','EXECUTED','FAILED'); end if;
+  if not exists(select 1 from pg_type where typnamespace='public'::regnamespace and typname='deletion_reason_code') then create type public.deletion_reason_code as enum ('RETENTION_EXPIRED','DATA_SUBJECT_REQUEST','SYNTHETIC_TEST'); end if;
+  if not exists(select 1 from pg_type where typnamespace='public'::regnamespace and typname='legal_hold_reason_code') then create type public.legal_hold_reason_code as enum ('LEGAL','CONTRACTUAL','INCIDENT','DISPUTE'); end if;
+  if not exists(select 1 from pg_type where typnamespace='public'::regnamespace and typname='restoration_status') then create type public.restoration_status as enum ('NOT_REQUESTED','NOT_POSSIBLE','METADATA_ONLY_VERIFIED'); end if;
+end $$;
+
+create unique index if not exists contacts_organization_id_id_unique
 on public.contacts (organization_id, id);
 
-create table public.legal_holds (
+create table if not exists public.legal_holds (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
   subject_type text not null default 'CONTACT' check (subject_type = 'CONTACT'),
@@ -35,11 +45,11 @@ create table public.legal_holds (
   )
 );
 
-create unique index legal_holds_one_active_per_contact
+create unique index if not exists legal_holds_one_active_per_contact
 on public.legal_holds (organization_id, subject_id)
 where status = 'ACTIVE';
 
-create table public.deletion_batches (
+create table if not exists public.deletion_batches (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
   status public.deletion_batch_status not null default 'DRAFT',
@@ -62,10 +72,10 @@ create table public.deletion_batches (
   check (approved_by is null or approved_by <> requested_by)
 );
 
-create unique index deletion_batches_organization_id_id_unique
+create unique index if not exists deletion_batches_organization_id_id_unique
 on public.deletion_batches (organization_id, id);
 
-create table public.deletion_items (
+create table if not exists public.deletion_items (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
   batch_id uuid not null,
@@ -96,10 +106,10 @@ create table public.deletion_items (
   )
 );
 
-create unique index deletion_items_organization_id_id_unique
+create unique index if not exists deletion_items_organization_id_id_unique
 on public.deletion_items (organization_id, id);
 
-create table public.deletion_tombstones (
+create table if not exists public.deletion_tombstones (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
   deletion_item_id uuid not null,
@@ -340,7 +350,7 @@ begin
   if new.status is distinct from old.status and not (
     (old.status = 'PENDING' and new.status in ('ELIGIBLE', 'INELIGIBLE_RETENTION', 'BLOCKED_HOLD', 'FAILED'))
     or (old.status = 'ELIGIBLE' and new.status in ('BLOCKED_HOLD', 'EXECUTED', 'FAILED'))
-    or (old.status in ('INELIGIBLE_RETENTION', 'BLOCKED_HOLD') and new.status = 'PENDING')
+    or (old.status in ('INELIGIBLE_RETENTION', 'BLOCKED_HOLD') and new.status in ('PENDING','ELIGIBLE'))
   ) then raise exception 'INVALID_DELETION_ITEM_TRANSITION'; end if;
 
   if old.status in ('EXECUTED', 'FAILED') and new is distinct from old then
@@ -349,6 +359,19 @@ begin
   return new;
 end;
 $$;
+
+drop trigger if exists legal_holds_updated_at on public.legal_holds;
+drop trigger if exists deletion_batches_updated_at on public.deletion_batches;
+drop trigger if exists deletion_items_updated_at on public.deletion_items;
+drop trigger if exists legal_holds_transition on public.legal_holds;
+drop trigger if exists legal_holds_actor on public.legal_holds;
+drop trigger if exists deletion_batches_transition on public.deletion_batches;
+drop trigger if exists deletion_batches_actor on public.deletion_batches;
+drop trigger if exists deletion_items_transition on public.deletion_items;
+drop trigger if exists legal_holds_audit on public.legal_holds;
+drop trigger if exists deletion_batches_audit on public.deletion_batches;
+drop trigger if exists deletion_items_audit on public.deletion_items;
+drop trigger if exists deletion_tombstones_audit on public.deletion_tombstones;
 
 create trigger legal_holds_updated_at before update on public.legal_holds
 for each row execute function app.set_updated_at();
@@ -539,6 +562,40 @@ begin
     return false;
   end if;
 
+  if exists (
+    select 1
+    from public.leads owned
+    join public.leads shared
+      on shared.organization_id = owned.organization_id
+     and shared.prequote_id = owned.prequote_id
+     and shared.contact_id <> owned.contact_id
+    where owned.organization_id = item_record.organization_id
+      and owned.contact_id = item_record.subject_id
+      and owned.prequote_id is not null
+  ) then
+    update public.deletion_items
+    set status='FAILED', failure_code='SHARED_PREQUOTE_OWNERSHIP_UNKNOWN', evaluated_at=clock_timestamp()
+    where id=item_record.id;
+    return false;
+  end if;
+
+  evidence_hash := encode(
+    digest(item_record.id::text || ':' || item_record.subject_hash || ':' || deletion_timestamp::text, 'sha256'),
+    'hex'
+  );
+
+  update public.deletion_items
+  set status = 'EXECUTED', blocked_hold_id = null, failure_code = null, executed_at = deletion_timestamp
+  where id = item_record.id;
+
+  insert into public.deletion_tombstones (
+    organization_id, deletion_item_id, subject_type, subject_hash,
+    deletion_evidence_sha256, deleted_at, restoration_status
+  ) values (
+    item_record.organization_id, item_record.id, item_record.subject_type, item_record.subject_hash,
+    evidence_hash, deletion_timestamp, 'NOT_POSSIBLE'
+  );
+
   if batch_record.status = 'APPROVED' then
     update public.deletion_batches
     set status = 'IN_PROGRESS', started_at = deletion_timestamp
@@ -620,7 +677,10 @@ begin
     );
 
   update public.meetings mt
-  set outcome_notes = null
+  set outcome_notes = case
+        when mt.attendance_verified and mt.held_at is not null then 'RETENTION_REDACTED'
+        else null
+      end
   where mt.organization_id = item_record.organization_id
     and mt.opportunity_id in (
       select o.id from public.opportunities o
@@ -641,6 +701,10 @@ begin
   set qualification_reason = null
   where organization_id = item_record.organization_id and contact_id = item_record.subject_id;
 
+  delete from public.qualification_evidence_links qel using public.source_evidence se
+  where qel.organization_id=se.organization_id and qel.source_evidence_id=se.id
+    and se.organization_id=item_record.organization_id and lower(se.subject_type)='contact' and se.subject_id=item_record.subject_id;
+
   delete from public.source_evidence
   where organization_id = item_record.organization_id
     and lower(subject_type) = 'contact'
@@ -660,22 +724,13 @@ begin
       is_deleted = true
   where id = item_record.subject_id and organization_id = item_record.organization_id;
 
-  evidence_hash := encode(
-    digest(item_record.id::text || ':' || item_record.subject_hash || ':' || deletion_timestamp::text, 'sha256'),
-    'hex'
-  );
-
-  update public.deletion_items
-  set status = 'EXECUTED', blocked_hold_id = null, failure_code = null, executed_at = deletion_timestamp
-  where id = item_record.id;
-
-  insert into public.deletion_tombstones (
-    organization_id, deletion_item_id, subject_type, subject_hash,
-    deletion_evidence_sha256, deleted_at, restoration_status
-  ) values (
-    item_record.organization_id, item_record.id, item_record.subject_type, item_record.subject_hash,
-    evidence_hash, deletion_timestamp, 'NOT_POSSIBLE'
-  );
+  if to_regprocedure('app.reapply_contact_retention_tombstone(uuid,uuid,text)') is not null then
+    perform app.reapply_contact_retention_tombstone(
+      item_record.organization_id,
+      item_record.subject_id,
+      item_record.subject_hash
+    );
+  end if;
 
   if not exists (
     select 1 from public.deletion_items di
@@ -723,6 +778,15 @@ using (
   )
 );
 
+drop policy if exists legal_holds_privileged_read on public.legal_holds;
+drop policy if exists legal_holds_admin_insert on public.legal_holds;
+drop policy if exists legal_holds_admin_update on public.legal_holds;
+drop policy if exists deletion_batches_privileged_read on public.deletion_batches;
+drop policy if exists deletion_batches_teckel_insert on public.deletion_batches;
+drop policy if exists deletion_batches_admin_update on public.deletion_batches;
+drop policy if exists deletion_items_privileged_read on public.deletion_items;
+drop policy if exists deletion_tombstones_privileged_read on public.deletion_tombstones;
+
 create policy legal_holds_privileged_read on public.legal_holds for select
 using (app.has_role(organization_id, array['ennco_admin'::public.user_role, 'teckel_admin'::public.user_role, 'auditor_readonly'::public.user_role]));
 create policy legal_holds_admin_insert on public.legal_holds for insert
@@ -754,17 +818,27 @@ revoke all on function app.execute_contact_deletion(uuid) from public;
 do $$
 begin
   if exists (select 1 from pg_roles where rolname = 'authenticated') then
-    grant select, insert, update on public.legal_holds to authenticated;
-    grant select, insert, update on public.deletion_batches to authenticated;
+    if to_regclass('public.retention_policy_versions') is null then
+      grant select, insert, update on public.legal_holds to authenticated;
+      grant select, insert, update on public.deletion_batches to authenticated;
+    else
+      revoke insert,update,delete,truncate on public.legal_holds,public.deletion_batches,public.deletion_items,public.deletion_tombstones from authenticated;
+    end if;
     grant select on public.deletion_items, public.deletion_tombstones to authenticated;
   end if;
 
   if exists (select 1 from pg_roles where rolname = 'service_role') then
     grant select on public.legal_holds, public.deletion_batches, public.deletion_items, public.deletion_tombstones to service_role;
-    grant execute on function app.is_contact_under_legal_hold(uuid, uuid) to service_role;
-    grant execute on function app.create_contact_deletion_item(uuid, uuid, timestamptz) to service_role;
-    grant execute on function app.assess_contact_deletion(uuid) to service_role;
-    grant execute on function app.execute_contact_deletion(uuid) to service_role;
+    if to_regclass('public.retention_policy_versions') is null then
+      grant execute on function app.is_contact_under_legal_hold(uuid, uuid) to service_role;
+      grant execute on function app.create_contact_deletion_item(uuid, uuid, timestamptz) to service_role;
+      grant execute on function app.assess_contact_deletion(uuid) to service_role;
+      grant execute on function app.execute_contact_deletion(uuid) to service_role;
+    else
+      revoke all on function app.create_contact_deletion_item(uuid,uuid,timestamptz) from service_role;
+      revoke all on function app.assess_contact_deletion(uuid) from service_role;
+      revoke all on function app.execute_contact_deletion(uuid) from service_role;
+    end if;
   end if;
 end;
 $$;

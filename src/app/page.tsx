@@ -1,6 +1,19 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { SiteHeader } from "@/components/SiteHeader";
+import { getRuntimeConfig } from "@/lib/runtime/config";
+import { PRIVATE_ROBOTS } from "@/lib/seo/indexing";
+
+export function generateMetadata(): Metadata {
+  const config = getRuntimeConfig();
+  return {
+    title: "ENNCO | Sistema comercial",
+    description: "Sistema operativo comercial de ENNCO.",
+    alternates: { canonical: new URL("/", config.appUrl) },
+    robots: PRIVATE_ROBOTS,
+  };
+}
 
 export default function HomePage() {
   return (

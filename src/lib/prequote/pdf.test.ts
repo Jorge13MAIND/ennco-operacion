@@ -2,6 +2,7 @@ import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
 
 import { calculatePrequote } from "@/lib/domain/prequote";
+import { PRIVACY_NOTICE_VERSION } from "@/lib/privacy/notice";
 import { renderPrequotePdf } from "@/lib/prequote/pdf";
 import type { PrequoteInput } from "@/lib/domain/types";
 
@@ -22,7 +23,7 @@ const input: PrequoteInput = {
     phone: "4770000000",
   },
   consent: true,
-  privacyNoticeVersion: "DRAFT-2026-08-11",
+  privacyNoticeVersion: PRIVACY_NOTICE_VERSION,
 };
 
 describe("prequote PDF", () => {

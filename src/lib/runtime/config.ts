@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+import {
+  PRIVACY_NOTICE_CONTENT_SHA256,
+  PRIVACY_NOTICE_VERSION,
+} from "@/lib/privacy/notice";
+
 const runtimeSchema = z.object({
   appEnv: z.enum(["development", "staging", "production"]),
   appUrl: z.url(),
@@ -8,7 +13,10 @@ const runtimeSchema = z.object({
   externalSendAllowed: z.boolean(),
   globalKillSwitch: z.boolean(),
   publicSurfaceReleased: z.boolean(),
+  publicSurfaceReleasedAt: z.iso.datetime({ offset: true }).optional(),
   privacyNoticeApproved: z.boolean(),
+  privacyNoticeApprovedVersion: z.string().min(1).optional(),
+  privacyNoticeApprovedSha256: z.string().regex(/^[a-f0-9]{64}$/).optional(),
   gmailWebhookReleased: z.boolean(),
   assistantReleased: z.boolean(),
   unsubscribeReleased: z.boolean(),
@@ -29,9 +37,17 @@ export type RuntimeConfig = z.infer<typeof runtimeSchema>;
 
 type RuntimeEnvironment = Record<string, string | undefined>;
 
+export const PUBLIC_SURFACE_ORIGIN = "https://diagnostico.ennco.com.mx";
+
 function envBoolean(value: string | undefined, fallback: boolean): boolean {
   if (value === undefined) return fallback;
   return value.toLowerCase() === "true";
+}
+
+function explicitReleaseBoolean(value: string | undefined): boolean {
+  if (value === undefined || value === "false") return false;
+  if (value === "true") return true;
+  throw new Error("PUBLIC_SURFACE_RELEASE_FLAG_INVALID");
 }
 
 function inferAppEnvironment(environment: RuntimeEnvironment): "development" | "staging" | "production" {
@@ -58,8 +74,11 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     requireMfa: envBoolean(environment.ENNCO_REQUIRE_MFA, appEnv !== "development"),
     externalSendAllowed: envBoolean(environment.ENNCO_ALLOW_EXTERNAL_SEND, false),
     globalKillSwitch: envBoolean(environment.ENNCO_GLOBAL_KILL_SWITCH, true),
-    publicSurfaceReleased: envBoolean(environment.ENNCO_PUBLIC_SURFACE_RELEASED, false),
+    publicSurfaceReleased: explicitReleaseBoolean(environment.ENNCO_PUBLIC_SURFACE_RELEASED),
+    publicSurfaceReleasedAt: environment.ENNCO_PUBLIC_SURFACE_RELEASED_AT || undefined,
     privacyNoticeApproved: envBoolean(environment.ENNCO_PRIVACY_NOTICE_APPROVED, false),
+    privacyNoticeApprovedVersion: environment.ENNCO_PRIVACY_NOTICE_APPROVED_VERSION || undefined,
+    privacyNoticeApprovedSha256: environment.ENNCO_PRIVACY_NOTICE_APPROVED_SHA256 || undefined,
     gmailWebhookReleased: envBoolean(environment.ENNCO_GMAIL_WEBHOOK_RELEASED, false),
     assistantReleased: envBoolean(environment.ENNCO_ASSISTANT_RELEASED, false),
     unsubscribeReleased: envBoolean(environment.ENNCO_UNSUBSCRIBE_RELEASED, false),
@@ -97,7 +116,35 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
   if (config.appEnv === "production" && (!config.prequoteIngestSecret || !config.pdfSigningSecret)) {
     throw new Error("PREQUOTE_SERVER_SECRETS_REQUIRED_IN_PRODUCTION");
   }
-  if (config.publicSurfaceReleased && (config.demoMode || !config.privacyNoticeApproved)) {
+  if (
+    config.privacyNoticeApproved
+    && (
+      config.privacyNoticeApprovedVersion !== PRIVACY_NOTICE_VERSION
+      || config.privacyNoticeApprovedSha256 !== PRIVACY_NOTICE_CONTENT_SHA256
+    )
+  ) {
+    throw new Error("PRIVACY_NOTICE_APPROVAL_VERSION_MISMATCH");
+  }
+  const publicUrl = new URL(config.appUrl);
+  const releaseTimestamp = config.publicSurfaceReleasedAt
+    ? Date.parse(config.publicSurfaceReleasedAt)
+    : Number.NaN;
+  if (
+    config.publicSurfaceReleased
+    && (
+      config.appEnv !== "production"
+      || config.demoMode
+      || !config.privacyNoticeApproved
+      || !config.publicSurfaceReleasedAt
+      || !environment.NEXT_PUBLIC_APP_URL
+      || publicUrl.protocol !== "https:"
+      || publicUrl.origin !== PUBLIC_SURFACE_ORIGIN
+      || publicUrl.pathname !== "/"
+      || Boolean(publicUrl.search || publicUrl.hash || publicUrl.username || publicUrl.password)
+      || !Number.isFinite(releaseTimestamp)
+      || releaseTimestamp > Date.now() + 5 * 60 * 1000
+    )
+  ) {
     throw new Error("PUBLIC_SURFACE_RELEASE_GATES_INCOMPLETE");
   }
   if (

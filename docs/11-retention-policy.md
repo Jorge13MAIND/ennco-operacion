@@ -59,7 +59,9 @@ Si el evento requerido es `NULL`, el registro entra en reporte de excepción. No
 9. Verificar por consulta, checksum y muestreo que el dato ya no sea accesible.
 10. Cerrar el lote con evidencia o abrir incidente si hay residuo.
 
-La migración 003 implementa y prueba localmente el registro de legal holds, lotes, evaluación, doble aprobación, anonimización transaccional y tombstones. No existe todavía un scheduler de producción, propagación confirmada a proveedores ni re-aplicación de tombstones después de un restore administrado.
+Las migraciones 003 y 021 implementan y prueban localmente política versionada, legal holds, lotes, doble aprobación, relojes monotónicos, reconciliación idempotente, anonimización transaccional, tombstones, propagación fail closed y replay de un restore parcial del grafo de aplicación. El control cubre datos sintéticos y conserva únicamente evidencia financiera no personal bajo un snapshot canónico.
+
+M021 no demuestra un PITR real. El drill restaura datos de aplicación dentro de PostgreSQL local y conserva un journal separado dentro del mismo entorno de prueba. Tampoco ejecuta scheduler administrado ni llama a Gmail, Resend, Sentry, Checkly, Supabase Backup o Storage Backup. Esos seis destinos permanecen sin confirmar y cualquier estado `UNKNOWN`, `PENDING` o `FAILED` impide cerrar el lote.
 
 ## Legal hold
 
@@ -77,7 +79,7 @@ Reglas:
 - Un hold no autoriza acceso adicional.
 - Sólo pausa eliminación dentro de su alcance.
 - Toda consulta o export durante el hold queda auditada.
-- Un hold sin expiración se revisa al menos cada 90 días.
+- Todo hold activo exige una revisión futura no mayor a 90 días. Un hold vencido degrada la salud a `UNKNOWN`.
 - Liberarlo requiere aprobación registrada y reanuda el reloj original, no uno nuevo.
 
 Responsable legal, formato y autoridad de hold: `BLOCKED_EXTERNAL`.
@@ -90,7 +92,7 @@ El sistema debe poder localizar información por organización, correo normaliza
 
 - RPO de 15 minutos sólo existe con PITR aprobado.
 - RTO de cuatro horas sólo cuenta después de un drill exitoso.
-- Un restore a ambiente separado debe re-aplicar tombstones y bajas posteriores al punto restaurado.
+- Un restore a ambiente separado debe importar un journal posterior autenticado y re-aplicar tombstones y bajas posteriores al punto restaurado.
 - Storage necesita backup independiente y prueba de borrado.
 - Región, cifrado, llave, ciclo de vida y destrucción de copias permanecen `BLOCKED_EXTERNAL`.
 
@@ -109,6 +111,8 @@ El sistema debe poder localizar información por organización, correo normaliza
 
 Defaults documentales: `PASS`.
 
-Eliminación local sintética: `PASS`. La suite prueba legal hold, cuatro ojos, aislamiento por organización, ejecución técnica, anonimización, tombstone sin PII, rollback irreversible y audit log minimizado.
+Eliminación y replay local sintético: `PASS LOCAL`. La suite M021 prueba política versionada, legal holds, relojes monotónicos, reconciliación idempotente, doble aprobación, borrado integral del grafo, redacción canónica, seis destinos requeridos, manifiesto completo, replay parcial, alertas `UNKNOWN` y rollback que preserva el journal.
 
-Retención de producción: `EXTEND` y `BLOCKED_EXTERNAL` hasta revisión legal, DPA, regiones, backups y pruebas de borrado end-to-end.
+Evidencia: `docs/evidence/M2-retention-live-local-gate-report.md`.
+
+Retención de producción: `EXTEND` y `BLOCKED_EXTERNAL` hasta revisión legal, DPA, regiones, proyecto Supabase aislado, scheduler administrado, ACK reales de proveedores, PITR real y prueba end-to-end.

@@ -89,7 +89,7 @@ Correos, nombres, teléfonos, empresa, UTM libre y propiedades arbitrarias son r
 
 ## Privacidad
 
-El aviso implementado cubre identidad y domicilio del responsable, datos, finalidades, encargados, transferencias, conservación, seguridad, ARCO, limitación y cambios. Su versión es `DRAFT-2026-08-11` y el runtime impide liberar la superficie mientras `ENNCO_PRIVACY_NOTICE_APPROVED=false`.
+El aviso implementado cubre identidad y domicilio del responsable, datos, finalidades, encargados, transferencias, conservación, seguridad, ARCO, limitación y cambios. Su versión es `2026-08-11-v1`; permanece en borrador mientras no exista aprobación externa. El runtime exige versión y SHA256 exactos del snapshot canónico antes de liberarlo, y el build recalcula ese hash para impedir cambios silenciosos del texto.
 
 La estructura se basó en el artículo 15 del texto vigente de la Ley Federal de Protección de Datos Personales en Posesión de los Particulares. No se declara revisión legal ni cumplimiento certificado.
 

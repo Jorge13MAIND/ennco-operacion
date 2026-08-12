@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import calibrationCases from "../../../data/prequote/calibration-cases.json";
 import { calculatePrequote, DRAFT_PREQUOTE_MODEL, prequoteInputSchema } from "@/lib/domain/prequote";
 import type { PrequoteInput } from "@/lib/domain/types";
+import { PRIVACY_NOTICE_VERSION } from "@/lib/privacy/notice";
 
 const validInput: PrequoteInput = {
   needType: "SOLAR_NEW",
@@ -21,7 +22,7 @@ const validInput: PrequoteInput = {
     phone: "4770000000",
   },
   consent: true,
-  privacyNoticeVersion: "DRAFT-2026-08-11",
+  privacyNoticeVersion: PRIVACY_NOTICE_VERSION,
 };
 
 const fixedNow = new Date("2026-08-11T18:00:00.000Z");

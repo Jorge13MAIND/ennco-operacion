@@ -38,7 +38,7 @@ Estados permitidos para este registro:
 | DEC-025 | El Control Room es la vista operativa del cliente; GitHub sigue siendo la evidencia tecnica | VERIFIED | Plan aprobado | Evita tableros duplicados y estados manuales contradictorios | UAT M4 |
 | DEC-026 | No se garantiza una venta; se garantizan controles, evidencia y medicion honesta | VERIFIED | Contrato y plan aprobado | La meta de leads se reporta con denominadores y limites | Reporte mensual |
 | DEC-027 | El modelo industrial se publica como rango extrapolado mientras no exista histórico entregado de 100 kWp o más | VERIFIED | Auditoría de 20 proyectos y cuatro propuestas | Prohíbe presentar la banda como precio final o calibración industrial observada | Aprobación de modelo M3 |
-| DEC-028 | El aviso `DRAFT-2026-08-11` no habilita producción | VERIFIED | Runtime fail closed y gate legal | `ENNCO_PUBLIC_SURFACE_RELEASED` no puede activarse sin aviso aprobado | Revisión legal M3 |
+| DEC-028 | El aviso `2026-08-11-v1` permanece en borrador mientras no exista aprobación exacta | VERIFIED | Runtime fail closed y gate legal | La versión aprobada debe coincidir y `ENNCO_PUBLIC_SURFACE_RELEASED` permanece false | Revisión legal M3 |
 | DEC-029 | La analítica pública usa allowlist y rechaza PII | VERIFIED | Migración 005 y gate adversarial | No se aceptan propiedades libres, correo, nombre, teléfono, empresa ni UTM libre | Canary M3 |
 | DEC-030 | Gmail push entrega un cursor y nunca se trata como mensaje completo | VERIFIED | Documentación oficial Gmail y arquitectura M4 | El worker usa history.list, pagina y hace full sync ante 404 | Canary M4 |
 | DEC-031 | La respuesta positiva exige revisión humana y no cuenta como lead contractual | VERIFIED | Migración 006 y gate adversarial | La revisión crea CAPTURED; otra transición exige cinco criterios y evidencia | UAT M4 |
@@ -71,6 +71,12 @@ Estados permitidos para este registro:
 | DEC-058 | La bandera de runtime no autoriza por sí sola un envío externo | VERIFIED | Trigger de mensajes, evaluación de salud y pruebas M020 | La autorización efectiva exige watchdog fresco, asignación activa, cero incidentes P0 o P1 y gates de campaña | Staging M4 |
 | DEC-059 | Cada recurrencia de incidente abre una ocurrencia nueva y una matriz de entregas obligatorias | VERIFIED | Ledger de incidentes, requisitos CLIENT EMAIL y TECKEL TELEGRAM, gate M020 | Un incidente repetido obtiene reloj, outbox y evidencia propios; una sola entrega no completa la alerta | Staging M4 |
 | DEC-060 | La aprobación de cierre usa digest canónico calculado en servidor y expira por drift | VERIFIED | RPC de solicitud, trigger de consumo y negativos M020 | Un hash arbitrario o una aprobación vencida no puede habilitar `CLOSED_WON` | M4 |
+| DEC-061 | La raíz de esta aplicación es interna y nunca se indexa | VERIFIED | Metadata y build release | Sólo `/diagnostico` y `/privacidad` pueden aparecer en sitemap | Staging M3 |
+| DEC-062 | El HOLD de indexación debe revocarse en runtime sobre el mismo artefacto | VERIFIED | Rutas dinámicas y prueba release a HOLD | Privacidad robots y sitemap no conservan flags del build | Staging M3 |
+| DEC-063 | La aprobación legal exige versión y SHA256 del contenido canónico | VERIFIED | Runtime config, snapshot único renderizado, verificador previo al build y pruebas negativas | Un cambio de texto, flag incompleto, versión stale o hash distinto falla cerrado | Revisión legal M3 |
+| DEC-064 | M021 sólo puede declarar PASS LOCAL para retención | VERIFIED | Runner forward concurrency rollback reapply y auditoría independiente | PITR scheduler y proveedores reales permanecen BLOCKED_EXTERNAL | M2 |
+| DEC-065 | Un restore sólo queda reconciliado con el conjunto completo de tombstones auténticos | VERIFIED | Manifiesto server-side, cardinalidad, SHA256, tenant y cero residuos | Subsets y manifiestos fabricados producen UNKNOWN sin mutación | M2 |
+| DEC-066 | La evidencia de primer pago se conserva sin origen personal | VERIFIED | Snapshot canónico con monto y fecha; source y texto se redactan | Mantiene integridad financiera sin retener PII de contacto | M2 |
 
 ## Jerarquia de evidencia
 

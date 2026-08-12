@@ -79,7 +79,7 @@ as $$
         'phone', '4770000000'
       ),
       'consent', true,
-      'privacyNoticeVersion', 'DRAFT-2026-08-11',
+      'privacyNoticeVersion', '2026-08-11-v1',
       'attribution', jsonb_build_object('source', 'synthetic-gate')
     ),
     'estimate', jsonb_build_object(
@@ -292,7 +292,7 @@ begin
       'ENN-PRE-FOREIGN01', 'SOLAR_NEW', 'Foreign', 'Foreign', 'CEO',
       'foreign@invalid.test', 100000, 'GDMTH', 75, 'Leon', 'Guanajuato', 'URBAN',
       '{}', now(), 'synthetic_demo', '48111111-1111-4111-8111-111111111111',
-      'm3-cross-tenant-000001', 'DRAFT-2026-08-11'
+      'm3-cross-tenant-000001', '2026-08-11-v1'
     );
     raise exception 'EXPECTED_TENANT_FK_REJECTION';
   exception when foreign_key_violation then null;
@@ -349,7 +349,7 @@ begin
     select 1 from public.prequotes
     where normalized_email = 'm3_pii_sentinel@invalid.test'
       and phone_e164 = '+524770000000'
-      and privacy_notice_version = 'DRAFT-2026-08-11'
+      and privacy_notice_version = '2026-08-11-v1'
   ) then
     raise exception 'EXPECTED_NORMALIZED_CONTACT_NOT_FOUND';
   end if;
