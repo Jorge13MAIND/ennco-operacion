@@ -1,14 +1,14 @@
 {
   "schema_version": "1.0.0",
   "evidence_class": "synthetic_demo",
-  "source_commit_sha": "49e1b994d160292b14a61826e95b9c5d3bb45504",
+  "source_commit_sha": "757ed4d20d2c68c78be5caa8bff7d2de17c8960f",
   "contains_real_ennco_data": false,
   "external_side_effects": 0,
   "artifacts": [
     {
       "key": "SOURCE_PACKAGE_LOCAL",
       "path": "artifacts/ennco-revenue-platform-source.tar",
-      "sha256": "b2e6d73ff9dbffb6b8c8bdc18a905a81194b3ad0aed0458f32f33f1d207a92d7"
+      "sha256": "7ff594ab17b9b08c38b5d1e687a2326cd9e7a2498b7447bffae9c09a2f187073"
     },
     {
       "key": "EXPORT_COMPANIES_CONTACTS_LOCAL",

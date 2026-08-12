@@ -19,8 +19,8 @@ El resultado local prueba el contrato, el paquete y el harness de entrega. No pr
 
 ## Paquete fuente
 
-- Commit fuente: `49e1b994d160292b14a61826e95b9c5d3bb45504`.
-- Manifest SHA256: `7bf1fc0379c9c496c183bccbd875b32ddc816acd8a5ebc1d47104123680bae4e`.
+- Commit fuente: `757ed4d20d2c68c78be5caa8bff7d2de17c8960f`.
+- Manifest SHA256: `1c8b7416cd8a8d44bbeae2a7ac1a41123201d1574f9fc7589815411549a38cd1`.
 - Evidence class: `synthetic_demo`.
 - Datos reales de ENNCO dentro del paquete de prueba: no.
 - Source archive reproducido y comparado contra manifest: PASS.
