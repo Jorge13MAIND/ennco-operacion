@@ -267,7 +267,7 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         { key: "limite", label: "Límite" },
       ],
       rows: [
-        row("handoff-local", "IN_PROGRESS", { entregable: "Paquete M9 local", evidencia: "5/6 criterios locales", valor: "Falta congelar commit fuente", limite: "No equivale a entrega ENNCO" }),
+        row("handoff-local", "EVIDENCE_READY", { entregable: "Paquete M9 local", evidencia: "6/6 criterios locales", valor: "Preparado", limite: "No equivale a entrega ENNCO" }),
         row("handoff-live", "EXTEND", { entregable: "Gates live", evidencia: "0/10", valor: "No iniciados", limite: "Requiere infraestructura, UAT y operación autorizada" }),
         row("handoff-training", "NOT_STARTED", { entregable: "Capacitación ENNCO", evidencia: "0 sesiones live", valor: "Guion listo", limite: "El guion no prueba capacitación" }),
         row("handoff-acceptance", "BLOCKED", { entregable: "Aceptación final", evidencia: "0 aceptaciones", valor: "No aceptado", limite: "Sólo un ennco_admin puede aceptar un paquete live" }),

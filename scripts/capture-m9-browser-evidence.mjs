@@ -8,7 +8,7 @@ import { chromium } from "@playwright/test";
 const repoIndex = process.argv.indexOf("--repo");
 const repoRoot = resolve(repoIndex >= 0 ? process.argv[repoIndex + 1] : ".");
 const baseUrlIndex = process.argv.indexOf("--base-url");
-const baseUrl = baseUrlIndex >= 0 ? process.argv[baseUrlIndex + 1] : "http://127.0.0.1:3109";
+const baseUrl = baseUrlIndex >= 0 ? process.argv[baseUrlIndex + 1] : "http://localhost:3109";
 const evidenceDir = resolve(repoRoot, "docs/evidence");
 await mkdir(evidenceDir, { recursive: true });
 

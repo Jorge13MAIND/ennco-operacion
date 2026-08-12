@@ -107,7 +107,9 @@ test("operations modules preserve synthetic disclosure and strict empty pipeline
 
   await page.goto("/operacion/entrega");
   await expect(page.getByRole("heading", { level: 1, name: "Hardening y entrega" })).toBeVisible();
-  await expect(page.getByText("5/6 criterios locales")).toBeVisible();
+  await expect(page.getByText("Estado local, sin entrega real.")).toBeVisible();
+  await expect(page.getByText("EVIDENCE_READY sólo describe el paquete local. UAT, capacitación, transferencia y aceptación ENNCO permanecen en cero.")).toBeVisible();
+  await expect(page.getByText("6/6 criterios locales")).toBeVisible();
   await expect(page.getByText("0/10")).toBeVisible();
   await expect(page.getByText("0 aceptaciones")).toBeVisible();
   await expect(page.getByText("No equivale a entrega ENNCO")).toBeVisible();
