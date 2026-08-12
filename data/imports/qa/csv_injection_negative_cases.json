@@ -1,0 +1,32 @@
+[
+  {
+    "case_id": "equals_prefix",
+    "raw_value": "=1+1",
+    "expected_csv_cell": "'=1+1"
+  },
+  {
+    "case_id": "plus_prefix",
+    "raw_value": "+SUM(1,1)",
+    "expected_csv_cell": "'+SUM(1,1)"
+  },
+  {
+    "case_id": "minus_prefix",
+    "raw_value": "-2+3",
+    "expected_csv_cell": "'-2+3"
+  },
+  {
+    "case_id": "at_prefix",
+    "raw_value": "@SUM(A1:A2)",
+    "expected_csv_cell": "'@SUM(A1:A2)"
+  },
+  {
+    "case_id": "negative_number",
+    "raw_value": -42,
+    "expected_csv_cell": "'-42"
+  },
+  {
+    "case_id": "safe_text",
+    "raw_value": "texto seguro",
+    "expected_csv_cell": "texto seguro"
+  }
+]

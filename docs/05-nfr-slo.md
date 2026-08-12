@@ -29,3 +29,5 @@
 ## Error budget
 
 Si se consume el error budget mensual, se congelan funciones nuevas y el siguiente trabajo es confiabilidad. Unknown nunca es verde.
+
+El contrato local de cálculo vive en `src/lib/slo/error-budget.ts`. Sin denominador de producción devuelve `UNKNOWN` y congela funciones. La telemetría, las alertas de burn rate y los denominadores administrados siguen bloqueados hasta contar con infraestructura autorizada.

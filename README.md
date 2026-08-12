@@ -4,7 +4,7 @@ Sistema comercial E2E de ENNCO. Este repositorio contiene la experiencia públic
 
 ## Estado
 
-- M0: paquete interno completo y auditado. Gate global `EXTEND` por insumos externos faltantes.
+- M0: paquete interno auditado y `EVIDENCE_READY`. Gate global `EXTEND` por insumos externos faltantes. No es cierre contractual.
 - M1: golden path local `PASS` con datos sintéticos y cero efectos externos.
 - M2: seguridad, Storage, audit allowlist, retención y restore local en `PASS`. Gate global `EXTEND` hasta validar proveedor, legal, secretos, antivirus, PITR y RTO.
 - M3: captación, precotizador, PDF, persistencia y analítica local en `PASS`. Gate global `EXTEND` hasta aprobar modelo, aviso, antivirus y Supabase real.
@@ -14,6 +14,7 @@ Sistema comercial E2E de ENNCO. Este repositorio contiene la experiencia públic
 - M7: escalamiento controlado, salud por ola y contrato T0 local en `PASS`. Gate global `EXTEND`, cero olas reales y cero de 100 entregas válidas.
 - M8: reporte contractual, denominadores por canal y recuperación de una variable local en `PASS`. Gate global `EXTEND`, mes contractual no iniciado y cero reportes reales.
 - M9: hardening, segundo restore, exports, handoff y aceptación local en `EVIDENCE_READY`. Gate global `EXTEND`, cero UAT, capacitaciones, transferencias y aceptaciones reales.
+- Checkpoint de hardening actual: evidencia comercial relacional, supresión privada, bajas one-click, operación canónica, atribución automática y comisión transaccional pasan en PostgreSQL desechable. Sigue pendiente el canary en Supabase aislado y todos los gates live.
 - Producción, DNS, compras y contacto externo: bloqueados hasta aprobación explícita.
 
 ## Desarrollo local
@@ -43,7 +44,7 @@ npm run verify:m9
 Este comando valida:
 
 - Cobertura RTM de 47 de 47 puntos del checklist.
-- Integridad de los dos XLSX y 28 controles de normalización.
+- Integridad de los dos XLSX y 45 controles de normalización y portabilidad.
 - Migración e invariantes en PostgreSQL desechable.
 - Supresión, idempotencia, audit log, outbox, retry, dead letter y kill switches.
 - Lint, tipos, unitarias y build de producción.
@@ -121,6 +122,10 @@ Este comando valida:
 - Inventario de accesos, proveedores, runbooks, capacitación y checklist final.
 - Aceptación append-only exclusiva de un `ennco_admin` autenticado.
 - Rechazo de autoaceptación, cross-tenant, statement drift y P0/P1 abiertos.
+- Evidencia contractual ligada a registros append-only y tenant-safe.
+- Bajas one-click firmadas, supresión HMAC sin correo crudo y fail closed.
+- Oportunidad, reunión, pago, atribución y comisión mediante RPCs canónicos idempotentes.
+- CodeQL, ZAP passive baseline, SBOM CycloneDX, accesibilidad automatizada y smoke de performance configurados o ejecutados según su evidencia local.
 
 Un `PASS` local valida implementación y controles. No equivale a producción, resultado comercial, UAT, capacitación o aceptación ENNCO.
 

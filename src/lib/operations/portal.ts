@@ -169,12 +169,13 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
       })],
     },
     pipeline: {
-      title: "Pipeline estricto",
-      description: "Sólo aparecen oportunidades con comprador, dolor, impacto, plazo, valor y siguiente acción.",
-      emptyState: "No hay pipeline estricto real.",
+      title: "Pipeline operativo",
+      description: "Muestra todas las oportunidades. Sólo las que tienen comprador, dolor, impacto, plazo, valor y siguiente acción cuentan como pipeline estricto.",
+      emptyState: "No hay oportunidades reales.",
       columns: [
         { key: "cuenta", label: "Cuenta" },
         { key: "etapa", label: "Etapa" },
+        { key: "criterios", label: "Criterios" },
         { key: "valor", label: "Valor" },
         { key: "siguiente", label: "Siguiente acción" },
       ],
@@ -292,8 +293,8 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
       killSwitch: true,
       externalSendAllowed: false,
       replySync: "HOLD",
-      openP0: 11,
-      openP1: 7,
+      openP0: 10,
+      openP1: 11,
     },
     nextActions: [
       row("next-annex", "BLOCKED_EXTERNAL", { objective: "Importar y conciliar Anexo A", due: "Al recibirlo", owner: "Teckel + ENNCO" }),
@@ -321,6 +322,14 @@ function dateValue(value: unknown): string {
   if (typeof value !== "string") return "Sin fecha";
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? "Sin fecha" : new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" }).format(date);
+}
+
+export function sumFirstPaymentsMxn(payments: Array<Record<string, unknown>>): number {
+  return payments.reduce((total, payment) => {
+    if (payment.is_first_payment !== true) return total;
+    const amount = Number(payment.amount_mxn ?? 0);
+    return Number.isFinite(amount) && amount > 0 ? total + amount : total;
+  }, 0);
 }
 
 export async function loadOperationsPortal(access: OperationsAccessContext): Promise<OperationsPortalSnapshot> {
@@ -358,11 +367,12 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     client.from("handoff_readiness_checks").select("id,package_id,check_code,status,evidence_class,observed_at").eq("organization_id", organizationId),
     client.from("handoff_training_records").select("id,package_id,audience_role,status,evidence_class,scheduled_at,held_at").eq("organization_id", organizationId),
     client.from("final_acceptances").select("id,package_id,accepted_by,accepted_at").eq("organization_id", organizationId),
+    client.from("payments").select("id,opportunity_id,amount_mxn,paid_at,is_first_payment").eq("organization_id", organizationId).eq("is_first_payment", true),
   ]);
   const failed = results.find((result) => result.error);
   if (failed?.error) throw new Error(`PORTAL_QUERY_FAILED:${failed.error.code ?? "UNKNOWN"}`);
 
-  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult, monthlyReportsResult, reportIssuancesResult, recoveryExperimentsResult, handoffPackagesResult, handoffArtifactsResult, handoffChecksResult, handoffTrainingResult, finalAcceptancesResult] = results;
+  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult, monthlyReportsResult, reportIssuancesResult, recoveryExperimentsResult, handoffPackagesResult, handoffArtifactsResult, handoffChecksResult, handoffTrainingResult, finalAcceptancesResult, paymentsResult] = results;
   const accounts = asRows(accountsResult.data);
   const contacts = asRows(contactsResult.data);
   const messages = asRows(messagesResult.data);
@@ -380,6 +390,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const handoffChecks = asRows(handoffChecksResult.data);
   const handoffTraining = asRows(handoffTrainingResult.data);
   const finalAcceptances = asRows(finalAcceptancesResult.data);
+  const firstPayments = asRows(paymentsResult.data);
   const leads = asRows(leadsResult.data);
   const opportunities = asRows(opportunitiesResult.data);
   const meetings = asRows(meetingsResult.data);
@@ -411,6 +422,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     origen: "Correo o captación",
     calificacion: lead.contractual_qualified === true ? "Contractual verificado" : "No contractual",
     evidencia: textValue(lead.qualification_reason, "Pendiente"),
+    qualified: lead.contractual_qualified === true ? "true" : "false",
   }));
   const accountRows = accounts.map((account) => row(textValue(account.id), textValue(account.source_confidence), {
     empresa: textValue(account.legal_name),
@@ -450,7 +462,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       envio: runtimeOpen && releaseReady ? "LISTO EN VENTANA" : "HOLD",
     });
   });
-  const pipelineRows = opportunities.filter((opportunity) =>
+  const strictQualifiedOpportunities = opportunities.filter((opportunity) =>
     opportunity.economic_buyer === true
     && opportunity.active_pain === true
     && opportunity.business_impact === true
@@ -458,11 +470,18 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     && Number(opportunity.value_mxn ?? 0) > 0
     && Boolean(opportunity.next_action)
     && Boolean(opportunity.next_action_at),
-  ).map((opportunity) => row(textValue(opportunity.id), textValue(opportunity.stage), {
+  );
+  const strictOpportunityIds = new Set(strictQualifiedOpportunities.map((opportunity) => textValue(opportunity.id)));
+  const pipelineRows = opportunities.map((opportunity) => row(textValue(opportunity.id), textValue(opportunity.stage), {
     cuenta: accountName(opportunity.account_id),
     etapa: textValue(opportunity.stage),
-    valor: new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(Number(opportunity.value_mxn)),
-    siguiente: `${textValue(opportunity.next_action)}. ${dateValue(opportunity.next_action_at)}`,
+    criterios: strictOpportunityIds.has(textValue(opportunity.id)) ? "Estrictos completos" : "No cuenta todavía",
+    valor: Number(opportunity.value_mxn ?? 0) > 0
+      ? new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(Number(opportunity.value_mxn))
+      : "Sin valor verificado",
+    siguiente: opportunity.next_action
+      ? `${textValue(opportunity.next_action)}. ${dateValue(opportunity.next_action_at)}`
+      : "Pendiente de registrar",
     meeting_id: textValue(meetingByOpportunityId.get(textValue(opportunity.id))?.id, ""),
   }));
   const roadmapRows = asRows(roadmapResult.data).map((milestone) => row(textValue(milestone.id), textValue(milestone.status), {
@@ -491,6 +510,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     : cursors.some((cursor) => cursor.status === "ERROR") ? "DEGRADED" : "HOLD";
   const contractualLeads = leads.filter((lead) => lead.contractual_qualified === true).length;
   const wonProjects = opportunities.filter((opportunity) => opportunity.stage === "CLOSED_WON").length;
+  const firstPaymentsMxn = sumFirstPaymentsMxn(firstPayments);
   const latestBaseline = baselines[0];
   const latestMonthlyReport = monthlyReports[0];
   const latestMonthlyIssuance = latestMonthlyReport
@@ -519,9 +539,9 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       }).length,
       overdueTasks: overdueTasks.length,
       contractualLeads,
-      qualifiedPipeline: pipelineRows.length,
+      qualifiedPipeline: strictQualifiedOpportunities.length,
       wonProjects,
-      firstPaymentsMxn: 0,
+      firstPaymentsMxn,
     },
     health: {
       killSwitch: controls?.global_kill_switch !== false,

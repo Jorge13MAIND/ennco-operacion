@@ -1,10 +1,10 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "source_id": "company_directory_seed",
-  "source_file": "/Users/Jorge/Downloads/Directorio_Empresas_Corredor_Leon_Queretaro.xlsx",
+  "source_file": "data/imports/raw/company_directory_seed/3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347/Directorio_Empresas_Corredor_Leon_Queretaro.xlsx",
+  "source_storage": "repository_relative_raw",
   "source_sha256": "3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347",
   "source_size_bytes": 6293063,
-  "source_mtime_utc": "2026-08-04T17:06:43.506Z",
   "ranges": [
     {
       "sheet": "Directorio corredor",

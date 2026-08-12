@@ -1,153 +1,146 @@
 # M9 Gate Report
 
-Fecha de corte: 2026-08-12 00:52 `America/Mexico_City`.
+Fecha de corte: 2026-08-12, `America/Mexico_City`.
 
 ## Veredicto
 
-- Implementacion local M9: `EVIDENCE_READY`.
-- Gate tecnico local: `PASS`.
+- Integridad de la captura provisional: `PASS`.
+- Estado del paquete: `PROVISIONAL_NOT_FINAL`.
+- Milestone local M9: `EXTEND` hasta ejecutar el freeze desde un commit limpio que contenga estos controles.
 - Gate global M9: `EXTEND`.
-- Programa enterprise de doce semanas: no terminado.
-- UAT ENNCO real: `0`.
-- Capacitaciones ENNCO reales: `0`.
-- Transferencias de acceso reales: `0`.
-- Aceptaciones finales reales: `0`.
-- Restore productivo probado: `0`.
-- Efectos externos: `0`.
-
-El resultado local prueba el contrato, el paquete y el harness de entrega. No prueba operacion productiva ni aceptacion del cliente.
-
-## Paquete fuente
-
-- Commit fuente: `757ed4d20d2c68c78be5caa8bff7d2de17c8960f`.
-- Manifest SHA256: `1c8b7416cd8a8d44bbeae2a7ac1a41123201d1574f9fc7589815411549a38cd1`.
 - Evidence class: `synthetic_demo`.
-- Datos reales de ENNCO dentro del paquete de prueba: no.
-- Source archive reproducido y comparado contra manifest: PASS.
+- Efectos externos: `0`.
+- UAT, capacitación, transferencia de accesos y aceptación final ENNCO: `0`.
 
-## Verificador M9
+Esta evidencia no es el artefacto final y no debe etiquetarse, compartirse ni usarse como prueba de entrega. Su propósito es demostrar que el empaquetador y el verificador ya fallan cerrado.
 
-`npm run verify:m9-readiness` obtuvo 17 de 17 checks:
+## Captura provisional
 
-- M8 global permanece `EXTEND`.
-- Commit fuente existe.
-- Archive fuente reproducible.
-- SHA256 coincide con manifest.
-- Empresas y contactos exportan y reimportan.
-- Empresas sin contacto se preservan.
-- Pipeline sintetico exporta y reimporta.
-- Todos los rows de prueba son `synthetic_demo`.
-- Cero datos reales y cero efectos externos.
-- Contrato DB de handoff presente.
-- Aceptacion exclusiva `ennco_admin`.
-- Evidencia de aceptacion append-only.
-- Rollback restaura el contrato M8.
-- Gate adversarial presente.
-- Indice de runbooks completo.
-- Segunda restauracion local presente.
+- Commit fuente: `02f08ed53fc7cb07ce7414ba78a64935c76353e6`.
+- Tree SHA: `63617cb63334b0c34f6b98b10a105308841006b1`.
+- Manifest SHA256: `c62fd08bea71a58b6304fe04c7e2aec1367373cf73139f96846f2f3db977767d`.
+- Source archive SHA256: `2b0c4469d0e8de2d539f4f7a2e0ea049da439e14d9637512c1441d05a48a52bb`.
+- Audit bundle SHA256: `ed9087094d590768efc84df6baa274ddf2162164fa7bd539bdc603ba2df92012`.
+- Worktree limpio al capturar: no.
+- Control de empaquetado incluido en el commit fuente: no, la versión del worktree no coincide con la del commit.
 
-Los seis criterios locales están en PASS. Los diez criterios live permanecen en `EXTEND`.
+Por estas dos últimas condiciones, `final_artifact=false` y los seis criterios locales permanecen en `EXTEND`, aunque los controles internos del paquete pasen.
 
-## Gate PostgreSQL
+## Source archive
 
-`supabase/tests/run-handoff-acceptance-gate.sh` aplico migraciones 001 a 011 sobre PostgreSQL 16.13 desechable y verifico:
+`evidence/m9-handoff/artifacts/ennco-revenue-platform-source.tar` se construye mediante una allowlist explícita desde un commit exacto. No se archiva el worktree.
 
-- Tenant isolation y RLS.
-- Paquete sintetico sellado sólo como `EVIDENCE_READY`.
-- Paquete live no sellable con P1 abierto.
-- Seis artefactos locales exactos.
-- Doce artefactos live exactos.
-- Seis checks locales y diez live.
-- Capacitacion live ligada a participante ENNCO.
-- Aceptacion cruzada entre tenants rechazada.
-- Paquete sintetico no aceptable.
-- Service role y Teckel sin autoridad de aceptacion.
-- Aprobacion exacta por manifest.
-- Aceptacion idempotente.
-- Deriva del statement rechazada.
-- Evidencia append-only.
-- Audit log sin locations de artefactos.
-- Forward, rollback y reapply.
+Contenido exacto de esta captura:
+
+- 170 archivos.
+- 243 entradas de tar, incluyendo directorios.
+- Código de aplicación allowlisted.
+- Configuración root exacta.
+- Tests E2E y gates SQL.
+- Migraciones y rollbacks.
+- Runbooks operativos.
+- Tres configuraciones o fixtures de runtime allowlisted después del filtro content-based de identidad.
+
+Cada archivo aparece en el manifest externo con ruta, tamaño y SHA256. El verificador extrae el tar en un directorio temporal, rechaza rutas inseguras, duplicados y symlinks, y compara el inventario real contra la allowlist y el manifest.
+
+## Exclusiones restricted
+
+El source archive no contiene:
+
+- `data/imports/**`, 12 archivos rastreados en el commit provisional.
+- `evidence/data-import/**`, 2 archivos.
+- `data/prequote/**`, 3 archivos con calibración derivada de propuestas históricas.
+- `src/lib/domain/prequote*`, 2 archivos que incorporan supuestos derivados de esa calibración.
+- `data/content/**`, 1 archivo de evidencia histórica derivada.
+- `docs/evidence/M9*`, 7 archivos.
+- `evidence/m9-handoff/**`, 4 archivos.
+- Ningún otro archivo bajo `evidence/**`.
+- 16 archivos allowlisted con identificadores personales u operativos conocidos. Cada path y marker ID aparece en el manifest.
+
+El manifest también lista los demás paths excluidos. El paquete es deliberadamente incompleto para build porque los insumos y el código de precotización derivados de evidencia real quedan fuera. Se trata de un paquete de revisión de fuente con privacidad acotada, no de un bundle productivo desplegable.
+
+## Audit bundle separado
+
+`evidence/m9-handoff/artifacts/m9-audit-bundle.tar` es un tar determinista distinto del source archive. Contiene exactamente cuatro archivos:
+
+- `audit/source-archive-inventory.json`.
+- `audit/source-archive-secret-scan.json`.
+- `exports/companies-contacts-synthetic.csv`.
+- `exports/pipeline-attribution-synthetic.csv`.
+
+No contiene el manifest externo, este reporte, el JSON de verificación ni otro artefacto M9. Por ello no existe evidencia autorreferencial ni una copia stale dentro de los tars.
+
+## Privacidad y secretos
+
+La afirmación verificable es limitada:
+
+- Rutas restricted dentro del source archive: `0`.
+- Marcadores conocidos de datos históricos o importados: `0`.
+- Hallazgos del scanner de secretos: `0`.
+- Identificadores personales u operativos conocidos: `0`.
+- Archivos regulares inspeccionados: 170 de 170.
+
+No se afirma ausencia universal de PII. Un scanner de patrones no puede probarla. Cualquier transferencia live sigue requiriendo revisión humana de privacidad y un canal restricted separado para los datos excluidos.
+
+## Verificación ejecutable
+
+```bash
+npm run test:m9-package
+npm run capture:m9-provisional
+npm run verify:m9-readiness
+shasum -a 256 -c docs/evidence/M9-checksums.sha256
+```
 
 Resultados:
 
-- `HANDOFF_ACCEPTANCE_GATE_PASS`.
-- `HANDOFF_ACCEPTANCE_ROLLBACK_PASS`.
-- `HANDOFF_ACCEPTANCE_REAPPLY_PASS`.
+- Negativos fail-closed: 7 de 7 `PASS`.
+- Verificación provisional: 38 de 38 `PASS`.
+- Source archive reproducido byte a byte desde el commit: `PASS`.
+- Audit bundle reproducido byte a byte: `PASS`.
+- Checksums externos: 6 de 6 `PASS`.
+- Empresas y contactos sintéticos exportan y reimportan: `PASS`.
+- Empresa sintética sin contacto se preserva: `PASS`.
+- Pipeline sintético reimporta con `NOT_REAL`: `PASS`.
+- Restore productivo, RPO 15 minutos y RTO 4 horas: no probados.
 
-El fixture live del gate es una organizacion sintetica que ejercita la rama de seguridad. No es evidencia de UAT, capacitacion o aceptacion ENNCO.
+Los negativos comprueban rechazo de ruta restricted, referencia M9 dentro del tar, path desconocido, secreto con prefijo reconocido, identidad conocida y determinismo del audit tar.
 
-## Segunda restauracion local
+## Scope del checksum externo
 
-`npm run capture:m9-restore` creo un destino separado de M2 y obtuvo:
+`docs/evidence/M9-checksums.sha256` cubre únicamente:
 
-- Nueve de nueve tablas con conteos y SHA256 iguales.
-- Dos de dos objetos con SHA256 iguales.
-- Invariantes fuente y restore iguales.
-- Audit append-only preservado.
-- Idempotencia preservada.
-- Lead estricto invalido rechazado.
-- Archivo corrupto detectado.
-- Verificacion independiente 11 de 11.
+1. Source archive.
+2. Audit bundle.
+3. Los dos CSV sintéticos externos.
+4. Manifest externo.
+5. Verificación JSON.
 
-`production_pitr_proven`, `production_rpo_15m_proven` y `production_rto_4h_proven` permanecen `false`.
+El gate report, QA review y capturas visuales no están dentro de ese checksum para evitar ciclos o evidencia stale dentro del paquete.
 
-## Regresion acumulativa
+## Orden exacto del freeze final
 
-Comando final:
+1. Terminar y revisar todos los cambios de código, manifest, riesgos y controles M9.
+2. Correr los gates acumulativos que el responsable de release determine.
+3. Commit de código y controles. Este commit será `SOURCE_COMMIT`.
+4. Confirmar `git status --porcelain` vacío.
+5. Ejecutar `npm run capture:m9-final`. El comando debe abortar si el worktree no está limpio, si `HEAD` no es el commit fuente o si el control actual no coincide con el almacenado en ese commit.
+6. Ejecutar `npm run verify:m9-readiness` y el checksum externo sin reempaquetar.
+7. Revisar manualmente manifest, inventarios, exclusiones y privacidad.
+8. Commit separado de los artefactos externos de evidencia. Este será el commit de evidencia, no el commit fuente.
+9. Crear el tag M9 sobre el commit de evidencia sólo después del `PASS` humano.
 
-```bash
-npm run verify:m9
-```
+No se debe regenerar el paquete después del paso 8. Cualquier cambio obliga a regresar al paso 1 con un nuevo commit fuente.
 
-Resultado:
+## Bloqueos live
 
-- RTM: 75 filas, 47 de 47 checklist, 0 fallas.
-- Importacion: 28 de 28 checks.
-- Secret scan: 343 archivos, 0 hallazgos.
-- Campaign package: 29 de 29 checks.
-- Canary acelerado: 14 de 14 escenarios, 13 fallas inyectadas, 0 efectos externos.
-- Gates DB M0 a M9: PASS local.
-- Rollback y reapply asociados: PASS.
-- Restore M2 y segundo restore M9: PASS local.
-- Dependency audit: 0 vulnerabilidades.
-- Lint y typecheck: PASS.
-- Unitarias: 27 archivos y 99 tests PASS.
-- Build: PASS, 21 rutas.
-- E2E: 75 de 75 en cinco viewports.
-- QA visual: entrega desktop, entrega mobile y roadmap desktop PASS.
-
-## Defectos encontrados y corregidos
-
-1. El export de empresas nacía desde contactos y omitía cuentas sin contacto. Se cambió a account-first y se agregó reimportación.
-2. `git archive` superó el buffer default. Se amplió a 128 MiB y se regeneró desde un commit exacto.
-3. La aceptación idempotente aceptaba un statement distinto en un retry. Ahora rechaza `HANDOFF_ACCEPTANCE_STATEMENT_DRIFT`.
-4. El primer diseño exigía un solo artefacto. Ahora exige seis locales y doce live exactos.
-5. Un P1 podía quedar fuera de una lista documental. El seal consulta incidentes abiertos en la misma transacción.
-6. El disclosure del módulo Entrega hablaba de renglones SIMULACION sin marcar. Ahora muestra de forma directa que no existe entrega real.
-7. La captura visual usaba un origen distinto y generaba warnings dev. Se alineó a `localhost` y la recaptura quedó limpia.
-8. El archive de un commit con un paquete previo podía incluir el tar dentro de sí mismo. `git archive` ahora excluye `evidence/m9-handoff` y la reproducibilidad se volvió a probar.
-
-## Evidencia visual
-
-- `docs/evidence/M9-delivery-desktop.png`.
-- `docs/evidence/M9-delivery-mobile.png`.
-- `docs/evidence/M9-roadmap-desktop.png`.
-
-La interfaz muestra seis de seis criterios locales, cero de diez live, cero capacitaciones y cero aceptaciones.
-
-## Bloqueos reales
-
-- M0 y M2 a M8 no tienen PASS live completo.
-- Anexo A y contrato ejecutado siguen ausentes.
-- Hay 11 P0 y 7 P1 abiertos o bloqueados externamente.
-- Source control y cuentas de proveedores no están bajo propiedad ENNCO verificada.
+- No existe propiedad de source control verificada por ENNCO.
+- No existe transferencia de accesos de producción.
 - No existe restore en infraestructura administrada.
-- No existe auditoria de seguridad live.
+- No existe auditoría live de seguridad o privacidad.
 - No existe UAT con operador ENNCO.
-- No existe capacitacion con operador y suplente.
-- No existe export y reimport live.
+- No existe capacitación con operador y suplente.
 - No existe walkthrough real de runbooks.
-- No existe aceptacion final.
+- No existe aceptación final.
+- Permanecen riesgos P0 y P1 abiertos.
 
-Ningun bloqueo invalida el PASS local. Todos impiden declarar M9 global, producción o programa enterprise terminado.
+Ningún PASS provisional permite declarar M9 final, producción lista o programa enterprise terminado.

@@ -4,7 +4,7 @@
 |---|---|---|---|---|---|---|
 | R-001 | P0 | Anexo A incompleto o tardío | No existe archivo aceptado y hasheado | Bloquear cualquier envío y desplazar reloj | Revenue Operations | OPEN |
 | R-002 | P0 | Credenciales expuestas en WhatsApp | Credencial no rotada | Rotar, invalidar, guardar en vault y registrar evidencia | Product Engineering | OPEN |
-| R-003 | P0 | Supresión incompleta | Fuente no reconciliada o consulta falla | Fail closed dentro de la transacción de envío | Product Engineering | OPEN |
+| R-003 | P0 | Supresión incompleta | Fuente no reconciliada o consulta falla | Fail closed dentro de las transacciones de envío y calificación estricta | Product Engineering | MITIGATED_LOCAL |
 | R-004 | P0 | Doble envío | Retry sin idempotencia verificable | Unique idempotency key, lock y kill switch | Product Engineering | MITIGATED_LOCAL |
 | R-005 | P0 | Pérdida silenciosa de lead | API responde éxito sin persistencia | Commit antes de responder y outbox transaccional | Product Engineering | MITIGATED_LOCAL |
 | R-006 | P0 | Precotización incorrecta | Fuente vencida o backtest fuera de tolerancia | Rango, versión, expiry y apagado | Paco | OPEN |
@@ -15,7 +15,7 @@
 | R-011 | P1 | Datos comerciales falsos o incompletos | Dato sin URL, fecha o confianza | Cuarentena y prohibición de contacto | Revenue Operations | OPEN |
 | R-012 | P1 | Restore no funcional | Drill falla | Corregir antes de M2 PASS | Product Engineering | VERIFIED_LOCAL |
 | R-013 | P0 | Contrato ejecutado no archivado | El PDF local conserva placeholders y no existe certificado | Mantener el hecho como no verificado y bloquear inicio contractual hasta archivar PDF y certificado con hash | Jorge | BLOCKED_EXTERNAL |
-| R-014 | P0 | RTM sin cobertura integral | Requisito del checklist o plan no tiene fila, prueba o evidencia | Reconciliar los 47 puntos y validar el CSV automáticamente | Product Engineering | VERIFIED |
+| R-014 | P0 | RTM sin cobertura integral | Requisito del checklist o plan no tiene fila, prueba o evidencia | Reconciliar checklist, requisitos enterprise, evidencia local y estados mediante verificador automático | Product Engineering | MITIGATED_LOCAL |
 | R-015 | P1 | Repositorio sin baseline inmutable | `git rev-parse HEAD` falla | Crear commit y tag local después de integrar y verificar M0 y M1 | Product Engineering | VERIFIED |
 | R-016 | P0 | Inicio contractual declarado con evidencia incompleta | Faltan firma ejecutada, pago o insumos de cláusula 7 | Registrar cada condición por separado y no iniciar reloj hasta evidencia acumulativa | Jorge | BLOCKED_EXTERNAL |
 | R-017 | P1 | Fuente histórica contradice auditoría posterior | Handover declara un estado que no coincide con evidencia actual | Conservar fuente, registrar supersesión y aplicar jerarquía del Decision Register | Product Engineering | MITIGATING |
@@ -58,3 +58,8 @@
 | R-054 | P1 | Export pierde empresas sin contactos | Join basado sólo en contactos omite cuentas de investigación | Export account-first, prueba de reimportación y reconciliación de conteos | Product Engineering | MITIGATED_LOCAL |
 | R-055 | P0 | Handoff deja a ENNCO sin recuperación o acceso | Se revocan accesos Teckel antes de probar admins, export y restore | Recertificación, inventario y checks live antes de aceptación | ENNCO y Teckel | OPEN_EXTERNAL |
 | R-056 | P0 | Restore local se presenta como RPO/RTO productivo | Segundo drill desechable se interpreta como continuidad administrada | Etiqueta local, production flags false y restore live obligatorio | QA independiente | MITIGATED_LOCAL |
+| R-057 | P0 | Evidencia contractual de lead falsificable | Un UUID inexistente o booleanos suministrados por operador califican un lead | FK o ledger de evidencia del mismo tenant, supresión vigente, RPC service-only y pruebas adversariales | Product Engineering | MITIGATED_LOCAL |
+| R-058 | P0 | Atribución o comisión alterable sin flujo canónico | Operador escribe atribución, pago o comisión sin evento verificable | Flujo append-only desde primer contacto y primer pago, menor privilegio e idempotencia | Product Engineering | MITIGATED_LOCAL |
+| R-059 | P1 | Gate enterprise omite seguridad performance o accesibilidad | Release local no tiene SAST DAST WCAG carga o SLO instrumentado | Requisitos ENT-001 a ENT-006, checks independientes y evidencia ligada a commit | QA independiente | OPEN |
+| R-060 | P0 | Pipeline no puede operarse por el flujo canónico o conserva flags falsos | El portal intenta avanzar a `QUALIFIED` sin capturar comprador dolor impacto y plazo o permite DML directo | RPC de creación y transición completa, DML revocado, revalidación en cada update y pruebas de operador | Product Engineering | MITIGATED_LOCAL |
+| R-061 | P1 | Atribución y comisión dependen de una acción manual omitible | Primer delivery o pago ocurre pero nadie ejecuta el RPC posterior | Disparador transaccional o job idempotente desde delivery y pago con reconciliación | Product Engineering | MITIGATED_LOCAL |

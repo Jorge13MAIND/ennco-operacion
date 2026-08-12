@@ -1,12 +1,15 @@
 {
-  "schema_version": "1.0.0",
-  "generated_at_utc": "2026-08-12T02:58:21.435Z",
+  "schema_version": "1.1.0",
+  "generation": "deterministic_from_repository_relative_raw_sources",
   "reader": {
     "name": "@oai/artifact-tool",
     "version": "2.8.39"
   },
   "rules": {
-    "source_preservation": "binary_copy_plus_values_and_formulas_extraction",
+    "source_preservation": "repository_raw_binary_plus_values_and_formulas_extraction",
+    "canonical_source": "repository_relative_raw_workbook_only",
+    "original_source_path": "informational_metadata_not_required_for_execution",
+    "csv_interchange_security": "prefix_apostrophe_for_cells_starting_equals_plus_minus_or_at",
     "unit_normalization": "source_header_kWp_interpreted_as_Wp_from_panel_count_times_panel_wattage",
     "directory_semantics": "research_seed_only_no_contacts_no_pipeline",
     "outreach_eligibility": "false_until_annex_a_and_contact_verification",
@@ -15,10 +18,11 @@
   "sources": {
     "historical": {
       "source_id": "historical_projects",
-      "source_path": "/Users/Jorge/Downloads/clientes....xlsx",
+      "canonical_source_path": "data/imports/raw/historical_projects/8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac/clientes....xlsx",
+      "original_source_path_metadata": "/Users/Jorge/Downloads/clientes....xlsx",
+      "original_source_path_required": false,
       "source_sha256": "8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac",
       "source_size_bytes": 13000,
-      "source_mtime_utc": "2026-08-11T22:12:58.149Z",
       "raw_workbook": "data/imports/raw/historical_projects/8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac/clientes....xlsx",
       "raw_extraction": "data/imports/raw/historical_projects/8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac/extracted.json",
       "structured_ranges": [
@@ -30,10 +34,11 @@
     },
     "directory": {
       "source_id": "company_directory_seed",
-      "source_path": "/Users/Jorge/Downloads/Directorio_Empresas_Corredor_Leon_Queretaro.xlsx",
+      "canonical_source_path": "data/imports/raw/company_directory_seed/3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347/Directorio_Empresas_Corredor_Leon_Queretaro.xlsx",
+      "original_source_path_metadata": "/Users/Jorge/Downloads/Directorio_Empresas_Corredor_Leon_Queretaro.xlsx",
+      "original_source_path_required": false,
       "source_sha256": "3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347",
       "source_size_bytes": 6293063,
-      "source_mtime_utc": "2026-08-04T17:06:43.506Z",
       "raw_workbook": "data/imports/raw/company_directory_seed/3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347/Directorio_Empresas_Corredor_Leon_Queretaro.xlsx",
       "raw_extraction": "data/imports/raw/company_directory_seed/3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347/extracted.json",
       "structured_ranges": [
@@ -55,7 +60,7 @@
     },
     "historicalCsv": {
       "path": "data/imports/normalized/historical_projects.csv",
-      "sha256": "b2d0ad91a28789cfdd2eaeaad86b70fbffa9efe8cd9c7113b472483c115d9212"
+      "sha256": "0fb5ca954585728b8593ab04a80ee7ec6a02e0a96eeb3e5e681dc68ebab30be6"
     },
     "directoryJson": {
       "path": "data/imports/normalized/company_directory.json",
@@ -76,6 +81,14 @@
     "duplicateCandidatesJson": {
       "path": "data/imports/quarantine/duplicate_candidates.json",
       "sha256": "0b7e94fc7a3578a4f6a24152a754fc8920c82e96762135aab621c4fa1215b20b"
+    },
+    "csvSecurityNegativeJson": {
+      "path": "data/imports/qa/csv_injection_negative_cases.json",
+      "sha256": "06799f3e763e9f1e6ffe8cb8ae39f30b3462507f252858f9bc18ffdfb18d3f15"
+    },
+    "csvSecurityNegativeCsv": {
+      "path": "data/imports/qa/csv_injection_negative_cases.csv",
+      "sha256": "4bf84fd42d101e0b891fa4aeccf5664f58a078471c3971f0995b6eedc4997204"
     }
   },
   "reconciliations": {

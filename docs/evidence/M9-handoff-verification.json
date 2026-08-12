@@ -1,10 +1,30 @@
 {
   "verification_status": "PASS",
-  "local_m9_status": "EVIDENCE_READY",
+  "package_capture_status": "PROVISIONAL_NOT_FINAL",
+  "local_m9_status": "EXTEND",
   "global_m9_gate": "EXTEND",
   "evidence_class": "synthetic_demo",
-  "source_commit_sha": "757ed4d20d2c68c78be5caa8bff7d2de17c8960f",
-  "handoff_manifest_sha256": "1c8b7416cd8a8d44bbeae2a7ac1a41123201d1574f9fc7589815411549a38cd1",
+  "source_commit_sha": "02f08ed53fc7cb07ce7414ba78a64935c76353e6",
+  "source_tree_sha": "63617cb63334b0c34f6b98b10a105308841006b1",
+  "handoff_manifest_sha256": "c62fd08bea71a58b6304fe04c7e2aec1367373cf73139f96846f2f3db977767d",
+  "privacy_assessment": {
+    "restricted_paths_in_source_archive": [],
+    "known_restricted_content_findings": [],
+    "known_identity_findings": [],
+    "secret_findings": [],
+    "pii_absence_claimed": false,
+    "claim": "restricted real-data paths and files with known identity markers excluded; every archived regular file inspected for known restricted markers and secret patterns",
+    "limitation": "No automated scanner proves universal absence of PII. Final live transfer still requires a separate human privacy review."
+  },
+  "final_freeze_preconditions": {
+    "mode": "provisional",
+    "final_artifact": false,
+    "head_at_capture": "02f08ed53fc7cb07ce7414ba78a64935c76353e6",
+    "worktree_clean_at_capture": false,
+    "control_worktree_sha256": "e2d2ddf5eebaf7e9d9f00620e1b817f1026239d503d1f40245b5fe5d5c3df8cc",
+    "control_source_sha256": "086a865d38844de881a189970793df11e48ee388d53dd4e22f28b5d388bc16f6",
+    "control_script_matches_source_commit": false
+  },
   "external_side_effects": 0,
   "real_client_uat_sessions": 0,
   "real_client_training_sessions": 0,
@@ -12,44 +32,75 @@
   "real_access_transfers": 0,
   "production_restores_proven": 0,
   "local_restore_drills_proven": 2,
-  "checks_passed": 17,
+  "open_risk_counts": {
+    "P0": 13,
+    "P1": 11,
+    "P2": 0
+  },
+  "open_risk_ids": [
+    "R-001",
+    "R-002",
+    "R-003",
+    "R-006",
+    "R-007",
+    "R-008",
+    "R-009",
+    "R-010",
+    "R-011",
+    "R-013",
+    "R-016",
+    "R-017",
+    "R-018",
+    "R-020",
+    "R-021",
+    "R-025",
+    "R-027",
+    "R-041",
+    "R-045",
+    "R-049",
+    "R-055",
+    "R-057",
+    "R-058",
+    "R-059"
+  ],
+  "checks_passed": 38,
   "checks_failed": 0,
   "local_criteria": [
     {
       "code": "SOURCE_PACKAGE_LOCAL",
-      "status": "PASS",
+      "status": "EXTEND",
       "evidenceClass": "synthetic_demo",
-      "evidenceReference": "docs/evidence/M9-handoff-verification.json#SOURCE_PACKAGE_LOCAL"
+      "evidenceReference": null
     },
     {
       "code": "EXPORT_REIMPORT_LOCAL",
-      "status": "PASS",
+      "status": "EXTEND",
       "evidenceClass": "synthetic_demo",
-      "evidenceReference": "docs/evidence/M9-handoff-verification.json#EXPORT_REIMPORT_LOCAL"
+      "evidenceReference": null
     },
     {
       "code": "SECOND_RESTORE_LOCAL",
-      "status": "PASS",
+      "status": "EXTEND",
       "evidenceClass": "synthetic_demo",
-      "evidenceReference": "docs/evidence/M9-handoff-verification.json#SECOND_RESTORE_LOCAL"
+      "evidenceReference": null
     },
     {
       "code": "SECURITY_REGRESSION_LOCAL",
-      "status": "PASS",
+      "status": "EXTEND",
       "evidenceClass": "synthetic_demo",
-      "evidenceReference": "docs/evidence/M9-handoff-verification.json#SECURITY_REGRESSION_LOCAL"
+      "evidenceReference": null
     },
     {
       "code": "RUNBOOK_INDEX_LOCAL",
-      "status": "PASS",
+      "status": "EXTEND",
       "evidenceClass": "synthetic_demo",
-      "evidenceReference": "docs/evidence/M9-handoff-verification.json#RUNBOOK_INDEX_LOCAL"
+      "evidenceReference": null
     },
     {
       "code": "TRAINING_SCRIPT_LOCAL",
-      "status": "PASS",
+      "status": "EXTEND",
       "evidenceClass": "synthetic_demo",
-      "evidenceReference": "docs/evidence/M9-handoff-verification.json#TRAINING_SCRIPT_LOCAL"
+      "evidenceReference": null
     }
   ],
   "live_criteria": [
@@ -115,11 +166,18 @@
     }
   ],
   "decision": {
-    "localEvidenceReady": true,
+    "localEvidenceReady": false,
     "readyForClientAcceptance": false,
     "accepted": false,
     "gate": "EXTEND",
-    "missingLocal": [],
+    "missingLocal": [
+      "SOURCE_PACKAGE_LOCAL",
+      "EXPORT_REIMPORT_LOCAL",
+      "SECOND_RESTORE_LOCAL",
+      "SECURITY_REGRESSION_LOCAL",
+      "RUNBOOK_INDEX_LOCAL",
+      "TRAINING_SCRIPT_LOCAL"
+    ],
     "missingLive": [
       "SOURCE_CONTROL_OWNERSHIP",
       "PRODUCTION_ACCESS_TRANSFER",
@@ -133,9 +191,10 @@
       "ZERO_P0_P1"
     ],
     "reasons": [
+      "Faltan 6 criterios locales con evidencia.",
       "La preparación local no puede convertirse en aceptación del cliente.",
       "Faltan 10 criterios live.",
-      "Hay 11 P0 y 7 P1 abiertos."
+      "Hay 13 P0 y 11 P1 abiertos."
     ]
   },
   "checks": [
@@ -148,11 +207,116 @@
       "pass": true
     },
     {
+      "id": "SOURCE_ALLOWLIST_NONEMPTY",
+      "pass": true,
+      "actual": 170
+    },
+    {
       "id": "SOURCE_ARCHIVE_REPRODUCIBLE",
       "pass": true
     },
     {
-      "id": "SOURCE_ARCHIVE_MANIFEST_MATCH",
+      "id": "SOURCE_ARCHIVE_SHA_MATCH",
+      "pass": true
+    },
+    {
+      "id": "SOURCE_ARCHIVE_FILES_EXACT",
+      "pass": true,
+      "actual": {
+        "unexpected": [],
+        "missing": [],
+        "restricted": [],
+        "self_referential": []
+      }
+    },
+    {
+      "id": "SOURCE_ARCHIVE_NO_UNSAFE_ENTRIES",
+      "pass": true,
+      "actual": {
+        "entry_count": 243,
+        "file_count": 170,
+        "unsafe_entries": [],
+        "duplicate_entries": [],
+        "symlink_entries": []
+      }
+    },
+    {
+      "id": "SOURCE_ARCHIVE_RESTRICTED_PATHS_ABSENT",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "id": "SOURCE_ARCHIVE_M9_SELF_REFERENCE_ABSENT",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "id": "SOURCE_ARCHIVE_RESTRICTED_CONTENT_ABSENT",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "id": "SOURCE_ARCHIVE_KNOWN_IDENTITY_ABSENT",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "id": "SOURCE_ARCHIVE_SECRET_SCAN_PASS",
+      "pass": true,
+      "actual": []
+    },
+    {
+      "id": "SOURCE_ARCHIVE_MANIFEST_INVENTORY_EXACT",
+      "pass": true
+    },
+    {
+      "id": "SOURCE_ARCHIVE_MANIFEST_ENTRIES_EXACT",
+      "pass": true
+    },
+    {
+      "id": "RESTRICTED_EXCLUSIONS_DECLARED",
+      "pass": true
+    },
+    {
+      "id": "PRIVACY_CLAIM_BOUNDED",
+      "pass": true
+    },
+    {
+      "id": "AUDIT_BUNDLE_REPRODUCIBLE",
+      "pass": true
+    },
+    {
+      "id": "AUDIT_BUNDLE_SHA_MATCH",
+      "pass": true
+    },
+    {
+      "id": "AUDIT_BUNDLE_ENTRIES_EXACT",
+      "pass": true,
+      "actual": [
+        "audit/source-archive-inventory.json",
+        "audit/source-archive-secret-scan.json",
+        "exports/companies-contacts-synthetic.csv",
+        "exports/pipeline-attribution-synthetic.csv"
+      ]
+    },
+    {
+      "id": "AUDIT_BUNDLE_NO_UNSAFE_ENTRIES",
+      "pass": true
+    },
+    {
+      "id": "AUDIT_INVENTORY_MATCH",
+      "pass": true
+    },
+    {
+      "id": "AUDIT_SECRET_SCAN_MATCH",
+      "pass": true
+    },
+    {
+      "id": "COMPANIES_EXPORT_MATCHES_AUDIT_BUNDLE",
+      "pass": true
+    },
+    {
+      "id": "PIPELINE_EXPORT_MATCHES_AUDIT_BUNDLE",
       "pass": true
     },
     {
@@ -172,7 +336,7 @@
       "pass": true
     },
     {
-      "id": "NO_REAL_ENNCO_DATA",
+      "id": "MANIFEST_EXACT",
       "pass": true
     },
     {
@@ -205,6 +369,10 @@
     },
     {
       "id": "SECOND_RESTORE_EVIDENCE",
+      "pass": true
+    },
+    {
+      "id": "RISK_REGISTER_VALID",
       "pass": true
     }
   ]

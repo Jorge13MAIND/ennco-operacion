@@ -26,6 +26,7 @@ describe("runtime configuration", () => {
       privacyNoticeApproved: false,
       gmailWebhookReleased: false,
       assistantReleased: false,
+      unsubscribeReleased: false,
     });
     expect(hasDedicatedSupabase(config)).toBe(false);
   });
@@ -147,6 +148,31 @@ describe("runtime configuration", () => {
       ENNCO_ASSISTANT_RELEASED: "true",
     });
     expect(config.assistantReleased).toBe(true);
+  });
+
+  it("requires a released one-click unsubscribe path before external sends", () => {
+    expect(() => getRuntimeConfig({
+      ...dedicated,
+      ENNCO_DEMO_MODE: "false",
+      ENNCO_ALLOW_EXTERNAL_SEND: "true",
+    })).toThrow("EXTERNAL_SEND_REQUIRES_UNSUBSCRIBE");
+
+    expect(() => getRuntimeConfig({
+      ...dedicated,
+      ENNCO_DEMO_MODE: "false",
+      ENNCO_UNSUBSCRIBE_RELEASED: "true",
+    })).toThrow("UNSUBSCRIBE_RELEASE_GATES_INCOMPLETE");
+
+    const config = getRuntimeConfig({
+      ...dedicated,
+      ENNCO_DEMO_MODE: "false",
+      ENNCO_ALLOW_EXTERNAL_SEND: "true",
+      ENNCO_UNSUBSCRIBE_RELEASED: "true",
+      ENNCO_UNSUBSCRIBE_SIGNING_SECRET: "synthetic-unsubscribe-signing-secret-32-plus",
+      ENNCO_UNSUBSCRIBE_INGEST_SECRET: "synthetic-unsubscribe-ingest-secret-32-plus",
+    });
+    expect(config.externalSendAllowed).toBe(true);
+    expect(config.unsubscribeReleased).toBe(true);
   });
 
   it("infers production from the deployment platform and rejects a platform downgrade", () => {

@@ -16,6 +16,9 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "verify:a11y": "playwright test tests/e2e/accessibility.spec.ts",
+    "verify:performance:smoke": "node scripts/performance-gate.mjs --duration-seconds 10 --rps 20 --p95-budget-ms 500 --max-error-rate 0",
+    "verify:performance:full": "node scripts/performance-gate.mjs --duration-seconds 300 --rps 20 --p95-budget-ms 500 --max-error-rate 0",
     "import:data": "node scripts/import-ennco-sources.mjs --repo .",
     "verify:data": "node scripts/verify-data-imports.mjs --repo .",
     "capture:data-verification": "node scripts/verify-data-imports.mjs --repo . --write-evidence",
@@ -39,11 +42,20 @@
     "verify:scaling-db": "supabase/tests/run-controlled-scaling-gate.sh",
     "verify:monthly-reporting-db": "supabase/tests/run-contractual-monthly-reporting-gate.sh",
     "verify:handoff-db": "supabase/tests/run-handoff-acceptance-gate.sh",
+    "verify:security-consistency-db": "supabase/tests/run-security-consistency-gate.sh",
+    "verify:unsubscribe-db": "supabase/tests/run-one-click-unsubscribe-gate.sh",
+    "verify:commercial-integrity-db": "supabase/tests/run-commercial-integrity-gate.sh",
+    "verify:commercial-operations-db": "supabase/tests/run-canonical-commercial-operations-gate.sh",
+    "verify:strict-lead-suppression-db": "supabase/tests/run-strict-lead-suppression-gate.sh",
+    "verify:suppression-privacy-db": "supabase/tests/run-suppression-privacy-gate.sh",
     "verify:m8-readiness": "node --experimental-strip-types scripts/m8-contractual-reporting.mts --repo .",
     "capture:m8-evidence": "node --experimental-strip-types scripts/m8-contractual-reporting.mts --repo . --write-evidence",
     "capture:m8-browser": "node scripts/capture-m8-browser-evidence.mjs --repo .",
     "verify:m9-readiness": "node --experimental-strip-types scripts/m9-handoff-readiness.mts --repo .",
-    "capture:m9-evidence": "node --experimental-strip-types scripts/m9-handoff-readiness.mts --repo . --write-evidence",
+    "test:m9-package": "node --experimental-strip-types scripts/m9-handoff-readiness.mts --repo . --self-test",
+    "capture:m9-provisional": "node --experimental-strip-types scripts/m9-handoff-readiness.mts --repo . --write-provisional",
+    "capture:m9-final": "node --experimental-strip-types scripts/m9-handoff-readiness.mts --repo . --freeze-final",
+    "capture:m9-evidence": "npm run capture:m9-provisional",
     "capture:m9-browser": "node scripts/capture-m9-browser-evidence.mjs --repo .",
     "verify:m7-readiness": "node --experimental-strip-types scripts/m7-controlled-scaling.mts --repo .",
     "capture:m7-evidence": "node --experimental-strip-types scripts/m7-controlled-scaling.mts --repo . --write-evidence",
@@ -64,7 +76,7 @@
     "verify:m6": "npm run verify:m5 && npm run verify:m6-readiness && npm run verify:first-send-db",
     "verify:m7": "npm run verify:m6 && npm run verify:m7-readiness && npm run verify:scaling-db",
     "verify:m8": "npm run verify:m7 && npm run verify:m8-readiness && npm run verify:monthly-reporting-db",
-    "verify:m9": "npm run verify:m8 && npm run verify:m9-restore && npm run verify:m9-readiness && npm run verify:handoff-db"
+    "verify:m9": "npm run verify:m8 && npm run verify:security-consistency-db && npm run verify:unsubscribe-db && npm run verify:commercial-integrity-db && npm run verify:suppression-privacy-db && npm run verify:commercial-operations-db && npm run verify:strict-lead-suppression-db && npm run verify:a11y && npm run verify:m9-restore && npm run verify:m9-readiness && npm run verify:handoff-db"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
@@ -77,6 +89,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "1.62.1",
     "@types/node": "26.2.0",
     "@types/react": "^19.2.0",

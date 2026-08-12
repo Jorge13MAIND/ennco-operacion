@@ -8,6 +8,8 @@ PASS para extracción y normalización reproducible. Los registros en cuarentena
 
 - Lector obligatorio: `@oai/artifact-tool` 2.8.39.
 - Se conservaron copias binarias exactas y extracciones de valores y fórmulas.
+- La ejecución lee únicamente las copias raw repo-relative. Las rutas originales son metadata informativa y no son dependencia.
+- Todo valor CSV que empieza con `=`, `+`, `-` o `@` se prefija con apóstrofo. El JSON conserva el valor raw.
 - Sólo se normalizaron rangos tabulares declarados. Las hojas gráficas permanecen preservadas dentro del XLSX raw.
 - No se generaron contactos, leads, oportunidades ni pipeline.
 
@@ -31,6 +33,13 @@ PASS para extracción y normalización reproducible. Los registros en cuarentena
 ### Corrección de unidad
 
 La fuente etiqueta la columna como `TAMAÑO kWp`, pero las fórmulas son multiplicaciones de cantidad de paneles por potencia nominal, por ejemplo `=4*620` y `=85*645`. Por ello, la capa normalizada conserva el valor como `capacity_wp` y deriva `capacity_kwp = capacity_wp / 1000`. El valor raw, encabezado y fórmula quedan preservados.
+
+## Portabilidad y seguridad CSV
+
+- Fuentes canónicas: `data/imports/raw/**`, verificadas contra SHA256 antes de leer.
+- Dependencia de las rutas originales: ninguna. Sólo se conservan como metadata de procedencia.
+- Fixtures negativos: seis casos, incluyendo `=`, `+`, `-`, `@` y un número negativo.
+- Las 18 fórmulas de capacidad permanecen raw en JSON y neutralizadas como texto en CSV.
 
 ## Directorio de empresas
 

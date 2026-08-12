@@ -193,8 +193,8 @@ export function getSyntheticControlRoomSnapshot(): ControlRoomSnapshot {
       environment: "local",
       killSwitch: true,
       externalSendAllowed: false,
-      openP0: 11,
-      openP1: 7,
+      openP0: 10,
+      openP1: 11,
     },
     commercial: {
       researchedCompanies: 0,

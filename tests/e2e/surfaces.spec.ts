@@ -93,14 +93,14 @@ test("control room never presents setup as live commercial truth", async ({ page
   await expect(page.getByRole("navigation", { name: "Módulos de operación" })).toBeVisible();
 });
 
-test("operations modules preserve synthetic disclosure and strict empty pipeline", async ({ page }) => {
+test("operations modules preserve synthetic disclosure and an empty operational pipeline", async ({ page }) => {
   await page.goto("/operacion/respuestas");
   await expect(page.getByRole("heading", { level: 1, name: "Bandeja de respuestas" })).toBeVisible();
   await expect(page.getByText("Los renglones marcados SIMULACION no son empresas, respuestas, leads ni oportunidades reales.")).toBeVisible();
   await expect(page.getByText("Planta Alfa, ejemplo anónimo")).toBeVisible();
 
   await page.goto("/operacion/pipeline");
-  await expect(page.getByText("No hay pipeline estricto real.")).toBeVisible();
+  await expect(page.getByText("No hay oportunidades reales.")).toBeVisible();
 
   await page.goto("/operacion/campanas");
   await expect(page.getByText("0/30 gates live")).toBeVisible();
@@ -139,6 +139,24 @@ test("Gmail webhook fails closed until the external release gate", async ({ requ
   await expect(response.json()).resolves.toMatchObject({ error: "GMAIL_WEBHOOK_NOT_RELEASED" });
 });
 
+test("one-click unsubscribe fails closed until its dedicated persistence gate", async ({ request }) => {
+  const response = await request.post("/api/v1/unsubscribe?token=synthetic", {
+    form: { "List-Unsubscribe": "One-Click" },
+  });
+  expect(response.status()).toBe(503);
+  await expect(response.json()).resolves.toMatchObject({ error: "UNSUBSCRIBE_NOT_RELEASED" });
+});
+
+test("visible unsubscribe link renders a private noindex confirmation surface", async ({ request }) => {
+  const response = await request.get("/api/v1/unsubscribe?token=synthetic");
+  expect(response.status()).toBe(503);
+  expect(response.headers()["content-type"]).toContain("text/html");
+  expect(response.headers()["cache-control"]).toBe("private, no-store");
+  expect(response.headers()["x-robots-tag"]).toBe("noindex, nofollow, noarchive");
+  expect(response.headers()["content-security-policy"]).toContain("form-action 'self'");
+  expect(await response.text()).toContain("Enlace no disponible");
+});
+
 test("operational mutations cannot persist in synthetic mode", async ({ request }) => {
   const response = await request.post(
     "/api/v1/operations/provider-events/11111111-1111-4111-8111-111111111111/review",
@@ -146,6 +164,49 @@ test("operational mutations cannot persist in synthetic mode", async ({ request 
   );
   expect(response.status()).toBe(409);
   await expect(response.json()).resolves.toMatchObject({ error: "SYNTHETIC_MUTATION_DISABLED" });
+});
+
+test("commercial evidence cannot be recorded in synthetic mode", async ({ request }) => {
+  const response = await request.post(
+    "/api/v1/operations/leads/11111111-1111-4111-8111-111111111111/evidence",
+    {
+      headers: { Origin: "http://localhost:3000", "Sec-Fetch-Site": "same-origin" },
+      data: {
+        criterion: "outside_annex_a",
+        value: true,
+        sourceUrl: "https://example.invalid/annex",
+        sourceName: "Fuente sintética",
+        observedAt: new Date().toISOString(),
+        confidence: "VERIFIED",
+      },
+    },
+  );
+  expect(response.status()).toBe(409);
+  await expect(response.json()).resolves.toMatchObject({ error: "SYNTHETIC_MUTATION_DISABLED" });
+});
+
+test("canonical commercial operations remain disabled in synthetic mode", async ({ request }) => {
+  const headers = { Origin: "http://localhost:3000", "Sec-Fetch-Site": "same-origin" };
+  const id = "11111111-1111-4111-8111-111111111111";
+  const create = await request.post(`/api/v1/operations/leads/${id}/opportunity`, { headers });
+  expect(create.status()).toBe(409);
+  const meeting = await request.post(`/api/v1/operations/opportunities/${id}/meetings`, {
+    headers,
+    data: { scheduledAt: "2026-08-13T16:00:00.000Z" },
+  });
+  expect(meeting.status()).toBe(409);
+  const payment = await request.post(`/api/v1/operations/opportunities/${id}/payments`, {
+    headers,
+    data: {
+      amountMxn: 100_000,
+      paidAt: "2026-08-12T12:00:00.000Z",
+      observedAt: "2026-08-12T12:05:00.000Z",
+      sourceUrl: "https://example.invalid/payment",
+      sourceName: "Comprobante sintético",
+      confidence: "VERIFIED",
+    },
+  });
+  expect(payment.status()).toBe(409);
 });
 
 test("operational mutations reject cross-origin requests before authentication", async ({ request }) => {

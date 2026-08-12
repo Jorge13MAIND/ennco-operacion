@@ -1,8 +1,9 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const DEFAULT_REPO = "/Users/Jorge/dev/ennco-revenue-platform";
+const DEFAULT_REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 function parseArgs(argv) {
   const args = { repo: DEFAULT_REPO, writeEvidence: false };
@@ -32,6 +33,51 @@ function assert(checks, id, condition, expected, actual) {
   checks.push({ id, status: condition ? "PASS" : "FAIL", expected, actual });
 }
 
+function parseCsv(text) {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let quoted = false;
+
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    if (quoted) {
+      if (character === '"' && text[index + 1] === '"') {
+        cell += '"';
+        index += 1;
+      } else if (character === '"') {
+        quoted = false;
+      } else {
+        cell += character;
+      }
+    } else if (character === '"') {
+      quoted = true;
+    } else if (character === ",") {
+      row.push(cell);
+      cell = "";
+    } else if (character === "\n") {
+      row.push(cell.replace(/\r$/, ""));
+      rows.push(row);
+      row = [];
+      cell = "";
+    } else {
+      cell += character;
+    }
+  }
+
+  if (quoted) throw new Error("CSV inválido: comillas sin cerrar");
+  if (cell.length > 0 || row.length > 0) {
+    row.push(cell.replace(/\r$/, ""));
+    rows.push(row);
+  }
+  return rows;
+}
+
+function isPathInside(root, candidate) {
+  const relative = path.relative(root, candidate);
+  return relative !== "" && !relative.startsWith("..") && !path.isAbsolute(relative);
+}
+
 const { repo, writeEvidence } = parseArgs(process.argv.slice(2));
 const manifestPath = path.join(repo, "data/imports/manifest.json");
 const manifest = JSON.parse(await fs.readFile(manifestPath, "utf8"));
@@ -47,14 +93,76 @@ const quarantine = JSON.parse(
 const duplicateCandidates = JSON.parse(
   await fs.readFile(path.join(repo, manifest.datasets.duplicateCandidatesJson.path), "utf8"),
 );
+const csvSecurityNegativeCases = JSON.parse(
+  await fs.readFile(path.join(repo, manifest.datasets.csvSecurityNegativeJson.path), "utf8"),
+);
 
 const checks = [];
 
 for (const [key, source] of Object.entries(manifest.sources)) {
-  const rawHash = await sha256File(path.join(repo, source.raw_workbook));
-  const liveSourceHash = await sha256File(source.source_path);
+  const canonicalPath = path.resolve(repo, source.canonical_source_path);
+  const canonicalPathIsSafe =
+    typeof source.canonical_source_path === "string" &&
+    !path.isAbsolute(source.canonical_source_path) &&
+    isPathInside(repo, canonicalPath);
+  if (!canonicalPathIsSafe) {
+    assert(
+      checks,
+      `${key}_canonical_path_repo_relative`,
+      false,
+      "repo-relative path inside repository",
+      source.canonical_source_path,
+    );
+    continue;
+  }
+  const rawHash = await sha256File(canonicalPath);
+  const extraction = JSON.parse(await fs.readFile(path.join(repo, source.raw_extraction), "utf8"));
+  assert(
+    checks,
+    `${key}_canonical_path_repo_relative`,
+    canonicalPathIsSafe,
+    "repo-relative path inside repository",
+    source.canonical_source_path,
+  );
+  assert(
+    checks,
+    `${key}_canonical_path_matches_raw_workbook`,
+    source.canonical_source_path === source.raw_workbook,
+    source.raw_workbook,
+    source.canonical_source_path,
+  );
+  assert(
+    checks,
+    `${key}_legacy_live_source_removed`,
+    !("source_path" in source),
+    false,
+    "source_path" in source,
+  );
+  assert(
+    checks,
+    `${key}_original_path_not_required`,
+    source.original_source_path_required === false,
+    false,
+    source.original_source_path_required,
+  );
   assert(checks, `${key}_raw_hash`, rawHash === source.source_sha256, source.source_sha256, rawHash);
-  assert(checks, `${key}_live_source_unchanged`, liveSourceHash === source.source_sha256, source.source_sha256, liveSourceHash);
+  assert(
+    checks,
+    `${key}_extraction_uses_canonical_path`,
+    extraction.source_file === source.canonical_source_path &&
+      extraction.source_storage === "repository_relative_raw" &&
+      !("source_mtime_utc" in extraction),
+    {
+      source_file: source.canonical_source_path,
+      source_storage: "repository_relative_raw",
+      source_mtime_utc_present: false,
+    },
+    {
+      source_file: extraction.source_file,
+      source_storage: extraction.source_storage,
+      source_mtime_utc_present: "source_mtime_utc" in extraction,
+    },
+  );
 }
 
 for (const [key, dataset] of Object.entries(manifest.datasets)) {
@@ -111,10 +219,90 @@ assert(
 assert(checks, "directory_research_seed_only", allResearchSeed, true, allResearchSeed);
 assert(checks, "directory_no_outreach_eligibility", allNotEligible, true, allNotEligible);
 
+const csvDatasetEntries = Object.entries(manifest.datasets).filter(([key]) => key.endsWith("Csv"));
+const unsafeCsvCells = [];
+const parsedCsvDatasets = {};
+for (const [key, dataset] of csvDatasetEntries) {
+  const rows = parseCsv(await fs.readFile(path.join(repo, dataset.path), "utf8"));
+  parsedCsvDatasets[key] = rows;
+  rows.slice(1).forEach((cells, rowIndex) => {
+    cells.forEach((cell, columnIndex) => {
+      if (/^[=+\-@]/.test(cell)) {
+        unsafeCsvCells.push({ key, row: rowIndex + 2, column: columnIndex + 1, prefix: cell[0] });
+      }
+    });
+  });
+}
+assert(checks, "csv_no_unsafe_formula_prefixes", unsafeCsvCells.length === 0, 0, unsafeCsvCells);
+
+const historicalCsv = parsedCsvDatasets.historicalCsv;
+const historicalCsvHeader = historicalCsv[0];
+const historicalFormulaColumn = historicalCsvHeader.indexOf("capacity_formula");
+const rawHistoricalFormulaCount = historical.filter((row) =>
+  typeof row.capacity_formula === "string" && /^[=+\-@]/.test(row.capacity_formula)
+).length;
+const protectedHistoricalFormulaCount = historicalCsv.slice(1).filter((row) =>
+  row[historicalFormulaColumn]?.startsWith("'=")
+).length;
+assert(
+  checks,
+  "historical_json_preserves_raw_formulas",
+  rawHistoricalFormulaCount === 18,
+  18,
+  rawHistoricalFormulaCount,
+);
+assert(
+  checks,
+  "historical_csv_neutralizes_formulas",
+  protectedHistoricalFormulaCount === rawHistoricalFormulaCount,
+  rawHistoricalFormulaCount,
+  protectedHistoricalFormulaCount,
+);
+
+const csvNegativeRows = parsedCsvDatasets.csvSecurityNegativeCsv;
+const negativeHeader = csvNegativeRows[0];
+const negativeRawIndex = negativeHeader.indexOf("raw_value");
+const negativeCaseIndex = negativeHeader.indexOf("case_id");
+const negativeCaseMap = new Map(
+  csvNegativeRows.slice(1).map((row) => [row[negativeCaseIndex], row[negativeRawIndex]]),
+);
+const negativeFailures = csvSecurityNegativeCases.filter((testCase) =>
+  negativeCaseMap.get(testCase.case_id) !== testCase.expected_csv_cell
+);
+assert(
+  checks,
+  "csv_injection_negative_vectors",
+  negativeFailures.length === 0 && csvSecurityNegativeCases.length === 6,
+  { cases: 6, failures: 0 },
+  { cases: csvSecurityNegativeCases.length, failures: negativeFailures },
+);
+
+assert(
+  checks,
+  "historical_csv_reimport_record_count",
+  historicalCsv.length - 1 === historical.length,
+  historical.length,
+  historicalCsv.length - 1,
+);
+assert(
+  checks,
+  "directory_csv_reimport_record_count",
+  parsedCsvDatasets.directoryCsv.length - 1 === directory.length,
+  directory.length,
+  parsedCsvDatasets.directoryCsv.length - 1,
+);
+assert(
+  checks,
+  "quarantine_csv_reimport_record_count",
+  parsedCsvDatasets.quarantineCsv.length - 1 === quarantine.length,
+  quarantine.length,
+  parsedCsvDatasets.quarantineCsv.length - 1,
+);
+
 const failed = checks.filter((check) => check.status === "FAIL");
 const evidence = {
-  schema_version: "1.0.0",
-  verified_at_utc: new Date().toISOString(),
+  schema_version: "1.1.0",
+  verification: "deterministic_current_artifact_state",
   status: failed.length === 0 ? "PASS" : "FAIL",
   manifest_sha256: await sha256File(manifestPath),
   checks_passed: checks.length - failed.length,
@@ -128,7 +316,7 @@ const evidence = {
   },
 };
 
-const evidenceDir = path.join(repo, "evidence/data-import");
+const evidenceDir = path.join(repo, "data/imports/evidence");
 if (writeEvidence) {
   await fs.mkdir(evidenceDir, { recursive: true });
   await fs.writeFile(
@@ -141,6 +329,7 @@ if (writeEvidence) {
     "data/imports/manifest.json",
     ...Object.values(manifest.sources).flatMap((source) => [source.raw_workbook, source.raw_extraction]),
     ...Object.values(manifest.datasets).map((dataset) => dataset.path),
+    "data/imports/evidence/verification.json",
   ];
   const checksumLines = [];
   for (const relativePath of checksumTargets) {

@@ -1,23 +1,28 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
-const SCHEMA_VERSION = "1.0.0";
-const DEFAULT_REPO = "/Users/Jorge/dev/ennco-revenue-platform";
-const DEFAULT_ARTIFACT_TOOL_ROOT =
-  "/Users/Jorge/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/@oai/artifact-tool";
+const SCHEMA_VERSION = "1.1.0";
+const DEFAULT_REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SOURCE_DEFINITIONS = {
   historicalProjects: {
     id: "historical_projects",
-    path: "/Users/Jorge/Downloads/clientes....xlsx",
+    canonicalRawWorkbook:
+      "data/imports/raw/historical_projects/8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac/clientes....xlsx",
+    expectedSha256: "8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac",
+    originalSourcePathMetadata: "/Users/Jorge/Downloads/clientes....xlsx",
     sheet: "Hoja1",
     range: "D7:I28",
     dataStartRow: 9,
   },
   companyDirectory: {
     id: "company_directory_seed",
-    path: "/Users/Jorge/Downloads/Directorio_Empresas_Corredor_Leon_Queretaro.xlsx",
+    canonicalRawWorkbook:
+      "data/imports/raw/company_directory_seed/3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347/Directorio_Empresas_Corredor_Leon_Queretaro.xlsx",
+    expectedSha256: "3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347",
+    originalSourcePathMetadata:
+      "/Users/Jorge/Downloads/Directorio_Empresas_Corredor_Leon_Queretaro.xlsx",
     sheet: "Directorio corredor",
     range: "A1:H28",
     dataStartRow: 2,
@@ -29,7 +34,7 @@ const SOURCE_DEFINITIONS = {
 function parseArgs(argv) {
   const args = {
     repo: DEFAULT_REPO,
-    artifactToolRoot: process.env.ENNCO_ARTIFACT_TOOL_ROOT ?? DEFAULT_ARTIFACT_TOOL_ROOT,
+    artifactToolRoot: process.env.ENNCO_ARTIFACT_TOOL_ROOT ?? null,
   };
   for (let index = 0; index < argv.length; index += 1) {
     if (argv[index] === "--repo") {
@@ -41,6 +46,11 @@ function parseArgs(argv) {
     } else {
       throw new Error(`Argumento no reconocido: ${argv[index]}`);
     }
+  }
+  if (!args.artifactToolRoot) {
+    throw new Error(
+      "Falta --artifact-tool-root o ENNCO_ARTIFACT_TOOL_ROOT con el runtime entregado por el cargador",
+    );
   }
   return args;
 }
@@ -133,7 +143,8 @@ function similarity(left, right) {
 
 function csvEscape(value) {
   if (value === null || value === undefined) return "";
-  const serialized = Array.isArray(value) ? value.join("|") : String(value);
+  const rawSerialized = Array.isArray(value) ? value.join("|") : String(value);
+  const serialized = /^[=+\-@]/.test(rawSerialized) ? `'${rawSerialized}` : rawSerialized;
   return /[",\r\n]/.test(serialized) ? `"${serialized.replaceAll('"', '""')}"` : serialized;
 }
 
@@ -161,21 +172,26 @@ async function loadArtifactToolVersion(artifactToolRoot) {
   return packageJson.version;
 }
 
-async function inspectSource(definition, artifactTool) {
+async function inspectSource(repo, definition, artifactTool) {
   const { FileBlob, SpreadsheetFile } = artifactTool;
-  const sourceBuffer = await fs.readFile(definition.path);
-  const sourceStat = await fs.stat(definition.path);
+  const sourcePath = path.join(repo, definition.canonicalRawWorkbook);
+  const sourceBuffer = await fs.readFile(sourcePath);
   const sourceHash = sha256Buffer(sourceBuffer);
-  const workbook = await SpreadsheetFile.importXlsx(await FileBlob.load(definition.path));
+  if (sourceHash !== definition.expectedSha256) {
+    throw new Error(
+      `La fuente raw canónica ${definition.canonicalRawWorkbook} no coincide con el SHA256 fijado`,
+    );
+  }
+  const workbook = await SpreadsheetFile.importXlsx(await FileBlob.load(sourcePath));
   const sheet = workbook.worksheets.getItem(definition.sheet);
   const range = sheet.getRange(definition.range);
   const extracted = {
     schema_version: SCHEMA_VERSION,
     source_id: definition.id,
-    source_file: definition.path,
+    source_file: definition.canonicalRawWorkbook,
+    source_storage: "repository_relative_raw",
     source_sha256: sourceHash,
     source_size_bytes: sourceBuffer.byteLength,
-    source_mtime_utc: sourceStat.mtime.toISOString(),
     ranges: [
       {
         sheet: definition.sheet,
@@ -198,7 +214,7 @@ async function inspectSource(definition, artifactTool) {
     });
   }
 
-  return { sourceBuffer, sourceHash, sourceStat, extracted };
+  return { sourceBuffer, sourceHash, extracted };
 }
 
 function normalizeHistoricalProjects(extracted) {
@@ -444,6 +460,8 @@ function buildQaReport({ artifactToolVersion, sources, historical, directory }) 
     `## Herramienta y alcance\n\n` +
     `- Lector obligatorio: \`@oai/artifact-tool\` ${artifactToolVersion}.\n` +
     `- Se conservaron copias binarias exactas y extracciones de valores y fórmulas.\n` +
+    `- La ejecución lee únicamente las copias raw repo-relative. Las rutas originales son metadata informativa y no son dependencia.\n` +
+    `- Todo valor CSV que empieza con \`=\`, \`+\`, \`-\` o \`@\` se prefija con apóstrofo. El JSON conserva el valor raw.\n` +
     `- Sólo se normalizaron rangos tabulares declarados. Las hojas gráficas permanecen preservadas dentro del XLSX raw.\n` +
     `- No se generaron contactos, leads, oportunidades ni pipeline.\n\n` +
     `## Fuentes congeladas\n\n` +
@@ -461,6 +479,11 @@ function buildQaReport({ artifactToolVersion, sources, historical, directory }) 
     `- Outliers de venta por kWp para revisión manual: ${outliers}. Se preservan, pero quedan excluidos de calibración automática.\n\n` +
     `### Corrección de unidad\n\n` +
     `La fuente etiqueta la columna como \`TAMAÑO kWp\`, pero las fórmulas son multiplicaciones de cantidad de paneles por potencia nominal, por ejemplo \`=4*620\` y \`=85*645\`. Por ello, la capa normalizada conserva el valor como \`capacity_wp\` y deriva \`capacity_kwp = capacity_wp / 1000\`. El valor raw, encabezado y fórmula quedan preservados.\n\n` +
+    `## Portabilidad y seguridad CSV\n\n` +
+    `- Fuentes canónicas: \`data/imports/raw/**\`, verificadas contra SHA256 antes de leer.\n` +
+    `- Dependencia de las rutas originales: ninguna. Sólo se conservan como metadata de procedencia.\n` +
+    `- Fixtures negativos: seis casos, incluyendo \`=\`, \`+\`, \`-\`, \`@\` y un número negativo.\n` +
+    `- Las 18 fórmulas de capacidad permanecen raw en JSON y neutralizadas como texto en CSV.\n\n` +
     `## Directorio de empresas\n\n` +
     `- Registros fuente: ${directoryStatsValue.source_records}.\n` +
     `- URLs presentes: ${directoryStatsValue.source_urls_present}; faltantes: ${directoryStatsValue.source_urls_missing}.\n` +
@@ -477,14 +500,30 @@ function buildQaReport({ artifactToolVersion, sources, historical, directory }) 
     `- Validar con Paco los proyectos excluidos de calibración automática.\n`;
 }
 
+const CSV_SECURITY_NEGATIVE_CASES = [
+  { case_id: "equals_prefix", raw_value: "=1+1", expected_csv_cell: "'=1+1" },
+  { case_id: "plus_prefix", raw_value: "+SUM(1,1)", expected_csv_cell: "'+SUM(1,1)" },
+  { case_id: "minus_prefix", raw_value: "-2+3", expected_csv_cell: "'-2+3" },
+  { case_id: "at_prefix", raw_value: "@SUM(A1:A2)", expected_csv_cell: "'@SUM(A1:A2)" },
+  { case_id: "negative_number", raw_value: -42, expected_csv_cell: "'-42" },
+  { case_id: "safe_text", raw_value: "texto seguro", expected_csv_cell: "texto seguro" },
+];
+
 const { repo, artifactToolRoot } = parseArgs(process.argv.slice(2));
-const generatedAtUtc = new Date().toISOString();
 const artifactTool = await import(
   pathToFileURL(path.join(artifactToolRoot, "dist/artifact_tool.mjs")).href
 );
 const artifactToolVersion = await loadArtifactToolVersion(artifactToolRoot);
-const historicalSource = await inspectSource(SOURCE_DEFINITIONS.historicalProjects, artifactTool);
-const directorySource = await inspectSource(SOURCE_DEFINITIONS.companyDirectory, artifactTool);
+const historicalSource = await inspectSource(
+  repo,
+  SOURCE_DEFINITIONS.historicalProjects,
+  artifactTool,
+);
+const directorySource = await inspectSource(
+  repo,
+  SOURCE_DEFINITIONS.companyDirectory,
+  artifactTool,
+);
 
 const historical = normalizeHistoricalProjects(historicalSource.extracted);
 historical.stats = historicalStats(historical.records, historical.qa);
@@ -503,23 +542,17 @@ const rawDefinitions = [
 const manifestSources = {};
 
 for (const source of rawDefinitions) {
-  const rawBase = path.join(
-    repo,
-    "data/imports/raw",
-    source.definition.id,
-    source.inspected.sourceHash,
-  );
-  const rawWorkbook = path.join(rawBase, path.basename(source.definition.path));
+  const rawWorkbook = path.join(repo, source.definition.canonicalRawWorkbook);
+  const rawBase = path.dirname(rawWorkbook);
   const rawExtract = path.join(rawBase, "extracted.json");
-  await fs.mkdir(rawBase, { recursive: true });
-  await fs.copyFile(source.definition.path, rawWorkbook);
   await writeJson(rawExtract, source.inspected.extracted);
   manifestSources[source.key] = {
     source_id: source.definition.id,
-    source_path: source.definition.path,
+    canonical_source_path: source.definition.canonicalRawWorkbook,
+    original_source_path_metadata: source.definition.originalSourcePathMetadata,
+    original_source_path_required: false,
     source_sha256: source.inspected.sourceHash,
     source_size_bytes: source.inspected.sourceBuffer.byteLength,
-    source_mtime_utc: source.inspected.sourceStat.mtime.toISOString(),
     raw_workbook: path.relative(repo, rawWorkbook),
     raw_extraction: path.relative(repo, rawExtract),
     structured_ranges: source.inspected.extracted.ranges.map(({ sheet, range }) => ({ sheet, range })),
@@ -534,6 +567,8 @@ const outputs = {
   quarantineJson: "data/imports/quarantine/company_directory_quarantine.json",
   quarantineCsv: "data/imports/quarantine/company_directory_quarantine.csv",
   duplicateCandidatesJson: "data/imports/quarantine/duplicate_candidates.json",
+  csvSecurityNegativeJson: "data/imports/qa/csv_injection_negative_cases.json",
+  csvSecurityNegativeCsv: "data/imports/qa/csv_injection_negative_cases.csv",
 };
 
 const historicalColumns = Object.keys(historical.records[0]);
@@ -547,6 +582,11 @@ await writeText(path.join(repo, outputs.directoryCsv), toCsv(directory.records, 
 await writeJson(path.join(repo, outputs.quarantineJson), directory.quarantine);
 await writeText(path.join(repo, outputs.quarantineCsv), toCsv(directory.quarantine, quarantineColumns));
 await writeJson(path.join(repo, outputs.duplicateCandidatesJson), directory.duplicatePairs);
+await writeJson(path.join(repo, outputs.csvSecurityNegativeJson), CSV_SECURITY_NEGATIVE_CASES);
+await writeText(
+  path.join(repo, outputs.csvSecurityNegativeCsv),
+  toCsv(CSV_SECURITY_NEGATIVE_CASES, ["case_id", "raw_value", "expected_csv_cell"]),
+);
 
 const datasetManifest = {};
 for (const [key, relativePath] of Object.entries(outputs)) {
@@ -558,13 +598,16 @@ for (const [key, relativePath] of Object.entries(outputs)) {
 
 const manifest = {
   schema_version: SCHEMA_VERSION,
-  generated_at_utc: generatedAtUtc,
+  generation: "deterministic_from_repository_relative_raw_sources",
   reader: {
     name: "@oai/artifact-tool",
     version: artifactToolVersion,
   },
   rules: {
-    source_preservation: "binary_copy_plus_values_and_formulas_extraction",
+    source_preservation: "repository_raw_binary_plus_values_and_formulas_extraction",
+    canonical_source: "repository_relative_raw_workbook_only",
+    original_source_path: "informational_metadata_not_required_for_execution",
+    csv_interchange_security: "prefix_apostrophe_for_cells_starting_equals_plus_minus_or_at",
     unit_normalization: "source_header_kWp_interpreted_as_Wp_from_panel_count_times_panel_wattage",
     directory_semantics: "research_seed_only_no_contacts_no_pipeline",
     outreach_eligibility: "false_until_annex_a_and_contact_verification",

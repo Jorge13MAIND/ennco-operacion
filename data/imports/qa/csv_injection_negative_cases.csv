@@ -1,0 +1,7 @@
+case_id,raw_value,expected_csv_cell
+equals_prefix,'=1+1,'=1+1
+plus_prefix,"'+SUM(1,1)","'+SUM(1,1)"
+minus_prefix,'-2+3,'-2+3
+at_prefix,'@SUM(A1:A2),'@SUM(A1:A2)
+negative_number,'-42,'-42
+safe_text,texto seguro,texto seguro

@@ -11,12 +11,15 @@ const runtimeSchema = z.object({
   privacyNoticeApproved: z.boolean(),
   gmailWebhookReleased: z.boolean(),
   assistantReleased: z.boolean(),
+  unsubscribeReleased: z.boolean(),
   supabaseUrl: z.url().optional(),
   supabasePublishableKey: z.string().min(20).optional(),
   organizationId: z.uuid().optional(),
   prequoteIngestSecret: z.string().min(32).optional(),
   pdfSigningSecret: z.string().min(32).optional(),
   gmailIngestSecret: z.string().min(32).optional(),
+  unsubscribeSigningSecret: z.string().min(32).optional(),
+  unsubscribeIngestSecret: z.string().min(32).optional(),
   gmailPubSubAudience: z.url().optional(),
   gmailPubSubServiceAccount: z.email().optional(),
   gmailPubSubSubscription: z.string().min(3).max(512).optional(),
@@ -59,6 +62,7 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     privacyNoticeApproved: envBoolean(environment.ENNCO_PRIVACY_NOTICE_APPROVED, false),
     gmailWebhookReleased: envBoolean(environment.ENNCO_GMAIL_WEBHOOK_RELEASED, false),
     assistantReleased: envBoolean(environment.ENNCO_ASSISTANT_RELEASED, false),
+    unsubscribeReleased: envBoolean(environment.ENNCO_UNSUBSCRIBE_RELEASED, false),
     supabaseUrl: environment.NEXT_PUBLIC_SUPABASE_URL || undefined,
     supabasePublishableKey:
       environment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
@@ -68,6 +72,8 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     prequoteIngestSecret: environment.ENNCO_PREQUOTE_INGEST_SECRET || undefined,
     pdfSigningSecret: environment.ENNCO_PDF_SIGNING_SECRET || undefined,
     gmailIngestSecret: environment.ENNCO_GMAIL_INGEST_SECRET || undefined,
+    unsubscribeSigningSecret: environment.ENNCO_UNSUBSCRIBE_SIGNING_SECRET || undefined,
+    unsubscribeIngestSecret: environment.ENNCO_UNSUBSCRIBE_INGEST_SECRET || undefined,
     gmailPubSubAudience: environment.GMAIL_PUBSUB_AUDIENCE || undefined,
     gmailPubSubServiceAccount: environment.GMAIL_PUBSUB_SERVICE_ACCOUNT || undefined,
     gmailPubSubSubscription: environment.GMAIL_PUBSUB_SUBSCRIPTION || undefined,
@@ -112,6 +118,15 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     && (config.demoMode || !config.privacyNoticeApproved || configuredCount !== configuredValues.length)
   ) {
     throw new Error("ASSISTANT_RELEASE_GATES_INCOMPLETE");
+  }
+  if (
+    config.unsubscribeReleased
+    && (config.demoMode || !config.unsubscribeSigningSecret || !config.unsubscribeIngestSecret || configuredCount !== configuredValues.length)
+  ) {
+    throw new Error("UNSUBSCRIBE_RELEASE_GATES_INCOMPLETE");
+  }
+  if (config.externalSendAllowed && !config.unsubscribeReleased) {
+    throw new Error("EXTERNAL_SEND_REQUIRES_UNSUBSCRIBE");
   }
 
   return config;

@@ -19,6 +19,25 @@ export type RenderValues = {
   source_name: string;
 };
 
+export function addVisibleUnsubscribe(body: string, unsubscribeUrl: string): string {
+  const parsed = new URL(unsubscribeUrl);
+  if (parsed.protocol !== "https:" || parsed.pathname !== "/api/v1/unsubscribe" || !parsed.searchParams.has("token")) {
+    throw new Error("UNSUBSCRIBE_URL_INVALID");
+  }
+  return `${body.trim()}\n\nSi prefieres no recibir más correos, puedes darte de baja aquí: ${parsed.toString()}`;
+}
+
+export function buildListUnsubscribeHeaders(unsubscribeUrl: string): Record<string, string> {
+  const parsed = new URL(unsubscribeUrl);
+  if (parsed.protocol !== "https:" || parsed.pathname !== "/api/v1/unsubscribe" || !parsed.searchParams.has("token")) {
+    throw new Error("UNSUBSCRIBE_URL_INVALID");
+  }
+  return {
+    "List-Unsubscribe": `<${parsed.toString()}>`,
+    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+  };
+}
+
 export function renderSequenceTouch(
   sequence: SequenceDefinition,
   touchNumber: number,
@@ -39,4 +58,3 @@ export function renderSequenceTouch(
   if (/\{\{[^}]+\}\}/.test(`${subject}${body}`)) throw new Error("UNRESOLVED_TEMPLATE_TOKEN");
   return { subject, body };
 }
-

@@ -3,12 +3,21 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { renderSequenceTouch } from "@/lib/release/render";
+import { addVisibleUnsubscribe, buildListUnsubscribeHeaders, renderSequenceTouch } from "@/lib/release/render";
 
 const sequence = JSON.parse(readFileSync(resolve(process.cwd(), "data/campaigns/sequence-draft-v1.json"), "utf8"));
 const fixture = JSON.parse(readFileSync(resolve(process.cwd(), "data/release/fixtures/first-send-synthetic-v1.json"), "utf8"));
 
 describe("first send deterministic render", () => {
+  it("adds a visible one-click URL and the RFC one-click headers", () => {
+    const url = "https://operacion.ennco.com.mx/api/v1/unsubscribe?token=synthetic-token";
+    expect(addVisibleUnsubscribe("Mensaje", url)).toContain("darte de baja aquí");
+    expect(buildListUnsubscribeHeaders(url)).toEqual({
+      "List-Unsubscribe": `<${url}>`,
+      "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+    });
+    expect(() => buildListUnsubscribeHeaders("http://evil.invalid/unsubscribe?token=x")).toThrow("UNSUBSCRIBE_URL_INVALID");
+  });
   it("renders exactly five synthetic accounts without unresolved tokens", () => {
     expect(fixture.evidence_class).toBe("synthetic_demo");
     expect(fixture.external_send_allowed).toBe(false);

@@ -46,7 +46,7 @@ export function PortalRowsTable({ module, actionKind, evidenceClass }: {
                   <td data-label="Estado"><StatusBadge value={item.status} /></td>
                   {showsAction ? (
                     <td data-label="Acción">
-                      {actionKind === "leads" ? <LeadQualificationAction leadId={item.id} /> : null}
+                      {actionKind === "leads" ? <LeadQualificationAction leadId={item.id} qualified={item.values.qualified === "true"} /> : null}
                       {actionKind === "pipeline" ? <OpportunityTransitionAction meetingId={item.values.meeting_id} opportunityId={item.id} /> : null}
                       {actionKind === "respuestas" && item.values.reviewable === "true" ? <ReplyReviewAction providerEventId={item.id} /> : null}
                     </td>
