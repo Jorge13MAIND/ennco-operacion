@@ -57,7 +57,9 @@ if (writeEvidence) {
 if (!/^[a-f0-9]{40}$/.test(sourceCommit)) throw new Error("M9_SOURCE_COMMIT_INVALID");
 git(["cat-file", "-e", `${sourceCommit}^{commit}`]);
 
-const sourceArchive = git(["archive", "--format=tar", sourceCommit]) as Buffer;
+const sourceArchive = git([
+  "archive", "--format=tar", sourceCommit, "--", ".", ":(exclude)evidence/m9-handoff",
+]) as Buffer;
 const companiesCsv = createCsv([
   "evidence_class", "account_name", "contact_name", "role_title", "normalized_email", "verified",
 ], [
