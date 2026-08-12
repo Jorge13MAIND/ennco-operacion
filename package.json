@@ -17,6 +17,8 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "verify:a11y": "playwright test tests/e2e/accessibility.spec.ts",
+    "verify:m23:frontend": "bash scripts/m23-enterprise-frontend-gate.sh .",
+    "verify:m23:frontend:smoke": "M23_LOAD_DURATION=10s bash scripts/m23-enterprise-frontend-gate.sh .",
     "verify:performance:smoke": "node scripts/performance-gate.mjs --duration-seconds 10 --rps 20 --p95-budget-ms 500 --max-error-rate 0",
     "verify:performance:full": "node scripts/performance-gate.mjs --duration-seconds 300 --rps 20 --p95-budget-ms 500 --max-error-rate 0",
     "import:data": "node scripts/import-ennco-sources.mjs --repo .",
@@ -76,7 +78,8 @@
     "capture:m9-restore": "bash scripts/m2-local-backup-restore-drill.sh --repo . --evidence-dir ./evidence/m9-restore && bash scripts/m2-verify-restore-evidence.sh --repo . --evidence-dir ./evidence/m9-restore",
     "verify:m9-restore": "bash scripts/m2-verify-restore-evidence.sh --repo . --evidence-dir ./evidence/m9-restore",
     "verify:audit": "npm audit --audit-level=high",
-    "sbom": "npm sbom --sbom-format cyclonedx",
+    "verify:enterprise-security": "node --test scripts/lib/enterprise-security-evidence.test.mjs && node scripts/security-evidence-gate.mjs config --repo .",
+    "sbom": "npm sbom --offline --sbom-format cyclonedx",
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build",
     "verify:m0m1": "npm run verify:rtm && npm run verify:data && npm run verify:db && npm run verify && npm run test:e2e",
     "verify:m2": "npm run verify:rtm && npm run verify:data && npm run verify:secrets && npm run verify:db && npm run verify:storage && npm run verify:retention && npm run verify:retention-live && npm run verify:restore && npm run verify:audit && npm run verify && npm run test:e2e",
@@ -86,7 +89,7 @@
     "verify:m6": "npm run verify:m5 && npm run verify:m6-readiness && npm run verify:first-send-db",
     "verify:m7": "npm run verify:m6 && npm run verify:m7-readiness && npm run verify:scaling-db",
     "verify:m8": "npm run verify:m7 && npm run verify:m8-readiness && npm run verify:monthly-reporting-db",
-    "verify:m9": "npm run verify:m8 && npm run verify:scope && npm run verify:security-consistency-db && npm run verify:unsubscribe-db && npm run verify:commercial-integrity-db && npm run verify:suppression-privacy-db && npm run verify:commercial-operations-db && npm run verify:strict-lead-suppression-db && npm run verify:a11y && npm run verify:m9-restore && npm run verify:m9-readiness && npm run verify:handoff-db"
+    "verify:m9": "node scripts/security-evidence-gate.mjs snapshot --repo . --expected-commit \"$(git rev-parse HEAD)\" --evidence evidence/m23-frontend/source.json --context local && npm run verify:m8 && npm run verify:scope && npm run verify:security-consistency-db && npm run verify:unsubscribe-db && npm run verify:commercial-integrity-db && npm run verify:suppression-privacy-db && npm run verify:commercial-operations-db && npm run verify:strict-lead-suppression-db && npm run verify:enterprise-security && npm run verify:a11y && M23_SOURCE_SNAPSHOT=evidence/m23-frontend/source.json npm run verify:m23:frontend && npm run verify:m9-restore && npm run verify:m9-readiness && npm run verify:handoff-db"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",

@@ -23,7 +23,7 @@ export default async function SignInPage({ searchParams }: { searchParams: Searc
   return (
     <>
       <SiteHeader />
-      <main className="shell auth-shell">
+      <main className="shell auth-shell" id="main-content" tabIndex={-1}>
         <section className="panel auth-panel">
           <p className="eyebrow">Acceso protegido</p>
           <h1>Control Room ENNCO</h1>

@@ -38,6 +38,24 @@ a {
   color: inherit;
 }
 
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 1000;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--navy-950);
+  font-weight: 800;
+  text-decoration: none;
+  transform: translateY(calc(-100% - 16px));
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
 button,
 input,
 select {
@@ -94,7 +112,6 @@ select {
 .navlinks a:hover,
 .navlinks a:focus-visible {
   background: #e5edf6;
-  outline: none;
 }
 
 .hero {
@@ -320,6 +337,14 @@ h3 {
 .card p {
   color: var(--muted);
   line-height: 1.6;
+}
+
+.golden-path-card {
+  margin-bottom: 22px;
+}
+
+.golden-path-title {
+  font-size: 28px;
 }
 
 .section {
@@ -822,7 +847,6 @@ th {
 .operations-nav a:focus-visible {
   border-color: var(--navy-800);
   background: #fff;
-  outline: none;
 }
 
 .operations-main {
@@ -928,6 +952,14 @@ th {
 .quick-links a:hover,
 .quick-links a:focus-visible {
   background: #eef3f8;
+}
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 3px;
+}
+
+main:focus {
   outline: none;
 }
 

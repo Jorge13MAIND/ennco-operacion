@@ -138,6 +138,9 @@ Este comando valida:
 - Investigación canónica con evidencia por campo, cuatro ojos, deduplicación, snapshot 75/150 y autorización comercial permanentemente separada.
 - Gate de alcance que mantiene fuera cualquier código, datos o automatización del sistema expresamente excluido.
 - CodeQL, ZAP passive baseline, SBOM CycloneDX, accesibilidad automatizada y smoke de performance configurados o ejecutados según su evidencia local.
+- Evidencia enterprise ligada a commit y tree limpios, con artefactos locales separados de CI remoto y producción.
+- CSP con nonce verificada sobre build productivo, hidratación real, teclado, reflow y foco en cinco perfiles.
+- Contrato SLO de seis indicadores que permanece `UNKNOWN` y congela release cuando no hay telemetría live.
 
 Un `PASS` local valida implementación y controles. No equivale a producción, resultado comercial, UAT, capacitación o aceptación ENNCO.
 

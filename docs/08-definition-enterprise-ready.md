@@ -26,4 +26,6 @@ Producción requiere además:
 - Cero P0/P1.
 - Autorización explícita.
 
+Toda evidencia de release debe registrar commit, tree y checksum. La captura aborta si el árbol no estaba limpio antes de generar artefactos. Un gate `PASS_LOCAL`, una fixture `synthetic_demo` o una configuración CI válida mantienen el requisito operativo en `EXTEND` hasta existir la ejecución remota, staging o revisión humana que corresponda.
+
 Un build exitoso o un documento creado es setup, no resultado comercial.

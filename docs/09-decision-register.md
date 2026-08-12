@@ -80,6 +80,9 @@ Estados permitidos para este registro:
 | DEC-067 | El Control Room tiene exactamente cinco cadencias canónicas | VERIFIED | M022 y gate adversarial | No se inventan días u horas ausentes; configuración incompleta es UNKNOWN | M4 |
 | DEC-068 | Cadencia sintética nunca autoriza outbound real | VERIFIED | Trigger de mensajes, health system y negativos M022 | Puede probar mecánica local y permitir DRY_RUN, pero outbound_release queda BLOCKED | M4 |
 | DEC-069 | El reconciler tiene un watchdog independiente | VERIFIED | RPC service_role idempotente e incidente P1 | Sin política o heartbeat stale crea alerta en vez de fallar silenciosamente | M4 |
+| DEC-070 | Toda evidencia enterprise se liga a fuente limpia antes de generar artefactos | VERIFIED | Snapshot de commit y tree incluye archivos nuevos y sidecars SHA256 | Un worktree sucio o commit distinto aborta la captura | M9 |
+| DEC-071 | El contrato SLO local nunca sustituye telemetría administrada | VERIFIED | Seis SLI, siete series, ventanas y burn rate fail closed | Cero denominadores live produce `UNKNOWN` y congela funciones | M9 |
+| DEC-072 | CSP se prueba sobre build productivo e hidratación real | VERIFIED | Nonce exacto, cero violaciones y journey interactivo Playwright | Prerender estático sin nonce queda prohibido para la raíz | M9 |
 
 ## Jerarquia de evidencia
 

@@ -27,7 +27,7 @@ export default function PrivacyPage() {
   return (
     <>
       <SiteHeader />
-      <main className="shell section legal-page">
+      <main className="shell section legal-page" id="main-content" tabIndex={-1}>
         <div className="section-head compact">
           <div>
             <p className="eyebrow">Privacidad</p>

@@ -16,7 +16,7 @@ export default async function OperationModulePage({ params }: { params: Promise<
   const snapshot = await loadOperationsPortal(access);
   const selected = snapshot.modules[module];
   return (
-    <main className="shell section operations-main">
+    <main className="shell section operations-main" id="main-content" tabIndex={-1}>
       <div className="section-head compact portal-module-title">
         <div>
           <p className="eyebrow">Control Room · {OPERATION_MODULE_LABELS[module]}</p>

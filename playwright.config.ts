@@ -1,5 +1,13 @@
 import { defineConfig, devices } from "@playwright/test";
 
+export const viewportProjects = [
+  { name: "desktop-wide", use: { ...devices["Desktop Chrome HiDPI"], browserName: "chromium" as const } },
+  { name: "desktop-standard", use: { ...devices["Desktop Chrome"], browserName: "chromium" as const } },
+  { name: "tablet", use: { ...devices["iPad Pro 11"], browserName: "chromium" as const } },
+  { name: "mobile-iphone", use: { ...devices["iPhone 15"], browserName: "chromium" as const } },
+  { name: "mobile-android", use: { ...devices["Pixel 7"], browserName: "chromium" as const } },
+];
+
 export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: true,
@@ -17,11 +25,5 @@ export default defineConfig({
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
   },
-  projects: [
-    { name: "desktop-wide", use: { ...devices["Desktop Chrome HiDPI"], browserName: "chromium" } },
-    { name: "desktop-standard", use: { ...devices["Desktop Chrome"], browserName: "chromium" } },
-    { name: "tablet", use: { ...devices["iPad Pro 11"], browserName: "chromium" } },
-    { name: "mobile-iphone", use: { ...devices["iPhone 15"], browserName: "chromium" } },
-    { name: "mobile-android", use: { ...devices["Pixel 7"], browserName: "chromium" } },
-  ],
+  projects: viewportProjects,
 });

@@ -7,6 +7,19 @@ const surfaces = [
   { path: "/privacidad", name: "privacy" },
   { path: "/ingreso", name: "identity" },
   { path: "/operacion", name: "control-room" },
+  { path: "/operacion/alertas", name: "control-room-alerts" },
+  { path: "/operacion/cadencia", name: "control-room-cadence" },
+  { path: "/operacion/respuestas", name: "control-room-replies" },
+  { path: "/operacion/leads", name: "control-room-leads" },
+  { path: "/operacion/empresas", name: "control-room-accounts" },
+  { path: "/operacion/precotizaciones", name: "control-room-prequotes" },
+  { path: "/operacion/campanas", name: "control-room-campaigns" },
+  { path: "/operacion/pipeline", name: "control-room-pipeline" },
+  { path: "/operacion/roadmap", name: "control-room-roadmap" },
+  { path: "/operacion/aprobaciones", name: "control-room-approvals" },
+  { path: "/operacion/reportes", name: "control-room-reports" },
+  { path: "/operacion/exportaciones", name: "control-room-exports" },
+  { path: "/operacion/entrega", name: "control-room-handoff" },
 ] as const;
 
 for (const surface of surfaces) {

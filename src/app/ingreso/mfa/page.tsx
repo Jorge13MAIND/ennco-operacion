@@ -23,7 +23,7 @@ export default async function MfaPage({ searchParams }: { searchParams: SearchPa
   return (
     <>
       <SiteHeader />
-      <main className="shell auth-shell">
+      <main className="shell auth-shell" id="main-content" tabIndex={-1}>
         <section className="panel auth-panel">
           <p className="eyebrow">Segundo factor</p>
           <h1>Confirma tu acceso</h1>

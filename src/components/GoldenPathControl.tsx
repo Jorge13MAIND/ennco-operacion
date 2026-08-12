@@ -35,9 +35,9 @@ export function GoldenPathControl() {
   }
 
   return (
-    <section className="card" style={{ marginBottom: 22 }}>
+    <section className="card golden-path-card">
       <p className="eyebrow">Golden path local</p>
-      <h2 style={{ fontSize: 28 }}>Prueba la columna vertebral sin contacto externo.</h2>
+      <h2 className="golden-path-title">Prueba la columna vertebral sin contacto externo.</h2>
       <p>
         Empresa, supresión, mensaje dry run, respuesta, lead estricto, alerta, portal y siguiente acción. La segunda ejecución usa la misma llave y debe responder DUPLICATE.
       </p>

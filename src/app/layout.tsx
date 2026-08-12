@@ -18,7 +18,10 @@ export function generateMetadata(): Metadata {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es-MX">
-      <body>{children}</body>
+      <body>
+        <a className="skip-link" href="#main-content">Saltar al contenido principal</a>
+        {children}
+      </body>
     </html>
   );
 }

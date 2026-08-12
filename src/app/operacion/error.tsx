@@ -2,7 +2,7 @@
 
 export default function OperationsError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
-    <main className="shell section">
+    <main className="shell section" id="main-content" tabIndex={-1}>
       <section className="panel auth-panel">
         <p className="eyebrow">Control Room</p>
         <h1>Los datos live no están disponibles.</h1>

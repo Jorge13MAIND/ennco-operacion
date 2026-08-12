@@ -29,7 +29,7 @@ export default async function DiagnosticPage({ searchParams }: { searchParams: S
   return (
     <>
       <SiteHeader />
-      <main className="shell section">
+      <main className="shell section" id="main-content" tabIndex={-1}>
         <div className="section-head">
           <div>
             <p className="eyebrow">Diagnóstico industrial</p>

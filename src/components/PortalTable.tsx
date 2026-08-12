@@ -36,7 +36,7 @@ export function PortalRowsTable({ module, actionKind, evidenceClass }: {
           <p>{module.emptyState}</p>
         </div>
       ) : (
-        <div className="table-wrap">
+        <div aria-label={`Tabla: ${module.title}`} className="table-wrap" role="region" tabIndex={0}>
           <table>
             <thead>
               <tr>

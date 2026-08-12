@@ -5,6 +5,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getRuntimeConfig } from "@/lib/runtime/config";
 import { PRIVATE_ROBOTS } from "@/lib/seo/indexing";
 
+export const dynamic = "force-dynamic";
+
 export function generateMetadata(): Metadata {
   const config = getRuntimeConfig();
   return {
@@ -19,7 +21,7 @@ export default function HomePage() {
   return (
     <>
       <SiteHeader />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <section className="shell hero">
           <div>
             <p className="eyebrow">Sistema comercial ENNCO</p>

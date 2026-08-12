@@ -1,9 +1,11 @@
 name: CI
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches: [main]
+    tags: ["v*", "enterprise-*"]
 
 concurrency:
   group: ennco-ci-${{ github.workflow }}-${{ github.ref }}
@@ -24,6 +26,11 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - name: Snapshot clean source tree and bind commit
+        run: node scripts/security-evidence-gate.mjs snapshot --repo . --expected-commit "$GITHUB_SHA" --evidence security-evidence/source.json --context github_actions
       - uses: github/codeql-action/init@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3
         with:
           languages: javascript-typescript
@@ -31,6 +38,19 @@ jobs:
       - uses: github/codeql-action/analyze@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3
         with:
           category: /language:javascript-typescript
+          output: codeql-results
+      - name: Gate CodeQL SARIF and bind evidence to commit
+        if: always()
+        run: node scripts/security-evidence-gate.mjs sarif --repo . --expected-commit "$GITHUB_SHA" --source-snapshot security-evidence/source.json --input codeql-results --evidence security-evidence/codeql.json --context github_actions
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: codeql-evidence-${{ github.sha }}
+          path: |
+            codeql-results
+            security-evidence/codeql.json
+          if-no-files-found: error
+          retention-days: 30
 
   verify:
     runs-on: ubuntu-latest
@@ -41,6 +61,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - name: Snapshot clean source tree and bind commit
+        run: node scripts/security-evidence-gate.mjs snapshot --repo . --expected-commit "$GITHUB_SHA" --evidence security-evidence/source.json --context github_actions
       - run: npm ci
       - run: npm run verify:rtm
       - run: npm run verify:data
@@ -52,6 +74,7 @@ jobs:
       - run: npm run verify:m8-readiness
       - run: npm run verify:m9-readiness
       - run: npm run verify:audit
+      - run: npm run verify:enterprise-security
       - run: npm run verify
       - name: Local synthetic performance smoke
         run: |
@@ -69,12 +92,16 @@ jobs:
           npm run verify:performance:smoke
       - name: Generate and validate CycloneDX SBOM
         run: |
-          npm sbom --sbom-format cyclonedx > sbom.cdx.json
-          node -e "const fs=require('fs'); const x=JSON.parse(fs.readFileSync('sbom.cdx.json','utf8')); if(x.bomFormat!=='CycloneDX'||!Array.isArray(x.components)) process.exit(1)"
+          npm sbom --offline --sbom-format cyclonedx > sbom.raw.cdx.json
+          node scripts/security-evidence-gate.mjs sbom --repo . --expected-commit "$GITHUB_SHA" --source-snapshot security-evidence/source.json --raw sbom.raw.cdx.json --output sbom.cdx.json --evidence security-evidence/sbom.json --context github_actions
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: cyclonedx-sbom
-          path: sbom.cdx.json
+          name: cyclonedx-sbom-${{ github.sha }}
+          path: |
+            sbom.raw.cdx.json
+            sbom.cdx.json
+            security-evidence/source.json
+            security-evidence/sbom.json
           if-no-files-found: error
           retention-days: 30
 
@@ -89,10 +116,11 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Resolve PostgreSQL binaries
-        run: echo "$(pg_config --bindir)" >> "$GITHUB_PATH"
+        run: pg_config --bindir >> "$GITHUB_PATH"
       - run: npm run verify:db
       - run: npm run verify:storage
       - run: npm run verify:retention
+      - run: npm run verify:retention-live
       - run: npm run verify:prequote-db
       - run: npm run verify:analytics-db
       - run: npm run verify:gmail-db
@@ -107,6 +135,10 @@ jobs:
       - run: npm run verify:suppression-privacy-db
       - run: npm run verify:commercial-operations-db
       - run: npm run verify:strict-lead-suppression-db
+      - run: npm run verify:capacity-db
+      - run: npm run verify:research-db
+      - run: npm run verify:operations-sla-db
+      - run: npm run verify:cadence-db
       - run: npm run capture:m2-restore
       - run: npm run capture:m9-restore
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -135,7 +167,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      - name: Enterprise frontend and multipath load smoke
+        run: npm run verify:m23:frontend:smoke
       - run: npm run test:e2e
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: m23-frontend-evidence-${{ github.sha }}
+          path: evidence/m23-frontend
+          if-no-files-found: error
+          retention-days: 30
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: failure()
         with:
@@ -158,6 +199,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - name: Snapshot clean source tree and bind commit
+        run: node scripts/security-evidence-gate.mjs snapshot --repo . --expected-commit "$GITHUB_SHA" --evidence security-evidence/source.json --context github_actions
       - run: npm ci
       - run: npm run build
       - name: Start fail-closed synthetic application
@@ -177,4 +220,18 @@ jobs:
           target: http://127.0.0.1:3000
           fail_action: true
           allow_issue_writing: false
-          artifact_name: zap-baseline-synthetic
+          artifact_name: zap-baseline-synthetic-${{ github.sha }}
+          cmd_options: "-J zap-report.json"
+      - name: Gate ZAP JSON and bind evidence to commit
+        if: always()
+        run: node scripts/security-evidence-gate.mjs zap --repo . --expected-commit "$GITHUB_SHA" --source-snapshot security-evidence/source.json --input zap-report.json --evidence security-evidence/zap.json --context github_actions --authenticated false --expected-target http://127.0.0.1:3000 --target-class synthetic_localhost
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: zap-evidence-${{ github.sha }}
+          path: |
+            zap-report.json
+            security-evidence/source.json
+            security-evidence/zap.json
+          if-no-files-found: error
+          retention-days: 30

@@ -18,7 +18,7 @@ export default async function OperationsPage() {
   const snapshot = await loadOperationsPortal(access);
   const capacityLabels = { HEALTHY: "Disponible", WARNING: "Atención", FULL: "Lleno", UNKNOWN: "Bloqueado" } as const;
   return (
-    <main className="shell section operations-main">
+    <main className="shell section operations-main" id="main-content" tabIndex={-1}>
       <div className="section-head compact">
         <div>
           <p className="eyebrow">Control Room · Hoy</p>
