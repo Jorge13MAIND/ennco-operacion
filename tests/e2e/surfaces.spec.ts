@@ -80,8 +80,48 @@ test("privacy notice is visible and explicitly remains a legal draft", async ({ 
 test("control room never presents setup as live commercial truth", async ({ page }) => {
   await page.goto("/operacion");
   await expect(page.getByText("synthetic_demo")).toBeVisible();
-  await expect(page.getByText("Datos sintéticos. Ninguna actividad comercial real ha sido ejecutada.")).toBeVisible();
-  await expect(page.getByText("Kill switch activo")).toBeVisible();
+  await expect(page.getByText("Modo sintético con tráfico cero.")).toBeVisible();
+  await expect(page.getByText("Leads contractuales")).toBeVisible();
+  await expect(page.getByText("Pipeline estricto")).toBeVisible();
+  await expect(page.getByText("BLOQUEADO", { exact: true })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Módulos de operación" })).toBeVisible();
+});
+
+test("operations modules preserve synthetic disclosure and strict empty pipeline", async ({ page }) => {
+  await page.goto("/operacion/respuestas");
+  await expect(page.getByRole("heading", { level: 1, name: "Bandeja de respuestas" })).toBeVisible();
+  await expect(page.getByText("Los renglones marcados SIMULACION no son empresas, respuestas, leads ni oportunidades reales.")).toBeVisible();
+  await expect(page.getByText("Planta Alfa, ejemplo anónimo")).toBeVisible();
+
+  await page.goto("/operacion/pipeline");
+  await expect(page.getByText("No hay pipeline estricto real.")).toBeVisible();
+});
+
+test("synthetic exports are private, empty and explicitly labeled", async ({ request }) => {
+  const response = await request.get("/api/v1/exports/companies-contacts");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("text/csv");
+  expect(response.headers()["cache-control"]).toBe("private, no-store");
+  expect(response.headers()["x-evidence-class"]).toBe("synthetic_demo");
+  expect(response.headers()["x-content-sha256"]).toMatch(/^[a-f0-9]{64}$/);
+  const csv = await response.text();
+  expect(csv).toContain('"evidence_class","account_name"');
+  expect(csv).not.toContain("Planta Alfa");
+});
+
+test("Gmail webhook fails closed until the external release gate", async ({ request }) => {
+  const response = await request.post("/api/v1/webhooks/gmail", { data: {} });
+  expect(response.status()).toBe(503);
+  await expect(response.json()).resolves.toMatchObject({ error: "GMAIL_WEBHOOK_NOT_RELEASED" });
+});
+
+test("operational mutations cannot persist in synthetic mode", async ({ request }) => {
+  const response = await request.post(
+    "/api/v1/operations/provider-events/11111111-1111-4111-8111-111111111111/review",
+    { data: { classification: "POSITIVE" } },
+  );
+  expect(response.status()).toBe(409);
+  await expect(response.json()).resolves.toMatchObject({ error: "SYNTHETIC_MUTATION_DISABLED" });
 });
 
 test("identity surface keeps real access separate from the local demo", async ({ page }) => {

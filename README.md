@@ -8,6 +8,7 @@ Sistema comercial E2E de ENNCO. Este repositorio contiene la experiencia públic
 - M1: golden path local `PASS` con datos sintéticos y cero efectos externos.
 - M2: seguridad, Storage, audit allowlist, retención y restore local en `PASS`. Gate global `EXTEND` hasta validar proveedor, legal, secretos, antivirus, PITR y RTO.
 - M3: captación, precotizador, PDF, persistencia y analítica local en `PASS`. Gate global `EXTEND` hasta aprobar modelo, aviso, antivirus y Supabase real.
+- M4: portal operativo, Gmail push, respuestas, calificación, pipeline y exportaciones locales en `PASS`. Gate global `EXTEND` hasta provisionar proveedores y ejecutar UAT ENNCO.
 - Producción, DNS, compras y contacto externo: bloqueados hasta aprobación explícita.
 
 ## Desarrollo local
@@ -26,6 +27,7 @@ npm run dev
 npm run verify:m0m1
 npm run verify:m2
 npm run verify:m3
+npm run verify:m4
 ```
 
 Este comando valida:
@@ -52,6 +54,16 @@ Este comando valida:
 - Captura HMAC, consentimiento versionado, idempotencia, replay y rate limit.
 - Analítica allowlist sin nombre, correo, teléfono, empresa ni propiedades arbitrarias.
 - PDF temporal privado y QA de landing, privacidad y resultado.
+
+`verify:m4` agrega:
+
+- Webhook Gmail con OIDC, HMAC, replay e idempotencia.
+- Sync de history paginado con full sync obligatorio ante cursor vencido.
+- Respuesta, auto reply, hard bounce, baja y evento ambiguo.
+- Revisión humana antes de crear un lead por respuesta positiva.
+- Calificación contractual, reuniones y transiciones de pipeline con gates de base.
+- CSV privado con neutralización de fórmulas, checksum y audit run.
+- Portal responsive con módulos de operación y separación explícita de simulación y verdad comercial.
 
 ## Operación local
 

@@ -40,6 +40,10 @@ Estados permitidos para este registro:
 | DEC-027 | El modelo industrial se publica como rango extrapolado mientras no exista histórico entregado de 100 kWp o más | VERIFIED | Auditoría de 20 proyectos y cuatro propuestas | Prohíbe presentar la banda como precio final o calibración industrial observada | Aprobación de modelo M3 |
 | DEC-028 | El aviso `DRAFT-2026-08-11` no habilita producción | VERIFIED | Runtime fail closed y gate legal | `ENNCO_PUBLIC_SURFACE_RELEASED` no puede activarse sin aviso aprobado | Revisión legal M3 |
 | DEC-029 | La analítica pública usa allowlist y rechaza PII | VERIFIED | Migración 005 y gate adversarial | No se aceptan propiedades libres, correo, nombre, teléfono, empresa ni UTM libre | Canary M3 |
+| DEC-030 | Gmail push entrega un cursor y nunca se trata como mensaje completo | VERIFIED | Documentación oficial Gmail y arquitectura M4 | El worker usa history.list, pagina y hace full sync ante 404 | Canary M4 |
+| DEC-031 | La respuesta positiva exige revisión humana y no cuenta como lead contractual | VERIFIED | Migración 006 y gate adversarial | La revisión crea CAPTURED; otra transición exige cinco criterios y evidencia | UAT M4 |
+| DEC-032 | Los exports live son privados, llevan checksum y dejan audit run | VERIFIED | API y migración 006 | Un CSV sintético siempre está vacío y etiquetado | UAT M4 |
+| DEC-033 | Gmail, Pub/Sub y mutaciones operativas permanecen cerrados en demo | VERIFIED | Runtime y pruebas E2E M4 | La interfaz puede probarse sin crear datos ni efectos externos | Staging M4 |
 
 ## Jerarquia de evidencia
 

@@ -29,3 +29,8 @@
 | R-025 | P0 | Captura real opera con aviso incompleto | Aviso draft o versión de consentimiento ausente | Runtime fail closed, versión persistida y revisión legal antes de release | ENNCO | BLOCKED_EXTERNAL |
 | R-026 | P1 | Analítica almacena PII | Propiedad arbitraria o valor con correo llega a base | Allowlist estricta, regex, HMAC, RLS y pruebas centinela | Product Engineering | MITIGATED_LOCAL |
 | R-027 | P0 | Recibo se carga sin antivirus real | Input de archivo se habilita antes del scanner | Input deshabilitado y gate de cuarentena hasta proveedor aprobado | Product Engineering | BLOCKED_EXTERNAL |
+| R-028 | P0 | Webhook Gmail falsificado o repetido | JWT, audience, subscription o message ID no se validan | OIDC, HMAC, replay nonce, unique key y pruebas adversariales | Product Engineering | MITIGATED_LOCAL |
+| R-029 | P0 | Respuesta positiva se cuenta como lead contractual | Clasificador crea qualification sin revisión | Toda respuesta inicia UNREVIEWED, revisión humana crea CAPTURED y gate estricto califica aparte | Product Engineering | MITIGATED_LOCAL |
+| R-030 | P0 | Operador altera mensaje o provider event directo | RLS genérica permite escritura fuera de RPC | Revocar DML y exigir RPC con audit allowlist | Product Engineering | MITIGATED_LOCAL |
+| R-031 | P1 | Cursor Gmail vencido deja un hueco silencioso | `history.list` devuelve 404 | Error explícito, pausa, dead letter y full sync reconciliado | Product Engineering | MITIGATED_LOCAL |
+| R-032 | P0 | Portal sustituye falla live con datos sintéticos | Consulta live falla y carga fixtures | Error boundary fail closed y demo permitido sólo fuera de producción | Product Engineering | MITIGATED_LOCAL |

@@ -1,92 +1,79 @@
-import { SiteHeader } from "@/components/SiteHeader";
+import type { Route } from "next";
+import Link from "next/link";
+
 import { GoldenPathControl } from "@/components/GoldenPathControl";
-import { getSyntheticControlRoomSnapshot } from "@/lib/control-room/snapshot";
+import { CompactActionTable, PortalRowsTable } from "@/components/PortalTable";
 import { requireOperationsAccess } from "@/lib/auth/authorization";
+import { loadOperationsPortal } from "@/lib/operations/portal";
 
 export const dynamic = "force-dynamic";
 
+function money(value: number): string {
+  return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(value);
+}
+
 export default async function OperationsPage() {
   const access = await requireOperationsAccess();
-  if (access.evidenceClass === "live") {
-    return (
-      <>
-        <SiteHeader />
-        <main className="shell section">
-          <section className="panel auth-panel">
-            <p className="eyebrow">Acceso verificado</p>
-            <h1>Control Room protegido</h1>
-            <p className="lede">La sesión, MFA, membresía y aislamiento de organización fueron validados.</p>
-            <div className="notice">
-              <strong>Datos operativos en HOLD.</strong>
-              <p>La lectura live del portal se habilita en M4. Esta pantalla no sustituye datos reales con fixtures sintéticos.</p>
-              <span className="badge">{access.role}</span>
-            </div>
-          </section>
-        </main>
-      </>
-    );
-  }
-  const snapshot = getSyntheticControlRoomSnapshot();
+  const snapshot = await loadOperationsPortal(access);
   return (
-    <>
-      <SiteHeader />
-      <main className="shell section">
-        <div className="section-head">
-          <div>
-            <p className="eyebrow">Control Room</p>
-            <h1>Lo que existe, lo que falta y quién mueve lo siguiente.</h1>
-          </div>
-          <span className="badge">{snapshot.evidenceClass}</span>
+    <main className="shell section operations-main">
+      <div className="section-head compact">
+        <div>
+          <p className="eyebrow">Control Room · Hoy</p>
+          <h1>Qué requiere atención y qué resultado existe de verdad.</h1>
+          <p className="lede">Datos actualizados {new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" }).format(new Date(snapshot.generatedAt))}.</p>
         </div>
-        <section aria-label="Métricas comerciales sintéticas" className="metric-grid">
-          <div className="metric"><span>Empresas investigadas</span><strong>{snapshot.commercial.researchedCompanies}</strong></div>
-          <div className="metric"><span>Contactos verificados</span><strong>{snapshot.commercial.verifiedContacts}</strong></div>
-          <div className="metric"><span>Leads contractuales</span><strong>{snapshot.commercial.contractualLeads}</strong></div>
-          <div className="metric"><span>Pipeline estricto</span><strong>{snapshot.commercial.qualifiedOpportunities}</strong></div>
-        </section>
-        <section aria-label="Controles de liberación" className="release-strip">
-          <div><span>Ambiente</span><strong>{snapshot.system.environment}</strong></div>
-          <div><span>Kill switch</span><strong>{snapshot.system.killSwitch ? "ACTIVO" : "INACTIVO"}</strong></div>
-          <div><span>Envío externo</span><strong>{snapshot.system.externalSendAllowed ? "HABILITADO" : "BLOQUEADO"}</strong></div>
-          <div><span>Riesgos abiertos</span><strong>{snapshot.system.openP0} P0 / {snapshot.system.openP1} P1</strong></div>
-        </section>
-        <GoldenPathControl />
-        <section className="panel">
+        <span className="badge">{snapshot.evidenceClass}</span>
+      </div>
+
+      {snapshot.evidenceClass === "synthetic_demo" ? (
+        <div className="notice operations-disclosure">
+          <strong>Modo sintético con tráfico cero.</strong>
+          <p>Los ejemplos de las tablas sirven para probar el flujo. Los ocho indicadores siguientes son la verdad comercial real y permanecen en cero.</p>
+        </div>
+      ) : null}
+
+      <section aria-label="Verdad comercial" className="metric-grid operations-metrics">
+        <div className="metric"><span>Leads nuevos hoy</span><strong>{snapshot.realTruth.newLeads}</strong></div>
+        <div className="metric"><span>Respuestas pendientes</span><strong>{snapshot.realTruth.pendingReplies}</strong></div>
+        <div className="metric"><span>Reuniones hoy</span><strong>{snapshot.realTruth.meetingsToday}</strong></div>
+        <div className="metric"><span>Tareas vencidas</span><strong>{snapshot.realTruth.overdueTasks}</strong></div>
+        <div className="metric"><span>Leads contractuales</span><strong>{snapshot.realTruth.contractualLeads}</strong></div>
+        <div className="metric"><span>Pipeline estricto</span><strong>{snapshot.realTruth.qualifiedPipeline}</strong></div>
+        <div className="metric"><span>Proyectos ganados</span><strong>{snapshot.realTruth.wonProjects}</strong></div>
+        <div className="metric"><span>Primeros pagos</span><strong>{money(snapshot.realTruth.firstPaymentsMxn)}</strong></div>
+      </section>
+
+      <section aria-label="Salud operativa" className="release-strip operations-health">
+        <div><span>Kill switch</span><strong>{snapshot.health.killSwitch ? "ACTIVO" : "INACTIVO"}</strong></div>
+        <div><span>Envío externo</span><strong>{snapshot.health.externalSendAllowed ? "HABILITADO" : "BLOQUEADO"}</strong></div>
+        <div><span>Reply sync</span><strong>{snapshot.health.replySync}</strong></div>
+        <div><span>Riesgos</span><strong>{snapshot.health.openP0} P0 / {snapshot.health.openP1} P1</strong></div>
+      </section>
+
+      <div className="operations-dashboard-grid">
+        <section className="panel action-panel">
           <div className="panel-head">
-            <h2>Roadmap</h2>
-            <span className="badge">Kill switch activo</span>
+            <div>
+              <h2>Siguientes acciones</h2>
+              <p>Ordenadas por vencimiento y severidad.</p>
+            </div>
           </div>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Milestone</th>
-                  <th>Estado</th>
-                  <th>Gate</th>
-                  <th>Responsable</th>
-                  <th>Fecha</th>
-                  <th>Bloqueador</th>
-                  <th>Siguiente acción</th>
-                </tr>
-              </thead>
-              <tbody>
-                {snapshot.milestones.map((milestone) => (
-                  <tr key={milestone.id}>
-                    <td data-label="Milestone"><strong>{milestone.id}</strong><br />{milestone.name}</td>
-                    <td data-label="Estado"><span className={`status ${milestone.status === "BLOCKED" ? "blocked" : ""}`}>{milestone.status}</span></td>
-                    <td data-label="Gate">{milestone.gate ? <span className={`status ${milestone.gate !== "PASS" ? "blocked" : ""}`}>{milestone.gate}</span> : "Pendiente"}</td>
-                    <td data-label="Responsable">{milestone.owner}</td>
-                    <td data-label="Fecha">{milestone.dueDate}</td>
-                    <td data-label="Bloqueador">{milestone.blocker ?? "Sin bloqueo"}</td>
-                    <td data-label="Siguiente acción">{milestone.nextAction}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <CompactActionTable evidenceClass={snapshot.evidenceClass} rows={snapshot.nextActions} />
+        </section>
+        <section className="panel quick-links-panel">
+          <div className="panel-head"><h2>Operar</h2></div>
+          <div className="quick-links">
+            <Link href={"/operacion/respuestas" as Route}><strong>Responder interés</strong><span>Revisar bandeja y detener secuencias</span></Link>
+            <Link href={"/operacion/leads" as Route}><strong>Calificar lead</strong><span>Aplicar definición contractual estricta</span></Link>
+            <Link href={"/operacion/pipeline" as Route}><strong>Actualizar oportunidad</strong><span>Registrar valor y siguiente acción</span></Link>
+            <Link href={"/operacion/aprobaciones" as Route}><strong>Resolver gate</strong><span>Dejar decisión y evidencia</span></Link>
           </div>
         </section>
-      </main>
-      <footer className="shell footer">Datos sintéticos. Ninguna actividad comercial real ha sido ejecutada.</footer>
-    </>
+      </div>
+
+      <PortalRowsTable actionKind="respuestas" evidenceClass={snapshot.evidenceClass} module={snapshot.modules.respuestas} />
+      {snapshot.evidenceClass === "synthetic_demo" ? <GoldenPathControl /> : null}
+    </main>
   );
 }

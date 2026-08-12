@@ -26,6 +26,7 @@
     "verify:retention": "supabase/tests/run-retention-gate.sh",
     "verify:prequote-db": "supabase/tests/run-prequote-gate.sh",
     "verify:analytics-db": "supabase/tests/run-analytics-gate.sh",
+    "verify:gmail-db": "supabase/tests/run-gmail-operations-gate.sh",
     "verify:prequote-model": "node scripts/verify-prequote-model.mjs --repo .",
     "verify:restore": "bash scripts/m2-verify-local-recovery.sh",
     "capture:m2-restore": "bash scripts/m2-local-backup-restore-drill.sh --repo . --evidence-dir ./evidence/m2-restore && bash scripts/m2-verify-restore-evidence.sh --repo . --evidence-dir ./evidence/m2-restore",
@@ -34,11 +35,13 @@
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build",
     "verify:m0m1": "npm run verify:rtm && npm run verify:data && npm run verify:db && npm run verify && npm run test:e2e",
     "verify:m2": "npm run verify:rtm && npm run verify:data && npm run verify:secrets && npm run verify:db && npm run verify:storage && npm run verify:retention && npm run verify:restore && npm run verify:audit && npm run verify && npm run test:e2e",
-    "verify:m3": "npm run verify:rtm && npm run verify:data && npm run verify:secrets && npm run verify:prequote-model && npm run verify:db && npm run verify:storage && npm run verify:retention && npm run verify:prequote-db && npm run verify:analytics-db && npm run verify:restore && npm run verify:audit && npm run verify && npm run test:e2e"
+    "verify:m3": "npm run verify:rtm && npm run verify:data && npm run verify:secrets && npm run verify:prequote-model && npm run verify:db && npm run verify:storage && npm run verify:retention && npm run verify:prequote-db && npm run verify:analytics-db && npm run verify:restore && npm run verify:audit && npm run verify && npm run test:e2e",
+    "verify:m4": "npm run verify:rtm && npm run verify:data && npm run verify:secrets && npm run verify:prequote-model && npm run verify:db && npm run verify:storage && npm run verify:retention && npm run verify:prequote-db && npm run verify:analytics-db && npm run verify:gmail-db && npm run verify:restore && npm run verify:audit && npm run verify && npm run test:e2e"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.3",
+    "google-auth-library": "^10.3.0",
     "next": "16.3.0",
     "pdf-lib": "^1.17.1",
     "react": "19.2.8",

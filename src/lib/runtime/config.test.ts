@@ -24,6 +24,7 @@ describe("runtime configuration", () => {
       globalKillSwitch: true,
       publicSurfaceReleased: false,
       privacyNoticeApproved: false,
+      gmailWebhookReleased: false,
     });
     expect(hasDedicatedSupabase(config)).toBe(false);
   });
@@ -100,6 +101,33 @@ describe("runtime configuration", () => {
         ENNCO_PUBLIC_SURFACE_RELEASED: "true",
       }),
     ).toThrow("PUBLIC_SURFACE_RELEASE_GATES_INCOMPLETE");
+  });
+
+  it("keeps Gmail push closed until every identity and persistence gate exists", () => {
+    expect(() =>
+      getRuntimeConfig({
+        ...dedicated,
+        ...prequoteSecrets,
+        NEXT_PUBLIC_APP_ENV: "production",
+        ENNCO_DEMO_MODE: "false",
+        ENNCO_REQUIRE_MFA: "true",
+        ENNCO_GMAIL_WEBHOOK_RELEASED: "true",
+      }),
+    ).toThrow("GMAIL_WEBHOOK_RELEASE_GATES_INCOMPLETE");
+
+    const config = getRuntimeConfig({
+      ...dedicated,
+      ...prequoteSecrets,
+      NEXT_PUBLIC_APP_ENV: "production",
+      ENNCO_DEMO_MODE: "false",
+      ENNCO_REQUIRE_MFA: "true",
+      ENNCO_GMAIL_WEBHOOK_RELEASED: "true",
+      ENNCO_GMAIL_INGEST_SECRET: "synthetic-gmail-secret-at-least-32-characters",
+      GMAIL_PUBSUB_AUDIENCE: "https://operacion.ennco.com.mx/api/v1/webhooks/gmail",
+      GMAIL_PUBSUB_SERVICE_ACCOUNT: "pubsub@ennco.invalid",
+      GMAIL_PUBSUB_SUBSCRIPTION: "projects/ennco/subscriptions/gmail",
+    });
+    expect(config.gmailWebhookReleased).toBe(true);
   });
 
   it("infers production from the deployment platform and rejects a platform downgrade", () => {

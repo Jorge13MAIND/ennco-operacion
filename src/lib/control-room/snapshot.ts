@@ -1,6 +1,6 @@
 import type { ControlRoomSnapshot, Milestone } from "@/lib/domain/types";
 
-const UPDATED_AT = "2026-08-11T21:20:00-06:00";
+const UPDATED_AT = "2026-08-11T22:50:00-06:00";
 
 export const INITIAL_MILESTONES: Milestone[] = [
   {
@@ -55,33 +55,42 @@ export const INITIAL_MILESTONES: Milestone[] = [
       "docs/12-m2-architecture.md",
     ],
     blocker: "Proveedor, legal, credenciales rotadas, antivirus y recuperación real requieren gates externos.",
-    nextAction: "Cerrar retención local y preparar canary aislado de Auth, Storage y restore.",
+    nextAction: "Ejecutar canary aislado de Auth, Storage y restore cuando exista infraestructura autorizada.",
     updatedAt: UPDATED_AT,
   },
   {
     id: "M3",
     name: "Captación y precotización",
     owner: "Teckel Product & Engineering",
-    status: "NOT_STARTED",
-    gate: null,
+    status: "EVIDENCE_READY",
+    gate: "EXTEND",
     dueDate: "2026-09-01",
     acceptance: "Modelo aprobado, PDF, mobile, desktop y captura E2E.",
-    evidence: [],
-    blocker: "Modelo requiere validación de Paco.",
-    nextAction: "Backtestear propuestas y recibos.",
+    evidence: [
+      "docs/evidence/M3-gate-report.md",
+      "docs/evidence/M3-prequote-model-verification.json",
+      "supabase/tests/004_public_prequote_capture_gate.sql",
+      "supabase/tests/005_conversion_analytics_gate.sql",
+    ],
+    blocker: "Modelo requiere validación de Paco, aviso requiere aprobación y recibos requieren antivirus real.",
+    nextAction: "Mantener release público cerrado hasta resolver los tres gates externos.",
     updatedAt: UPDATED_AT,
   },
   {
     id: "M4",
     name: "Portal y operación",
     owner: "Teckel Product & Engineering",
-    status: "NOT_STARTED",
-    gate: null,
+    status: "EVIDENCE_READY",
+    gate: "EXTEND",
     dueDate: "2026-09-08",
     acceptance: "ENNCO opera leads, respuestas, pipeline, reportes y exportación.",
-    evidence: [],
-    blocker: null,
-    nextAction: "Completar contratos antes de UI ampliada.",
+    evidence: [
+      "supabase/tests/006_gmail_operations_gate.sql",
+      "src/lib/operations/portal.ts",
+      "tests/e2e/surfaces.spec.ts",
+    ],
+    blocker: "Gmail, Pub/Sub, KMS y Supabase real no están provisionados ni autorizados.",
+    nextAction: "Validar el mismo flujo en staging aislado y ejecutar UAT con operador ENNCO.",
     updatedAt: UPDATED_AT,
   },
   {
@@ -159,8 +168,8 @@ export function getSyntheticControlRoomSnapshot(): ControlRoomSnapshot {
       environment: "local",
       killSwitch: true,
       externalSendAllowed: false,
-      openP0: 5,
-      openP1: 1,
+      openP0: 10,
+      openP1: 4,
     },
     commercial: {
       researchedCompanies: 0,

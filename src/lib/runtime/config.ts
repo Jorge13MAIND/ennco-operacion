@@ -9,11 +9,16 @@ const runtimeSchema = z.object({
   globalKillSwitch: z.boolean(),
   publicSurfaceReleased: z.boolean(),
   privacyNoticeApproved: z.boolean(),
+  gmailWebhookReleased: z.boolean(),
   supabaseUrl: z.url().optional(),
   supabasePublishableKey: z.string().min(20).optional(),
   organizationId: z.uuid().optional(),
   prequoteIngestSecret: z.string().min(32).optional(),
   pdfSigningSecret: z.string().min(32).optional(),
+  gmailIngestSecret: z.string().min(32).optional(),
+  gmailPubSubAudience: z.url().optional(),
+  gmailPubSubServiceAccount: z.email().optional(),
+  gmailPubSubSubscription: z.string().min(3).max(512).optional(),
 });
 
 export type RuntimeConfig = z.infer<typeof runtimeSchema>;
@@ -51,6 +56,7 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     globalKillSwitch: envBoolean(environment.ENNCO_GLOBAL_KILL_SWITCH, true),
     publicSurfaceReleased: envBoolean(environment.ENNCO_PUBLIC_SURFACE_RELEASED, false),
     privacyNoticeApproved: envBoolean(environment.ENNCO_PRIVACY_NOTICE_APPROVED, false),
+    gmailWebhookReleased: envBoolean(environment.ENNCO_GMAIL_WEBHOOK_RELEASED, false),
     supabaseUrl: environment.NEXT_PUBLIC_SUPABASE_URL || undefined,
     supabasePublishableKey:
       environment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
@@ -59,6 +65,10 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     organizationId: environment.NEXT_PUBLIC_ENNCO_ORGANIZATION_ID || undefined,
     prequoteIngestSecret: environment.ENNCO_PREQUOTE_INGEST_SECRET || undefined,
     pdfSigningSecret: environment.ENNCO_PDF_SIGNING_SECRET || undefined,
+    gmailIngestSecret: environment.ENNCO_GMAIL_INGEST_SECRET || undefined,
+    gmailPubSubAudience: environment.GMAIL_PUBSUB_AUDIENCE || undefined,
+    gmailPubSubServiceAccount: environment.GMAIL_PUBSUB_SERVICE_ACCOUNT || undefined,
+    gmailPubSubSubscription: environment.GMAIL_PUBSUB_SUBSCRIPTION || undefined,
   });
 
   const configuredValues = [config.supabaseUrl, config.supabasePublishableKey, config.organizationId];
@@ -81,6 +91,19 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
   }
   if (config.publicSurfaceReleased && (config.demoMode || !config.privacyNoticeApproved)) {
     throw new Error("PUBLIC_SURFACE_RELEASE_GATES_INCOMPLETE");
+  }
+  if (
+    config.gmailWebhookReleased
+    && (
+      config.demoMode
+      || !config.gmailIngestSecret
+      || !config.gmailPubSubAudience
+      || !config.gmailPubSubServiceAccount
+      || !config.gmailPubSubSubscription
+      || configuredCount !== configuredValues.length
+    )
+  ) {
+    throw new Error("GMAIL_WEBHOOK_RELEASE_GATES_INCOMPLETE");
   }
 
   return config;
