@@ -4,27 +4,27 @@ Fecha de corte: 2026-08-12, `America/Mexico_City`.
 
 ## Veredicto
 
-- Integridad de la captura provisional: `PASS`.
-- Estado del paquete: `PROVISIONAL_NOT_FINAL`.
-- Milestone local M9: `EXTEND` hasta ejecutar el freeze desde un commit limpio que contenga estos controles.
+- Integridad de la captura final local: `PASS`.
+- Estado del paquete: `FINAL_FREEZE`.
+- Milestone local M9: `EVIDENCE_READY`.
 - Gate global M9: `EXTEND`.
 - Evidence class: `synthetic_demo`.
 - Efectos externos: `0`.
 - UAT, capacitación, transferencia de accesos y aceptación final ENNCO: `0`.
 
-Esta evidencia no es el artefacto final y no debe etiquetarse, compartirse ni usarse como prueba de entrega. Su propósito es demostrar que el empaquetador y el verificador ya fallan cerrado.
+Esta es la evidencia final del checkpoint local. No es prueba de producción, aceptación del cliente ni terminación del programa enterprise.
 
-## Captura provisional
+## Captura final local
 
-- Commit fuente: `02f08ed53fc7cb07ce7414ba78a64935c76353e6`.
-- Tree SHA: `63617cb63334b0c34f6b98b10a105308841006b1`.
-- Manifest SHA256: `c62fd08bea71a58b6304fe04c7e2aec1367373cf73139f96846f2f3db977767d`.
-- Source archive SHA256: `2b0c4469d0e8de2d539f4f7a2e0ea049da439e14d9637512c1441d05a48a52bb`.
-- Audit bundle SHA256: `ed9087094d590768efc84df6baa274ddf2162164fa7bd539bdc603ba2df92012`.
-- Worktree limpio al capturar: no.
-- Control de empaquetado incluido en el commit fuente: no, la versión del worktree no coincide con la del commit.
+- Commit fuente: `a84162757b22706915d2aaa2a18e3809dca8569e`.
+- Tree SHA: `364d30be41bd200259facf13210ec85e9ce7c69f`.
+- Manifest SHA256: `c99b7e0219656a2c3ed47845c936effdd9faa0d9bf11fbfd06cd91acc77533ac`.
+- Source archive SHA256: `aa983245a31cc0af19291ca6ad109236ccee81dfa5b78d924f6221efe1b08f83`.
+- Audit bundle SHA256: `b96a4b7f71555a15db789792893900be134d4a7dcd1a47ec7759757d946e0d12`.
+- Worktree limpio al capturar: sí.
+- Control de empaquetado incluido en el commit fuente: sí, ambos SHA256 son `e2d2ddf5eebaf7e9d9f00620e1b817f1026239d503d1f40245b5fe5d5c3df8cc`.
 
-Por estas dos últimas condiciones, `final_artifact=false` y los seis criterios locales permanecen en `EXTEND`, aunque los controles internos del paquete pasen.
+Las precondiciones del freeze quedaron satisfechas. `final_artifact=true` y los seis criterios locales están en `PASS`.
 
 ## Source archive
 
@@ -32,8 +32,8 @@ Por estas dos últimas condiciones, `final_artifact=false` y los seis criterios 
 
 Contenido exacto de esta captura:
 
-- 170 archivos.
-- 243 entradas de tar, incluyendo directorios.
+- 220 archivos.
+- 301 entradas de tar, incluyendo directorios.
 - Código de aplicación allowlisted.
 - Configuración root exacta.
 - Tests E2E y gates SQL.
@@ -47,13 +47,13 @@ Cada archivo aparece en el manifest externo con ruta, tamaño y SHA256. El verif
 
 El source archive no contiene:
 
-- `data/imports/**`, 12 archivos rastreados en el commit provisional.
+- `data/imports/**`, 16 archivos rastreados en el commit fuente.
 - `evidence/data-import/**`, 2 archivos.
 - `data/prequote/**`, 3 archivos con calibración derivada de propuestas históricas.
 - `src/lib/domain/prequote*`, 2 archivos que incorporan supuestos derivados de esa calibración.
 - `data/content/**`, 1 archivo de evidencia histórica derivada.
 - `docs/evidence/M9*`, 7 archivos.
-- `evidence/m9-handoff/**`, 4 archivos.
+- `evidence/m9-handoff/**`, 5 archivos.
 - Ningún otro archivo bajo `evidence/**`.
 - 16 archivos allowlisted con identificadores personales u operativos conocidos. Cada path y marker ID aparece en el manifest.
 
@@ -78,7 +78,7 @@ La afirmación verificable es limitada:
 - Marcadores conocidos de datos históricos o importados: `0`.
 - Hallazgos del scanner de secretos: `0`.
 - Identificadores personales u operativos conocidos: `0`.
-- Archivos regulares inspeccionados: 170 de 170.
+- Archivos regulares inspeccionados: 220 de 220.
 
 No se afirma ausencia universal de PII. Un scanner de patrones no puede probarla. Cualquier transferencia live sigue requiriendo revisión humana de privacidad y un canal restricted separado para los datos excluidos.
 
@@ -86,7 +86,7 @@ No se afirma ausencia universal de PII. Un scanner de patrones no puede probarla
 
 ```bash
 npm run test:m9-package
-npm run capture:m9-provisional
+npm run capture:m9-final
 npm run verify:m9-readiness
 shasum -a 256 -c docs/evidence/M9-checksums.sha256
 ```
@@ -94,7 +94,7 @@ shasum -a 256 -c docs/evidence/M9-checksums.sha256
 Resultados:
 
 - Negativos fail-closed: 7 de 7 `PASS`.
-- Verificación provisional: 38 de 38 `PASS`.
+- Verificación final: 38 de 38 `PASS`.
 - Source archive reproducido byte a byte desde el commit: `PASS`.
 - Audit bundle reproducido byte a byte: `PASS`.
 - Checksums externos: 6 de 6 `PASS`.
@@ -143,4 +143,4 @@ No se debe regenerar el paquete después del paso 8. Cualquier cambio obliga a r
 - No existe aceptación final.
 - Permanecen riesgos P0 y P1 abiertos.
 
-Ningún PASS provisional permite declarar M9 final, producción lista o programa enterprise terminado.
+El `EVIDENCE_READY` local no permite declarar producción lista, aceptación del cliente ni programa enterprise terminado.

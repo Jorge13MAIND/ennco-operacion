@@ -3,17 +3,17 @@
   "package_id": "ENNCO-M9-HANDOFF-LOCAL",
   "evidence_class": "synthetic_demo",
   "capture": {
-    "mode": "provisional",
-    "final_artifact": false,
-    "head_at_capture": "02f08ed53fc7cb07ce7414ba78a64935c76353e6",
-    "worktree_clean_at_capture": false,
+    "mode": "final",
+    "final_artifact": true,
+    "head_at_capture": "a84162757b22706915d2aaa2a18e3809dca8569e",
+    "worktree_clean_at_capture": true,
     "control_worktree_sha256": "e2d2ddf5eebaf7e9d9f00620e1b817f1026239d503d1f40245b5fe5d5c3df8cc",
-    "control_source_sha256": "086a865d38844de881a189970793df11e48ee388d53dd4e22f28b5d388bc16f6",
-    "control_script_matches_source_commit": false
+    "control_source_sha256": "e2d2ddf5eebaf7e9d9f00620e1b817f1026239d503d1f40245b5fe5d5c3df8cc",
+    "control_script_matches_source_commit": true
   },
   "source": {
-    "commit_sha": "02f08ed53fc7cb07ce7414ba78a64935c76353e6",
-    "tree_sha": "63617cb63334b0c34f6b98b10a105308841006b1",
+    "commit_sha": "a84162757b22706915d2aaa2a18e3809dca8569e",
+    "tree_sha": "364d30be41bd200259facf13210ec85e9ce7c69f",
     "archive_format": "posix_tar",
     "allowlist_policy": [
       {
@@ -161,6 +161,10 @@
       "src/app/api/v1/operations/",
       "src/app/api/v1/operations/leads/",
       "src/app/api/v1/operations/leads/[id]/",
+      "src/app/api/v1/operations/leads/[id]/evidence/",
+      "src/app/api/v1/operations/leads/[id]/evidence/route.ts",
+      "src/app/api/v1/operations/leads/[id]/opportunity/",
+      "src/app/api/v1/operations/leads/[id]/opportunity/route.ts",
       "src/app/api/v1/operations/leads/[id]/qualify/",
       "src/app/api/v1/operations/leads/[id]/qualify/route.ts",
       "src/app/api/v1/operations/meetings/",
@@ -169,6 +173,10 @@
       "src/app/api/v1/operations/meetings/[id]/outcome/route.ts",
       "src/app/api/v1/operations/opportunities/",
       "src/app/api/v1/operations/opportunities/[id]/",
+      "src/app/api/v1/operations/opportunities/[id]/meetings/",
+      "src/app/api/v1/operations/opportunities/[id]/meetings/route.ts",
+      "src/app/api/v1/operations/opportunities/[id]/payments/",
+      "src/app/api/v1/operations/opportunities/[id]/payments/route.ts",
       "src/app/api/v1/operations/opportunities/[id]/transition/",
       "src/app/api/v1/operations/opportunities/[id]/transition/route.ts",
       "src/app/api/v1/operations/provider-events/",
@@ -184,6 +192,9 @@
       "src/app/api/v1/prequotes/[folio]/pdf/",
       "src/app/api/v1/prequotes/[folio]/pdf/route.ts",
       "src/app/api/v1/prequotes/route.ts",
+      "src/app/api/v1/unsubscribe/",
+      "src/app/api/v1/unsubscribe/route.test.ts",
+      "src/app/api/v1/unsubscribe/route.ts",
       "src/app/api/v1/webhooks/",
       "src/app/api/v1/webhooks/gmail/",
       "src/app/api/v1/webhooks/gmail/route.ts",
@@ -249,14 +260,19 @@
       "src/lib/gmail/persistence.ts",
       "src/lib/gmail/webhook.test.ts",
       "src/lib/gmail/webhook.ts",
+      "src/lib/governance/",
+      "src/lib/governance/governance.test.ts",
       "src/lib/handoff/",
       "src/lib/handoff/csv-roundtrip.test.ts",
       "src/lib/handoff/csv-roundtrip.ts",
       "src/lib/handoff/readiness.test.ts",
       "src/lib/handoff/readiness.ts",
       "src/lib/operations/",
+      "src/lib/operations/evidence.test.ts",
+      "src/lib/operations/evidence.ts",
       "src/lib/operations/mutations.test.ts",
       "src/lib/operations/mutations.ts",
+      "src/lib/operations/portal.test.ts",
       "src/lib/operations/route.ts",
       "src/lib/prequote/",
       "src/lib/prequote/ingest-proof.test.ts",
@@ -273,6 +289,8 @@
       "src/lib/release/dns.test.ts",
       "src/lib/release/dns.ts",
       "src/lib/release/first-send.test.ts",
+      "src/lib/release/outbound-envelope.test.ts",
+      "src/lib/release/outbound-envelope.ts",
       "src/lib/release/render.ts",
       "src/lib/reporting/",
       "src/lib/reporting/monthly.test.ts",
@@ -286,10 +304,19 @@
       "src/lib/security/",
       "src/lib/security/request.test.ts",
       "src/lib/security/request.ts",
+      "src/lib/slo/",
+      "src/lib/slo/error-budget.test.ts",
+      "src/lib/slo/error-budget.ts",
       "src/lib/supabase/",
       "src/lib/supabase/browser.ts",
       "src/lib/supabase/proxy.ts",
       "src/lib/supabase/server.ts",
+      "src/lib/unsubscribe/",
+      "src/lib/unsubscribe/ingest-proof.test.ts",
+      "src/lib/unsubscribe/ingest-proof.ts",
+      "src/lib/unsubscribe/persistence.ts",
+      "src/lib/unsubscribe/token.test.ts",
+      "src/lib/unsubscribe/token.ts",
       "src/proxy.ts",
       "supabase/",
       "supabase/config.toml",
@@ -304,6 +331,12 @@
       "supabase/migrations/202608110009_controlled_scaling.sql",
       "supabase/migrations/202608120010_contractual_monthly_reporting.sql",
       "supabase/migrations/202608120011_handoff_acceptance.sql",
+      "supabase/migrations/202608120012_security_consistency_hardening.sql",
+      "supabase/migrations/202608120013_one_click_unsubscribe.sql",
+      "supabase/migrations/202608120014_commercial_integrity.sql",
+      "supabase/migrations/202608120015_suppression_privacy.sql",
+      "supabase/migrations/202608120016_canonical_commercial_operations.sql",
+      "supabase/migrations/202608120017_strict_lead_suppression_gate.sql",
       "supabase/rollbacks/",
       "supabase/rollbacks/202608110002_secure_document_storage.down.sql",
       "supabase/rollbacks/202608110003_retention_deletion.down.sql",
@@ -315,6 +348,12 @@
       "supabase/rollbacks/202608110009_controlled_scaling.down.sql",
       "supabase/rollbacks/202608120010_contractual_monthly_reporting.down.sql",
       "supabase/rollbacks/202608120011_handoff_acceptance.down.sql",
+      "supabase/rollbacks/202608120012_security_consistency_hardening.down.sql",
+      "supabase/rollbacks/202608120013_one_click_unsubscribe.down.sql",
+      "supabase/rollbacks/202608120014_commercial_integrity.down.sql",
+      "supabase/rollbacks/202608120015_suppression_privacy.down.sql",
+      "supabase/rollbacks/202608120016_canonical_commercial_operations.down.sql",
+      "supabase/rollbacks/202608120017_strict_lead_suppression_gate.down.sql",
       "supabase/seed.sql",
       "supabase/tests/",
       "supabase/tests/002_secure_storage_gate.sql",
@@ -336,19 +375,38 @@
       "supabase/tests/010_contractual_monthly_reporting_rollback_gate.sql",
       "supabase/tests/011_handoff_acceptance_gate.sql",
       "supabase/tests/011_handoff_acceptance_rollback_gate.sql",
+      "supabase/tests/012_security_consistency_gate.sql",
+      "supabase/tests/012_security_consistency_rollback_gate.sql",
+      "supabase/tests/013_one_click_unsubscribe_gate.sql",
+      "supabase/tests/013_one_click_unsubscribe_rollback_gate.sql",
+      "supabase/tests/014_commercial_integrity_gate.sql",
+      "supabase/tests/014_commercial_integrity_rollback_gate.sql",
+      "supabase/tests/015_suppression_privacy_gate.sql",
+      "supabase/tests/015_suppression_privacy_rollback_gate.sql",
+      "supabase/tests/016_canonical_commercial_operations_gate.sql",
+      "supabase/tests/016_canonical_commercial_operations_rollback_gate.sql",
+      "supabase/tests/017_strict_lead_suppression_gate.sql",
+      "supabase/tests/017_strict_lead_suppression_rollback_gate.sql",
       "supabase/tests/run-analytics-gate.sh",
+      "supabase/tests/run-canonical-commercial-operations-gate.sh",
+      "supabase/tests/run-commercial-integrity-gate.sh",
       "supabase/tests/run-contractual-monthly-reporting-gate.sh",
       "supabase/tests/run-controlled-scaling-gate.sh",
       "supabase/tests/run-core-gate.sh",
       "supabase/tests/run-first-send-release-gate.sh",
       "supabase/tests/run-gmail-operations-gate.sh",
       "supabase/tests/run-handoff-acceptance-gate.sh",
+      "supabase/tests/run-one-click-unsubscribe-gate.sh",
       "supabase/tests/run-prequote-gate.sh",
       "supabase/tests/run-retention-gate.sh",
+      "supabase/tests/run-security-consistency-gate.sh",
       "supabase/tests/run-shadow-canary-gate.sh",
       "supabase/tests/run-storage-gate.sh",
+      "supabase/tests/run-strict-lead-suppression-gate.sh",
+      "supabase/tests/run-suppression-privacy-gate.sh",
       "tests/",
       "tests/e2e/",
+      "tests/e2e/accessibility.spec.ts",
       "tests/e2e/surfaces.spec.ts",
       "tsconfig.json",
       "vitest.config.ts"
@@ -356,8 +414,8 @@
     "files": [
       {
         "path": ".env.example",
-        "sha256": "26778f0b3e621de9d3d474c0f5b794a2a0a448774b35e4ccee2d84d1d1fe8c8c",
-        "size_bytes": 1227
+        "sha256": "5d769fa01cc24734ccef626287e4256fff8cc209d00b485f7f23618dbe87c6de",
+        "size_bytes": 1327
       },
       {
         "path": ".gitattributes",
@@ -366,8 +424,8 @@
       },
       {
         "path": ".github/workflows/ci.yml",
-        "sha256": "427044e02cef3e8d3b0936e6a2fc52ceb9954be883e92398bc992c6f21923da2",
-        "size_bytes": 3322
+        "sha256": "cd37ef11502954ddbd8b546046a370ce082c4051f604c7c3692c0ae3f15e20d6",
+        "size_bytes": 6165
       },
       {
         "path": ".gitignore",
@@ -446,8 +504,8 @@
       },
       {
         "path": "next-env.d.ts",
-        "sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
-        "size_bytes": 288
+        "sha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+        "size_bytes": 296
       },
       {
         "path": "next.config.ts",
@@ -456,13 +514,13 @@
       },
       {
         "path": "package-lock.json",
-        "sha256": "1a11fcdc6ac8247c63edfbe39ae0caf7bbb2bc4793241a858fff677775ac75e6",
-        "size_bytes": 268459
+        "sha256": "fcf5943fc13eede8570b8450147367dce2e9a5e99cd06e5f10928a3dcff75d98",
+        "size_bytes": 269366
       },
       {
         "path": "package.json",
-        "sha256": "5e56bbec0792c618ca2591ef7c8eef50a62caf5f04f9ffe2c4041067414a259d",
-        "size_bytes": 6544
+        "sha256": "0d1cc8fe1942ae60703f2752a50878918186de731db71eccd3e257e3e323c2dc",
+        "size_bytes": 8037
       },
       {
         "path": "playwright.config.ts",
@@ -495,6 +553,16 @@
         "size_bytes": 2179
       },
       {
+        "path": "src/app/api/v1/operations/leads/[id]/evidence/route.ts",
+        "sha256": "a4d2f05c6ba26db35baacfe4aa223360abe96d69b8fb3041ac73732f9769fe40",
+        "size_bytes": 1980
+      },
+      {
+        "path": "src/app/api/v1/operations/leads/[id]/opportunity/route.ts",
+        "sha256": "109e50985ef51183e291b41b998063dbde3c4ea7d2c3be50084b5cffae05e226",
+        "size_bytes": 1005
+      },
+      {
         "path": "src/app/api/v1/operations/leads/[id]/qualify/route.ts",
         "sha256": "5f62c2adde68051b2a5f6b3c6dabff4b5972135911773a3c121c6ae7e635eb76",
         "size_bytes": 1418
@@ -505,9 +573,19 @@
         "size_bytes": 1190
       },
       {
+        "path": "src/app/api/v1/operations/opportunities/[id]/meetings/route.ts",
+        "sha256": "b11b3dd3818e47cd13b50cef5d2e7c62ee0f0f08d3c98b3bab101922ddccffc8",
+        "size_bytes": 1185
+      },
+      {
+        "path": "src/app/api/v1/operations/opportunities/[id]/payments/route.ts",
+        "sha256": "e88f9105ba9c76aa8036ddc59a19ae49748d560b9e2da192bb7231fc44487005",
+        "size_bytes": 1996
+      },
+      {
         "path": "src/app/api/v1/operations/opportunities/[id]/transition/route.ts",
-        "sha256": "1850d6a86c762411f160a8e55093e3bf6ef9e5c998816af21c8c7bf1f3e3a6f7",
-        "size_bytes": 1261
+        "sha256": "ea70ae11c534ef9af48c7088736a24189fc1140757cf23d7fb372a7df4625829",
+        "size_bytes": 1487
       },
       {
         "path": "src/app/api/v1/operations/provider-events/[id]/review/route.ts",
@@ -528,6 +606,16 @@
         "path": "src/app/api/v1/prequotes/route.ts",
         "sha256": "69177dd8bf823379ac5def85bc53da75d4dd4c7a1d1c9d9b9df4efa69b4bb1e4",
         "size_bytes": 4712
+      },
+      {
+        "path": "src/app/api/v1/unsubscribe/route.test.ts",
+        "sha256": "94302f427658e8c1d254556e9e044207d4d983141aa6723e84a2c9eb4d6bb361",
+        "size_bytes": 2332
+      },
+      {
+        "path": "src/app/api/v1/unsubscribe/route.ts",
+        "sha256": "aa6930926f302ad1f860c2e503da22df9fda1770aa19e051bc4fc60a8deead01",
+        "size_bytes": 4522
       },
       {
         "path": "src/app/api/v1/webhooks/gmail/route.ts",
@@ -601,8 +689,8 @@
       },
       {
         "path": "src/components/OperationsActions.tsx",
-        "sha256": "51bc359f8255f55789846f6ffb5ab8338b193902300e602a10c5a679b4b82ea9",
-        "size_bytes": 6972
+        "sha256": "4993aa9ccec43c8b7204685c4f6762def6ea6440ee16f92f5fe4ea39244087c3",
+        "size_bytes": 14278
       },
       {
         "path": "src/components/OperationsNav.tsx",
@@ -611,8 +699,8 @@
       },
       {
         "path": "src/components/PortalTable.tsx",
-        "sha256": "5ea1153bd150e8ed742d80af1024f83cdc1c038d7e4145cda9e9212dc63dab70",
-        "size_bytes": 3273
+        "sha256": "809f7cc8c0fea0de258f9267f58b7bac684f57ffb9b3c77a2f72f8fc6a50b58d",
+        "size_bytes": 3318
       },
       {
         "path": "src/components/PrequoteForm.tsx",
@@ -770,6 +858,11 @@
         "size_bytes": 3106
       },
       {
+        "path": "src/lib/governance/governance.test.ts",
+        "sha256": "7ea2569dc698bd0c94c47c4f4d98dfe67a7b8be528a7c9e29be26501e89ceefb",
+        "size_bytes": 2695
+      },
+      {
         "path": "src/lib/handoff/csv-roundtrip.test.ts",
         "sha256": "1a0aadf97fd704a7732d8465f15ee4865a8841b388676fa9b9583a4573093e49",
         "size_bytes": 1031
@@ -790,14 +883,29 @@
         "size_bytes": 3792
       },
       {
+        "path": "src/lib/operations/evidence.test.ts",
+        "sha256": "79b97d46f2ec0d13d2cc14c13c363334b3157503e13c7aac5cc12692160c6912",
+        "size_bytes": 1733
+      },
+      {
+        "path": "src/lib/operations/evidence.ts",
+        "sha256": "15bca2085cc198a05ad2d041d36149a0259288e3f622a131dbd0bb2bc5eb7e19",
+        "size_bytes": 1322
+      },
+      {
         "path": "src/lib/operations/mutations.test.ts",
-        "sha256": "00c748b4f1bcdb8331c120e146087558e41f5bc9a71425619ea0d302ec03b33d",
-        "size_bytes": 1113
+        "sha256": "5b97b3f5f48c1f8da35c40a75d657d08349bc24eb0b2564647b574d65d36ce96",
+        "size_bytes": 2912
       },
       {
         "path": "src/lib/operations/mutations.ts",
-        "sha256": "602f3f103eb8dd7b05fe80779270fce04a8992e213081f2b3d1f0f311ced6aed",
-        "size_bytes": 1233
+        "sha256": "9e0a3e965793da21504c9c77fb0d76823338fff444ac1197c3c99655a3ca1dcc",
+        "size_bytes": 2933
+      },
+      {
+        "path": "src/lib/operations/portal.test.ts",
+        "sha256": "1107bdb9b5004ab3560730981ffd8242763ae231a304350a085733f9f21b0709",
+        "size_bytes": 574
       },
       {
         "path": "src/lib/operations/route.ts",
@@ -865,9 +973,19 @@
         "size_bytes": 2705
       },
       {
+        "path": "src/lib/release/outbound-envelope.test.ts",
+        "sha256": "e412cdb12886f43af2740e245816fafe1319643077bc4c29e7a94164d514c74e",
+        "size_bytes": 1534
+      },
+      {
+        "path": "src/lib/release/outbound-envelope.ts",
+        "sha256": "426b48d20ecba541273f947dbb7d3f042744920644fdce3820759414479116ef",
+        "size_bytes": 1446
+      },
+      {
         "path": "src/lib/release/render.ts",
-        "sha256": "04a02c6b9445e96890faca9d986c4d3fd8b044a1521e46b32fc2545124db19ee",
-        "size_bytes": 1229
+        "sha256": "fea788ec90f91237c6772f46dfbd197e9ee7cae4829b9c5b85f5107173af130e",
+        "size_bytes": 2084
       },
       {
         "path": "src/lib/reporting/monthly.test.ts",
@@ -881,13 +999,13 @@
       },
       {
         "path": "src/lib/runtime/config.test.ts",
-        "sha256": "918dbc5e908845209228bb98a5c083ee49a8ae66f194de3821e931fe49e2ffa4",
-        "size_bytes": 5279
+        "sha256": "c6050cfee4d1e732daa3f3f3d2c76f8cc61207f740ce442e4331a5c5125b0f9d",
+        "size_bytes": 6235
       },
       {
         "path": "src/lib/runtime/config.ts",
-        "sha256": "dc8f2c5630c64665f80e88ae079b3f0238ac26d7af996d3a04335012891a77ac",
-        "size_bytes": 5687
+        "sha256": "a99a56e527d9cc2c8244679811d33204dc8f612cb041d5f9a11dab12b2b77c63",
+        "size_bytes": 6482
       },
       {
         "path": "src/lib/scaling/health.test.ts",
@@ -910,6 +1028,16 @@
         "size_bytes": 1860
       },
       {
+        "path": "src/lib/slo/error-budget.test.ts",
+        "sha256": "6b4aad2adcb5060194424c3d1931bd0c87724f842d891dffa6213da75917e67a",
+        "size_bytes": 1015
+      },
+      {
+        "path": "src/lib/slo/error-budget.ts",
+        "sha256": "d45f451802a356d91d7bf38edbb226df60c3ad058cd0c381c81b7f4236d12b55",
+        "size_bytes": 1689
+      },
+      {
         "path": "src/lib/supabase/browser.ts",
         "sha256": "c170f787bdae154facd94b9f484533cb456b370e64206b7178d337e2aeee993c",
         "size_bytes": 494
@@ -923,6 +1051,31 @@
         "path": "src/lib/supabase/server.ts",
         "sha256": "8a678ae2b07cde33c4d06fa84ca83bb7bdfd052c7642574b51662a24cff74a77",
         "size_bytes": 904
+      },
+      {
+        "path": "src/lib/unsubscribe/ingest-proof.test.ts",
+        "sha256": "a38dbacd79643c31dbafd86a314ebf493ccb7887d526f9b39263e5947feba9e5",
+        "size_bytes": 1010
+      },
+      {
+        "path": "src/lib/unsubscribe/ingest-proof.ts",
+        "sha256": "b5b9ce506bb60c6a8fac19d128ce5e9e6111c6c41c94d100c5f3be0fd8de1c6b",
+        "size_bytes": 1224
+      },
+      {
+        "path": "src/lib/unsubscribe/persistence.ts",
+        "sha256": "2a742c20ca71f9f10932a23444cd87b3174852b47220e51574ce02adf8b44fa5",
+        "size_bytes": 1809
+      },
+      {
+        "path": "src/lib/unsubscribe/token.test.ts",
+        "sha256": "553e2aaedd982773c1bfa5710053213659a62713c3f0b1117238a215984ce0a0",
+        "size_bytes": 1485
+      },
+      {
+        "path": "src/lib/unsubscribe/token.ts",
+        "sha256": "b1350e5e297f7ec42698a079ca24490d14cea7541df4ae571e2fd265716e8f4c",
+        "size_bytes": 3089
       },
       {
         "path": "src/proxy.ts",
@@ -985,6 +1138,36 @@
         "size_bytes": 26028
       },
       {
+        "path": "supabase/migrations/202608120012_security_consistency_hardening.sql",
+        "sha256": "4a6e00f98f8ae428d0f640d2ea5f610dd475da1c493d566738d1bcfa21f0a190",
+        "size_bytes": 10917
+      },
+      {
+        "path": "supabase/migrations/202608120013_one_click_unsubscribe.sql",
+        "sha256": "8a518ead94e7b2117c86324bf2f3fe379ffefa61657e4ec1bfb4ac07a92d81ae",
+        "size_bytes": 8350
+      },
+      {
+        "path": "supabase/migrations/202608120014_commercial_integrity.sql",
+        "sha256": "a2d60feda4346b536615aed600656c7ac81adf6463f4e8f1220ee74eec80236f",
+        "size_bytes": 57512
+      },
+      {
+        "path": "supabase/migrations/202608120015_suppression_privacy.sql",
+        "sha256": "9e2b3445969a068e01a57b94c70da034bef3030304ee82f91a49188ac50cdfc2",
+        "size_bytes": 12645
+      },
+      {
+        "path": "supabase/migrations/202608120016_canonical_commercial_operations.sql",
+        "sha256": "f7e7e179eedc6b56de9e1c2840d3d7a432b3be33f0dba911cc37e5b01a111965",
+        "size_bytes": 24242
+      },
+      {
+        "path": "supabase/migrations/202608120017_strict_lead_suppression_gate.sql",
+        "sha256": "90333c1c7a25c8ba073deeac5dd4626ffd5f91887de427a928bde3a63bab8678",
+        "size_bytes": 6140
+      },
+      {
         "path": "supabase/rollbacks/202608110002_secure_document_storage.down.sql",
         "sha256": "ef196745301719791243496f075030ecee53c0d53869ec92e58310bbf3be94ac",
         "size_bytes": 4065
@@ -1033,6 +1216,36 @@
         "path": "supabase/rollbacks/202608120011_handoff_acceptance.down.sql",
         "sha256": "070ad3dcc97f27d2899b639d514e9ba181966a3ee8962f12675fe17f035f405e",
         "size_bytes": 2364
+      },
+      {
+        "path": "supabase/rollbacks/202608120012_security_consistency_hardening.down.sql",
+        "sha256": "e129bb83991826932513838dec061fc5a8a2af235ef7a535cdfabd68315e16aa",
+        "size_bytes": 1445
+      },
+      {
+        "path": "supabase/rollbacks/202608120013_one_click_unsubscribe.down.sql",
+        "sha256": "69caede049f1eeef35dbadeac2d5d0014051ddb8f366b7496ba86f55b66923b8",
+        "size_bytes": 388
+      },
+      {
+        "path": "supabase/rollbacks/202608120014_commercial_integrity.down.sql",
+        "sha256": "2a143459de70f4718e18ed9c14cbb5e1f20b58691e171409924514cd88826d47",
+        "size_bytes": 2460
+      },
+      {
+        "path": "supabase/rollbacks/202608120015_suppression_privacy.down.sql",
+        "sha256": "cd176618f568d2adff96d2e56572cd7d02a54d8c281287cd880365a80da2675e",
+        "size_bytes": 1586
+      },
+      {
+        "path": "supabase/rollbacks/202608120016_canonical_commercial_operations.down.sql",
+        "sha256": "545d7e4dda9de8da3e7a75f73fcf1ee42970249cd34b87f9f9c0667720c42559",
+        "size_bytes": 3792
+      },
+      {
+        "path": "supabase/rollbacks/202608120017_strict_lead_suppression_gate.down.sql",
+        "sha256": "cde35463a37a7c186f24795f44a7ef24afc96a87d41590b9727b686c1a824002",
+        "size_bytes": 1362
       },
       {
         "path": "supabase/seed.sql",
@@ -1135,9 +1348,79 @@
         "size_bytes": 1526
       },
       {
+        "path": "supabase/tests/012_security_consistency_gate.sql",
+        "sha256": "f92d76bf607e9581aaac75b86b0166707c58974aaaae434fd3154181f4d7e7e1",
+        "size_bytes": 7107
+      },
+      {
+        "path": "supabase/tests/012_security_consistency_rollback_gate.sql",
+        "sha256": "cc52cd066f21120edfca25171c44a81d4f8edd37914da35056daf69cf35fb90a",
+        "size_bytes": 1902
+      },
+      {
+        "path": "supabase/tests/013_one_click_unsubscribe_gate.sql",
+        "sha256": "28a2043e80aea45dfa9afdd138629f65690e92ec07eb68cda162a20a8059db5d",
+        "size_bytes": 7639
+      },
+      {
+        "path": "supabase/tests/013_one_click_unsubscribe_rollback_gate.sql",
+        "sha256": "0531dc88b0b58aa4e9b73e1173e568951faac0fa2870f44089e1607448c7e183",
+        "size_bytes": 678
+      },
+      {
+        "path": "supabase/tests/014_commercial_integrity_gate.sql",
+        "sha256": "4fda1479ccec0e8458884374d19263a42868fa7bc0ca2fc2d70d65fdbb4370cf",
+        "size_bytes": 25118
+      },
+      {
+        "path": "supabase/tests/014_commercial_integrity_rollback_gate.sql",
+        "sha256": "d52ae107b5b7bff62d71d75fca01b5a27ec17deaf9574a0ea0989e7b067cd79d",
+        "size_bytes": 1358
+      },
+      {
+        "path": "supabase/tests/015_suppression_privacy_gate.sql",
+        "sha256": "dde9a440df13fd5414b6917ab4e32b32f6d2366c8e3dc250c1d7ede607778a31",
+        "size_bytes": 12262
+      },
+      {
+        "path": "supabase/tests/015_suppression_privacy_rollback_gate.sql",
+        "sha256": "7fa2bda682405ade91ab9d6fea9859791cae9f5bb6a71419f979d42679a17ef7",
+        "size_bytes": 1211
+      },
+      {
+        "path": "supabase/tests/016_canonical_commercial_operations_gate.sql",
+        "sha256": "43ef2d598e3a18617a8a40d15def98697ea3b92da6d7e6466a9ca915779e8df4",
+        "size_bytes": 26490
+      },
+      {
+        "path": "supabase/tests/016_canonical_commercial_operations_rollback_gate.sql",
+        "sha256": "48946da7a9617a7910af9d984536c38f8adabce41c43464ca0284bce748fa10c",
+        "size_bytes": 2892
+      },
+      {
+        "path": "supabase/tests/017_strict_lead_suppression_gate.sql",
+        "sha256": "a6f445d0fccfc7cddcdb512f84498bd10a1f41421ecd90408418c7e5c45936e2",
+        "size_bytes": 13741
+      },
+      {
+        "path": "supabase/tests/017_strict_lead_suppression_rollback_gate.sql",
+        "sha256": "2ef569857e00859c92539ead2989c1f92d48711d2de1c4fcf433338db185d63f",
+        "size_bytes": 2426
+      },
+      {
         "path": "supabase/tests/run-analytics-gate.sh",
         "sha256": "3eb6388396742ca7d328465b851a1fc26274130e1d1b2cb4c6884e2880257747",
         "size_bytes": 3435
+      },
+      {
+        "path": "supabase/tests/run-canonical-commercial-operations-gate.sh",
+        "sha256": "c1bae8822b89bec455f244ba01c42f6eac2435fceabaa08559e8f87515e28c26",
+        "size_bytes": 3995
+      },
+      {
+        "path": "supabase/tests/run-commercial-integrity-gate.sh",
+        "sha256": "13a58200d251537fee20a55fab263c2fe1f01cb9cff70336fa4cae2dd38c97c5",
+        "size_bytes": 3860
       },
       {
         "path": "supabase/tests/run-contractual-monthly-reporting-gate.sh",
@@ -1170,6 +1453,11 @@
         "size_bytes": 3705
       },
       {
+        "path": "supabase/tests/run-one-click-unsubscribe-gate.sh",
+        "sha256": "57d0849918caa7d2c86a2c0da24dec2b792fbe4b86c708fd0766cf2c84914237",
+        "size_bytes": 3811
+      },
+      {
         "path": "supabase/tests/run-prequote-gate.sh",
         "sha256": "58b902bb3bd6d27143861919c5eb561601c0a8b33efb6d9a5295f5f11c8e9450",
         "size_bytes": 3404
@@ -1178,6 +1466,11 @@
         "path": "supabase/tests/run-retention-gate.sh",
         "sha256": "c7a8b467e7fc837208598cf1baa6eb08e6890a748a71b5ecc888d71bbd52ed50",
         "size_bytes": 3411
+      },
+      {
+        "path": "supabase/tests/run-security-consistency-gate.sh",
+        "sha256": "0552f6b53a1fd330c50b36f4b699f4119fca283c1ce2ba4459d75aaf1231ecfe",
+        "size_bytes": 3795
       },
       {
         "path": "supabase/tests/run-shadow-canary-gate.sh",
@@ -1190,9 +1483,24 @@
         "size_bytes": 3602
       },
       {
+        "path": "supabase/tests/run-strict-lead-suppression-gate.sh",
+        "sha256": "aafe85dd40c966bc649b286f34ead28c447494db83ccbb87cf20d6249f293060",
+        "size_bytes": 6426
+      },
+      {
+        "path": "supabase/tests/run-suppression-privacy-gate.sh",
+        "sha256": "9f88f24de68fc2834298d6f13f8451a8e536be2d24d7bc13763b9e335b26268a",
+        "size_bytes": 3878
+      },
+      {
+        "path": "tests/e2e/accessibility.spec.ts",
+        "sha256": "0c31408d5ebfc3540135235023d86409914e478be713302304b2f5ae89604fe3",
+        "size_bytes": 738
+      },
+      {
         "path": "tests/e2e/surfaces.spec.ts",
-        "sha256": "99dab8689d4e9756c4d8e5afb74c93b386e68f31efaa00a835ab12aef03e4953",
-        "size_bytes": 10218
+        "sha256": "2e2a95213f4e390d2d65922c04f84f890d9e2c2d915f34f0040e1c5bf9eaf8d2",
+        "size_bytes": 12898
       },
       {
         "path": "tsconfig.json",
@@ -1205,13 +1513,13 @@
         "size_bytes": 453
       }
     ],
-    "excluded_file_count": 179,
+    "excluded_file_count": 187,
     "restricted_exclusions": [
       {
         "id": "CANONICAL_IMPORT_DATA",
         "pattern": "data/imports/**",
         "reason": "real ENNCO import sources and normalized derivatives",
-        "tracked_file_count": 12
+        "tracked_file_count": 16
       },
       {
         "id": "LEGACY_IMPORT_EVIDENCE",
@@ -1247,13 +1555,13 @@
         "id": "M9_HANDOFF_OUTPUTS",
         "pattern": "evidence/m9-handoff/**",
         "reason": "prevents self-reference and stale embedded packages",
-        "tracked_file_count": 4
+        "tracked_file_count": 5
       },
       {
         "id": "ALL_OTHER_EVIDENCE",
         "pattern": "evidence/**",
         "reason": "operational evidence is transferred separately",
-        "tracked_file_count": 35
+        "tracked_file_count": 36
       },
       {
         "id": "KNOWN_IDENTITY_BEARING_SOURCE",
@@ -1450,6 +1758,8 @@
       "scripts/capture-m8-browser-evidence.mjs",
       "scripts/capture-m9-browser-evidence.mjs",
       "scripts/import-ennco-sources.mjs",
+      "scripts/lib/governance.d.mts",
+      "scripts/lib/governance.mjs",
       "scripts/m2-local-backup-restore-drill.sh",
       "scripts/m2-verify-local-recovery.sh",
       "scripts/m2-verify-restore-evidence.sh",
@@ -1460,6 +1770,7 @@
       "scripts/m7-controlled-scaling.mts",
       "scripts/m8-contractual-reporting.mts",
       "scripts/m9-handoff-readiness.mts",
+      "scripts/performance-gate.mjs",
       "scripts/verify-campaign-package.mjs",
       "scripts/verify-data-imports.mjs",
       "scripts/verify-first-send-readiness.mjs",
@@ -1588,7 +1899,7 @@
     {
       "key": "SOURCE_PACKAGE_LOCAL",
       "path": "artifacts/ennco-revenue-platform-source.tar",
-      "sha256": "2b0c4469d0e8de2d539f4f7a2e0ea049da439e14d9637512c1441d05a48a52bb",
+      "sha256": "aa983245a31cc0af19291ca6ad109236ccee81dfa5b78d924f6221efe1b08f83",
       "classification": "allowlisted_source_code_config_tests_runbooks",
       "entries": [
         ".env.example",
@@ -1643,6 +1954,10 @@
         "src/app/api/v1/operations/",
         "src/app/api/v1/operations/leads/",
         "src/app/api/v1/operations/leads/[id]/",
+        "src/app/api/v1/operations/leads/[id]/evidence/",
+        "src/app/api/v1/operations/leads/[id]/evidence/route.ts",
+        "src/app/api/v1/operations/leads/[id]/opportunity/",
+        "src/app/api/v1/operations/leads/[id]/opportunity/route.ts",
         "src/app/api/v1/operations/leads/[id]/qualify/",
         "src/app/api/v1/operations/leads/[id]/qualify/route.ts",
         "src/app/api/v1/operations/meetings/",
@@ -1651,6 +1966,10 @@
         "src/app/api/v1/operations/meetings/[id]/outcome/route.ts",
         "src/app/api/v1/operations/opportunities/",
         "src/app/api/v1/operations/opportunities/[id]/",
+        "src/app/api/v1/operations/opportunities/[id]/meetings/",
+        "src/app/api/v1/operations/opportunities/[id]/meetings/route.ts",
+        "src/app/api/v1/operations/opportunities/[id]/payments/",
+        "src/app/api/v1/operations/opportunities/[id]/payments/route.ts",
         "src/app/api/v1/operations/opportunities/[id]/transition/",
         "src/app/api/v1/operations/opportunities/[id]/transition/route.ts",
         "src/app/api/v1/operations/provider-events/",
@@ -1666,6 +1985,9 @@
         "src/app/api/v1/prequotes/[folio]/pdf/",
         "src/app/api/v1/prequotes/[folio]/pdf/route.ts",
         "src/app/api/v1/prequotes/route.ts",
+        "src/app/api/v1/unsubscribe/",
+        "src/app/api/v1/unsubscribe/route.test.ts",
+        "src/app/api/v1/unsubscribe/route.ts",
         "src/app/api/v1/webhooks/",
         "src/app/api/v1/webhooks/gmail/",
         "src/app/api/v1/webhooks/gmail/route.ts",
@@ -1731,14 +2053,19 @@
         "src/lib/gmail/persistence.ts",
         "src/lib/gmail/webhook.test.ts",
         "src/lib/gmail/webhook.ts",
+        "src/lib/governance/",
+        "src/lib/governance/governance.test.ts",
         "src/lib/handoff/",
         "src/lib/handoff/csv-roundtrip.test.ts",
         "src/lib/handoff/csv-roundtrip.ts",
         "src/lib/handoff/readiness.test.ts",
         "src/lib/handoff/readiness.ts",
         "src/lib/operations/",
+        "src/lib/operations/evidence.test.ts",
+        "src/lib/operations/evidence.ts",
         "src/lib/operations/mutations.test.ts",
         "src/lib/operations/mutations.ts",
+        "src/lib/operations/portal.test.ts",
         "src/lib/operations/route.ts",
         "src/lib/prequote/",
         "src/lib/prequote/ingest-proof.test.ts",
@@ -1755,6 +2082,8 @@
         "src/lib/release/dns.test.ts",
         "src/lib/release/dns.ts",
         "src/lib/release/first-send.test.ts",
+        "src/lib/release/outbound-envelope.test.ts",
+        "src/lib/release/outbound-envelope.ts",
         "src/lib/release/render.ts",
         "src/lib/reporting/",
         "src/lib/reporting/monthly.test.ts",
@@ -1768,10 +2097,19 @@
         "src/lib/security/",
         "src/lib/security/request.test.ts",
         "src/lib/security/request.ts",
+        "src/lib/slo/",
+        "src/lib/slo/error-budget.test.ts",
+        "src/lib/slo/error-budget.ts",
         "src/lib/supabase/",
         "src/lib/supabase/browser.ts",
         "src/lib/supabase/proxy.ts",
         "src/lib/supabase/server.ts",
+        "src/lib/unsubscribe/",
+        "src/lib/unsubscribe/ingest-proof.test.ts",
+        "src/lib/unsubscribe/ingest-proof.ts",
+        "src/lib/unsubscribe/persistence.ts",
+        "src/lib/unsubscribe/token.test.ts",
+        "src/lib/unsubscribe/token.ts",
         "src/proxy.ts",
         "supabase/",
         "supabase/config.toml",
@@ -1786,6 +2124,12 @@
         "supabase/migrations/202608110009_controlled_scaling.sql",
         "supabase/migrations/202608120010_contractual_monthly_reporting.sql",
         "supabase/migrations/202608120011_handoff_acceptance.sql",
+        "supabase/migrations/202608120012_security_consistency_hardening.sql",
+        "supabase/migrations/202608120013_one_click_unsubscribe.sql",
+        "supabase/migrations/202608120014_commercial_integrity.sql",
+        "supabase/migrations/202608120015_suppression_privacy.sql",
+        "supabase/migrations/202608120016_canonical_commercial_operations.sql",
+        "supabase/migrations/202608120017_strict_lead_suppression_gate.sql",
         "supabase/rollbacks/",
         "supabase/rollbacks/202608110002_secure_document_storage.down.sql",
         "supabase/rollbacks/202608110003_retention_deletion.down.sql",
@@ -1797,6 +2141,12 @@
         "supabase/rollbacks/202608110009_controlled_scaling.down.sql",
         "supabase/rollbacks/202608120010_contractual_monthly_reporting.down.sql",
         "supabase/rollbacks/202608120011_handoff_acceptance.down.sql",
+        "supabase/rollbacks/202608120012_security_consistency_hardening.down.sql",
+        "supabase/rollbacks/202608120013_one_click_unsubscribe.down.sql",
+        "supabase/rollbacks/202608120014_commercial_integrity.down.sql",
+        "supabase/rollbacks/202608120015_suppression_privacy.down.sql",
+        "supabase/rollbacks/202608120016_canonical_commercial_operations.down.sql",
+        "supabase/rollbacks/202608120017_strict_lead_suppression_gate.down.sql",
         "supabase/seed.sql",
         "supabase/tests/",
         "supabase/tests/002_secure_storage_gate.sql",
@@ -1818,19 +2168,38 @@
         "supabase/tests/010_contractual_monthly_reporting_rollback_gate.sql",
         "supabase/tests/011_handoff_acceptance_gate.sql",
         "supabase/tests/011_handoff_acceptance_rollback_gate.sql",
+        "supabase/tests/012_security_consistency_gate.sql",
+        "supabase/tests/012_security_consistency_rollback_gate.sql",
+        "supabase/tests/013_one_click_unsubscribe_gate.sql",
+        "supabase/tests/013_one_click_unsubscribe_rollback_gate.sql",
+        "supabase/tests/014_commercial_integrity_gate.sql",
+        "supabase/tests/014_commercial_integrity_rollback_gate.sql",
+        "supabase/tests/015_suppression_privacy_gate.sql",
+        "supabase/tests/015_suppression_privacy_rollback_gate.sql",
+        "supabase/tests/016_canonical_commercial_operations_gate.sql",
+        "supabase/tests/016_canonical_commercial_operations_rollback_gate.sql",
+        "supabase/tests/017_strict_lead_suppression_gate.sql",
+        "supabase/tests/017_strict_lead_suppression_rollback_gate.sql",
         "supabase/tests/run-analytics-gate.sh",
+        "supabase/tests/run-canonical-commercial-operations-gate.sh",
+        "supabase/tests/run-commercial-integrity-gate.sh",
         "supabase/tests/run-contractual-monthly-reporting-gate.sh",
         "supabase/tests/run-controlled-scaling-gate.sh",
         "supabase/tests/run-core-gate.sh",
         "supabase/tests/run-first-send-release-gate.sh",
         "supabase/tests/run-gmail-operations-gate.sh",
         "supabase/tests/run-handoff-acceptance-gate.sh",
+        "supabase/tests/run-one-click-unsubscribe-gate.sh",
         "supabase/tests/run-prequote-gate.sh",
         "supabase/tests/run-retention-gate.sh",
+        "supabase/tests/run-security-consistency-gate.sh",
         "supabase/tests/run-shadow-canary-gate.sh",
         "supabase/tests/run-storage-gate.sh",
+        "supabase/tests/run-strict-lead-suppression-gate.sh",
+        "supabase/tests/run-suppression-privacy-gate.sh",
         "tests/",
         "tests/e2e/",
+        "tests/e2e/accessibility.spec.ts",
         "tests/e2e/surfaces.spec.ts",
         "tsconfig.json",
         "vitest.config.ts"
@@ -1839,7 +2208,7 @@
     {
       "key": "AUDIT_BUNDLE_LOCAL",
       "path": "artifacts/m9-audit-bundle.tar",
-      "sha256": "ed9087094d590768efc84df6baa274ddf2162164fa7bd539bdc603ba2df92012",
+      "sha256": "b96a4b7f71555a15db789792893900be134d4a7dcd1a47ec7759757d946e0d12",
       "classification": "synthetic_demo_audit_only",
       "entries": [
         "audit/source-archive-inventory.json",

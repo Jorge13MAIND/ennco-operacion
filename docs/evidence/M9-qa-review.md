@@ -23,16 +23,16 @@ Scope revisado:
 - Inventario exacto por archivo y SHA256: `PASS`.
 - Reproducción desde commit exacto: `PASS`.
 - Inspección real del tar: `PASS`.
-- Scanner de secretos sobre 170 de 170 archivos: `PASS`, cero hallazgos.
+- Scanner de secretos sobre 220 de 220 archivos: `PASS`, cero hallazgos.
 - Exclusión content-based de identificadores conocidos: `PASS`, 16 archivos excluidos y cero hallazgos residuales.
 - Afirmación universal de ausencia de PII: no realizada.
-- Corrida provisional marcada no final: `PASS`.
-- Freeze final ejecutado: no, correctamente bloqueado.
+- Freeze ejecutado desde commit fuente limpio y exacto: `PASS`.
+- Manifest y control del empaquetador coinciden con el commit fuente: `PASS`.
 
 ## Pruebas
 
 - Self-test fail-closed: 7 de 7.
-- Verificación del paquete provisional: 38 de 38.
+- Verificación del paquete final: 38 de 38.
 - Checksums externos: 6 de 6.
 - Source archive restricted paths: 0.
 - Source archive referencias M9: 0.
@@ -44,8 +44,9 @@ Scope revisado:
 
 - El paquete no es build-complete porque excluye precotización derivada de propuestas históricas.
 - El scanner no sustituye una revisión humana de PII.
-- La captura actual usa un commit anterior a estos controles y un worktree sucio.
-- Los seis criterios locales y los diez live permanecen en `EXTEND`.
+- Los seis criterios locales están en `PASS`.
+- Los diez criterios live permanecen en `EXTEND`.
+- Existen 10 riesgos P0 y 11 P1 abiertos, todos visibles en el Risk Register.
 
 ## Reglas del proyecto
 
@@ -56,8 +57,8 @@ Scope revisado:
 
 ## Evaluación final
 
-Calidad del control: buena, con freeze pendiente.
+Calidad del control: `PASS` para el checkpoint local.
 
-Recomendación: `Conditional`.
+Recomendación: `PASS` local, `EXTEND` global.
 
-El control y la evidencia provisional están listos para commit. El artefacto final sólo puede generarse después de congelar un commit limpio que contenga el propio empaquetador y pasar la revisión humana descrita en el gate report.
+La revisión humana confirmó que el source tar no contiene rutas restricted, referencias autorreferenciales, marcadores conocidos de identidad ni secretos detectables. No se afirma ausencia universal de PII. El paquete puede sellarse como evidencia local, pero no transferirse como aceptación ENNCO ni usarse para activar producción.

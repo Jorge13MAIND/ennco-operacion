@@ -1,12 +1,12 @@
 {
   "verification_status": "PASS",
-  "package_capture_status": "PROVISIONAL_NOT_FINAL",
-  "local_m9_status": "EXTEND",
+  "package_capture_status": "FINAL_FREEZE",
+  "local_m9_status": "EVIDENCE_READY",
   "global_m9_gate": "EXTEND",
   "evidence_class": "synthetic_demo",
-  "source_commit_sha": "02f08ed53fc7cb07ce7414ba78a64935c76353e6",
-  "source_tree_sha": "63617cb63334b0c34f6b98b10a105308841006b1",
-  "handoff_manifest_sha256": "c62fd08bea71a58b6304fe04c7e2aec1367373cf73139f96846f2f3db977767d",
+  "source_commit_sha": "a84162757b22706915d2aaa2a18e3809dca8569e",
+  "source_tree_sha": "364d30be41bd200259facf13210ec85e9ce7c69f",
+  "handoff_manifest_sha256": "c99b7e0219656a2c3ed47845c936effdd9faa0d9bf11fbfd06cd91acc77533ac",
   "privacy_assessment": {
     "restricted_paths_in_source_archive": [],
     "known_restricted_content_findings": [],
@@ -17,13 +17,13 @@
     "limitation": "No automated scanner proves universal absence of PII. Final live transfer still requires a separate human privacy review."
   },
   "final_freeze_preconditions": {
-    "mode": "provisional",
-    "final_artifact": false,
-    "head_at_capture": "02f08ed53fc7cb07ce7414ba78a64935c76353e6",
-    "worktree_clean_at_capture": false,
+    "mode": "final",
+    "final_artifact": true,
+    "head_at_capture": "a84162757b22706915d2aaa2a18e3809dca8569e",
+    "worktree_clean_at_capture": true,
     "control_worktree_sha256": "e2d2ddf5eebaf7e9d9f00620e1b817f1026239d503d1f40245b5fe5d5c3df8cc",
-    "control_source_sha256": "086a865d38844de881a189970793df11e48ee388d53dd4e22f28b5d388bc16f6",
-    "control_script_matches_source_commit": false
+    "control_source_sha256": "e2d2ddf5eebaf7e9d9f00620e1b817f1026239d503d1f40245b5fe5d5c3df8cc",
+    "control_script_matches_source_commit": true
   },
   "external_side_effects": 0,
   "real_client_uat_sessions": 0,
@@ -33,14 +33,13 @@
   "production_restores_proven": 0,
   "local_restore_drills_proven": 2,
   "open_risk_counts": {
-    "P0": 13,
+    "P0": 10,
     "P1": 11,
     "P2": 0
   },
   "open_risk_ids": [
     "R-001",
     "R-002",
-    "R-003",
     "R-006",
     "R-007",
     "R-008",
@@ -59,8 +58,6 @@
     "R-045",
     "R-049",
     "R-055",
-    "R-057",
-    "R-058",
     "R-059"
   ],
   "checks_passed": 38,
@@ -68,39 +65,39 @@
   "local_criteria": [
     {
       "code": "SOURCE_PACKAGE_LOCAL",
-      "status": "EXTEND",
+      "status": "PASS",
       "evidenceClass": "synthetic_demo",
-      "evidenceReference": null
+      "evidenceReference": "docs/evidence/M9-handoff-verification.json#SOURCE_PACKAGE_LOCAL"
     },
     {
       "code": "EXPORT_REIMPORT_LOCAL",
-      "status": "EXTEND",
+      "status": "PASS",
       "evidenceClass": "synthetic_demo",
-      "evidenceReference": null
+      "evidenceReference": "docs/evidence/M9-handoff-verification.json#EXPORT_REIMPORT_LOCAL"
     },
     {
       "code": "SECOND_RESTORE_LOCAL",
-      "status": "EXTEND",
+      "status": "PASS",
       "evidenceClass": "synthetic_demo",
-      "evidenceReference": null
+      "evidenceReference": "docs/evidence/M9-handoff-verification.json#SECOND_RESTORE_LOCAL"
     },
     {
       "code": "SECURITY_REGRESSION_LOCAL",
-      "status": "EXTEND",
+      "status": "PASS",
       "evidenceClass": "synthetic_demo",
-      "evidenceReference": null
+      "evidenceReference": "docs/evidence/M9-handoff-verification.json#SECURITY_REGRESSION_LOCAL"
     },
     {
       "code": "RUNBOOK_INDEX_LOCAL",
-      "status": "EXTEND",
+      "status": "PASS",
       "evidenceClass": "synthetic_demo",
-      "evidenceReference": null
+      "evidenceReference": "docs/evidence/M9-handoff-verification.json#RUNBOOK_INDEX_LOCAL"
     },
     {
       "code": "TRAINING_SCRIPT_LOCAL",
-      "status": "EXTEND",
+      "status": "PASS",
       "evidenceClass": "synthetic_demo",
-      "evidenceReference": null
+      "evidenceReference": "docs/evidence/M9-handoff-verification.json#TRAINING_SCRIPT_LOCAL"
     }
   ],
   "live_criteria": [
@@ -166,18 +163,11 @@
     }
   ],
   "decision": {
-    "localEvidenceReady": false,
+    "localEvidenceReady": true,
     "readyForClientAcceptance": false,
     "accepted": false,
     "gate": "EXTEND",
-    "missingLocal": [
-      "SOURCE_PACKAGE_LOCAL",
-      "EXPORT_REIMPORT_LOCAL",
-      "SECOND_RESTORE_LOCAL",
-      "SECURITY_REGRESSION_LOCAL",
-      "RUNBOOK_INDEX_LOCAL",
-      "TRAINING_SCRIPT_LOCAL"
-    ],
+    "missingLocal": [],
     "missingLive": [
       "SOURCE_CONTROL_OWNERSHIP",
       "PRODUCTION_ACCESS_TRANSFER",
@@ -191,10 +181,9 @@
       "ZERO_P0_P1"
     ],
     "reasons": [
-      "Faltan 6 criterios locales con evidencia.",
       "La preparación local no puede convertirse en aceptación del cliente.",
       "Faltan 10 criterios live.",
-      "Hay 13 P0 y 11 P1 abiertos."
+      "Hay 10 P0 y 11 P1 abiertos."
     ]
   },
   "checks": [
@@ -209,7 +198,7 @@
     {
       "id": "SOURCE_ALLOWLIST_NONEMPTY",
       "pass": true,
-      "actual": 170
+      "actual": 220
     },
     {
       "id": "SOURCE_ARCHIVE_REPRODUCIBLE",
@@ -233,8 +222,8 @@
       "id": "SOURCE_ARCHIVE_NO_UNSAFE_ENTRIES",
       "pass": true,
       "actual": {
-        "entry_count": 243,
-        "file_count": 170,
+        "entry_count": 301,
+        "file_count": 220,
         "unsafe_entries": [],
         "duplicate_entries": [],
         "symlink_entries": []
