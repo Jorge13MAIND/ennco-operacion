@@ -70,3 +70,14 @@ export const firstPaymentSchema = z.object({
 }).refine((value) => new Date(value.observedAt).getTime() >= new Date(value.paidAt).getTime(), {
   message: "PAYMENT_EVIDENCE_MUST_FOLLOW_PAYMENT",
 });
+
+export const capacityScheduleSchema = z.object({
+  commandId: z.uuid(),
+  executionDate: z.iso.date(),
+  changeReason: z.string().trim().min(3).max(500),
+});
+
+export const capacityConfigSchema = z.object({
+  effectiveFromMonth: z.iso.date().refine((value) => value.endsWith("-01"), "CAPACITY_MONTH_START_REQUIRED"),
+  sourceReference: z.string().trim().min(3).max(1_000),
+});

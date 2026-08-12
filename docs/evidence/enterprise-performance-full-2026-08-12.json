@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_class": "synthetic_demo",
+  "executed_at_date": "2026-08-12",
+  "command": "npm run verify:performance:full",
+  "target": "http://127.0.0.1:3000/api/v1/health",
+  "external_side_effects": 0,
+  "duration_seconds": 300,
+  "requests_per_second": 20,
+  "target_requests": 6000,
+  "completed_requests": 6000,
+  "failed_requests": 0,
+  "error_rate": 0,
+  "latency_ms": {
+    "min": 1.375499999994645,
+    "p50": 3.0555420000018785,
+    "p95": 3.8486250000005384,
+    "p99": 4.789792000010493,
+    "max": 160.510125
+  },
+  "budgets": {
+    "p95_ms": 500,
+    "max_error_rate": 0
+  },
+  "status": "PASS",
+  "failures": [],
+  "limitations": [
+    "local synthetic health endpoint only",
+    "does not prove managed database, queue, provider or production capacity",
+    "managed staging must repeat API, portal, database, queue and provider tests before release"
+  ]
+}

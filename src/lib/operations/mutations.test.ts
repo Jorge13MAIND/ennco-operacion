@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  capacityScheduleSchema,
+  capacityConfigSchema,
   commercialEvidenceSchema,
   firstPaymentSchema,
   meetingOutcomeSchema,
@@ -82,6 +84,30 @@ describe("operation mutation contracts", () => {
       sourceUrl: "https://example.invalid/payment",
       sourceName: "Comprobante bancario",
       confidence: "VERIFIED",
+    }).success).toBe(false);
+  });
+
+  it("requires an explicit date and bounded reason for capacity", () => {
+    expect(capacityScheduleSchema.safeParse({
+      commandId: "10000000-0000-4000-8000-000000000001",
+      executionDate: "2026-10-15",
+      changeReason: "Instalación confirmada por operación",
+    }).success).toBe(true);
+    expect(capacityScheduleSchema.safeParse({
+      commandId: "not-a-uuid",
+      executionDate: "octubre",
+      changeReason: "ok",
+    }).success).toBe(false);
+  });
+
+  it("fixes the capacity policy to the first day of a month", () => {
+    expect(capacityConfigSchema.safeParse({
+      effectiveFromMonth: "2026-10-01",
+      sourceReference: "Transcript Aug 3, capacidad confirmada",
+    }).success).toBe(true);
+    expect(capacityConfigSchema.safeParse({
+      effectiveFromMonth: "2026-10-15",
+      sourceReference: "Transcript",
     }).success).toBe(false);
   });
 });

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { GoldenPathControl } from "@/components/GoldenPathControl";
 import { CompactActionTable, PortalRowsTable } from "@/components/PortalTable";
 import { requireOperationsAccess } from "@/lib/auth/authorization";
+import { civilDateValue } from "@/lib/operations/capacity";
 import { loadOperationsPortal } from "@/lib/operations/portal";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +16,7 @@ function money(value: number): string {
 export default async function OperationsPage() {
   const access = await requireOperationsAccess();
   const snapshot = await loadOperationsPortal(access);
+  const capacityLabels = { HEALTHY: "Disponible", WARNING: "Atención", FULL: "Lleno", UNKNOWN: "Bloqueado" } as const;
   return (
     <main className="shell section operations-main">
       <div className="section-head compact">
@@ -49,6 +51,20 @@ export default async function OperationsPage() {
         <div><span>Envío externo</span><strong>{snapshot.health.externalSendAllowed ? "HABILITADO" : "BLOQUEADO"}</strong></div>
         <div><span>Reply sync</span><strong>{snapshot.health.replySync}</strong></div>
         <div><span>Riesgos</span><strong>{snapshot.health.openP0} P0 / {snapshot.health.openP1} P1</strong></div>
+        <div>
+          <span>Capacidad {civilDateValue(snapshot.health.capacity.month)}</span>
+          <strong className={`status ${snapshot.health.capacity.state === "UNKNOWN" || snapshot.health.capacity.state === "FULL" ? "blocked" : ""}`}>
+            {capacityLabels[snapshot.health.capacity.state]}. {snapshot.health.capacity.committed}/{snapshot.health.capacity.limit ?? "?"}. {snapshot.health.capacity.available ?? "?"} disponibles
+          </strong>
+          {snapshot.health.capacity.unscheduled > 0 ? <span>{snapshot.health.capacity.unscheduled} proyectos ganados sin fecha</span> : null}
+        </div>
+        <div>
+          <span>Investigación</span>
+          <strong className={`status ${snapshot.health.research.decision !== "PASS" ? "blocked" : ""}`}>
+            {snapshot.health.research.decision}. {snapshot.health.research.verifiedAccounts}/{snapshot.health.research.targetAccounts} empresas. {snapshot.health.research.verifiedContacts}/{snapshot.health.research.targetContacts} contactos
+          </strong>
+          <span>{snapshot.health.research.outreachState}. {snapshot.health.research.outreachEligibleRecords} autorizados</span>
+        </div>
       </section>
 
       <div className="operations-dashboard-grid">
@@ -67,6 +83,7 @@ export default async function OperationsPage() {
             <Link href={"/operacion/respuestas" as Route}><strong>Responder interés</strong><span>Revisar bandeja y detener secuencias</span></Link>
             <Link href={"/operacion/leads" as Route}><strong>Calificar lead</strong><span>Aplicar definición contractual estricta</span></Link>
             <Link href={"/operacion/pipeline" as Route}><strong>Actualizar oportunidad</strong><span>Registrar valor y siguiente acción</span></Link>
+            <Link href={"/operacion/empresas" as Route}><strong>Revisar investigación</strong><span>Fuentes, contactos y duplicados sin mezclar pipeline</span></Link>
             <Link href={"/operacion/aprobaciones" as Route}><strong>Resolver gate</strong><span>Dejar decisión y evidencia</span></Link>
           </div>
         </section>

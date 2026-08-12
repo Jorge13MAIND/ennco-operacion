@@ -13,6 +13,23 @@ export const ENTERPRISE_REQUIREMENTS = [
   { id: "ENT-009", name: "Evidencia contractual de lead no falsificable" },
 ];
 
+export const PLAN_REQUIREMENTS = [
+  "PLAN-LEAD-TARGET-001",
+  "PLAN-FIRST-SEND-001",
+  "PLAN-INVENTORY-001",
+  "PLAN-RESEARCH-PROVENANCE-001",
+  "PLAN-CLIENT-SLA-001",
+  "PLAN-ALERT-SLA-001",
+  "PLAN-UPLOAD-MALWARE-001",
+  "PLAN-API-SURFACE-001",
+  "PLAN-SECURITY-STANDARDS-001",
+  "PLAN-RETENTION-LIVE-001",
+  "PLAN-CONTROL-CADENCE-001",
+  "PLAN-T0-RECOVERY-001",
+  "PLAN-CHANNEL-POLICY-001",
+  "PLAN-FINAL-ACCEPTANCE-001",
+];
+
 export const OPEN_RISK_STATUSES = new Set([
   "OPEN",
   "OPEN_EXTERNAL",
@@ -174,6 +191,9 @@ export function validateRtm({ text, repo }) {
   if (records.length < 75) failures.push(`EXPECTED_AT_LEAST_75_ROWS_GOT_${records.length}`);
   if (checklist.length !== 47) failures.push(`EXPECTED_47_CHECKLIST_ROWS_GOT_${checklist.length}`);
   if (!records.some((record) => record.id === "AVA-001")) failures.push("AVA_AUTHORITY_REQUIREMENT_MISSING");
+  for (const planId of PLAN_REQUIREMENTS) {
+    if (!records.some((record) => record.id === planId)) failures.push(`MISSING_PLAN_REQUIREMENT_${planId}`);
+  }
   if (new Set(ids).size !== ids.length) failures.push("DUPLICATE_IDS");
 
   for (const record of records) {

@@ -1,5 +1,7 @@
 import type { OperationsAccessContext } from "@/lib/auth/authorization";
 import { INITIAL_MILESTONES } from "@/lib/control-room/snapshot";
+import { civilDateValue, parseCapacityReadModel } from "@/lib/operations/capacity";
+import { parseResearchPortalReadModel } from "@/lib/research/portal";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const OPERATION_MODULE_KEYS = [
@@ -62,6 +64,25 @@ export type OperationsPortalSnapshot = {
     replySync: "HOLD" | "HEALTHY" | "DEGRADED";
     openP0: number;
     openP1: number;
+    capacity: {
+      state: "HEALTHY" | "WARNING" | "FULL" | "UNKNOWN";
+      month: string;
+      limit: number | null;
+      committed: number;
+      available: number | null;
+      unscheduled: number;
+      reasonCode: string | null;
+    };
+    research: {
+      decision: "PASS" | "EXTEND" | "KILL" | "UNKNOWN";
+      verifiedAccounts: number;
+      targetAccounts: 75;
+      verifiedContacts: number;
+      targetContacts: 150;
+      outreachState: "RESEARCH_ONLY_HOLD";
+      outreachEligibleRecords: 0;
+      blockers: string[];
+    };
   };
   nextActions: PortalRow[];
   modules: Record<OperationModuleKey, PortalModule>;
@@ -111,19 +132,23 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
     },
     empresas: {
       title: "Empresas",
-      description: "Inventario con fuente, confianza y estado de elegibilidad separados del pipeline.",
+      description: "Workbench de investigación. Fuente, verificación, contactos y deduplicación permanecen separados del pipeline.",
       emptyState: "No hay empresas live cargadas en el portal.",
       columns: [
         { key: "empresa", label: "Empresa" },
-        { key: "ubicacion", label: "Ubicación" },
-        { key: "confianza", label: "Confianza" },
+        { key: "mercado", label: "Mercado" },
+        { key: "evidencia", label: "Evidencia" },
+        { key: "contactos", label: "Contactos" },
+        { key: "dedupe", label: "Duplicados" },
         { key: "elegibilidad", label: "Elegibilidad" },
       ],
       rows: [row("account-synthetic-1", sampleBadge, {
         empresa: "Cuenta industrial sintética",
-        ubicacion: "León, Guanajuato",
-        confianza: "UNVERIFIED",
-        elegibilidad: "HOLD hasta fuente y supresión",
+        mercado: "Guanajuato y Querétaro primero",
+        evidencia: "UNVERIFIED",
+        contactos: "0 verificados",
+        dedupe: "Sin decisión live",
+        elegibilidad: "RESEARCH_ONLY_HOLD",
       })],
     },
     precotizaciones: {
@@ -177,6 +202,7 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         { key: "etapa", label: "Etapa" },
         { key: "criterios", label: "Criterios" },
         { key: "valor", label: "Valor" },
+        { key: "capacidad", label: "Capacidad" },
         { key: "siguiente", label: "Siguiente acción" },
       ],
       rows: [],
@@ -295,6 +321,30 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
       replySync: "HOLD",
       openP0: 10,
       openP1: 11,
+      capacity: {
+        state: "UNKNOWN",
+        month: "Sin mes operativo",
+        limit: null,
+        committed: 0,
+        available: null,
+        unscheduled: 0,
+        reasonCode: "CAPACITY_NOT_CONFIGURED_IN_SYNTHETIC_DEMO",
+      },
+      research: {
+        decision: "EXTEND",
+        verifiedAccounts: 0,
+        targetAccounts: 75,
+        verifiedContacts: 0,
+        targetContacts: 150,
+        outreachState: "RESEARCH_ONLY_HOLD",
+        outreachEligibleRecords: 0,
+        blockers: [
+          "RESEARCH_DATABASE_NOT_LIVE",
+          "RESEARCH_ACCOUNT_TARGET_NOT_MET",
+          "RESEARCH_CONTACT_TARGET_NOT_MET",
+          "ANNEX_A_MISSING",
+        ],
+      },
     },
     nextActions: [
       row("next-annex", "BLOCKED_EXTERNAL", { objective: "Importar y conciliar Anexo A", due: "Al recibirlo", owner: "Teckel + ENNCO" }),
@@ -338,6 +388,37 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
 
   const client = await createSupabaseServerClient();
   const organizationId = access.organizationId;
+  const monthParts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Mexico_City",
+    year: "numeric",
+    month: "2-digit",
+  }).formatToParts(new Date());
+  const capacityMonth = `${monthParts.find((part) => part.type === "year")?.value ?? "0000"}-${monthParts.find((part) => part.type === "month")?.value ?? "00"}-01`;
+  const capacityPromise = Promise.allSettled([
+    client.from("opportunity_capacity_schedules").select("id,opportunity_id,execution_date,capacity_month,config_version").eq("organization_id", organizationId),
+    client.rpc("evaluate_monthly_operational_capacity", {
+      target_organization_id: organizationId,
+      target_capacity_month: capacityMonth,
+    }),
+  ]);
+  const researchPromise = Promise.allSettled([
+    client.from("accounts")
+      .select("id,research_status,priority_market,research_state,research_coverage_exception_approved", { count: "exact" })
+      .eq("organization_id", organizationId)
+      .eq("is_deleted", false)
+      .limit(500),
+    client.from("research_contact_candidates")
+      .select("id,account_id,role_category,research_status,promoted_contact_id", { count: "exact" })
+      .eq("organization_id", organizationId)
+      .limit(1000),
+    client.from("research_dedupe_cases")
+      .select("id,subject_type,source_record_id,candidate_account_id,matched_account_id,candidate_contact_id,matched_candidate_id,status", { count: "exact" })
+      .eq("organization_id", organizationId)
+      .limit(1000),
+    client.rpc("assess_research_inventory", {
+      target_organization_id: organizationId,
+    }),
+  ]);
   const results = await Promise.all([
     client.from("runtime_controls").select("global_kill_switch,external_send_allowed").eq("organization_id", organizationId).maybeSingle(),
     client.from("accounts").select("id,legal_name,state,sector,source_confidence,updated_at", { count: "exact" }).eq("organization_id", organizationId).eq("is_deleted", false).limit(200),
@@ -373,6 +454,26 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   if (failed?.error) throw new Error(`PORTAL_QUERY_FAILED:${failed.error.code ?? "UNKNOWN"}`);
 
   const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult, monthlyReportsResult, reportIssuancesResult, recoveryExperimentsResult, handoffPackagesResult, handoffArtifactsResult, handoffChecksResult, handoffTrainingResult, finalAcceptancesResult, paymentsResult] = results;
+  const [capacitySchedulesSettled, capacityEvaluationSettled] = await capacityPromise;
+  const [researchAccountsSettled, researchCandidatesSettled, researchDedupeSettled, researchAssessmentSettled] = await researchPromise;
+  const capacitySchedulesResult = capacitySchedulesSettled.status === "fulfilled" && !capacitySchedulesSettled.value.error
+    ? capacitySchedulesSettled.value
+    : null;
+  const capacityEvaluationResult = capacityEvaluationSettled.status === "fulfilled" && !capacityEvaluationSettled.value.error
+    ? capacityEvaluationSettled.value
+    : null;
+  const researchAccountsResult = researchAccountsSettled.status === "fulfilled" && !researchAccountsSettled.value.error
+    ? researchAccountsSettled.value
+    : null;
+  const researchCandidatesResult = researchCandidatesSettled.status === "fulfilled" && !researchCandidatesSettled.value.error
+    ? researchCandidatesSettled.value
+    : null;
+  const researchDedupeResult = researchDedupeSettled.status === "fulfilled" && !researchDedupeSettled.value.error
+    ? researchDedupeSettled.value
+    : null;
+  const researchAssessmentResult = researchAssessmentSettled.status === "fulfilled" && !researchAssessmentSettled.value.error
+    ? researchAssessmentSettled.value
+    : null;
   const accounts = asRows(accountsResult.data);
   const contacts = asRows(contactsResult.data);
   const messages = asRows(messagesResult.data);
@@ -391,6 +492,32 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const handoffTraining = asRows(handoffTrainingResult.data);
   const finalAcceptances = asRows(finalAcceptancesResult.data);
   const firstPayments = asRows(paymentsResult.data);
+  const capacityReadModel = parseCapacityReadModel({
+    schedulesAvailable: capacitySchedulesResult !== null,
+    schedulesData: capacitySchedulesResult?.data,
+    evaluationAvailable: capacityEvaluationResult !== null,
+    evaluationData: capacityEvaluationResult?.data,
+  });
+  const capacitySchedules = capacityReadModel.schedules;
+  const capacityInventoryReady = capacityReadModel.inventoryReady;
+  const capacityEvaluation = capacityReadModel.evaluation;
+  const researchReadModel = parseResearchPortalReadModel({
+    accountsAvailable: researchAccountsResult !== null,
+    accountsData: researchAccountsResult?.data,
+    accountsCount: researchAccountsResult?.count ?? null,
+    candidatesAvailable: researchCandidatesResult !== null,
+    candidatesData: researchCandidatesResult?.data,
+    candidatesCount: researchCandidatesResult?.count ?? null,
+    dedupeAvailable: researchDedupeResult !== null,
+    dedupeData: researchDedupeResult?.data,
+    dedupeCount: researchDedupeResult?.count ?? null,
+    assessmentAvailable: researchAssessmentResult !== null,
+    assessmentData: researchAssessmentResult?.data,
+  });
+  const researchCandidates = researchReadModel.candidates;
+  const researchDedupeCases = researchReadModel.dedupeCases;
+  const researchAssessment = researchReadModel.assessment;
+  const researchAccountById = new Map(researchReadModel.accounts.map((item) => [item.id, item]));
   const leads = asRows(leadsResult.data);
   const opportunities = asRows(opportunitiesResult.data);
   const meetings = asRows(meetingsResult.data);
@@ -401,6 +528,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const contactById = new Map(contacts.map((item) => [textValue(item.id), item]));
   const eventByMessageId = new Map(events.map((item) => [textValue(item.message_id), item]));
   const meetingByOpportunityId = new Map(meetings.map((item) => [textValue(item.opportunity_id), item]));
+  const capacityByOpportunityId = new Map(capacitySchedules.map((item) => [textValue(item.opportunity_id), item]));
   const accountName = (accountId: unknown) => textValue(accountById.get(textValue(accountId))?.legal_name);
   const contactName = (contactId: unknown) => textValue(contactById.get(textValue(contactId))?.full_name);
   const today = new Date();
@@ -424,12 +552,26 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     evidencia: textValue(lead.qualification_reason, "Pendiente"),
     qualified: lead.contractual_qualified === true ? "true" : "false",
   }));
-  const accountRows = accounts.map((account) => row(textValue(account.id), textValue(account.source_confidence), {
-    empresa: textValue(account.legal_name),
-    ubicacion: textValue(account.state),
-    confianza: textValue(account.source_confidence),
-    elegibilidad: "Revisar supresión antes de contacto",
-  }));
+  const researchInventoryAvailable = researchReadModel.inventoryReady;
+  const researchDecision = researchAssessment?.decision ?? "UNKNOWN";
+  const researchBlockers = researchAssessment?.blockers ?? [researchReadModel.reasonCode ?? "RESEARCH_READ_MODEL_UNAVAILABLE"];
+  const accountRows = accounts.map((account) => {
+    const accountId = textValue(account.id);
+    const researchAccount = researchAccountById.get(accountId);
+    const candidates = researchCandidates.filter((candidate) => textValue(candidate.account_id) === accountId);
+    const promotedCandidates = candidates.filter((candidate) => candidate.research_status === "PROMOTED" && candidate.promoted_contact_id !== null);
+    const openDedupe = researchDedupeCases.filter((candidate) =>
+      candidate.status === "OPEN"
+      && (textValue(candidate.candidate_account_id, "") === accountId || textValue(candidate.matched_account_id, "") === accountId));
+    return row(accountId, textValue(researchAccount?.research_status, "UNKNOWN"), {
+      empresa: textValue(account.legal_name),
+      mercado: `${textValue(researchAccount?.research_state, textValue(account.state))}. ${textValue(researchAccount?.priority_market, "EXPANSION_HOLD")}`,
+      evidencia: `${textValue(researchAccount?.research_status, "UNKNOWN")}. ${textValue(account.source_confidence, "UNVERIFIED")}`,
+      contactos: researchInventoryAvailable ? `${promotedCandidates.length} promovidos de ${candidates.length} candidatos` : "Inventario no disponible",
+      dedupe: researchInventoryAvailable ? (openDedupe.length > 0 ? `${openDedupe.length} casos abiertos` : "Sin casos abiertos") : "UNKNOWN",
+      elegibilidad: "RESEARCH_ONLY_HOLD. 0 autorizados",
+    });
+  });
   const prequoteRows = asRows(prequotesResult.data).map((prequote) => row(textValue(prequote.id), textValue(prequote.evidence_class), {
     folio: textValue(prequote.folio),
     necesidad: textValue(prequote.need_type),
@@ -472,18 +614,24 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     && Boolean(opportunity.next_action_at),
   );
   const strictOpportunityIds = new Set(strictQualifiedOpportunities.map((opportunity) => textValue(opportunity.id)));
-  const pipelineRows = opportunities.map((opportunity) => row(textValue(opportunity.id), textValue(opportunity.stage), {
-    cuenta: accountName(opportunity.account_id),
-    etapa: textValue(opportunity.stage),
-    criterios: strictOpportunityIds.has(textValue(opportunity.id)) ? "Estrictos completos" : "No cuenta todavía",
-    valor: Number(opportunity.value_mxn ?? 0) > 0
-      ? new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(Number(opportunity.value_mxn))
-      : "Sin valor verificado",
-    siguiente: opportunity.next_action
-      ? `${textValue(opportunity.next_action)}. ${dateValue(opportunity.next_action_at)}`
-      : "Pendiente de registrar",
-    meeting_id: textValue(meetingByOpportunityId.get(textValue(opportunity.id))?.id, ""),
-  }));
+  const pipelineRows = opportunities.map((opportunity) => {
+    const capacity = capacityByOpportunityId.get(textValue(opportunity.id));
+    return row(textValue(opportunity.id), textValue(opportunity.stage), {
+      cuenta: accountName(opportunity.account_id),
+      etapa: textValue(opportunity.stage),
+      criterios: strictOpportunityIds.has(textValue(opportunity.id)) ? "Estrictos completos" : "No cuenta todavía",
+      valor: Number(opportunity.value_mxn ?? 0) > 0
+        ? new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(Number(opportunity.value_mxn))
+        : "Sin valor verificado",
+      capacidad: !capacityInventoryReady
+        ? "Reserva no disponible"
+        : capacity ? `${civilDateValue(capacity.execution_date)}. Config v${capacity.config_version}` : "Sin reserva operativa",
+      siguiente: opportunity.next_action
+        ? `${textValue(opportunity.next_action)}. ${dateValue(opportunity.next_action_at)}`
+        : "Pendiente de registrar",
+      meeting_id: textValue(meetingByOpportunityId.get(textValue(opportunity.id))?.id, ""),
+    });
+  });
   const roadmapRows = asRows(roadmapResult.data).map((milestone) => row(textValue(milestone.id), textValue(milestone.status), {
     milestone: `${textValue(milestone.code)}. ${textValue(milestone.name)}`,
     gate: "Ver evidencia",
@@ -549,6 +697,26 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       replySync,
       openP0,
       openP1,
+      capacity: {
+        state: capacityEvaluation?.state ?? "UNKNOWN",
+        month: capacityEvaluation?.capacity_month ?? capacityMonth,
+        limit: capacityEvaluation?.monthly_limit ?? null,
+        committed: capacityEvaluation?.committed_projects ?? 0,
+        available: capacityEvaluation?.available_projects ?? null,
+        unscheduled: capacityEvaluation?.unscheduled_closed_won_projects ?? 0,
+        reasonCode: capacityEvaluation?.reason_code
+          ?? capacityReadModel.reasonCode,
+      },
+      research: {
+        decision: researchDecision,
+        verifiedAccounts: researchAssessment?.verified_accounts ?? 0,
+        targetAccounts: 75,
+        verifiedContacts: researchAssessment?.verified_contacts ?? 0,
+        targetContacts: 150,
+        outreachState: "RESEARCH_ONLY_HOLD",
+        outreachEligibleRecords: 0,
+        blockers: researchBlockers,
+      },
     },
     nextActions: tasks.filter((task) => task.status === "OPEN").slice(0, 8).map((task) => row(textValue(task.id), textValue(task.status), {
       objective: textValue(task.normalized_objective),

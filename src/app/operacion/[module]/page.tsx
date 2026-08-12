@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { PortalRowsTable } from "@/components/PortalTable";
+import { CapacityConfigAction } from "@/components/OperationsActions";
 import { requireOperationsAccess } from "@/lib/auth/authorization";
 import { isOperationModuleKey, loadOperationsPortal, OPERATION_MODULE_LABELS } from "@/lib/operations/portal";
 
@@ -36,6 +37,9 @@ export default async function OperationModulePage({ params }: { params: Promise<
           <Link className="button secondary" href={"/api/v1/exports/companies-contacts" as Route} prefetch={false}>Descargar empresas y contactos</Link>
           <Link className="button secondary" href={"/api/v1/exports/pipeline-attribution" as Route} prefetch={false}>Descargar pipeline y atribución</Link>
         </section>
+      ) : null}
+      {module === "pipeline" && snapshot.evidenceClass === "live" && ["ennco_admin", "teckel_admin"].includes(access.role) ? (
+        <CapacityConfigAction />
       ) : null}
       <PortalRowsTable actionKind={module} evidenceClass={snapshot.evidenceClass} module={selected} />
     </main>

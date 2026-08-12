@@ -15,6 +15,8 @@ Sistema comercial E2E de ENNCO. Este repositorio contiene la experiencia públic
 - M8: reporte contractual, denominadores por canal y recuperación de una variable local en `PASS`. Gate global `EXTEND`, mes contractual no iniciado y cero reportes reales.
 - M9: hardening, segundo restore, exports, handoff y aceptación local en `EVIDENCE_READY`. Gate global `EXTEND`, cero UAT, capacitaciones, transferencias y aceptaciones reales.
 - Checkpoint de hardening actual: evidencia comercial relacional, supresión privada, bajas one-click, operación canónica, atribución automática y comisión transaccional pasan en PostgreSQL desechable. Sigue pendiente el canary en Supabase aislado y todos los gates live.
+- Capacidad operativa: política versionada de dos proyectos industriales por mes, reserva exclusiva de CLOSED_WON, alertas y estado UNKNOWN ante cierres sin fecha pasan forward, concurrencia, rollback y reapply en PostgreSQL desechable.
+- Research Workbench: contratos, nueve endpoints, portal y base M019 pasan localmente. M019 revoca DML directo, exige AAL2, evidencia ligada al sujeto, revisión de dos personas, deduplicación, supresión e inventario 75/150 siempre en `RESEARCH_ONLY_HOLD`. El lote determinista concilia 27 semillas, 21 investigables y 6 en cuarentena, pero no se ha ejecutado contra una base externa. Hay cero contactos, cero elegibles y cero outreach.
 - Producción, DNS, compras y contacto externo: bloqueados hasta aprobación explícita.
 
 ## Desarrollo local
@@ -125,6 +127,9 @@ Este comando valida:
 - Evidencia contractual ligada a registros append-only y tenant-safe.
 - Bajas one-click firmadas, supresión HMAC sin correo crudo y fail closed.
 - Oportunidad, reunión, pago, atribución y comisión mediante RPCs canónicos idempotentes.
+- Capacidad mensual separada de leads y pipeline, con ledger idempotente y alertas accionables.
+- Investigación canónica con evidencia por campo, cuatro ojos, deduplicación, snapshot 75/150 y autorización comercial permanentemente separada.
+- Gate de alcance que mantiene fuera cualquier código, datos o automatización del sistema expresamente excluido.
 - CodeQL, ZAP passive baseline, SBOM CycloneDX, accesibilidad automatizada y smoke de performance configurados o ejecutados según su evidencia local.
 
 Un `PASS` local valida implementación y controles. No equivale a producción, resultado comercial, UAT, capacitación o aceptación ENNCO.

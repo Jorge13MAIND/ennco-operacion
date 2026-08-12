@@ -1,14 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
+
+import { selectCapacityCommand, type CapacityCommand } from "@/lib/operations/capacity";
 
 type MutationStatus = "idle" | "pending" | "done" | "error";
 
-function Result({ status }: { status: MutationStatus }) {
+class MutationRejectedError extends Error {
+  constructor(readonly code: string) {
+    super(code);
+    this.name = "MutationRejectedError";
+  }
+}
+
+function Result({ status, errorMessage }: { status: MutationStatus; errorMessage?: string }) {
   if (status === "idle") return null;
-  if (status === "pending") return <span className="fine">Guardando...</span>;
-  if (status === "done") return <span className="status">Guardado</span>;
-  return <span className="status blocked">Rechazado por gate</span>;
+  if (status === "pending") return <span aria-live="polite" className="fine" role="status">Guardando...</span>;
+  if (status === "done") return <span aria-live="polite" className="status" role="status">Guardado</span>;
+  return <span aria-live="assertive" className="status blocked" role="alert">{errorMessage ?? "Rechazado por gate"}</span>;
 }
 
 async function mutate(url: string, body?: unknown): Promise<void> {
@@ -17,7 +27,10 @@ async function mutate(url: string, body?: unknown): Promise<void> {
     headers: body === undefined ? undefined : { "Content-Type": "application/json" },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
-  if (!response.ok) throw new Error("MUTATION_REJECTED");
+  if (!response.ok) {
+    const payload = await response.json().catch(() => null) as { error?: unknown } | null;
+    throw new MutationRejectedError(typeof payload?.error === "string" ? payload.error : "MUTATION_REJECTED");
+  }
 }
 
 async function mutateWithResult<T>(url: string, body: unknown): Promise<T> {
@@ -188,10 +201,31 @@ export function LeadQualificationAction({ leadId, qualified }: { leadId: string;
   );
 }
 
-export function OpportunityTransitionAction({ opportunityId, meetingId }: { opportunityId: string; meetingId?: string }) {
+function capacityErrorMessage(error: unknown): string {
+  if (!(error instanceof MutationRejectedError)) return "No fue posible reservar capacidad";
+  switch (error.code) {
+    case "CAPACITY_CONFIG_MISSING": return "Primero un administrador debe configurar la capacidad mensual";
+    case "CAPACITY_STAGE_NOT_CLOSED_WON": return "Sólo se reserva capacidad para un proyecto ganado";
+    case "CAPACITY_OPPORTUNITY_NOT_FOUND": return "La oportunidad ya no está disponible";
+    case "CAPACITY_OPERATOR_FORBIDDEN": return "Tu sesión no tiene permiso operativo con MFA";
+    case "CAPACITY_COMMAND_CONFLICT": return "La solicitud cambió durante el guardado. Revisa y vuelve a intentar";
+    case "CAPACITY_RESPONSE_INVALID": return "La base respondió con un estado inválido y el cambio quedó en revisión";
+    default: return "La reserva fue detenida por un gate de capacidad";
+  }
+}
+
+export function OpportunityTransitionAction({ opportunityId, opportunityStage, meetingId }: {
+  opportunityId: string;
+  opportunityStage: string;
+  meetingId?: string;
+}) {
+  const router = useRouter();
   const [transitionStatus, setTransitionStatus] = useState<MutationStatus>("idle");
   const [meetingStatus, setMeetingStatus] = useState<MutationStatus>("idle");
   const [paymentStatus, setPaymentStatus] = useState<MutationStatus>("idle");
+  const [capacityStatus, setCapacityStatus] = useState<MutationStatus>("idle");
+  const [capacityError, setCapacityError] = useState<string>();
+  const pendingCapacityCommand = useRef<CapacityCommand | undefined>(undefined);
   async function transition(formData: FormData) {
     setTransitionStatus("pending");
     try {
@@ -245,6 +279,28 @@ export function OpportunityTransitionAction({ opportunityId, meetingId }: { oppo
       setPaymentStatus("error");
     }
   }
+  async function capacity(formData: FormData) {
+    setCapacityStatus("pending");
+    setCapacityError(undefined);
+    const executionDate = String(formData.get("executionDate"));
+    const changeReason = String(formData.get("changeReason"));
+    const payloadKey = JSON.stringify({ executionDate, changeReason });
+    const command = selectCapacityCommand(pendingCapacityCommand.current, payloadKey, () => crypto.randomUUID());
+    pendingCapacityCommand.current = command;
+    try {
+      await mutate(`/api/v1/operations/opportunities/${opportunityId}/capacity`, {
+        commandId: command.commandId,
+        executionDate,
+        changeReason,
+      });
+      pendingCapacityCommand.current = undefined;
+      setCapacityStatus("done");
+      router.refresh();
+    } catch (error) {
+      setCapacityError(capacityErrorMessage(error));
+      setCapacityStatus("error");
+    }
+  }
   return (
     <details className="operation-details">
       <summary>Actualizar</summary>
@@ -296,6 +352,51 @@ export function OpportunityTransitionAction({ opportunityId, meetingId }: { oppo
         <button className="button" disabled={paymentStatus === "pending" || paymentStatus === "done"} type="submit">Registrar pago</button>
         <Result status={paymentStatus} />
       </form>
+      {opportunityStage === "CLOSED_WON" ? (
+        <form action={(data) => void capacity(data)} className="compact-operation-form subform">
+          <strong>Reservar capacidad operativa</strong>
+          <p className="fine">El límite mensual se calcula sin habilitar contacto ni envío.</p>
+          <label>Fecha estimada de ejecución<input name="executionDate" required type="date" /></label>
+          <label>Motivo de programación<input maxLength={500} minLength={3} name="changeReason" required type="text" /></label>
+          <button className="button" disabled={capacityStatus === "pending"} type="submit">
+            {capacityStatus === "done" ? "Reprogramar" : "Reservar mes"}
+          </button>
+          <Result errorMessage={capacityError} status={capacityStatus} />
+        </form>
+      ) : <p className="fine">La capacidad se reserva cuando la oportunidad llegue a CLOSED_WON.</p>}
     </details>
+  );
+}
+
+export function CapacityConfigAction() {
+  const [status, setStatus] = useState<MutationStatus>("idle");
+  async function submit(formData: FormData) {
+    setStatus("pending");
+    const effectiveMonth = String(formData.get("effectiveMonth"));
+    try {
+      await mutate("/api/v1/operations/capacity/config", {
+        effectiveFromMonth: `${effectiveMonth}-01`,
+        sourceReference: String(formData.get("sourceReference")),
+      });
+      setStatus("done");
+    } catch {
+      setStatus("error");
+    }
+  }
+  return (
+    <section aria-labelledby="capacity-config-heading" className="panel">
+      <div className="panel-head">
+        <div>
+          <h2 id="capacity-config-heading">Política de capacidad</h2>
+          <p>Dos proyectos industriales por mes. Al primer proyecto se alerta; al segundo el mes queda lleno.</p>
+        </div>
+      </div>
+      <form action={(data) => void submit(data)} className="compact-operation-form">
+        <label>Vigente desde el mes<input name="effectiveMonth" required type="month" /></label>
+        <label>Fuente de la decisión<input maxLength={1000} minLength={3} name="sourceReference" required type="text" /></label>
+        <button className="button" disabled={status === "pending" || status === "done"} type="submit">Crear versión 2 por mes</button>
+        <Result status={status} />
+      </form>
+    </section>
   );
 }
