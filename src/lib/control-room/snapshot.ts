@@ -1,6 +1,6 @@
 import type { ControlRoomSnapshot, Milestone } from "@/lib/domain/types";
 
-const UPDATED_AT = "2026-08-11T23:40:00-06:00";
+const UPDATED_AT = "2026-08-12T00:40:00-06:00";
 
 export const INITIAL_MILESTONES: Milestone[] = [
   {
@@ -133,13 +133,18 @@ export const INITIAL_MILESTONES: Milestone[] = [
     id: "M7",
     name: "Escalamiento controlado",
     owner: "Teckel Revenue Operations",
-    status: "NOT_STARTED",
-    gate: null,
+    status: "BLOCKED",
+    gate: "EXTEND",
     dueDate: "2026-10-06",
     acceptance: "Primeras 100 entregas válidas, T0 y lotes progresivos con salud estable.",
-    evidence: [],
-    blocker: "Depende de M6 y de inventario verificado.",
-    nextAction: "Mantener investigación en cuarentena hasta cumplir supresión y release.",
+    evidence: [
+      "supabase/tests/009_controlled_scaling_gate.sql",
+      "src/lib/scaling/health.test.ts",
+      "docs/17-m7-controlled-scaling-architecture.md",
+      "docs/evidence/M7-gate-report.md",
+    ],
+    blocker: "M6 sigue en EXTEND. Hay 0 de 100 entregas válidas y T0 no existe.",
+    nextAction: "Conservar HOLD. Liberar cada ola sólo después de salud live PASS y aprobación exacta.",
     updatedAt: UPDATED_AT,
   },
   {

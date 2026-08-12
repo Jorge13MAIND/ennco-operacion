@@ -151,6 +151,8 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         { key: "canary", label: "Canary" },
         { key: "gates", label: "Gate de liberación" },
         { key: "lote", label: "Primer lote" },
+        { key: "escalamiento", label: "Escalamiento" },
+        { key: "t0", label: "T0" },
         { key: "envio", label: "Envío" },
       ],
       rows: [row("campaign-synthetic-1", sampleBadge, {
@@ -159,6 +161,8 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         canary: "0/14 días reales",
         gates: "0/30 gates live",
         lote: "0 destinatarios reales",
+        escalamiento: "M7 bloqueado. 0 olas live",
+        t0: "0/100 entregas válidas",
         envio: "HOLD",
       })],
     },
@@ -227,8 +231,9 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         { key: "limite", label: "Límite" },
       ],
       rows: [
-        row("report-system", "LOCAL_PASS", { capa: "Sistema", metrica: "Gates locales M0 a M3", valor: "PASS local", limite: "No equivale a producción" }),
+        row("report-system", "LOCAL_PASS", { capa: "Sistema", metrica: "Gates locales M0 a M7", valor: "PASS local", limite: "No equivale a producción" }),
         row("report-activity", "ZERO", { capa: "Actividad", metrica: "Entregas válidas", valor: "0", limite: "T0 no calculado" }),
+        row("report-t0", "UNKNOWN", { capa: "Baseline", metrica: "T0", valor: "No existe", limite: "Requiere exactamente 100 primeras entregas válidas" }),
         row("report-outcome", "ZERO", { capa: "Resultado", metrica: "Leads contractuales", valor: "0", limite: "Sin campaña real" }),
       ],
     },
@@ -321,17 +326,23 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     client.from("mailbox_sync_cursors").select("mailbox_id,status,last_synced_at,last_error_code,watch_expires_at").eq("organization_id", organizationId),
     client.from("campaign_release_gates").select("id,campaign_id,gate_code,status,evidence_class,observed_at,valid_until").eq("organization_id", organizationId).order("gate_code", { ascending: true }),
     client.from("first_send_batches").select("id,campaign_id,status,recipient_count,account_count,scheduled_for,approved_at,released_at,killed_at,kill_reason_code").eq("organization_id", organizationId).order("created_at", { ascending: false }),
+    client.from("rollout_waves").select("id,campaign_id,wave_number,status,planned_recipient_count,scheduled_for,previous_observation_id,passed_at,extended_at,killed_at").eq("organization_id", organizationId).order("wave_number", { ascending: false }),
+    client.from("rollout_health_observations").select("id,campaign_id,source_kind,source_id,decision,evidence_class,delivered_count,hard_bounce_count,spam_complaint_count,unknown_count,observed_at").eq("organization_id", organizationId).order("observed_at", { ascending: false }),
+    client.from("commercial_baselines").select("id,campaign_id,valid_first_deliveries,substantive_replies,positive_replies,strict_leads,held_meetings,qualified_opportunities,cutoff_at,evidence_class").eq("organization_id", organizationId).order("cutoff_at", { ascending: false }),
   ]);
   const failed = results.find((result) => result.error);
   if (failed?.error) throw new Error(`PORTAL_QUERY_FAILED:${failed.error.code ?? "UNKNOWN"}`);
 
-  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult] = results;
+  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult] = results;
   const accounts = asRows(accountsResult.data);
   const contacts = asRows(contactsResult.data);
   const messages = asRows(messagesResult.data);
   const events = asRows(eventsResult.data);
   const releaseGates = asRows(releaseGatesResult.data);
   const firstSendBatches = asRows(firstSendBatchesResult.data);
+  const rolloutWaves = asRows(rolloutWavesResult.data);
+  const rolloutHealth = asRows(rolloutHealthResult.data);
+  const baselines = asRows(baselinesResult.data);
   const leads = asRows(leadsResult.data);
   const opportunities = asRows(opportunitiesResult.data);
   const meetings = asRows(meetingsResult.data);
@@ -381,14 +392,24 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     const gates = releaseGates.filter((gate) => textValue(gate.campaign_id) === campaignId);
     const passedGates = gates.filter((gate) => gate.status === "PASS" && gate.evidence_class === "live").length;
     const batch = firstSendBatches.find((candidate) => textValue(candidate.campaign_id) === campaignId);
+    const wave = rolloutWaves.find((candidate) => textValue(candidate.campaign_id) === campaignId);
+    const health = rolloutHealth.find((candidate) => textValue(candidate.campaign_id) === campaignId);
+    const baseline = baselines.find((candidate) => textValue(candidate.campaign_id) === campaignId);
     const runtimeOpen = controls?.external_send_allowed === true && controls?.global_kill_switch === false;
-    const releaseReady = gates.length === 30 && passedGates === 30 && batch?.status === "READY";
+    const releaseReady = gates.length === 30 && passedGates === 30
+      && (batch?.status === "READY" || wave?.status === "READY");
     return row(campaignId, textValue(campaign.status), {
       campana: textValue(campaign.name),
       manifiesto: textValue(campaign.manifest_sha256).slice(0, 12),
       canary: textValue(campaign.shadow_canary_decision, "Pendiente"),
       gates: `${passedGates}/${gates.length || 30} gates live`,
       lote: batch ? `${textValue(batch.status)}. ${textValue(batch.recipient_count, "0")} destinatarios` : "Sin lote aprobado",
+      escalamiento: wave
+        ? `Ola ${textValue(wave.wave_number)} ${textValue(wave.status)}. Salud ${textValue(health?.decision, "UNKNOWN")}`
+        : "Sin ola liberada",
+      t0: baseline
+        ? `${textValue(baseline.valid_first_deliveries)}/100. ${textValue(baseline.strict_leads, "0")} leads estrictos`
+        : "T0 no congelado",
       envio: runtimeOpen && releaseReady ? "LISTO EN VENTANA" : "HOLD",
     });
   });
@@ -433,6 +454,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     : cursors.some((cursor) => cursor.status === "ERROR") ? "DEGRADED" : "HOLD";
   const contractualLeads = leads.filter((lead) => lead.contractual_qualified === true).length;
   const wonProjects = opportunities.filter((opportunity) => opportunity.stage === "CLOSED_WON").length;
+  const latestBaseline = baselines[0];
 
   const base = getSyntheticOperationsPortal();
   return {
@@ -478,6 +500,14 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
         rows: [
           row("live-system", "LIVE", { capa: "Sistema", metrica: "Sincronización de respuestas", valor: replySync, limite: `${openP0} P0 y ${openP1} P1 abiertos` }),
           row("live-activity", "LIVE", { capa: "Actividad", metrica: "Empresas registradas", valor: String(accountsResult.count ?? accountRows.length), limite: "No equivale a pipeline" }),
+          row("live-t0", latestBaseline ? "LIVE" : "UNKNOWN", {
+            capa: "Baseline",
+            metrica: "T0 tras 100 entregas",
+            valor: latestBaseline
+              ? `${textValue(latestBaseline.strict_leads, "0")} leads, ${textValue(latestBaseline.positive_replies, "0")} respuestas positivas`
+              : "No existe",
+            limite: latestBaseline ? `Corte ${dateValue(latestBaseline.cutoff_at)}` : "No calcular antes de 100 entregas válidas",
+          }),
           row("live-outcome", "LIVE", { capa: "Resultado", metrica: "Leads contractuales", valor: String(contractualLeads), limite: "Requiere evidencia estricta" }),
         ],
       },

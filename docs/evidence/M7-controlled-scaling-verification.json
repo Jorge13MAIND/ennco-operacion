@@ -1,0 +1,99 @@
+{
+  "verification_status": "PASS",
+  "global_gate": "EXTEND",
+  "evidence_class": "synthetic_demo",
+  "external_side_effects": 0,
+  "real_waves_released": 0,
+  "valid_first_deliveries": 0,
+  "t0_status": "NOT_AVAILABLE",
+  "checks_passed": 13,
+  "checks_failed": 0,
+  "scenarios": {
+    "passHealth": {
+      "decision": "PASS",
+      "nextMaximumVolume": 10,
+      "reasons": []
+    },
+    "syntheticHealth": {
+      "decision": "EXTEND",
+      "nextMaximumVolume": 10,
+      "reasons": [
+        "EVIDENCE_NOT_LIVE"
+      ]
+    },
+    "killHealth": {
+      "decision": "KILL",
+      "nextMaximumVolume": 10,
+      "reasons": [
+        "SUPPRESSION_VIOLATION_OBSERVED"
+      ]
+    },
+    "t0": {
+      "validFirstDeliveries": 100,
+      "substantiveReplies": 10,
+      "positiveReplies": 6,
+      "strictLeads": 4,
+      "heldMeetings": 3,
+      "qualifiedOpportunities": 2,
+      "replyRate": 0.1,
+      "positiveReplyRate": 0.06,
+      "strictLeadRate": 0.04,
+      "heldMeetingPerLeadRate": 0.75,
+      "opportunityPerMeetingRate": 0.6666666666666666
+    }
+  },
+  "checks": [
+    {
+      "id": "M6_REMAINS_HOLD",
+      "pass": true
+    },
+    {
+      "id": "ZERO_REAL_RECIPIENTS",
+      "pass": true
+    },
+    {
+      "id": "RUNTIME_CLOSED",
+      "pass": true
+    },
+    {
+      "id": "LIVE_HEALTH_PASS",
+      "pass": true
+    },
+    {
+      "id": "SYNTHETIC_NEVER_PASS",
+      "pass": true
+    },
+    {
+      "id": "SUPPRESSION_VIOLATION_KILLS",
+      "pass": true
+    },
+    {
+      "id": "WAVE_CAP_25",
+      "pass": true
+    },
+    {
+      "id": "OBSERVATION_MINIMUM_24H",
+      "pass": true
+    },
+    {
+      "id": "REPLY_SYNC_MAX_300S",
+      "pass": true
+    },
+    {
+      "id": "RELEASE_SOURCE_UNIQUE",
+      "pass": true
+    },
+    {
+      "id": "T0_EXACT_DENOMINATOR",
+      "pass": true
+    },
+    {
+      "id": "T0_FORECAST_DERIVED",
+      "pass": true
+    },
+    {
+      "id": "ZERO_RATE_NO_FORECAST",
+      "pass": true
+    }
+  ]
+}

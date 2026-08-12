@@ -52,6 +52,10 @@ Estados permitidos para este registro:
 | DEC-039 | El primer lote contiene exactamente cinco cuentas y congela destinatario buzón secuencia y hashes | VERIFIED | Migración 008 y gate PostgreSQL | Cualquier deriva posterior bloquea la cola | M6 |
 | DEC-040 | La aprobación explícita de primer envío es append-only y debe coincidir con actor campaña y hash | VERIFIED | Migración 008 y prueba adversarial | Una autorización genérica o editada no cuenta | M6 |
 | DEC-041 | Falta de datos de Postmaster se conserva como `UNKNOWN` | VERIFIED | Guías oficiales Gmail y diseño fail closed | Un dashboard vacío nunca se convierte en señal verde | M6 |
+| DEC-042 | Cada ola exige 24 horas live y no puede superar 25 destinatarios ni duplicar el volumen valido previo | VERIFIED | Migracion 009 y gate PostgreSQL | Mala conversion nunca se compensa dañando reputacion | M7 |
+| DEC-043 | Queja, doble entrega, violacion de supresion o P0 matan la ola | VERIFIED | Contrato de salud M7 | Un riesgo critico no puede degradarse a simple extension | M7 |
+| DEC-044 | T0 nace exactamente en 100 primeras entregas validas y es append-only | VERIFIED | Plan aprobado y migracion 009 | Antes de T0 cualquier forecast permanece escenario | M7 |
+| DEC-045 | Una oportunidad cuenta en T0 sólo desde `QUALIFIED` y con los siete campos estrictos | VERIFIED | Plan aprobado y prueba de transiciones | Actividad y reuniones no inflan pipeline | M7 |
 
 ## Jerarquia de evidencia
 
