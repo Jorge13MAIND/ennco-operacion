@@ -126,6 +126,7 @@ Resultado:
 5. Un P1 podía quedar fuera de una lista documental. El seal consulta incidentes abiertos en la misma transacción.
 6. El disclosure del módulo Entrega hablaba de renglones SIMULACION sin marcar. Ahora muestra de forma directa que no existe entrega real.
 7. La captura visual usaba un origen distinto y generaba warnings dev. Se alineó a `localhost` y la recaptura quedó limpia.
+8. El archive de un commit con un paquete previo podía incluir el tar dentro de sí mismo. `git archive` ahora excluye `evidence/m9-handoff` y la reproducibilidad se volvió a probar.
 
 ## Evidencia visual
 
