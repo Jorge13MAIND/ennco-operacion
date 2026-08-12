@@ -11,6 +11,9 @@ Sistema comercial E2E de ENNCO. Este repositorio contiene la experiencia públic
 - M4: portal operativo, Gmail push, respuestas, calificación, pipeline y exportaciones locales en `PASS`. Gate global `EXTEND` hasta provisionar proveedores y ejecutar UAT ENNCO.
 - M5: secuencia, manifest, assistant acotado y shadow canary acelerado local en `PASS`. Gate global `EXTEND` porque han transcurrido cero de 14 días reales.
 - M6: paquete de primer envío, 30 gates, lote inmutable y bloqueo SQL local en `PASS`. Gate global `EXTEND`, campaña `HOLD`, cero destinatarios y cero envíos.
+- M7: escalamiento controlado, salud por ola y contrato T0 local en `PASS`. Gate global `EXTEND`, cero olas reales y cero de 100 entregas válidas.
+- M8: reporte contractual, denominadores por canal y recuperación de una variable local en `PASS`. Gate global `EXTEND`, mes contractual no iniciado y cero reportes reales.
+- M9: hardening, segundo restore, exports, handoff y aceptación local en `EVIDENCE_READY`. Gate global `EXTEND`, cero UAT, capacitaciones, transferencias y aceptaciones reales.
 - Producción, DNS, compras y contacto externo: bloqueados hasta aprobación explícita.
 
 ## Desarrollo local
@@ -32,6 +35,9 @@ npm run verify:m3
 npm run verify:m4
 npm run verify:m5
 npm run verify:m6
+npm run verify:m7
+npm run verify:m8
+npm run verify:m9
 ```
 
 Este comando valida:
@@ -89,6 +95,35 @@ Este comando valida:
 - Bloqueo de `QUEUED`, `SENDING`, `SENT` y `DELIVERED` por fuera del gate.
 - Forward, rollback y reapply del gate de primer envío.
 
+`verify:m7` agrega:
+
+- Olas máximas de 25 destinatarios y observación live mínima de 24 horas.
+- Decisión `PASS`, `EXTEND` o `KILL` con quejas, duplicados, supresión y P0.
+- Fuente única de liberación por enrollment.
+- T0 exacto sobre las primeras 100 entregas válidas.
+- Funnel estricto que no convierte reuniones o actividad en pipeline.
+
+`verify:m8` agrega:
+
+- Mes calendario completo con evidencia diaria live.
+- Calendario MX versionado y fecha del tercer día hábil.
+- Reporte append-only con items, denominadores y hash.
+- Email y precotización separados por canal.
+- Aprobación exacta de emisión.
+- Recuperación en orden fijo y una sola variable activa, sin volumen.
+
+`verify:m9` agrega:
+
+- Paquete fuente reproducible desde un commit exacto y manifest SHA256.
+- Export y reimport sintético que conserva empresas sin contacto.
+- Segunda restauración local independiente con verificación 11 de 11.
+- Seis criterios locales y diez criterios live separados.
+- Inventario de accesos, proveedores, runbooks, capacitación y checklist final.
+- Aceptación append-only exclusiva de un `ennco_admin` autenticado.
+- Rechazo de autoaceptación, cross-tenant, statement drift y P0/P1 abiertos.
+
+Un `PASS` local valida implementación y controles. No equivale a producción, resultado comercial, UAT, capacitación o aceptación ENNCO.
+
 ## Operación local
 
 1. Ejecuta `npm install`.
@@ -116,6 +151,9 @@ El endpoint sintético devuelve 404 en producción. El assistant devuelve 503 ha
 - Aprobación de compras, dominios, DNS, credenciales, producción y primer envío.
 - Validación técnica de Paco para cualquier modelo de precotización.
 - Revisión legal del aviso de privacidad y aprobación de su versión final.
+- Propiedad ENNCO de repositorio y proveedores, con accesos recertificados.
+- Restore, auditoría, export y reimport en infraestructura administrada.
+- UAT, capacitación del operador y suplente, walkthrough y aceptación final.
 
 Ninguno bloquea el trabajo interno seguro. Todos bloquean la acción externa que les corresponde.
 
