@@ -1,0 +1,370 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "historical_projects",
+  "source_file": "/Users/Jorge/Downloads/clientes....xlsx",
+  "source_sha256": "8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac",
+  "source_size_bytes": 13000,
+  "source_mtime_utc": "2026-08-11T22:12:58.149Z",
+  "ranges": [
+    {
+      "sheet": "Hoja1",
+      "range": "D7:I28",
+      "values": [
+        [
+          "PROYECTOS ",
+          "VENTAS ",
+          "FECHA DE PAGO ",
+          "ZONA",
+          "TAMAÑO kWp",
+          "TIPO DE OBRA"
+        ],
+        [
+          "Columna2",
+          "Columna1",
+          "Columna3",
+          "Columna4",
+          "Columna5",
+          "Columna6"
+        ],
+        [
+          "CASA",
+          64623.84,
+          45989,
+          "GUADALAJARA",
+          2480,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "RANCHO ",
+          195241.7,
+          45992,
+          "GUADALAJARA",
+          9300,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "PARABRISAS",
+          75879.22,
+          45994,
+          "IRAPUATO",
+          3720,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "ASIAN",
+          685356.4,
+          46010,
+          "GUADALAJARA",
+          40300,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "FRIDA ESCAÑEDO",
+          151065.18,
+          46044,
+          "SAN LUIS POTOSI",
+          6450,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "DAVID MARTINEZ",
+          93541.27,
+          46045,
+          "SAN FRANCISCO DEL RINCON ",
+          5160,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "EDMUNDO FABRICA",
+          386935.2,
+          46080,
+          "SAN FRANCISCO DEL RINCON ",
+          23865,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "ALDO SANTOYO",
+          72274.54,
+          46081,
+          "LEON",
+          3870,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "VALLE DE LOS REYES",
+          399173.34,
+          46081,
+          "LAGOS DE MORENO",
+          3870,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "EDMUNDO CASA",
+          83064.8,
+          46094,
+          "LEON",
+          4515,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "LUIS SAAVEDRA",
+          92883.44,
+          46124,
+          "LEON",
+          3225,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "VERIFICENTRO VALLEJO ",
+          700214.2,
+          46135,
+          "CDMX",
+          32500,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "VERIFICENTRO PORTALES",
+          796880.11,
+          46135,
+          "CDMX",
+          39000,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "MENDOZA BOOTS ",
+          970243.27,
+          46142,
+          "LEON",
+          54825,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "VIÑA DEL MAR",
+          278556.81,
+          46148,
+          "LEON",
+          3900,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "AZCAPOTZALCO",
+          649600.28,
+          46155,
+          "CDMX",
+          26000,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "MAESTRO PEDRO ",
+          81988.27,
+          46164,
+          "SAN FRANCISCO DEL RINCON ",
+          4515,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "CARBONAARA",
+          170000,
+          46189,
+          "LEON",
+          10400,
+          "INSTALACION FOTOVOLTAICA"
+        ],
+        [
+          "SCHNEIDER",
+          2312752.87,
+          46211,
+          "LEON",
+          "-",
+          "MANTENIMIENTO ELECTRICO "
+        ],
+        [
+          "LAODIKEA",
+          151393.57,
+          null,
+          "LA PIEDAD ",
+          "-",
+          "MANTENIMIENTO ELECTRICO "
+        ]
+      ],
+      "formulas": [
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=4*620",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=15*620",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=6*620",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=65*620",
+          ""
+        ],
+        [
+          "",
+          "=137145.18+13920",
+          "",
+          "",
+          "=10*645",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=8*645",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=37*645",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=6*645",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=6*645",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=7*645",
+          ""
+        ],
+        [
+          "",
+          "=70000+12000+10883.44",
+          "",
+          "",
+          "=5*645",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=50*650",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=60*650",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=85*645",
+          ""
+        ],
+        [
+          "",
+          "=276509.93+2046.88",
+          "",
+          "",
+          "=6*650",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=40*650",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=7*645",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "=16*650",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ]
+      ]
+    }
+  ]
+}

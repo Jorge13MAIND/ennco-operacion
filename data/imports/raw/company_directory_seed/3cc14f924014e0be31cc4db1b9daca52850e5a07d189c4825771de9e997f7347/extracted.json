@@ -1,0 +1,650 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "company_directory_seed",
+  "source_file": "/Users/Jorge/Downloads/Directorio_Empresas_Corredor_Leon_Queretaro.xlsx",
+  "source_sha256": "3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347",
+  "source_size_bytes": 6293063,
+  "source_mtime_utc": "2026-08-04T17:06:43.506Z",
+  "ranges": [
+    {
+      "sheet": "Directorio corredor",
+      "range": "A1:H28",
+      "values": [
+        [
+          "No.",
+          "Empresa",
+          "Municipio / Ciudad",
+          "Estado",
+          "Parque / Zona industrial",
+          "Dirección",
+          "Sector / Nota",
+          "Fuente"
+        ],
+        [
+          1,
+          "PLASTIC OMNIUM INERGY AUTOMOTIVE LEON",
+          "León",
+          "Guanajuato",
+          "Colinas de León",
+          "Blvd. Las Joyas #4497, Colinas de León, C.P. 37668",
+          "Automotriz",
+          "https://puntoglobal.es/plastic-omnium-inergy-automotive-leon/"
+        ],
+        [
+          2,
+          "MD ELEKTRONIK de México S. de R.L. de C.V.",
+          "León",
+          "Guanajuato",
+          "Parque Industrial Colinas de León",
+          "Paseo de las Colinas 412, C.P. 37668",
+          "Automotriz / electrónica",
+          "https://www.md-elektronik.com/es/contacto/"
+        ],
+        [
+          3,
+          "Taigene México S.A. de C.V.",
+          "León",
+          "Guanajuato",
+          "Parque Industrial Colinas de León",
+          "Circuito Paseo de las Colinas, C.P. 37668",
+          "Automotriz",
+          null
+        ],
+        [
+          4,
+          "Hope Global",
+          "León",
+          "Guanajuato",
+          "Valle del Campestre",
+          "Blvd. Juan Alonso de Torres Poniente 2103A, C.P. 37150",
+          null,
+          "https://www.allbiz.mx/hope-global_4J"
+        ],
+        [
+          5,
+          "VILLASERRE INVERNADEROS",
+          "Silao",
+          "Guanajuato",
+          "Pozo de Gallegos",
+          "San José del Progreso S/N, C.P. 36100",
+          "Agroindustrial / invernaderos",
+          "https://villaserre.com/contacto/"
+        ],
+        [
+          6,
+          "Quickpipes Systems",
+          "Silao de la Victoria",
+          "Guanajuato",
+          "Parque Industrial FIPASI",
+          "Av. Químicos #427, C.P. 36100",
+          "Manufactura / tuberías",
+          "https://www.quickpipes.mx/contacto/"
+        ],
+        [
+          7,
+          "Johnan de México, S.A. de C.V.",
+          "Silao",
+          "Guanajuato",
+          "Parque Industrial Las Colinas",
+          "Av. Eucalipto 240, C.P. 36270",
+          "Automotriz",
+          "https://johnanmexico.com.mx/estructuraglobal.php"
+        ],
+        [
+          8,
+          "NSK Motion & Control / NSK México",
+          "Silao de la Victoria",
+          "Guanajuato",
+          "Puerto Interior",
+          "Cto. Mexiamora Lote Oriente #331, C.P. 36275",
+          "Automotriz / componentes",
+          null
+        ],
+        [
+          9,
+          "NPAMX",
+          "Silao",
+          "Guanajuato",
+          "Puerto Interior",
+          "Cto. San Roque Sur 112, C.P. 36275",
+          "Validar razón social / giro",
+          null
+        ],
+        [
+          10,
+          "BorgWarner PDS Irapuato S. de R.L. de C.V.",
+          "Irapuato",
+          "Guanajuato",
+          "Parque Tecnoindustrial Castro del Río",
+          "Río Danubio No. 303, C.P. 36814/36815",
+          "Automotriz",
+          "https://www.dnb.com/business-directory/company-profiles.borgwarner_pds_irapuato_s_de_rl_de_cv.53c394287cc7808dc259f44be374cda6.html"
+        ],
+        [
+          11,
+          "Parker Trutec Mexicana",
+          "Irapuato",
+          "Guanajuato",
+          "Parque Tecnoindustrial Castro del Río",
+          "Río Ota 628, C.P. 36814",
+          "Metal / tratamiento",
+          null
+        ],
+        [
+          12,
+          "SAGA TEKKOHSHO MEXICANA",
+          "Irapuato",
+          "Guanajuato",
+          "Parque Tecnoindustrial Castro del Río",
+          "Río Ota 631, C.P. 36814",
+          "Automotriz",
+          null
+        ],
+        [
+          13,
+          "OKAWA Mexicana, S.A. de C.V.",
+          "Irapuato",
+          "Guanajuato",
+          "Castro del Río",
+          "Río Ota 981, C.P. 36810",
+          "Automotriz / forja",
+          "https://www.okawa.mx/"
+        ],
+        [
+          14,
+          "Metso Mexico - Screening Media Factory - IRA4",
+          "Irapuato",
+          "Guanajuato",
+          "Guanajuato Central Park",
+          "Lote Guanajuato, C.P. 36827",
+          "Manufactura",
+          null
+        ],
+        [
+          15,
+          "Conecel Manufacturera S.A. de C.V.",
+          "Celaya",
+          "Guanajuato",
+          "Ciudad Industrial de Celaya",
+          "Oriente 5 #124, C.P. 38010",
+          "Manufactura",
+          null
+        ],
+        [
+          16,
+          "Motherson Yachiyo México Automotive S.A. de C.V.",
+          "Apaseo el Grande",
+          "Guanajuato",
+          "Parque Industrial Amistad Bajío",
+          "Av. Apaseo el Grande 106, C.P. 38160",
+          "Automotriz",
+          null
+        ],
+        [
+          17,
+          "Witzenmann Metal Products México",
+          "Apaseo el Grande",
+          "Guanajuato",
+          "Parque Industrial Amistad Bajío",
+          "Av. La Cruz 101, C.P. 38180",
+          "Automotriz / metal",
+          "https://www.witzenmann.com.mx/es/empresas/witzenmann-metal-products-mexico/"
+        ],
+        [
+          18,
+          "Grupo Ameristeel S.A. de C.V. AMEX",
+          "Apaseo el Grande",
+          "Guanajuato",
+          "Amexhe",
+          "Carretera Querétaro-Celaya Km. 19.5, Poblado de Amexhe",
+          "Acero estructural / manufactura",
+          "https://www.grupoameristeel.com/contacto.html"
+        ],
+        [
+          19,
+          "WELDCOAT de México",
+          "Santa Rosa Jáuregui",
+          "Querétaro",
+          "Polígono Empresarial Santa Rosa",
+          "Av. Hércules No. 200, C.P. 76220",
+          "Recubrimientos / automotriz",
+          "https://www.jetro.go.jp/world/cs_america/mx/autoparts/companies/490_Weldcoat.html"
+        ],
+        [
+          20,
+          "Juntas Especiales Querétaro",
+          "Santiago de Querétaro",
+          "Querétaro",
+          "Zona Santa Rosa Jáuregui",
+          "Av. Hércules 31, C.P. 76220",
+          "Industrial",
+          null
+        ],
+        [
+          21,
+          "Avery Dennison Smartrac",
+          "Santa Rosa Jáuregui",
+          "Querétaro",
+          "FINSA III",
+          "Av. Finsa No. 206, C.P. 76223",
+          "Manufactura / etiquetas RFID",
+          null
+        ],
+        [
+          22,
+          "Tuvanosa",
+          "Santiago de Querétaro",
+          "Querétaro",
+          "Zona Querétaro",
+          "Guadalupe San Vidaño 5 Los Ángeles, C.P. 76908",
+          "Suministro industrial",
+          null
+        ],
+        [
+          23,
+          "Instituto de Educación y Desarrollo Richard E. Dauch IECA - AAM",
+          "Silao",
+          "Guanajuato",
+          "Por verificar",
+          "Por verificar",
+          "Capacitación / educación",
+          null
+        ],
+        [
+          24,
+          "Agrícola Zarattini S.A. de C.V.",
+          "Silao",
+          "Guanajuato",
+          "Por verificar",
+          "Por verificar",
+          "Agrícola",
+          null
+        ],
+        [
+          25,
+          "Mitsui Kinzoku",
+          "Irapuato",
+          "Guanajuato",
+          "Por verificar",
+          "Por verificar",
+          "Industrial / metal",
+          null
+        ],
+        [
+          26,
+          "4AP de México",
+          "Por verificar",
+          "Por verificar",
+          "Por verificar",
+          "Por verificar",
+          "Industrial",
+          null
+        ],
+        [
+          27,
+          "HEWELDCOAT de México",
+          "Por verificar",
+          "Querétaro",
+          "Por verificar",
+          "Por verificar",
+          "Posible duplicado/relación con WELDCOAT; validar",
+          null
+        ]
+      ],
+      "formulas": [
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ]
+      ]
+    },
+    {
+      "sheet": "Resumen",
+      "range": "A1:B8",
+      "values": [
+        [
+          "Ubicación",
+          "Cantidad"
+        ],
+        [
+          "León",
+          4
+        ],
+        [
+          "Silao / Puerto Interior",
+          5
+        ],
+        [
+          "Irapuato",
+          5
+        ],
+        [
+          "Celaya",
+          1
+        ],
+        [
+          "Apaseo el Grande",
+          3
+        ],
+        [
+          "Querétaro",
+          4
+        ],
+        [
+          "Por verificar",
+          5
+        ]
+      ],
+      "formulas": [
+        [
+          "",
+          ""
+        ],
+        [
+          "",
+          ""
+        ],
+        [
+          "",
+          ""
+        ],
+        [
+          "",
+          ""
+        ],
+        [
+          "",
+          ""
+        ],
+        [
+          "",
+          ""
+        ],
+        [
+          "",
+          ""
+        ],
+        [
+          "",
+          ""
+        ]
+      ]
+    }
+  ]
+}

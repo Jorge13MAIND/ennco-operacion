@@ -1,0 +1,190 @@
+{
+  "schema_version": "1.0.0",
+  "verified_at_utc": "2026-08-12T02:59:01.089Z",
+  "status": "PASS",
+  "manifest_sha256": "40a8972a2872632427581918044770682928dab398dc5b23682cab19142cf130",
+  "checks_passed": 28,
+  "checks_failed": 0,
+  "checks": [
+    {
+      "id": "historical_raw_hash",
+      "status": "PASS",
+      "expected": "8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac",
+      "actual": "8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac"
+    },
+    {
+      "id": "historical_live_source_unchanged",
+      "status": "PASS",
+      "expected": "8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac",
+      "actual": "8bc5d60d1c90259e039480f7ea4408532408e8670c72658eb6b369b5359088ac"
+    },
+    {
+      "id": "directory_raw_hash",
+      "status": "PASS",
+      "expected": "3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347",
+      "actual": "3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347"
+    },
+    {
+      "id": "directory_live_source_unchanged",
+      "status": "PASS",
+      "expected": "3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347",
+      "actual": "3cc14f924014e0be31cc4db1b9daca52850e5a07d189c4825771de9e997f7347"
+    },
+    {
+      "id": "dataset_hash_historicalJson",
+      "status": "PASS",
+      "expected": "4be378d6586c4a95ae9223da3ba0f28008547d865248e26e70b457ff66191e1d",
+      "actual": "4be378d6586c4a95ae9223da3ba0f28008547d865248e26e70b457ff66191e1d"
+    },
+    {
+      "id": "dataset_hash_historicalCsv",
+      "status": "PASS",
+      "expected": "b2d0ad91a28789cfdd2eaeaad86b70fbffa9efe8cd9c7113b472483c115d9212",
+      "actual": "b2d0ad91a28789cfdd2eaeaad86b70fbffa9efe8cd9c7113b472483c115d9212"
+    },
+    {
+      "id": "dataset_hash_directoryJson",
+      "status": "PASS",
+      "expected": "acbb467f42e85064531cefc24bb4cddcb1cd7d6ce48b7fcbd4dffcdb0cb91d34",
+      "actual": "acbb467f42e85064531cefc24bb4cddcb1cd7d6ce48b7fcbd4dffcdb0cb91d34"
+    },
+    {
+      "id": "dataset_hash_directoryCsv",
+      "status": "PASS",
+      "expected": "8150441c2d5cab1066d7eda77d7dbb2aabf44cc87e36d9e354563a8189cc26e9",
+      "actual": "8150441c2d5cab1066d7eda77d7dbb2aabf44cc87e36d9e354563a8189cc26e9"
+    },
+    {
+      "id": "dataset_hash_quarantineJson",
+      "status": "PASS",
+      "expected": "3454241414057884b8a1144b807dff3e444411fa3e18b002def95d7bd7a47ea7",
+      "actual": "3454241414057884b8a1144b807dff3e444411fa3e18b002def95d7bd7a47ea7"
+    },
+    {
+      "id": "dataset_hash_quarantineCsv",
+      "status": "PASS",
+      "expected": "1194e31b46a5c87a3ab516eee80f1c17d63a568b2a8dfa6d512f297d8639604b",
+      "actual": "1194e31b46a5c87a3ab516eee80f1c17d63a568b2a8dfa6d512f297d8639604b"
+    },
+    {
+      "id": "dataset_hash_duplicateCandidatesJson",
+      "status": "PASS",
+      "expected": "0b7e94fc7a3578a4f6a24152a754fc8920c82e96762135aab621c4fa1215b20b",
+      "actual": "0b7e94fc7a3578a4f6a24152a754fc8920c82e96762135aab621c4fa1215b20b"
+    },
+    {
+      "id": "historical_record_count",
+      "status": "PASS",
+      "expected": 20,
+      "actual": 20
+    },
+    {
+      "id": "historical_sales_total",
+      "status": "PASS",
+      "expected": 8411668.31,
+      "actual": 8411668.31
+    },
+    {
+      "id": "historical_pv_count",
+      "status": "PASS",
+      "expected": 18,
+      "actual": 18
+    },
+    {
+      "id": "historical_maintenance_count",
+      "status": "PASS",
+      "expected": 2,
+      "actual": 2
+    },
+    {
+      "id": "historical_capacity_wp",
+      "status": "PASS",
+      "expected": 277895,
+      "actual": 277895
+    },
+    {
+      "id": "historical_capacity_kwp",
+      "status": "PASS",
+      "expected": 277.895,
+      "actual": 277.895
+    },
+    {
+      "id": "historical_unit_conversion",
+      "status": "PASS",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "id": "historical_unique_record_ids",
+      "status": "PASS",
+      "expected": 20,
+      "actual": 20
+    },
+    {
+      "id": "historical_high_outlier_count",
+      "status": "PASS",
+      "expected": 2,
+      "actual": 2
+    },
+    {
+      "id": "directory_record_count",
+      "status": "PASS",
+      "expected": 27,
+      "actual": 27
+    },
+    {
+      "id": "directory_unique_record_ids",
+      "status": "PASS",
+      "expected": 27,
+      "actual": 27
+    },
+    {
+      "id": "directory_location_review_count",
+      "status": "PASS",
+      "expected": 5,
+      "actual": 5
+    },
+    {
+      "id": "directory_quarantine_count",
+      "status": "PASS",
+      "expected": 6,
+      "actual": 6
+    },
+    {
+      "id": "directory_duplicate_pair_count",
+      "status": "PASS",
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "id": "directory_duplicate_names",
+      "status": "PASS",
+      "expected": [
+        "WELDCOAT de México",
+        "HEWELDCOAT de México"
+      ],
+      "actual": [
+        "WELDCOAT de México",
+        "HEWELDCOAT de México"
+      ]
+    },
+    {
+      "id": "directory_research_seed_only",
+      "status": "PASS",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "id": "directory_no_outreach_eligibility",
+      "status": "PASS",
+      "expected": true,
+      "actual": true
+    }
+  ],
+  "boundaries": {
+    "contacts_created": 0,
+    "leads_created": 0,
+    "opportunities_created": 0,
+    "outreach_eligible_records": 0
+  }
+}

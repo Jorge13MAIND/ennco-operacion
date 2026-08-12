@@ -1,0 +1,11 @@
+[
+  {
+    "duplicate_candidate_group": "dup_ecf591ad2d184e8a9bf3",
+    "left_record_id": "company_b3d4a3926e4efd01ec6a",
+    "left_company": "WELDCOAT de México",
+    "right_record_id": "company_baa96500be2996d3ddc9",
+    "right_company": "HEWELDCOAT de México",
+    "similarity_score": 0.8889,
+    "resolution_status": "UNKNOWN_REQUIRES_HUMAN_REVIEW"
+  }
+]

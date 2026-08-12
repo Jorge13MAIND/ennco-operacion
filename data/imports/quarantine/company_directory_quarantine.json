@@ -1,0 +1,80 @@
+[
+  {
+    "record_id": "company_b3d4a3926e4efd01ec6a",
+    "source_row": 20,
+    "source_number": 19,
+    "company_name": "WELDCOAT de México",
+    "quarantine_reason": "possible_duplicate_requires_human_resolution",
+    "duplicate_candidate_group": "dup_ecf591ad2d184e8a9bf3",
+    "qa_flags": [
+      "possible_duplicate"
+    ],
+    "resolution_status": "UNKNOWN_REQUIRES_HUMAN_REVIEW"
+  },
+  {
+    "record_id": "company_a511992d1886a5f69005",
+    "source_row": 24,
+    "source_number": 23,
+    "company_name": "Instituto de Educación y Desarrollo Richard E. Dauch IECA - AAM",
+    "quarantine_reason": "incomplete_location_requires_human_verification",
+    "duplicate_candidate_group": null,
+    "qa_flags": [
+      "missing_source_url",
+      "location_verification_required"
+    ],
+    "resolution_status": "UNKNOWN_REQUIRES_HUMAN_REVIEW"
+  },
+  {
+    "record_id": "company_defa1fee564b9ab7a090",
+    "source_row": 25,
+    "source_number": 24,
+    "company_name": "Agrícola Zarattini S.A. de C.V.",
+    "quarantine_reason": "incomplete_location_requires_human_verification",
+    "duplicate_candidate_group": null,
+    "qa_flags": [
+      "missing_source_url",
+      "location_verification_required"
+    ],
+    "resolution_status": "UNKNOWN_REQUIRES_HUMAN_REVIEW"
+  },
+  {
+    "record_id": "company_d2fac24f0cc0806d8cfb",
+    "source_row": 26,
+    "source_number": 25,
+    "company_name": "Mitsui Kinzoku",
+    "quarantine_reason": "incomplete_location_requires_human_verification",
+    "duplicate_candidate_group": null,
+    "qa_flags": [
+      "missing_source_url",
+      "location_verification_required"
+    ],
+    "resolution_status": "UNKNOWN_REQUIRES_HUMAN_REVIEW"
+  },
+  {
+    "record_id": "company_21b72f55e5b5303394e4",
+    "source_row": 27,
+    "source_number": 26,
+    "company_name": "4AP de México",
+    "quarantine_reason": "incomplete_location_requires_human_verification",
+    "duplicate_candidate_group": null,
+    "qa_flags": [
+      "missing_source_url",
+      "location_verification_required"
+    ],
+    "resolution_status": "UNKNOWN_REQUIRES_HUMAN_REVIEW"
+  },
+  {
+    "record_id": "company_baa96500be2996d3ddc9",
+    "source_row": 28,
+    "source_number": 27,
+    "company_name": "HEWELDCOAT de México",
+    "quarantine_reason": "possible_duplicate_requires_human_resolution",
+    "duplicate_candidate_group": "dup_ecf591ad2d184e8a9bf3",
+    "qa_flags": [
+      "missing_source_url",
+      "location_verification_required",
+      "possible_duplicate"
+    ],
+    "resolution_status": "UNKNOWN_REQUIRES_HUMAN_REVIEW"
+  }
+]
