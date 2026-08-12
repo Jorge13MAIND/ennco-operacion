@@ -1,0 +1,576 @@
+{
+  "schema_version": "1.0.0",
+  "requirement_ids": [
+    "ENT-004",
+    "ENT-005"
+  ],
+  "evidence_class": "synthetic_demo",
+  "baseline_commit": "5415523405f3d1644391b1878ea0ab619124bfd8",
+  "baseline_tree": "2c28acc154e3c8d602095eed56fceafe570da2bd",
+  "source_snapshot": {
+    "path": "evidence/m23-frontend/source.json",
+    "status": "PASS",
+    "execution_context": "local"
+  },
+  "generated_at": "2026-08-12T13:41:42.613Z",
+  "external_side_effects": 0,
+  "matrix": {
+    "surfaces": 5,
+    "viewports": 5,
+    "captures": 10
+  },
+  "surface_results": [
+    {
+      "viewport": "desktop-wide",
+      "surface": "home",
+      "document": {
+        "client_width": 1440,
+        "scroll_width": 1440,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 7.5999999940395355,
+        "dom_content_loaded": 47.099999994039536,
+        "load": 69.59999999403954
+      },
+      "web_vitals": {
+        "fcp_ms": 64,
+        "lcp_ms": 64,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "desktop-wide",
+      "surface": "diagnostic",
+      "document": {
+        "client_width": 1440,
+        "scroll_width": 1440,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4.0999999940395355,
+        "dom_content_loaded": 45.69999998807907,
+        "load": 65.5
+      },
+      "web_vitals": {
+        "fcp_ms": 64,
+        "lcp_ms": 64,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "desktop-wide",
+      "surface": "privacy",
+      "document": {
+        "client_width": 1440,
+        "scroll_width": 1440,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4.0999999940395355,
+        "dom_content_loaded": 44,
+        "load": 63.5
+      },
+      "web_vitals": {
+        "fcp_ms": 64,
+        "lcp_ms": 64,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "desktop-wide",
+      "surface": "identity",
+      "document": {
+        "client_width": 1440,
+        "scroll_width": 1440,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 3.699999988079071,
+        "dom_content_loaded": 42.5,
+        "load": 62.400000005960464
+      },
+      "web_vitals": {
+        "fcp_ms": 60,
+        "lcp_ms": 60,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "desktop-wide",
+      "surface": "control-room",
+      "document": {
+        "client_width": 1440,
+        "scroll_width": 1440,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4.5,
+        "dom_content_loaded": 46.30000001192093,
+        "load": 65.5
+      },
+      "web_vitals": {
+        "fcp_ms": 56,
+        "lcp_ms": 56,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "desktop-standard",
+      "surface": "home",
+      "document": {
+        "client_width": 1280,
+        "scroll_width": 1280,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4.9000000059604645,
+        "dom_content_loaded": 47.30000001192093,
+        "load": 71
+      },
+      "web_vitals": {
+        "fcp_ms": 60,
+        "lcp_ms": 60,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "desktop-standard",
+      "surface": "diagnostic",
+      "document": {
+        "client_width": 1280,
+        "scroll_width": 1280,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 5.4000000059604645,
+        "dom_content_loaded": 48.900000005960464,
+        "load": 68.80000001192093
+      },
+      "web_vitals": {
+        "fcp_ms": 64,
+        "lcp_ms": 64,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "desktop-standard",
+      "surface": "privacy",
+      "document": {
+        "client_width": 1280,
+        "scroll_width": 1280,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4.200000017881393,
+        "dom_content_loaded": 45.30000001192093,
+        "load": 64.90000000596046
+      },
+      "web_vitals": {
+        "fcp_ms": 60,
+        "lcp_ms": 60,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "desktop-standard",
+      "surface": "identity",
+      "document": {
+        "client_width": 1280,
+        "scroll_width": 1280,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 3.699999988079071,
+        "dom_content_loaded": 42.80000001192093,
+        "load": 62.80000001192093
+      },
+      "web_vitals": {
+        "fcp_ms": 48,
+        "lcp_ms": 48,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "desktop-standard",
+      "surface": "control-room",
+      "document": {
+        "client_width": 1280,
+        "scroll_width": 1280,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4.5,
+        "dom_content_loaded": 47.5,
+        "load": 67.40000000596046
+      },
+      "web_vitals": {
+        "fcp_ms": 68,
+        "lcp_ms": 68,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "tablet",
+      "surface": "home",
+      "document": {
+        "client_width": 834,
+        "scroll_width": 834,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4,
+        "dom_content_loaded": 43.5,
+        "load": 63.400000005960464
+      },
+      "web_vitals": {
+        "fcp_ms": 52,
+        "lcp_ms": 52,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "tablet",
+      "surface": "diagnostic",
+      "document": {
+        "client_width": 834,
+        "scroll_width": 834,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4.5,
+        "dom_content_loaded": 48,
+        "load": 68.90000000596046
+      },
+      "web_vitals": {
+        "fcp_ms": 56,
+        "lcp_ms": 56,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "tablet",
+      "surface": "privacy",
+      "document": {
+        "client_width": 834,
+        "scroll_width": 834,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4,
+        "dom_content_loaded": 43.69999998807907,
+        "load": 64.2999999821186
+      },
+      "web_vitals": {
+        "fcp_ms": 56,
+        "lcp_ms": 56,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "tablet",
+      "surface": "identity",
+      "document": {
+        "client_width": 834,
+        "scroll_width": 834,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 3.5999999940395355,
+        "dom_content_loaded": 42.30000001192093,
+        "load": 62.5
+      },
+      "web_vitals": {
+        "fcp_ms": 48,
+        "lcp_ms": 48,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "tablet",
+      "surface": "control-room",
+      "document": {
+        "client_width": 834,
+        "scroll_width": 834,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 5.700000017881393,
+        "dom_content_loaded": 48.599999994039536,
+        "load": 69.40000000596046
+      },
+      "web_vitals": {
+        "fcp_ms": 68,
+        "lcp_ms": 68,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "mobile-iphone",
+      "surface": "home",
+      "document": {
+        "client_width": 393,
+        "scroll_width": 393,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 3.7000000178813934,
+        "dom_content_loaded": 43.5,
+        "load": 64.90000000596046
+      },
+      "web_vitals": {
+        "fcp_ms": 56,
+        "lcp_ms": 56,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "mobile-iphone",
+      "surface": "diagnostic",
+      "document": {
+        "client_width": 393,
+        "scroll_width": 393,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4.4000000059604645,
+        "dom_content_loaded": 48,
+        "load": 68.90000000596046
+      },
+      "web_vitals": {
+        "fcp_ms": 60,
+        "lcp_ms": 60,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "mobile-iphone",
+      "surface": "privacy",
+      "document": {
+        "client_width": 393,
+        "scroll_width": 393,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 3.600000023841858,
+        "dom_content_loaded": 46.10000002384186,
+        "load": 65.7000000178814
+      },
+      "web_vitals": {
+        "fcp_ms": 52,
+        "lcp_ms": 52,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "mobile-iphone",
+      "surface": "identity",
+      "document": {
+        "client_width": 393,
+        "scroll_width": 393,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4,
+        "dom_content_loaded": 43.400000005960464,
+        "load": 63.5
+      },
+      "web_vitals": {
+        "fcp_ms": 48,
+        "lcp_ms": 48,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "mobile-iphone",
+      "surface": "control-room",
+      "document": {
+        "client_width": 393,
+        "scroll_width": 393,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4.4000000059604645,
+        "dom_content_loaded": 46.79999998211861,
+        "load": 67.09999999403954
+      },
+      "web_vitals": {
+        "fcp_ms": 60,
+        "lcp_ms": 60,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "mobile-android",
+      "surface": "home",
+      "document": {
+        "client_width": 412,
+        "scroll_width": 412,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 3.7999999821186066,
+        "dom_content_loaded": 43.599999994039536,
+        "load": 63.29999998211861
+      },
+      "web_vitals": {
+        "fcp_ms": 48,
+        "lcp_ms": 48,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "mobile-android",
+      "surface": "diagnostic",
+      "document": {
+        "client_width": 412,
+        "scroll_width": 412,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 3.800000011920929,
+        "dom_content_loaded": 46.900000005960464,
+        "load": 68
+      },
+      "web_vitals": {
+        "fcp_ms": 52,
+        "lcp_ms": 52,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "mobile-android",
+      "surface": "privacy",
+      "document": {
+        "client_width": 412,
+        "scroll_width": 412,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 3.800000011920929,
+        "dom_content_loaded": 44.400000005960464,
+        "load": 64.2000000178814
+      },
+      "web_vitals": {
+        "fcp_ms": 48,
+        "lcp_ms": 48,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "mobile-android",
+      "surface": "identity",
+      "document": {
+        "client_width": 412,
+        "scroll_width": 412,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 3.5,
+        "dom_content_loaded": 42.30000001192093,
+        "load": 62.30000001192093
+      },
+      "web_vitals": {
+        "fcp_ms": 48,
+        "lcp_ms": 48,
+        "cls": 0
+      },
+      "csp_violations": []
+    },
+    {
+      "viewport": "mobile-android",
+      "surface": "control-room",
+      "document": {
+        "client_width": 412,
+        "scroll_width": 412,
+        "horizontal_overflow_px": 0
+      },
+      "navigation_ms": {
+        "response_start": 4.200000017881393,
+        "dom_content_loaded": 48.5,
+        "load": 68.60000002384186
+      },
+      "web_vitals": {
+        "fcp_ms": 52,
+        "lcp_ms": 52,
+        "cls": 0
+      },
+      "csp_violations": []
+    }
+  ],
+  "mobile_portal_profile": {
+    "viewport_css_px": {
+      "width": 412,
+      "height": 915
+    },
+    "latency_ms": 150,
+    "download_bps": 1600000,
+    "upload_bps": 750000,
+    "cpu_slowdown": 4,
+    "samples": [
+      {
+        "run": 1,
+        "fcp_ms": 472,
+        "lcp_ms": 472,
+        "cls": 0
+      },
+      {
+        "run": 2,
+        "fcp_ms": 448,
+        "lcp_ms": 448,
+        "cls": 0
+      },
+      {
+        "run": 3,
+        "fcp_ms": 472,
+        "lcp_ms": 472,
+        "cls": 0
+      },
+      {
+        "run": 4,
+        "fcp_ms": 472,
+        "lcp_ms": 472,
+        "cls": 0
+      },
+      {
+        "run": 5,
+        "fcp_ms": 472,
+        "lcp_ms": 472,
+        "cls": 0
+      }
+    ],
+    "lcp_p75_ms": 472,
+    "budget_lcp_p75_ms": 2500
+  },
+  "status": "PASS_LOCAL",
+  "failures": [],
+  "limitations": [
+    "Chromium automation is not a human WCAG conformance audit or assistive-technology certification.",
+    "The 320 CSS pixel reflow test is the deterministic equivalent of a 1280 CSS pixel viewport at 400 percent zoom; actual browser zoom and physical-device review remain required before public release.",
+    "Performance uses a production build on localhost with simulated mobile network and CPU; it does not prove managed database, queue, storage, provider, staging or production capacity.",
+    "Generated PDF reading order and contrast require a separate document accessibility review."
+  ]
+}

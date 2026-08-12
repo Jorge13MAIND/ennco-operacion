@@ -1,0 +1,39 @@
+{
+  "artifact": {
+    "normalized": {
+      "path": "evidence/m23-security/sbom.cdx.json",
+      "sha256": "a8d235475307ec921f2381cf8517266c247859393855ed38e8b1caa36c47c7bb"
+    },
+    "raw": {
+      "path": "evidence/m23-security/sbom.raw.cdx.json",
+      "sha256": "614f08c4d72febd27a21dc37af55056dc53272bf556dbeaa1f0e8dcd3ee8fdd0"
+    }
+  },
+  "assessment": {
+    "counts": {
+      "duplicate_component_instances_collapsed": 7,
+      "raw_components": 427,
+      "raw_dependencies": 428,
+      "unique_components": 420,
+      "unique_dependencies": 421
+    },
+    "status": "PASS"
+  },
+  "control": "ENT-003",
+  "evidence_class": "LOCAL_TOOL_OUTPUT",
+  "execution_context": "local",
+  "limitations": [
+    "Local output is not an archived remote CI artifact."
+  ],
+  "release_eligible": false,
+  "requirement_status": "EXTEND",
+  "schema_version": "1.0.0",
+  "scope": {
+    "dependency_tree": "package-lock.json",
+    "format": "CycloneDX",
+    "spec_version": "1.5"
+  },
+  "source_commit": "5415523405f3d1644391b1878ea0ab619124bfd8",
+  "source_tree": "2c28acc154e3c8d602095eed56fceafe570da2bd",
+  "source_tree_clean": true
+}

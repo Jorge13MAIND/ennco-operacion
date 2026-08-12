@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0.0",
+  "requirement_ids": [
+    "ENT-004",
+    "ENT-005"
+  ],
+  "evidence_class": "synthetic_demo",
+  "source_commit": "5415523405f3d1644391b1878ea0ab619124bfd8",
+  "source_tree": "2c28acc154e3c8d602095eed56fceafe570da2bd",
+  "source_tree_clean_before_capture": true,
+  "local_gate_status": "PASS_LOCAL",
+  "requirement_status": "EXTEND",
+  "release_eligible": false,
+  "external_side_effects": 0,
+  "artifacts": {
+    "source": {
+      "path": "evidence/m23-frontend/source.json",
+      "sha256": "cc6bc029cf662a0e816078663348170e7fae90dfe2b514a1786beb3c0bc92032"
+    },
+    "browser": {
+      "path": "evidence/m23-frontend/browser-report.json",
+      "sha256": "443e2025e90577158d702359ab73f2ac3a25e9ed0e2ec93ccfdf2340ef9560dd"
+    },
+    "k6": {
+      "path": "evidence/m23-frontend/k6-summary.json",
+      "sha256": "c749fd31dad482a2f03d1ce99fce44cffad315ca6688fb87c8e3687e4dd148e5"
+    },
+    "playwright": {
+      "path": "evidence/m23-frontend/playwright.log",
+      "sha256": "7bf19e20e11ce070e763bafc592f44f80300b44ddbe51b8a5d3a85c3de8cf24f"
+    }
+  },
+  "metrics": {
+    "playwright_passed": 131,
+    "playwright_skipped": 4,
+    "browser_surface_viewport_matrix": 25,
+    "browser_runtime_failures": 0,
+    "mobile_portal_lcp_p75_ms": 472,
+    "mobile_portal_cls_max": 0,
+    "load_requests": 203,
+    "load_rps": 20.287330562063993,
+    "load_p95_ms": 7.9756,
+    "load_errors": 0,
+    "load_dropped_iterations": 0
+  },
+  "failures": [],
+  "limitations": [
+    "Local Chromium automation is not a human WCAG conformance or assistive-technology audit.",
+    "The smoke load run does not satisfy the required five-minute release load gate.",
+    "Localhost does not prove managed database, queue, storage, provider, staging or production capacity.",
+    "Generated PDF reading order and contrast remain pending manual review."
+  ]
+}

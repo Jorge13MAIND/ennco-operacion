@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-12T13:42:10.139Z",
+  "local_contract_status": "PASS",
+  "operational_slo_status": "UNKNOWN",
+  "feature_freeze": true,
+  "evidence_class": "synthetic_demo",
+  "external_side_effects": 0,
+  "live_telemetry_records": 0,
+  "source_binding": {
+    "requested_commit_sha": "5415523405f3d1644391b1878ea0ab619124bfd8",
+    "source_tree_sha": "2c28acc154e3c8d602095eed56fceafe570da2bd",
+    "head_sha": "5415523405f3d1644391b1878ea0ab619124bfd8",
+    "source_commit_is_head": true,
+    "worktree_clean_before_capture": true,
+    "status": "BOUND"
+  },
+  "canonical_fixture_snapshot_sha256": "eab232f04f0368c6df44d9ba46adf8a93d53063f2111f9d703ea6cca01dc0a27",
+  "canonical_sli_codes": [
+    "PUBLIC_AVAILABILITY",
+    "ACCEPTED_REQUEST_DURABILITY",
+    "CRITICAL_ALERT_LATENCY",
+    "REPLY_SYNC_LATENCY",
+    "SUPPRESSION_ENFORCEMENT",
+    "RETRY_DUPLICATE_SEND"
+  ],
+  "required_series": [
+    "ACCEPTED_REQUEST_DURABILITY:ALL",
+    "CRITICAL_ALERT_LATENCY:ALL",
+    "PUBLIC_AVAILABILITY:CAPTURE",
+    "PUBLIC_AVAILABILITY:PORTAL",
+    "REPLY_SYNC_LATENCY:ALL",
+    "RETRY_DUPLICATE_SEND:ALL",
+    "SUPPRESSION_ENFORCEMENT:ALL"
+  ],
+  "windows": {
+    "short_seconds": 3600,
+    "long_seconds": 21600,
+    "monthly_timezone": "America/Mexico_City"
+  },
+  "checks": [
+    {
+      "id": "EXACT_SIX_SLI_AND_SEVEN_SERIES",
+      "pass": true
+    },
+    {
+      "id": "SYNTHETIC_NEVER_LIVE",
+      "pass": true
+    },
+    {
+      "id": "MISSING_SERIES_FAILS_CLOSED",
+      "pass": true
+    },
+    {
+      "id": "STALE_TELEMETRY_FAILS_CLOSED",
+      "pass": true
+    },
+    {
+      "id": "CANONICAL_ORDER_STABLE",
+      "pass": true
+    },
+    {
+      "id": "MATERIAL_DRIFT_CHANGES_SHA",
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "Synthetic fixtures validate only the local contract and never satisfy an operational SLO.",
+    "No managed telemetry, live denominator, provider alert delivery or burn-rate alert was observed.",
+    "Production and managed staging remain UNKNOWN until a separately authorized collector supplies fresh live evidence."
+  ],
+  "report_sha256": "f5f65282a695807f5b781c583a4db9890ca8190a9cbc2725120fb38de19dd4b6"
+}

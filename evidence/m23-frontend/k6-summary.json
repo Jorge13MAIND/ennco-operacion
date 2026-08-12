@@ -1,0 +1,189 @@
+{
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {},
+        "checks": {
+                "health returned 200": {
+                    "passes": 51,
+                    "fails": 0,
+                    "name": "health returned 200",
+                    "path": "::health returned 200",
+                    "id": "1a43b0500b9b85009cc040bfe4f4f8f3"
+                },
+                "health returned the expected fail-closed surface": {
+                    "passes": 51,
+                    "fails": 0,
+                    "name": "health returned the expected fail-closed surface",
+                    "path": "::health returned the expected fail-closed surface",
+                    "id": "d2420075a645a2c6991e527d5663f161"
+                },
+                "home returned 200": {
+                    "id": "f115509effaf628b447b2a514812d34f",
+                    "passes": 51,
+                    "fails": 0,
+                    "name": "home returned 200",
+                    "path": "::home returned 200"
+                },
+                "home returned the expected fail-closed surface": {
+                    "fails": 0,
+                    "name": "home returned the expected fail-closed surface",
+                    "path": "::home returned the expected fail-closed surface",
+                    "id": "b8545b42f4e524b76d0fd329dcc1b71d",
+                    "passes": 51
+                },
+                "diagnostic returned 200": {
+                    "id": "fd04a9965cac0ce652de653f2d93dbf4",
+                    "passes": 50,
+                    "fails": 0,
+                    "name": "diagnostic returned 200",
+                    "path": "::diagnostic returned 200"
+                },
+                "diagnostic returned the expected fail-closed surface": {
+                    "name": "diagnostic returned the expected fail-closed surface",
+                    "path": "::diagnostic returned the expected fail-closed surface",
+                    "id": "2c41a5db3e5d91878272f20359bf6927",
+                    "passes": 50,
+                    "fails": 0
+                },
+                "portal returned 200": {
+                    "name": "portal returned 200",
+                    "path": "::portal returned 200",
+                    "id": "a70827167aa2a97c0917ddd07a9a29b4",
+                    "passes": 51,
+                    "fails": 0
+                },
+                "portal returned the expected fail-closed surface": {
+                    "fails": 0,
+                    "name": "portal returned the expected fail-closed surface",
+                    "path": "::portal returned the expected fail-closed surface",
+                    "id": "0a17aaa19a15968c1363d2a0124ae11f",
+                    "passes": 51
+                }
+            }
+    },
+    "metrics": {
+        "http_reqs": {
+            "rate": 20.287330562063993,
+            "count": 203
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 5.97647290640394,
+            "min": 0.875,
+            "med": 6.445,
+            "max": 8.469,
+            "p(90)": 7.771,
+            "p(95)": 7.9756
+        },
+        "http_req_blocked": {
+            "max": 0.526,
+            "p(90)": 0.0038000000000000048,
+            "p(95)": 0.31569999999999987,
+            "avg": 0.029192118226600998,
+            "min": 0,
+            "med": 0.002
+        },
+        "checks": {
+            "passes": 406,
+            "fails": 0,
+            "value": 1
+        },
+        "vus": {
+            "max": 0,
+            "value": 0,
+            "min": 0
+        },
+        "http_req_tls_handshaking": {
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0
+        },
+        "http_req_waiting": {
+            "avg": 5.927477832512316,
+            "min": 0.828,
+            "med": 6.404,
+            "max": 8.423,
+            "p(90)": 7.6908,
+            "p(95)": 7.9144000000000005
+        },
+        "iterations": {
+            "count": 203,
+            "rate": 20.287330562063993
+        },
+        "http_req_connecting": {
+            "p(95)": 0.2689999999999999,
+            "avg": 0.021916256157635473,
+            "min": 0,
+            "med": 0,
+            "max": 0.36,
+            "p(90)": 0
+        },
+        "http_req_sending": {
+            "p(95)": 0.022,
+            "avg": 0.008748768472906385,
+            "min": 0.002,
+            "med": 0.007,
+            "max": 0.102,
+            "p(90)": 0.012
+        },
+        "dropped_iterations": {
+            "count": 0,
+            "rate": 0,
+            "thresholds": {
+                "count==0": false
+            }
+        },
+        "data_sent": {
+            "count": 28013,
+            "rate": 2799.551679975855
+        },
+        "data_received": {
+            "count": 2838621,
+            "rate": 283684.93875574705
+        },
+        "http_req_duration": {
+            "p(95)": 7.9756,
+            "avg": 5.97647290640394,
+            "min": 0.875,
+            "med": 6.445,
+            "max": 8.469,
+            "p(90)": 7.771,
+            "thresholds": {
+                "p(95)<800": false
+            }
+        },
+        "vus_max": {
+            "value": 16,
+            "min": 16,
+            "max": 16
+        },
+        "http_req_receiving": {
+            "p(95)": 0.08069999999999998,
+            "avg": 0.040246305418719173,
+            "min": 0.013,
+            "med": 0.034,
+            "max": 0.322,
+            "p(90)": 0.0618
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 203,
+            "thresholds": {
+                "rate==0": false
+            },
+            "value": 0
+        },
+        "iteration_duration": {
+            "avg": 6.118671359605908,
+            "min": 0.94375,
+            "med": 6.5675,
+            "max": 9.569125,
+            "p(90)": 7.890100599999999,
+            "p(95)": 8.111583099999999
+        }
+    }
+}
