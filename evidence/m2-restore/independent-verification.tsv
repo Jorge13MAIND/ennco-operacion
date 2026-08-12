@@ -1,0 +1,12 @@
+check	status	detail
+backup_artifact_sha256	PASS	database_dump_and_object_tar_match_manifest
+database_table_data_entries	PASS	9
+object_file_entries	PASS	2
+database_row_counts	PASS	all_tables_match
+database_row_sha256	PASS	all_tables_match
+invariants_source_restore	PASS	identical_and_true
+object_content_sha256	PASS	source_and_restore_match
+corruption_detection	PASS	altered_object_archive_rejected
+production_pitr_claim	PASS	remains_false
+production_rpo_15m_claim	PASS	remains_false
+production_rto_4h_claim	PASS	remains_false

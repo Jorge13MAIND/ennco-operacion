@@ -1,0 +1,64 @@
+;
+; Archive created at 2026-08-11 21:32:36 CST
+;     dbname: ennco_m2_source
+;     TOC Entries: 53
+;     Compression: gzip
+;     Dump Version: 1.15-0
+;     Format: CUSTOM
+;     Integer: 4 bytes
+;     Offset: 8 bytes
+;     Dumped from database version: 16.13 (Homebrew)
+;     Dumped by pg_dump version: 16.13 (Homebrew)
+;
+;
+; Selected TOC Entries:
+;
+224; 1255 16543 FUNCTION public prevent_audit_log_mutation() Jorge
+223; 1259 16531 TABLE public audit_log Jorge
+216; 1259 16394 TABLE public companies Jorge
+220; 1259 16473 TABLE public leads Jorge
+218; 1259 16427 TABLE public messages Jorge
+222; 1259 16514 TABLE public object_records Jorge
+215; 1259 16385 TABLE public organizations Jorge
+221; 1259 16497 TABLE public outbox_events Jorge
+219; 1259 16448 TABLE public replies Jorge
+217; 1259 16409 TABLE public suppression_entries Jorge
+3807; 0 16531 TABLE DATA public audit_log Jorge
+3800; 0 16394 TABLE DATA public companies Jorge
+3804; 0 16473 TABLE DATA public leads Jorge
+3802; 0 16427 TABLE DATA public messages Jorge
+3806; 0 16514 TABLE DATA public object_records Jorge
+3799; 0 16385 TABLE DATA public organizations Jorge
+3805; 0 16497 TABLE DATA public outbox_events Jorge
+3803; 0 16448 TABLE DATA public replies Jorge
+3801; 0 16409 TABLE DATA public suppression_entries Jorge
+3640; 2606 16537 CONSTRAINT public audit_log audit_log_pkey Jorge
+3616; 2606 16403 CONSTRAINT public companies companies_organization_id_company_key_key Jorge
+3618; 2606 16401 CONSTRAINT public companies companies_pkey Jorge
+3630; 2606 16481 CONSTRAINT public leads leads_pkey Jorge
+3622; 2606 16437 CONSTRAINT public messages messages_organization_id_idempotency_key_key Jorge
+3624; 2606 16435 CONSTRAINT public messages messages_pkey Jorge
+3636; 2606 16525 CONSTRAINT public object_records object_records_organization_id_object_key_key Jorge
+3638; 2606 16523 CONSTRAINT public object_records object_records_pkey Jorge
+3612; 2606 16391 CONSTRAINT public organizations organizations_pkey Jorge
+3614; 2606 16393 CONSTRAINT public organizations organizations_slug_key Jorge
+3632; 2606 16508 CONSTRAINT public outbox_events outbox_events_organization_id_idempotency_key_key Jorge
+3634; 2606 16506 CONSTRAINT public outbox_events outbox_events_pkey Jorge
+3626; 2606 16457 CONSTRAINT public replies replies_organization_id_external_event_id_key Jorge
+3628; 2606 16455 CONSTRAINT public replies replies_pkey Jorge
+3620; 2606 16416 CONSTRAINT public suppression_entries suppression_entries_pkey Jorge
+3655; 2620 16544 TRIGGER public audit_log audit_log_append_only Jorge
+3654; 2606 16538 FK CONSTRAINT public audit_log audit_log_organization_id_fkey Jorge
+3641; 2606 16404 FK CONSTRAINT public companies companies_organization_id_fkey Jorge
+3649; 2606 16487 FK CONSTRAINT public leads leads_company_id_fkey Jorge
+3650; 2606 16482 FK CONSTRAINT public leads leads_organization_id_fkey Jorge
+3651; 2606 16492 FK CONSTRAINT public leads leads_reply_id_fkey Jorge
+3644; 2606 16443 FK CONSTRAINT public messages messages_company_id_fkey Jorge
+3645; 2606 16438 FK CONSTRAINT public messages messages_organization_id_fkey Jorge
+3653; 2606 16526 FK CONSTRAINT public object_records object_records_organization_id_fkey Jorge
+3652; 2606 16509 FK CONSTRAINT public outbox_events outbox_events_organization_id_fkey Jorge
+3646; 2606 16463 FK CONSTRAINT public replies replies_company_id_fkey Jorge
+3647; 2606 16468 FK CONSTRAINT public replies replies_message_id_fkey Jorge
+3648; 2606 16458 FK CONSTRAINT public replies replies_organization_id_fkey Jorge
+3642; 2606 16422 FK CONSTRAINT public suppression_entries suppression_entries_company_id_fkey Jorge
+3643; 2606 16417 FK CONSTRAINT public suppression_entries suppression_entries_organization_id_fkey Jorge

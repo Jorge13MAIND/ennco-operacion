@@ -7,6 +7,18 @@ test("home exposes the two primary surfaces", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Ver Control Room" })).toBeVisible();
 });
 
+test("application surfaces return the security header baseline", async ({ request }) => {
+  const response = await request.get("/");
+  expect(response.headers()).toMatchObject({
+    "cross-origin-opener-policy": "same-origin",
+    "permissions-policy": "camera=(), microphone=(), geolocation=()",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "strict-transport-security": "max-age=63072000; includeSubDomains",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+  });
+});
+
 test("diagnostic calculates a synthetic range", async ({ page }) => {
   await page.goto("/diagnostico");
   await page.getByRole("button", { name: "Generar referencia" }).click();
@@ -20,6 +32,14 @@ test("control room never presents setup as live commercial truth", async ({ page
   await expect(page.getByText("synthetic_demo")).toBeVisible();
   await expect(page.getByText("Datos sintéticos. Ninguna actividad comercial real ha sido ejecutada.")).toBeVisible();
   await expect(page.getByText("Kill switch activo")).toBeVisible();
+});
+
+test("identity surface keeps real access separate from the local demo", async ({ page }) => {
+  await page.goto("/ingreso");
+  await expect(page.getByRole("heading", { level: 1, name: "Control Room ENNCO" })).toBeVisible();
+  await expect(page.getByText("Modo local con tráfico cero.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Abrir demo sintético" })).toBeVisible();
+  await expect(page.getByRole("textbox", { name: "Correo" })).toHaveCount(0);
 });
 
 test("golden path is executable and idempotent", async ({ page }) => {

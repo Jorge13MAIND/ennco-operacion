@@ -5,11 +5,13 @@ import path from "node:path";
 const DEFAULT_REPO = "/Users/Jorge/dev/ennco-revenue-platform";
 
 function parseArgs(argv) {
-  const args = { repo: DEFAULT_REPO };
+  const args = { repo: DEFAULT_REPO, writeEvidence: false };
   for (let index = 0; index < argv.length; index += 1) {
     if (argv[index] === "--repo") {
       args.repo = argv[index + 1];
       index += 1;
+    } else if (argv[index] === "--write-evidence") {
+      args.writeEvidence = true;
     } else {
       throw new Error(`Argumento no reconocido: ${argv[index]}`);
     }
@@ -30,7 +32,7 @@ function assert(checks, id, condition, expected, actual) {
   checks.push({ id, status: condition ? "PASS" : "FAIL", expected, actual });
 }
 
-const { repo } = parseArgs(process.argv.slice(2));
+const { repo, writeEvidence } = parseArgs(process.argv.slice(2));
 const manifestPath = path.join(repo, "data/imports/manifest.json");
 const manifest = JSON.parse(await fs.readFile(manifestPath, "utf8"));
 const historical = JSON.parse(
@@ -127,23 +129,25 @@ const evidence = {
 };
 
 const evidenceDir = path.join(repo, "evidence/data-import");
-await fs.mkdir(evidenceDir, { recursive: true });
-await fs.writeFile(
-  path.join(evidenceDir, "verification.json"),
-  `${JSON.stringify(evidence, null, 2)}\n`,
-  "utf8",
-);
+if (writeEvidence) {
+  await fs.mkdir(evidenceDir, { recursive: true });
+  await fs.writeFile(
+    path.join(evidenceDir, "verification.json"),
+    `${JSON.stringify(evidence, null, 2)}\n`,
+    "utf8",
+  );
 
-const checksumTargets = [
-  "data/imports/manifest.json",
-  ...Object.values(manifest.sources).flatMap((source) => [source.raw_workbook, source.raw_extraction]),
-  ...Object.values(manifest.datasets).map((dataset) => dataset.path),
-];
-const checksumLines = [];
-for (const relativePath of checksumTargets) {
-  checksumLines.push(`${await sha256File(path.join(repo, relativePath))}  ${relativePath}`);
+  const checksumTargets = [
+    "data/imports/manifest.json",
+    ...Object.values(manifest.sources).flatMap((source) => [source.raw_workbook, source.raw_extraction]),
+    ...Object.values(manifest.datasets).map((dataset) => dataset.path),
+  ];
+  const checksumLines = [];
+  for (const relativePath of checksumTargets) {
+    checksumLines.push(`${await sha256File(path.join(repo, relativePath))}  ${relativePath}`);
+  }
+  await fs.writeFile(path.join(evidenceDir, "checksums.sha256"), `${checksumLines.join("\n")}\n`, "utf8");
 }
-await fs.writeFile(path.join(evidenceDir, "checksums.sha256"), `${checksumLines.join("\n")}\n`, "utf8");
 
 process.stdout.write(`${JSON.stringify(evidence, null, 2)}\n`);
 if (failed.length > 0) process.exitCode = 1;

@@ -227,6 +227,66 @@ h3 {
   padding: 50px 0 80px;
 }
 
+.auth-shell {
+  display: grid;
+  min-height: calc(100vh - 72px);
+  place-items: center;
+  padding: 48px 0 80px;
+}
+
+.auth-panel {
+  width: min(520px, 100%);
+  padding: 32px;
+}
+
+.auth-panel h1 {
+  font-size: clamp(38px, 7vw, 58px);
+}
+
+.auth-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.auth-form label {
+  color: var(--navy-900);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.auth-form input {
+  min-height: 48px;
+  margin-bottom: 8px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.auth-form input:focus-visible {
+  border-color: var(--navy-800);
+  outline: 3px solid rgba(1, 61, 122, 0.16);
+}
+
+.notice {
+  padding: 18px;
+  border: 1px solid var(--gold-200);
+  border-radius: 14px;
+  background: #fff9e7;
+}
+
+.notice p {
+  margin: 8px 0 18px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.notice.danger {
+  border-color: #f3b7b2;
+  background: #fff3f2;
+}
+
 .section-head {
   display: flex;
   align-items: end;

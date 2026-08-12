@@ -1,0 +1,76 @@
+import { describe, expect, it } from "vitest";
+import { getRuntimeConfig, hasDedicatedSupabase } from "@/lib/runtime/config";
+
+const dedicated = {
+  NEXT_PUBLIC_SUPABASE_URL: "https://ennco.supabase.co",
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_ennco_test_only",
+  NEXT_PUBLIC_ENNCO_ORGANIZATION_ID: "11111111-1111-4111-8111-111111111111",
+};
+
+describe("runtime configuration", () => {
+  it("keeps local synthetic mode fail closed for external actions", () => {
+    const config = getRuntimeConfig({});
+
+    expect(config).toMatchObject({
+      appEnv: "development",
+      demoMode: true,
+      requireMfa: false,
+      externalSendAllowed: false,
+      globalKillSwitch: true,
+    });
+    expect(hasDedicatedSupabase(config)).toBe(false);
+  });
+
+  it("rejects partially configured identity infrastructure", () => {
+    expect(() =>
+      getRuntimeConfig({
+        NEXT_PUBLIC_SUPABASE_URL: dedicated.NEXT_PUBLIC_SUPABASE_URL,
+      }),
+    ).toThrow("INCOMPLETE_DEDICATED_SUPABASE_CONFIGURATION");
+  });
+
+  it("requires dedicated identity infrastructure outside demo mode", () => {
+    expect(() => getRuntimeConfig({ ENNCO_DEMO_MODE: "false" })).toThrow(
+      "DEDICATED_SUPABASE_REQUIRED_OUTSIDE_DEMO",
+    );
+  });
+
+  it("accepts a complete dedicated configuration without a service role key", () => {
+    const config = getRuntimeConfig({
+      ...dedicated,
+      ENNCO_DEMO_MODE: "false",
+    });
+
+    expect(hasDedicatedSupabase(config)).toBe(true);
+  });
+
+  it("forbids demo mode or disabled MFA in production", () => {
+    expect(() =>
+      getRuntimeConfig({
+        NEXT_PUBLIC_APP_ENV: "production",
+        ENNCO_DEMO_MODE: "true",
+      }),
+    ).toThrow("DEMO_MODE_FORBIDDEN_IN_PRODUCTION");
+
+    expect(() =>
+      getRuntimeConfig({
+        ...dedicated,
+        NEXT_PUBLIC_APP_ENV: "production",
+        ENNCO_DEMO_MODE: "false",
+        ENNCO_REQUIRE_MFA: "false",
+      }),
+    ).toThrow("MFA_REQUIRED_IN_PRODUCTION");
+  });
+
+  it("infers production from the deployment platform and rejects a platform downgrade", () => {
+    expect(() => getRuntimeConfig({ VERCEL_ENV: "production" })).toThrow(
+      "DEDICATED_SUPABASE_REQUIRED_OUTSIDE_DEMO",
+    );
+    expect(() =>
+      getRuntimeConfig({
+        VERCEL_ENV: "production",
+        NEXT_PUBLIC_APP_ENV: "development",
+      }),
+    ).toThrow("APP_ENV_PLATFORM_MISMATCH");
+  });
+});

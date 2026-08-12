@@ -1,8 +1,31 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { GoldenPathControl } from "@/components/GoldenPathControl";
 import { getSyntheticControlRoomSnapshot } from "@/lib/control-room/snapshot";
+import { requireOperationsAccess } from "@/lib/auth/authorization";
 
-export default function OperationsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function OperationsPage() {
+  const access = await requireOperationsAccess();
+  if (access.evidenceClass === "live") {
+    return (
+      <>
+        <SiteHeader />
+        <main className="shell section">
+          <section className="panel auth-panel">
+            <p className="eyebrow">Acceso verificado</p>
+            <h1>Control Room protegido</h1>
+            <p className="lede">La sesión, MFA, membresía y aislamiento de organización fueron validados.</p>
+            <div className="notice">
+              <strong>Datos operativos en HOLD.</strong>
+              <p>La lectura live del portal se habilita en M4. Esta pantalla no sustituye datos reales con fixtures sintéticos.</p>
+              <span className="badge">{access.role}</span>
+            </div>
+          </section>
+        </main>
+      </>
+    );
+  }
   const snapshot = getSyntheticControlRoomSnapshot();
   return (
     <>

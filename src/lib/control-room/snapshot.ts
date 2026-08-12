@@ -1,6 +1,6 @@
 import type { ControlRoomSnapshot, Milestone } from "@/lib/domain/types";
 
-const UPDATED_AT = "2026-08-11T21:00:00-06:00";
+const UPDATED_AT = "2026-08-11T21:20:00-06:00";
 
 export const INITIAL_MILESTONES: Milestone[] = [
   {
@@ -37,20 +37,25 @@ export const INITIAL_MILESTONES: Milestone[] = [
       "docs/evidence/M1-gate-report.md",
     ],
     blocker: null,
-    nextAction: "Congelar baseline Git y entrar a M2 sin habilitar acciones externas.",
+    nextAction: "Conservar baseline y revalidar el golden path con cada cambio material.",
     updatedAt: UPDATED_AT,
   },
   {
     id: "M2",
     name: "Datos, seguridad y recuperación",
     owner: "Teckel Product & Engineering",
-    status: "NOT_STARTED",
-    gate: null,
+    status: "EVIDENCE_READY",
+    gate: "EXTEND",
     dueDate: "2026-08-25",
     acceptance: "Restore, RLS, MFA, supresión y threat model sin P0 abiertos.",
-    evidence: [],
-    blocker: "Infraestructura pagada requiere aprobación.",
-    nextAction: "Preparar migraciones y drill local.",
+    evidence: [
+      "supabase/migrations/202608110002_secure_document_storage.sql",
+      "evidence/m2-restore/summary.json",
+      "docs/06-threat-model.md",
+      "docs/12-m2-architecture.md",
+    ],
+    blocker: "Proveedor, legal, credenciales rotadas, antivirus y recuperación real requieren gates externos.",
+    nextAction: "Cerrar retención local y preparar canary aislado de Auth, Storage y restore.",
     updatedAt: UPDATED_AT,
   },
   {

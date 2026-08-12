@@ -6,6 +6,7 @@ Sistema comercial E2E de ENNCO. Este repositorio contiene la experiencia públic
 
 - M0: paquete interno completo y auditado. Gate global `EXTEND` por insumos externos faltantes.
 - M1: golden path local `PASS` con datos sintéticos y cero efectos externos.
+- M2: seguridad, Storage, audit allowlist, retención y restore local en `PASS`. Gate global `EXTEND` hasta validar proveedor, legal, secretos, antivirus, PITR y RTO.
 - Producción, DNS, compras y contacto externo: bloqueados hasta aprobación explícita.
 
 ## Desarrollo local
@@ -16,12 +17,13 @@ cp .env.example .env.local
 npm run dev
 ```
 
-`ENNCO_DEMO_MODE=true` permite datos sintéticos exclusivamente en desarrollo. Producción falla si no existe un proyecto Supabase dedicado.
+`ENNCO_DEMO_MODE=true` permite datos sintéticos exclusivamente fuera de producción. Producción falla si no existe un proyecto Supabase dedicado, organización, MFA y configuración completa.
 
 ## Verificación
 
 ```bash
 npm run verify:m0m1
+npm run verify:m2
 ```
 
 Este comando valida:
@@ -30,8 +32,17 @@ Este comando valida:
 - Integridad de los dos XLSX y 28 controles de normalización.
 - Migración e invariantes en PostgreSQL desechable.
 - Supresión, idempotencia, audit log, outbox, retry, dead letter y kill switches.
-- Lint, tipos, 13 pruebas unitarias y build de producción.
-- 30 pruebas E2E en cinco perfiles de viewport.
+- Lint, tipos, unitarias y build de producción.
+- E2E en cinco perfiles de viewport.
+
+`verify:m2` agrega:
+
+- Escaneo local de secretos y auditoría de dependencias.
+- Storage privado, aislamiento por organización, cuarentena y rollback.
+- Audit log con allowlist y pruebas centinela sin PII.
+- Legal holds, doble aprobación, borrado transaccional y tombstones sin PII.
+- Backup lógico y restore separado de base y objetos sintéticos.
+- Evidencia explícita de que PITR, RPO de 15 minutos y RTO de cuatro horas aún no están probados.
 
 ## Operación local
 
@@ -44,6 +55,13 @@ Este comando valida:
 7. Repite con la misma llave. Debe mostrar `DUPLICATE`.
 
 El endpoint sintético devuelve 404 en producción. El assistant devuelve 503 hasta su release gate. La precotización usa exclusivamente un modelo draft y datos sintéticos.
+
+## Acceso y documentos
+
+- `/operacion` usa demo local sólo cuando `ENNCO_DEMO_MODE=true` y el ambiente no es producción.
+- Fuera del demo, la sesión se valida con claims firmados, membresía de organización y MFA AAL2.
+- La aplicación web no necesita ni expone una llave `service_role`.
+- Los documentos aceptados entran en cuarentena con path opaco y checksum. No quedan legibles hasta que un scanner autorizado registre resultado limpio.
 
 ## Bloqueos humanos visibles
 

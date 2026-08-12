@@ -4,37 +4,78 @@ const runtimeSchema = z.object({
   appEnv: z.enum(["development", "staging", "production"]),
   appUrl: z.url(),
   demoMode: z.boolean(),
+  requireMfa: z.boolean(),
   externalSendAllowed: z.boolean(),
   globalKillSwitch: z.boolean(),
   supabaseUrl: z.url().optional(),
-  supabaseAnonKey: z.string().min(20).optional(),
-  supabaseServiceRoleKey: z.string().min(20).optional(),
+  supabasePublishableKey: z.string().min(20).optional(),
+  organizationId: z.uuid().optional(),
 });
 
 export type RuntimeConfig = z.infer<typeof runtimeSchema>;
+
+type RuntimeEnvironment = Record<string, string | undefined>;
 
 function envBoolean(value: string | undefined, fallback: boolean): boolean {
   if (value === undefined) return fallback;
   return value.toLowerCase() === "true";
 }
 
-export function getRuntimeConfig(): RuntimeConfig {
+function inferAppEnvironment(environment: RuntimeEnvironment): "development" | "staging" | "production" {
+  if (environment.NEXT_PUBLIC_APP_ENV) {
+    return z.enum(["development", "staging", "production"]).parse(environment.NEXT_PUBLIC_APP_ENV);
+  }
+  if (environment.VERCEL_ENV === "production") return "production";
+  if (environment.VERCEL_ENV === "preview") return "staging";
+  return "development";
+}
+
+export function getRuntimeConfig(environment: RuntimeEnvironment = process.env): RuntimeConfig {
+  const appEnv = inferAppEnvironment(environment);
+  if (
+    (environment.VERCEL_ENV === "production" && appEnv !== "production") ||
+    (environment.VERCEL_ENV === "preview" && appEnv === "production")
+  ) {
+    throw new Error("APP_ENV_PLATFORM_MISMATCH");
+  }
   const config = runtimeSchema.parse({
-    appEnv: process.env.NEXT_PUBLIC_APP_ENV ?? "development",
-    appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-    demoMode: envBoolean(process.env.ENNCO_DEMO_MODE, true),
-    externalSendAllowed: envBoolean(process.env.ENNCO_ALLOW_EXTERNAL_SEND, false),
-    globalKillSwitch: envBoolean(process.env.ENNCO_GLOBAL_KILL_SWITCH, true),
-    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL || undefined,
-    supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || undefined,
-    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || undefined,
+    appEnv,
+    appUrl: environment.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+    demoMode: envBoolean(environment.ENNCO_DEMO_MODE, appEnv === "development"),
+    requireMfa: envBoolean(environment.ENNCO_REQUIRE_MFA, appEnv !== "development"),
+    externalSendAllowed: envBoolean(environment.ENNCO_ALLOW_EXTERNAL_SEND, false),
+    globalKillSwitch: envBoolean(environment.ENNCO_GLOBAL_KILL_SWITCH, true),
+    supabaseUrl: environment.NEXT_PUBLIC_SUPABASE_URL || undefined,
+    supabasePublishableKey:
+      environment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+      environment.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      undefined,
+    organizationId: environment.NEXT_PUBLIC_ENNCO_ORGANIZATION_ID || undefined,
   });
 
-  if (config.appEnv === "production") {
-    if (config.demoMode) throw new Error("DEMO_MODE_FORBIDDEN_IN_PRODUCTION");
-    if (!config.supabaseUrl || !config.supabaseAnonKey || !config.supabaseServiceRoleKey) {
-      throw new Error("DEDICATED_SUPABASE_REQUIRED_IN_PRODUCTION");
-    }
+  const configuredValues = [config.supabaseUrl, config.supabasePublishableKey, config.organizationId];
+  const configuredCount = configuredValues.filter(Boolean).length;
+
+  if (configuredCount > 0 && configuredCount < configuredValues.length) {
+    throw new Error("INCOMPLETE_DEDICATED_SUPABASE_CONFIGURATION");
   }
+  if (!config.demoMode && configuredCount !== configuredValues.length) {
+    throw new Error("DEDICATED_SUPABASE_REQUIRED_OUTSIDE_DEMO");
+  }
+  if (config.appEnv === "production" && config.demoMode) {
+    throw new Error("DEMO_MODE_FORBIDDEN_IN_PRODUCTION");
+  }
+  if (config.appEnv === "production" && !config.requireMfa) {
+    throw new Error("MFA_REQUIRED_IN_PRODUCTION");
+  }
+
   return config;
+}
+
+export function hasDedicatedSupabase(config: RuntimeConfig): config is RuntimeConfig & {
+  supabaseUrl: string;
+  supabasePublishableKey: string;
+  organizationId: string;
+} {
+  return Boolean(config.supabaseUrl && config.supabasePublishableKey && config.organizationId);
 }
