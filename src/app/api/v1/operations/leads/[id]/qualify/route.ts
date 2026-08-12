@@ -10,7 +10,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   if (!leadId.success || !payload.success) {
     return NextResponse.json({ error: "STRICT_LEAD_INPUT_INVALID" }, { status: 400 });
   }
-  const context = await getMutationContext();
+  const context = await getMutationContext(request);
   if (!context.ok) return context.response;
   const { data, error } = await context.client.rpc("qualify_lead_strict", {
     target_organization_id: context.organizationId,

@@ -10,7 +10,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   if (!providerEventId.success || !payload.success) {
     return NextResponse.json({ error: "REPLY_REVIEW_INPUT_INVALID" }, { status: 400 });
   }
-  const context = await getMutationContext();
+  const context = await getMutationContext(request);
   if (!context.ok) return context.response;
   const { data, error } = await context.client.rpc("review_reply_event", {
     target_organization_id: context.organizationId,

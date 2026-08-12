@@ -1,13 +1,26 @@
 import { NextResponse } from "next/server";
 
 import { requireOperationsAccess } from "@/lib/auth/authorization";
+import { getRuntimeConfig } from "@/lib/runtime/config";
+import { evaluateMutationRequest } from "@/lib/security/request";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export async function getMutationContext(): Promise<
+export async function getMutationContext(request: Request): Promise<
   | { ok: true; organizationId: string; client: Awaited<ReturnType<typeof createSupabaseServerClient>> }
   | { ok: false; response: NextResponse }
 > {
   try {
+    const config = getRuntimeConfig();
+    const requestDecision = evaluateMutationRequest(request, config.appUrl);
+    if (requestDecision.decision !== "ALLOW") {
+      return {
+        ok: false,
+        response: NextResponse.json(
+          { error: requestDecision.code },
+          { status: 403, headers: { "Cache-Control": "private, no-store" } },
+        ),
+      };
+    }
     const access = await requireOperationsAccess();
     if (access.evidenceClass !== "live" || !access.organizationId) {
       return {

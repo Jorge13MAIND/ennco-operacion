@@ -11,12 +11,18 @@ test("application surfaces return the security header baseline", async ({ reques
   const response = await request.get("/");
   expect(response.headers()).toMatchObject({
     "cross-origin-opener-policy": "same-origin",
+    "cross-origin-resource-policy": "same-origin",
     "permissions-policy": "camera=(), microphone=(), geolocation=()",
     "referrer-policy": "strict-origin-when-cross-origin",
     "strict-transport-security": "max-age=63072000; includeSubDomains",
     "x-content-type-options": "nosniff",
     "x-frame-options": "DENY",
+    "x-xss-protection": "0",
   });
+  const csp = response.headers()["content-security-policy"];
+  expect(csp).toMatch(/script-src 'self' 'nonce-[A-Za-z0-9+/=]+' 'strict-dynamic'/);
+  expect(csp).toContain("frame-ancestors 'none'");
+  expect(csp).not.toContain("unsafe-inline");
 });
 
 test("diagnostic calculates a synthetic range and returns a private PDF", async ({ page, request }) => {
@@ -136,10 +142,19 @@ test("Gmail webhook fails closed until the external release gate", async ({ requ
 test("operational mutations cannot persist in synthetic mode", async ({ request }) => {
   const response = await request.post(
     "/api/v1/operations/provider-events/11111111-1111-4111-8111-111111111111/review",
-    { data: { classification: "POSITIVE" } },
+    { data: { classification: "POSITIVE" }, headers: { Origin: "http://localhost:3000", "Sec-Fetch-Site": "same-origin" } },
   );
   expect(response.status()).toBe(409);
   await expect(response.json()).resolves.toMatchObject({ error: "SYNTHETIC_MUTATION_DISABLED" });
+});
+
+test("operational mutations reject cross-origin requests before authentication", async ({ request }) => {
+  const response = await request.post(
+    "/api/v1/operations/provider-events/11111111-1111-4111-8111-111111111111/review",
+    { data: { classification: "POSITIVE" }, headers: { Origin: "https://evil.invalid", "Sec-Fetch-Site": "cross-site" } },
+  );
+  expect(response.status()).toBe(403);
+  await expect(response.json()).resolves.toMatchObject({ error: "MUTATION_ORIGIN_MISMATCH" });
 });
 
 test("identity surface keeps real access separate from the local demo", async ({ page }) => {

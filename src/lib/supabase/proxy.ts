@@ -21,7 +21,7 @@ function unavailable(): NextResponse {
   });
 }
 
-export async function updateSupabaseSession(request: NextRequest): Promise<NextResponse> {
+export async function updateSupabaseSession(request: NextRequest, requestHeaders = new Headers(request.headers)): Promise<NextResponse> {
   let config;
   try {
     config = getRuntimeConfig();
@@ -30,18 +30,18 @@ export async function updateSupabaseSession(request: NextRequest): Promise<NextR
   }
 
   if (config.demoMode && config.appEnv !== "production") {
-    return NextResponse.next({ request });
+    return NextResponse.next({ request: { headers: requestHeaders } });
   }
   if (!hasDedicatedSupabase(config)) return unavailable();
 
-  let response = NextResponse.next({ request });
+  let response = NextResponse.next({ request: { headers: requestHeaders } });
   const supabase = createServerClient(config.supabaseUrl, config.supabasePublishableKey, {
     cookies: {
       encode: "tokens-only",
       getAll: () => request.cookies.getAll(),
       setAll(cookiesToSet, headers) {
         cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-        response = NextResponse.next({ request });
+        response = NextResponse.next({ request: { headers: requestHeaders } });
         cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
         Object.entries(headers).forEach(([name, value]) => response.headers.set(name, value));
       },
