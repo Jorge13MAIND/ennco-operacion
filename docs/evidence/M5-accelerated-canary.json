@@ -1,0 +1,322 @@
+{
+  "schemaVersion": "1.0.0",
+  "runId": "M5-LOCAL-ACCELERATED-2026-08-11",
+  "evidenceClass": "synthetic_demo",
+  "timeMode": "time_accelerated_simulation",
+  "realElapsedDays": 0,
+  "simulatedConsecutiveDays": 14,
+  "localHarnessDecision": "PASS",
+  "releaseDecision": "EXTEND",
+  "releaseBlockers": [
+    "REAL_14_DAY_WINDOW_NOT_OBSERVED",
+    "MANAGED_STAGING_NOT_PROVISIONED",
+    "REAL_PROVIDERS_NOT_CONNECTED",
+    "QA_RELEASE_DECISION_NOT_RECORDED"
+  ],
+  "externalSideEffects": 0,
+  "totals": {
+    "scenarios": 14,
+    "passed": 14,
+    "failed": 0,
+    "unknown": 0,
+    "injectedFailures": 13
+  },
+  "days": [
+    {
+      "sequence": 1,
+      "observedOn": "2026-08-12",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "GOLDEN_PATH_DRY_RUN",
+          "category": "GOLDEN_PATH",
+          "failureInjected": false,
+          "assertion": "company to next action completes with zero external effects",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "evidenceSha256": "827c3cdc97f19ec635a600041e015a6c8fdba94b49ed8ba58b54fd9bf2f837ff"
+    },
+    {
+      "sequence": 2,
+      "observedOn": "2026-08-13",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "SUPPRESSION_FAIL_CLOSED",
+          "category": "SAFETY",
+          "failureInjected": true,
+          "assertion": "suppressed target stops before message creation",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "827c3cdc97f19ec635a600041e015a6c8fdba94b49ed8ba58b54fd9bf2f837ff",
+      "evidenceSha256": "8fcb80f112b27179b27b1eb95fcca105e5cee6da65259f1a71d052d26ea8aafa"
+    },
+    {
+      "sequence": 3,
+      "observedOn": "2026-08-14",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "IDEMPOTENT_DUPLICATE",
+          "category": "SAFETY",
+          "failureInjected": true,
+          "assertion": "same key returns the existing record and creates no duplicate",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "8fcb80f112b27179b27b1eb95fcca105e5cee6da65259f1a71d052d26ea8aafa",
+      "evidenceSha256": "9131b21527bae4fa4c1e75e0a9aa447ae7b47f787ad05f1af4ded0a290db8f38"
+    },
+    {
+      "sequence": 4,
+      "observedOn": "2026-08-15",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "REPLY_STOPS_SEQUENCE",
+          "category": "GOLDEN_PATH",
+          "failureInjected": true,
+          "assertion": "human reply stops enrollment and preserves next action",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "9131b21527bae4fa4c1e75e0a9aa447ae7b47f787ad05f1af4ded0a290db8f38",
+      "evidenceSha256": "ae14829a546fe85d2dd11518c074103da75ce1d1cd46dab3e0ca73951d915833"
+    },
+    {
+      "sequence": 5,
+      "observedOn": "2026-08-16",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "HARD_BOUNCE_EXACT_SUPPRESSION",
+          "category": "SAFETY",
+          "failureInjected": true,
+          "assertion": "hard bounce suppresses the exact email and stops enrollment",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "ae14829a546fe85d2dd11518c074103da75ce1d1cd46dab3e0ca73951d915833",
+      "evidenceSha256": "c98309f7b59b8c6070379f36ca787372baea74160c0a914cb73552365641aff9"
+    },
+    {
+      "sequence": 6,
+      "observedOn": "2026-08-17",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "UNSUBSCRIBE_EXACT_SUPPRESSION",
+          "category": "SAFETY",
+          "failureInjected": true,
+          "assertion": "unsubscribe suppresses the exact email and stops enrollment",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "c98309f7b59b8c6070379f36ca787372baea74160c0a914cb73552365641aff9",
+      "evidenceSha256": "dd6c64b212293d3feeab0d86d8008fbd54b9d2175ea4276832ea68b91c08928b"
+    },
+    {
+      "sequence": 7,
+      "observedOn": "2026-08-18",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "PROVIDER_TIMEOUT_RETRY",
+          "category": "RELIABILITY",
+          "failureInjected": true,
+          "assertion": "timeout retries with the same idempotency key and no double action",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "dd6c64b212293d3feeab0d86d8008fbd54b9d2175ea4276832ea68b91c08928b",
+      "evidenceSha256": "0cde349a7f615e36f74f5be9c461064bd6a7760cbf2dbe30119b855e61c4060c"
+    },
+    {
+      "sequence": 8,
+      "observedOn": "2026-08-19",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "RETRY_TO_DEAD_LETTER",
+          "category": "RELIABILITY",
+          "failureInjected": true,
+          "assertion": "retry exhaustion moves the event to dead letter with evidence",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "0cde349a7f615e36f74f5be9c461064bd6a7760cbf2dbe30119b855e61c4060c",
+      "evidenceSha256": "b4b56b832817e6b86ec358495c508964989890c158a6ec37559c3f1d1d649be1"
+    },
+    {
+      "sequence": 9,
+      "observedOn": "2026-08-20",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "ALERT_FAILURE_PRESERVES_LEAD",
+          "category": "RELIABILITY",
+          "failureInjected": true,
+          "assertion": "notification failure does not roll back or erase the lead",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "b4b56b832817e6b86ec358495c508964989890c158a6ec37559c3f1d1d649be1",
+      "evidenceSha256": "7e8c5c8b87f807ef17f57fa24c15fb9b060df7a599d1fd8141b487d75a9238ab"
+    },
+    {
+      "sequence": 10,
+      "observedOn": "2026-08-21",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "GLOBAL_KILL_SWITCH_HOLD",
+          "category": "SAFETY",
+          "failureInjected": true,
+          "assertion": "non dry-run action is rejected while the global switch is active",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "7e8c5c8b87f807ef17f57fa24c15fb9b060df7a599d1fd8141b487d75a9238ab",
+      "evidenceSha256": "cb2a7805565d99c9d796aa18564dde5c0898d9328a6b95c61e140f1dcbfcaa70"
+    },
+    {
+      "sequence": 11,
+      "observedOn": "2026-08-22",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "MANIFEST_HASH_MISMATCH_HOLD",
+          "category": "SAFETY",
+          "failureInjected": true,
+          "assertion": "runtime drift invalidates authorization",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "cb2a7805565d99c9d796aa18564dde5c0898d9328a6b95c61e140f1dcbfcaa70",
+      "evidenceSha256": "3c2d046785f6d2342be1914e9f52f7e8a79ca87d21b406674cbeead00e14c7b3"
+    },
+    {
+      "sequence": 12,
+      "observedOn": "2026-08-23",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "PARTIAL_RESTORE_RECONCILIATION",
+          "category": "RECOVERY",
+          "failureInjected": true,
+          "assertion": "restored counts, checksums and invariants reconcile",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "3c2d046785f6d2342be1914e9f52f7e8a79ca87d21b406674cbeead00e14c7b3",
+      "evidenceSha256": "2936cc2c96165c9b9b302d87a906723070273be2de783be1e1f10f2e848edaf9"
+    },
+    {
+      "sequence": 13,
+      "observedOn": "2026-08-24",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "UNKNOWN_GATE_FAILS_CLOSED",
+          "category": "SAFETY",
+          "failureInjected": true,
+          "assertion": "unknown state produces HOLD and never PASS",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "2936cc2c96165c9b9b302d87a906723070273be2de783be1e1f10f2e848edaf9",
+      "evidenceSha256": "ecb19c02c7ca38a7a17b7eec18e2d3d83e06b25fb2c3193c00f62abc5885b18d"
+    },
+    {
+      "sequence": 14,
+      "observedOn": "2026-08-25",
+      "evidenceClass": "synthetic_demo",
+      "scenarios": [
+        {
+          "key": "LOAD_IDEMPOTENCY_1000",
+          "category": "LOAD",
+          "failureInjected": true,
+          "assertion": "1100 attempts over 1000 keys create exactly 1000 records",
+          "outcome": "PASS"
+        }
+      ],
+      "reconciliationOk": true,
+      "openP0": 0,
+      "openP1": 0,
+      "unknownCount": 0,
+      "externalSideEffects": 0,
+      "previousSha256": "ecb19c02c7ca38a7a17b7eec18e2d3d83e06b25fb2c3193c00f62abc5885b18d",
+      "evidenceSha256": "bb2eb28e1565a23e6ccbdbf55fb7613bb3ade7809647d0fb0f70bbf0f23c5323"
+    }
+  ],
+  "finalEvidenceSha256": "bb2eb28e1565a23e6ccbdbf55fb7613bb3ade7809647d0fb0f70bbf0f23c5323",
+  "verificationFailures": []
+}

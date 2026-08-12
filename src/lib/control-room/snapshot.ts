@@ -1,6 +1,6 @@
 import type { ControlRoomSnapshot, Milestone } from "@/lib/domain/types";
 
-const UPDATED_AT = "2026-08-11T22:50:00-06:00";
+const UPDATED_AT = "2026-08-11T23:15:00-06:00";
 
 export const INITIAL_MILESTONES: Milestone[] = [
   {
@@ -97,13 +97,18 @@ export const INITIAL_MILESTONES: Milestone[] = [
     id: "M5",
     name: "Shadow canary",
     owner: "QA independiente",
-    status: "NOT_STARTED",
-    gate: null,
+    status: "EVIDENCE_READY",
+    gate: "EXTEND",
     dueDate: "2026-09-15",
     acceptance: "14 días sin P0/P1 y decisión PASS.",
-    evidence: [],
-    blocker: "Depende de M1 a M4.",
-    nextAction: "Definir fixtures y escenarios de falla.",
+    evidence: [
+      "docs/evidence/M5-accelerated-canary.json",
+      "supabase/tests/007_shadow_canary_gate.sql",
+      "data/campaigns/campaign-manifest-draft-v1.json",
+      "src/lib/assistant/policy.test.ts",
+    ],
+    blocker: "El harness local pasa, pero faltan staging administrado y 14 días reales consecutivos.",
+    nextAction: "Provisionar staging autorizado y ejecutar el run real sin tráfico externo.",
     updatedAt: UPDATED_AT,
   },
   {

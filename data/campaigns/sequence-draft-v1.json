@@ -1,0 +1,221 @@
+{
+  "schema_version": "1.0.0",
+  "sequence_version": 1,
+  "status": "DRAFT_REVIEW_REQUIRED",
+  "evidence_class": "synthetic_demo",
+  "sender": {
+    "name": "Francisco Cuellar",
+    "title": "CEO",
+    "company": "ENNCO"
+  },
+  "voice": [
+    "personal",
+    "directa",
+    "breve",
+    "CEO a CEO",
+    "sin hype"
+  ],
+  "cadence_days": [0, 3, 7, 14, 28, 42, 60, 75],
+  "personalization_required": [
+    "first_name",
+    "company",
+    "observed_signal",
+    "source_name"
+  ],
+  "personalization_rules": [
+    "observed_signal debe provenir de una fuente pública verificada y fechada",
+    "si no existe señal verificable, la cuenta no entra al lote",
+    "no presentar consumo, dolor, intención o ahorro como hechos inferidos",
+    "cada mensaje tiene una sola CTA"
+  ],
+  "prohibited_claims": [
+    "garantía técnica o comercial",
+    "descuento",
+    "precio final",
+    "fecha de instalación",
+    "ahorro prometido",
+    "beneficio fiscal definitivo",
+    "resultado atribuido a un cliente sin autorización"
+  ],
+  "stop_rules": [
+    "HUMAN_REPLY",
+    "HARD_BOUNCE",
+    "UNSUBSCRIBE",
+    "DNC",
+    "SUPPRESSION_MATCH",
+    "MANUAL_INTERVENTION",
+    "GLOBAL_KILL_SWITCH",
+    "MAILBOX_KILL_SWITCH"
+  ],
+  "source_basis": [
+    {
+      "source": "/Users/Jorge/.codex/attachments/a90e0a8c-1f46-4d68-94f6-c8df4390ae81/pasted-text.txt",
+      "lines": "31-35, 71, 128-143, 174-175, 229",
+      "supports": "servicios, compradores, insumos de diagnóstico, proceso presencial y capacidad"
+    },
+    {
+      "source": "/Users/Jorge/.codex/attachments/3f761979-fdb2-4b2f-91e3-5711aa5d17e6/pasted-text.txt",
+      "lines": "8-28",
+      "supports": "flujo comercial, visita técnica, seguimiento y necesidad de comunicación clara"
+    },
+    {
+      "source": "/Users/Jorge/dev/ennco-revenue-platform/data/imports/normalized/historical_projects.json",
+      "lines": "dataset completo",
+      "supports": "existencia de entregas históricas sin publicar nombres ni resultados"
+    }
+  ],
+  "touches": [
+    {
+      "touch_number": 1,
+      "day_offset": 0,
+      "purpose": "abrir con una señal verificada y ofrecer diagnóstico preliminar",
+      "variants": {
+        "executive": {
+          "subject": "{{company}}: una observación eléctrica",
+          "body": "Hola {{first_name}},\n\nVi {{observed_signal}} en {{source_name}}. Puede ser un buen momento para revisar continuidad eléctrica, costo de energía y capacidad de la planta. En ENNCO integramos ingeniería eléctrica, solar industrial y mantenimiento especializado. Si te sirve, revisamos su recibo o capacidad instalada y te comparto un diagnóstico preliminar. ¿Te lo envío?\n\nFrancisco Cuellar\nCEO, ENNCO"
+        },
+        "maintenance": {
+          "subject": "{{company}}: revisión de infraestructura eléctrica",
+          "body": "Hola {{first_name}},\n\nVi {{observed_signal}} en {{source_name}}. Me hizo pensar en la continuidad de la instalación, el mantenimiento y la capacidad disponible de la planta. En ENNCO integramos diagnóstico, obra eléctrica, solar industrial y termografía. Si te sirve, revisamos el punto de partida sin compromiso comercial. ¿Te mando los datos que necesitamos?\n\nFrancisco Cuellar\nCEO, ENNCO"
+        },
+        "procurement": {
+          "subject": "{{company}}: diagnóstico antes de cotizar",
+          "body": "Hola {{first_name}},\n\nVi {{observed_signal}} en {{source_name}}. Antes de cotizar una obra industrial, conviene separar el diagnóstico preliminar del alcance técnico final. En ENNCO cubrimos ingeniería eléctrica, solar, mantenimiento y transformadores. Podemos revisar el recibo o la capacidad instalada y devolverte un punto de partida documentado. ¿Te interesa verlo?\n\nFrancisco Cuellar\nCEO, ENNCO"
+        }
+      }
+    },
+    {
+      "touch_number": 2,
+      "day_offset": 3,
+      "purpose": "hacer concreto el insumo mínimo",
+      "variants": {
+        "executive": {
+          "subject": "Re: {{company}}: una observación eléctrica",
+          "body": "Hola {{first_name}},\n\nVoy al punto. Con un recibo de CFE o la capacidad instalada podemos preparar un rango preliminar y los supuestos para revisarlo internamente. No sustituye el levantamiento técnico, pero ayuda a decidir si vale la pena avanzar. ¿Te comparto el formato?\n\nFrancisco"
+        },
+        "maintenance": {
+          "subject": "Re: {{company}}: revisión de infraestructura eléctrica",
+          "body": "Hola {{first_name}},\n\nEl primer filtro es sencillo. Si ya tienen sistema fotovoltaico, partimos de la capacidad instalada; si evalúan uno nuevo, del recibo y las condiciones básicas de la planta. Con eso ubicamos qué debe revisar ingeniería antes de una visita. ¿Te comparto el formato?\n\nFrancisco"
+        },
+        "procurement": {
+          "subject": "Re: {{company}}: diagnóstico antes de cotizar",
+          "body": "Hola {{first_name}},\n\nPara evitar una cotización sin sustento, primero documentamos recibo o capacidad instalada, ubicación y necesidad. El resultado inicial muestra rango y supuestos; el alcance final se define después de revisión técnica. ¿Te mando el formato de entrada?\n\nFrancisco"
+        }
+      }
+    },
+    {
+      "touch_number": 3,
+      "day_offset": 7,
+      "purpose": "abrir el ángulo de continuidad operativa",
+      "variants": {
+        "executive": {
+          "subject": "Continuidad eléctrica en {{company}}",
+          "body": "Hola {{first_name}},\n\nNo asumo que hoy tengan una falla. La pregunta es si la infraestructura eléctrica, el mantenimiento y el crecimiento de la planta están alineados para evitar interrupciones y decisiones urgentes. Podemos revisar el contexto y decirte qué información falta antes de hablar de una obra. ¿Vale la pena una primera revisión?\n\nFrancisco"
+        },
+        "maintenance": {
+          "subject": "Mantenimiento y continuidad en {{company}}",
+          "body": "Hola {{first_name}},\n\nNo asumo que exista un problema en planta. Sí vale la pena distinguir mantenimiento preventivo, correctivo y revisión termográfica antes de que una anomalía se vuelva urgente. Podemos revisar su situación actual y ordenar los siguientes datos técnicos. ¿Te sirve una primera revisión?\n\nFrancisco"
+        },
+        "procurement": {
+          "subject": "Alcance eléctrico de {{company}}",
+          "body": "Hola {{first_name}},\n\nUna comparación útil empieza con alcances equivalentes. Instalación eléctrica, solar, mantenimiento y transformadores cambian mucho según la condición de planta y el levantamiento. Podemos ayudarte a ordenar el alcance preliminar antes de pedir propuestas comparables. ¿Te sirve esa revisión?\n\nFrancisco"
+        }
+      }
+    },
+    {
+      "touch_number": 4,
+      "day_offset": 14,
+      "purpose": "mostrar evidencia de proceso sin revelar clientes",
+      "variants": {
+        "executive": {
+          "subject": "Cómo documentamos una obra industrial",
+          "body": "Hola {{first_name}},\n\nEn proyectos industriales entregamos el expediente técnico con planos, condiciones de instalación y procesos de revisión. Esa documentación ayuda a que dirección, mantenimiento y compras evalúen la misma versión. Los casos se mantienen anónimos hasta contar con autorización. ¿Quieres que te comparta un ejemplo anonimizado?\n\nFrancisco"
+        },
+        "maintenance": {
+          "subject": "Expediente técnico para mantenimiento",
+          "body": "Hola {{first_name}},\n\nNuestro trabajo no termina en la instalación. El expediente reúne condiciones observadas, planos y el proceso técnico para que mantenimiento tenga una referencia común. Los ejemplos disponibles son anónimos por ahora. ¿Quieres que te comparta uno?\n\nFrancisco"
+        },
+        "procurement": {
+          "subject": "Un alcance comparable para compras",
+          "body": "Hola {{first_name}},\n\nUn expediente claro reduce diferencias entre lo solicitado, lo presupuestado y lo que ingeniería debe ejecutar. ENNCO documenta planos, condiciones y alcance técnico para que las áreas revisen la misma versión. Los ejemplos disponibles son anónimos. ¿Te comparto uno?\n\nFrancisco"
+        }
+      }
+    },
+    {
+      "touch_number": 5,
+      "day_offset": 28,
+      "purpose": "ampliar la conversación más allá de paneles",
+      "variants": {
+        "executive": {
+          "subject": "No sólo solar",
+          "body": "Hola {{first_name}},\n\nTe escribo por una razón puntual: ENNCO no es sólo instalación de paneles. Integramos sistemas eléctricos, transformadores, mantenimiento, termografía y solar industrial según la necesidad de planta. Si alguno de esos frentes está en revisión en {{company}}, puedo ayudarte a ordenar el diagnóstico inicial. ¿Hay uno que hoy sea prioritario?\n\nFrancisco"
+        },
+        "maintenance": {
+          "subject": "Solar, termografía y sistema eléctrico",
+          "body": "Hola {{first_name}},\n\nAdemás de solar industrial, trabajamos mantenimiento preventivo y correctivo, termografía e infraestructura eléctrica. La revisión inicial busca separar una necesidad operativa de una obra que requiera levantamiento. Si están evaluando alguno de esos frentes, puedo ayudarte a ordenar los datos. ¿Cuál tiene prioridad?\n\nFrancisco"
+        },
+        "procurement": {
+          "subject": "Alcances que cubre ENNCO",
+          "body": "Hola {{first_name}},\n\nPara ubicar bien a ENNCO: trabajamos solar industrial, mantenimiento, termografía, transformadores e instalaciones eléctricas. Cada frente se cotiza después de entender condiciones y alcance, no con un paquete genérico. Si compras está revisando alguno, puedo compartirte el proceso de evaluación. ¿Te sirve?\n\nFrancisco"
+        }
+      }
+    },
+    {
+      "touch_number": 6,
+      "day_offset": 42,
+      "purpose": "explicar el proceso sin comprometer tiempos",
+      "variants": {
+        "executive": {
+          "subject": "Del diagnóstico a una decisión",
+          "body": "Hola {{first_name}},\n\nEl proceso normal es breve al inicio: contexto y datos, diagnóstico preliminar y, si hace sentido, visita técnica. Después se define el alcance que dirección puede evaluar con ingeniería y compras. El calendario depende de la planta y de la información disponible. ¿Te explico el primer paso?\n\nFrancisco"
+        },
+        "maintenance": {
+          "subject": "Primer paso técnico en {{company}}",
+          "body": "Hola {{first_name}},\n\nPrimero revisamos datos y necesidad. Si existe base suficiente, sigue un levantamiento para documentar condiciones, observaciones y alcance. La propuesta técnica viene después de esa revisión. ¿Quieres que te comparta la lista inicial?\n\nFrancisco"
+        },
+        "procurement": {
+          "subject": "Proceso previo a propuesta",
+          "body": "Hola {{first_name}},\n\nPara que compras reciba un alcance defendible, primero reunimos datos, después validamos condiciones y finalmente armamos la propuesta técnica. El orden evita comparar cifras construidas con supuestos distintos. ¿Te comparto la lista de información inicial?\n\nFrancisco"
+        }
+      }
+    },
+    {
+      "touch_number": 7,
+      "day_offset": 60,
+      "purpose": "facilitar la alineación entre áreas",
+      "variants": {
+        "executive": {
+          "subject": "Una versión para dirección e ingeniería",
+          "body": "Hola {{first_name}},\n\nMuchos proyectos se frenan cuando dirección, ingeniería y compras revisan información distinta. Podemos preparar un resumen preliminar compartible, con supuestos y pendientes visibles, para que la conversación empiece sobre la misma base. ¿Te serviría ese formato para {{company}}?\n\nFrancisco"
+        },
+        "maintenance": {
+          "subject": "Alinear mantenimiento con dirección",
+          "body": "Hola {{first_name}},\n\nLa revisión técnica es más útil cuando dirección entiende qué se observó, qué falta validar y cuál es el siguiente paso. Podemos estructurar ese resumen sin convertirlo todavía en una propuesta final. ¿Te serviría para una conversación interna?\n\nFrancisco"
+        },
+        "procurement": {
+          "subject": "Una base común para comparar",
+          "body": "Hola {{first_name}},\n\nAntes de comparar propuestas, ayuda que compras, dirección e ingeniería compartan supuestos y pendientes. Podemos estructurar un diagnóstico preliminar que deje claro qué está verificado y qué requiere levantamiento. ¿Te sirve ese formato?\n\nFrancisco"
+        }
+      }
+    },
+    {
+      "touch_number": 8,
+      "day_offset": 75,
+      "purpose": "cerrar el ciclo con respeto y mantener opt out",
+      "variants": {
+        "executive": {
+          "subject": "Cierro el tema por ahora",
+          "body": "Hola {{first_name}},\n\nCierro el seguimiento para no llenar tu correo. Si continuidad eléctrica, mantenimiento o energía entra en agenda más adelante, con gusto retomamos desde el diagnóstico inicial. Si prefieres no recibir más mensajes, responde baja y lo registro de inmediato. ¿Lo dejamos aquí por ahora?\n\nFrancisco"
+        },
+        "maintenance": {
+          "subject": "Cierro el seguimiento técnico",
+          "body": "Hola {{first_name}},\n\nCierro el seguimiento para no insistir. Si mantenimiento, termografía o infraestructura eléctrica entra en agenda, podemos retomar con los datos técnicos básicos. Si prefieres no recibir más mensajes, responde baja y lo registro de inmediato. ¿Lo dejamos aquí por ahora?\n\nFrancisco"
+        },
+        "procurement": {
+          "subject": "Cierro el seguimiento",
+          "body": "Hola {{first_name}},\n\nCierro el seguimiento por ahora. Si compras abre una revisión de solar, mantenimiento, transformadores o instalación eléctrica, puedo compartir el proceso y el alcance inicial. Si prefieres no recibir más mensajes, responde baja y lo registro de inmediato. ¿Lo dejamos aquí?\n\nFrancisco"
+        }
+      }
+    }
+  ]
+}

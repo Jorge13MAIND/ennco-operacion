@@ -9,6 +9,7 @@ Sistema comercial E2E de ENNCO. Este repositorio contiene la experiencia públic
 - M2: seguridad, Storage, audit allowlist, retención y restore local en `PASS`. Gate global `EXTEND` hasta validar proveedor, legal, secretos, antivirus, PITR y RTO.
 - M3: captación, precotizador, PDF, persistencia y analítica local en `PASS`. Gate global `EXTEND` hasta aprobar modelo, aviso, antivirus y Supabase real.
 - M4: portal operativo, Gmail push, respuestas, calificación, pipeline y exportaciones locales en `PASS`. Gate global `EXTEND` hasta provisionar proveedores y ejecutar UAT ENNCO.
+- M5: secuencia, manifest, assistant acotado y shadow canary acelerado local en `PASS`. Gate global `EXTEND` porque han transcurrido cero de 14 días reales.
 - Producción, DNS, compras y contacto externo: bloqueados hasta aprobación explícita.
 
 ## Desarrollo local
@@ -28,6 +29,7 @@ npm run verify:m0m1
 npm run verify:m2
 npm run verify:m3
 npm run verify:m4
+npm run verify:m5
 ```
 
 Este comando valida:
@@ -64,6 +66,15 @@ Este comando valida:
 - Calificación contractual, reuniones y transiciones de pipeline con gates de base.
 - CSV privado con neutralización de fórmulas, checksum y audit run.
 - Portal responsive con módulos de operación y separación explícita de simulación y verdad comercial.
+
+`verify:m5` agrega:
+
+- Ocho contactos y 24 variantes CEO a CEO con hash, stop rules y cero destinatarios.
+- Response playbook y referencias anónimas sin llamarlas casos de éxito.
+- Assistant determinista con 22 evals en dos corridas completas.
+- Canary acelerado de 14 escenarios con hash chain y cero efectos externos.
+- Gate SQL que impide convertir evidencia sintética en `PASS`.
+- Forward, rollback y reapply de la persistencia del canary.
 
 ## Operación local
 

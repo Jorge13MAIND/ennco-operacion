@@ -10,6 +10,7 @@ const runtimeSchema = z.object({
   publicSurfaceReleased: z.boolean(),
   privacyNoticeApproved: z.boolean(),
   gmailWebhookReleased: z.boolean(),
+  assistantReleased: z.boolean(),
   supabaseUrl: z.url().optional(),
   supabasePublishableKey: z.string().min(20).optional(),
   organizationId: z.uuid().optional(),
@@ -57,6 +58,7 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     publicSurfaceReleased: envBoolean(environment.ENNCO_PUBLIC_SURFACE_RELEASED, false),
     privacyNoticeApproved: envBoolean(environment.ENNCO_PRIVACY_NOTICE_APPROVED, false),
     gmailWebhookReleased: envBoolean(environment.ENNCO_GMAIL_WEBHOOK_RELEASED, false),
+    assistantReleased: envBoolean(environment.ENNCO_ASSISTANT_RELEASED, false),
     supabaseUrl: environment.NEXT_PUBLIC_SUPABASE_URL || undefined,
     supabasePublishableKey:
       environment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
@@ -104,6 +106,12 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     )
   ) {
     throw new Error("GMAIL_WEBHOOK_RELEASE_GATES_INCOMPLETE");
+  }
+  if (
+    config.assistantReleased
+    && (config.demoMode || !config.privacyNoticeApproved || configuredCount !== configuredValues.length)
+  ) {
+    throw new Error("ASSISTANT_RELEASE_GATES_INCOMPLETE");
   }
 
   return config;

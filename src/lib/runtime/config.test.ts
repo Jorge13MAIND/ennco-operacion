@@ -25,6 +25,7 @@ describe("runtime configuration", () => {
       publicSurfaceReleased: false,
       privacyNoticeApproved: false,
       gmailWebhookReleased: false,
+      assistantReleased: false,
     });
     expect(hasDedicatedSupabase(config)).toBe(false);
   });
@@ -128,6 +129,24 @@ describe("runtime configuration", () => {
       GMAIL_PUBSUB_SUBSCRIPTION: "projects/ennco/subscriptions/gmail",
     });
     expect(config.gmailWebhookReleased).toBe(true);
+  });
+
+  it("keeps the assistant closed until privacy and dedicated infrastructure are ready", () => {
+    expect(() =>
+      getRuntimeConfig({
+        ...dedicated,
+        ENNCO_DEMO_MODE: "false",
+        ENNCO_ASSISTANT_RELEASED: "true",
+      }),
+    ).toThrow("ASSISTANT_RELEASE_GATES_INCOMPLETE");
+
+    const config = getRuntimeConfig({
+      ...dedicated,
+      ENNCO_DEMO_MODE: "false",
+      ENNCO_PRIVACY_NOTICE_APPROVED: "true",
+      ENNCO_ASSISTANT_RELEASED: "true",
+    });
+    expect(config.assistantReleased).toBe(true);
   });
 
   it("infers production from the deployment platform and rejects a platform downgrade", () => {

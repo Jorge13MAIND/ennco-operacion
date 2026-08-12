@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "status": "DRAFT_REVIEW_REQUIRED",
+  "evidence_class": "synthetic_demo",
+  "sender": "Francisco Cuellar, CEO",
+  "rules": [
+    "responder breve y personal",
+    "una pregunta de calificación por mensaje",
+    "detener la secuencia antes de responder",
+    "no confirmar garantías, descuentos, precio final o fecha",
+    "registrar siguiente acción y fecha",
+    "una baja se confirma sin agregar otro pitch"
+  ],
+  "responses": [
+    {
+      "intent": "POSITIVE",
+      "body": "Gracias, {{first_name}}. Te mando el formato para revisar recibo o capacidad instalada y dejar claros los supuestos. Para ubicar el frente correcto, ¿hoy están evaluando solar, mantenimiento o infraestructura eléctrica?\n\nFrancisco"
+    },
+    {
+      "intent": "NOT_NOW",
+      "body": "Entiendo, {{first_name}}. Lo dejo en pausa y no sigo con la secuencia. Si te parece, registro el mes que tenga sentido para retomarlo. ¿Cuándo sería menos inoportuno?\n\nFrancisco"
+    },
+    {
+      "intent": "WHAT_IS_THIS",
+      "body": "Claro. ENNCO integra ingeniería eléctrica, solar industrial, mantenimiento, termografía y transformadores. El primer paso es revisar datos básicos para saber si existe algo que valga la pena llevar a visita técnica. ¿Qué frente están revisando?\n\nFrancisco"
+    },
+    {
+      "intent": "PRICE_OBJECTION",
+      "body": "Tiene sentido revisar el costo. Sin validar condiciones y alcance, cualquier cifra aislada puede llevarnos a comparar cosas distintas. Si me compartes el contexto básico, Paco revisa la parte comercial sobre una base técnica. ¿Te mando la lista?\n\nFrancisco"
+    },
+    {
+      "intent": "CHEAPER_VENDOR",
+      "body": "Una opción más barata puede ser correcta si el alcance y las condiciones son equivalentes. Podemos ayudarte a poner en la misma hoja qué incluye cada propuesta y qué falta validar. ¿Te serviría esa comparación?\n\nFrancisco"
+    },
+    {
+      "intent": "INTERNAL_ALIGNMENT",
+      "body": "Te preparo un resumen corto con lo verificado, los supuestos y los pendientes para que dirección, mantenimiento y compras revisen la misma versión. ¿Quién más debe quedar incluido?\n\nFrancisco"
+    },
+    {
+      "intent": "COMMERCIAL_COMMITMENT",
+      "body": "Ese punto lo confirma Paco después de revisar el alcance técnico. No quiero darte una respuesta incompleta o fuera de contexto. ¿Te conecto con él sobre este mismo expediente?\n\nFrancisco"
+    },
+    {
+      "intent": "UNSUBSCRIBE",
+      "body": "Listo, {{first_name}}. Ya registré la baja y no recibirás más mensajes de esta secuencia.\n\nFrancisco"
+    }
+  ]
+}
+

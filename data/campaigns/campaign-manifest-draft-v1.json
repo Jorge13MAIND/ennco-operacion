@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0.0",
+  "manifest_id": "ENNCO-PILOT-DRAFT-V1",
+  "status": "HOLD",
+  "evidence_class": "synthetic_demo",
+  "environment": "local",
+  "external_send_authorized": false,
+  "sender": {
+    "name": "Francisco Cuellar",
+    "title": "CEO",
+    "mailbox": "UNKNOWN_NOT_PROVISIONED",
+    "domain": "UNKNOWN_NOT_PURCHASED"
+  },
+  "recipients": [],
+  "recipient_count": 0,
+  "pilot_account_limit": 5,
+  "sequence": {
+    "path": "data/campaigns/sequence-draft-v1.json",
+    "sha256": "6d67db19633e5749a55b545e9b1a09b1ac25688234bf402b881618514c48738e",
+    "touch_count": 8,
+    "cadence_days": [0, 3, 7, 14, 28, 42, 60, 75]
+  },
+  "cta": {
+    "type": "LOW_FRICTION_REPLY_OR_DIAGNOSTIC",
+    "public_url": "UNKNOWN_NOT_PUBLISHED",
+    "utm_required_when_linked": true
+  },
+  "tracking": {
+    "open_pixel": false,
+    "click_tracking": false,
+    "utm": true
+  },
+  "schedule": {
+    "timezone": "America/Mexico_City",
+    "window_start": "09:30",
+    "window_end": "11:30",
+    "days": ["TUESDAY", "WEDNESDAY", "THURSDAY"]
+  },
+  "suppression": {
+    "annex_a_present": false,
+    "current_clients_present": true,
+    "unsubscribes_present": true,
+    "hard_bounces_present": true,
+    "snapshot_sha256": "UNKNOWN_ANNEX_A_ABSENT",
+    "snapshot_max_age_hours": 24,
+    "transactional_recheck_required": true,
+    "fail_closed": true
+  },
+  "domain_readiness": {
+    "minimum_authenticated_days": 35,
+    "spf": "UNKNOWN",
+    "dkim": "UNKNOWN",
+    "dmarc": "UNKNOWN",
+    "tls": "UNKNOWN",
+    "postmaster": "UNKNOWN",
+    "seed_tests": "UNKNOWN"
+  },
+  "runtime": {
+    "global_kill_switch": true,
+    "mailbox_kill_switch": true,
+    "external_send_allowed": false,
+    "dry_run_only": true,
+    "max_external_side_effects": 0
+  },
+  "stop_rules": [
+    "HUMAN_REPLY",
+    "HARD_BOUNCE",
+    "UNSUBSCRIBE",
+    "DNC",
+    "SUPPRESSION_MATCH",
+    "MANUAL_INTERVENTION",
+    "GLOBAL_KILL_SWITCH",
+    "MAILBOX_KILL_SWITCH"
+  ],
+  "approvals": {
+    "copy_francisco": false,
+    "technical_paco": false,
+    "suppression_reconciled": false,
+    "qa_canary": false,
+    "release_jorge": false
+  },
+  "canary": {
+    "required_real_consecutive_days": 14,
+    "synthetic_harness_result": "PASS_LOCAL",
+    "release_decision": "EXTEND",
+    "unknown_is_pass": false
+  },
+  "release_blockers": [
+    "ANNEX_A_ABSENT",
+    "RECIPIENTS_EMPTY",
+    "DOMAINS_NOT_PURCHASED",
+    "MAILBOXES_NOT_PROVISIONED",
+    "DNS_AUTH_UNKNOWN",
+    "REPUTATION_WINDOW_NOT_STARTED",
+    "COPY_NOT_APPROVED",
+    "TECHNICAL_REVIEW_NOT_APPROVED",
+    "REAL_CANARY_NOT_COMPLETED",
+    "EXPLICIT_SEND_APPROVAL_ABSENT"
+  ],
+  "immutable_release_fields": [
+    "sender",
+    "recipients",
+    "sequence.sha256",
+    "cta",
+    "tracking",
+    "schedule",
+    "suppression.snapshot_sha256",
+    "runtime",
+    "stop_rules",
+    "approvals"
+  ]
+}

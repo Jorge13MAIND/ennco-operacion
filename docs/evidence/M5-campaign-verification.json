@@ -1,0 +1,234 @@
+{
+  "status": "PASS",
+  "evidence_class": "synthetic_demo",
+  "release_decision": "EXTEND",
+  "sequence_sha256": "6d67db19633e5749a55b545e9b1a09b1ac25688234bf402b881618514c48738e",
+  "manifest_sha256": "e423bdfb9446b1c5988133626353b0cc5bcb53a212b25fc9cbd752d686deb0da",
+  "check_count": 29,
+  "pass_count": 29,
+  "failure_count": 0,
+  "checks": [
+    {
+      "id": "SEQUENCE_DRAFT_ONLY",
+      "status": "PASS",
+      "observed": "DRAFT_REVIEW_REQUIRED"
+    },
+    {
+      "id": "SYNTHETIC_EVIDENCE_ONLY",
+      "status": "PASS",
+      "observed": "synthetic_demo"
+    },
+    {
+      "id": "SENDER_FROZEN",
+      "status": "PASS",
+      "observed": {
+        "name": "Francisco Cuellar",
+        "title": "CEO",
+        "company": "ENNCO"
+      }
+    },
+    {
+      "id": "EIGHT_TOUCHES",
+      "status": "PASS",
+      "observed": 8
+    },
+    {
+      "id": "CADENCE_MATCHES",
+      "status": "PASS",
+      "observed": [
+        0,
+        3,
+        7,
+        14,
+        28,
+        42,
+        60,
+        75
+      ]
+    },
+    {
+      "id": "TOUCH_OFFSETS_MATCH",
+      "status": "PASS",
+      "observed": [
+        0,
+        3,
+        7,
+        14,
+        28,
+        42,
+        60,
+        75
+      ]
+    },
+    {
+      "id": "THREE_ROLE_VARIANTS",
+      "status": "PASS",
+      "observed": 24
+    },
+    {
+      "id": "COPY_UNDER_100_WORDS",
+      "status": "PASS",
+      "observed": 55
+    },
+    {
+      "id": "SUBJECTS_UNDER_70_CHARS",
+      "status": "PASS",
+      "observed": 54
+    },
+    {
+      "id": "ONE_CTA_MAX",
+      "status": "PASS",
+      "observed": []
+    },
+    {
+      "id": "FRANCISCO_SIGNATURE",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "INITIAL_SIGNAL_GROUNDED",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "NO_UNICODE_DASHES",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "NO_PROHIBITED_COMMITMENTS",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "EXPLICIT_STOP_RULES",
+      "status": "PASS",
+      "observed": [
+        "HUMAN_REPLY",
+        "HARD_BOUNCE",
+        "UNSUBSCRIBE",
+        "DNC",
+        "SUPPRESSION_MATCH",
+        "MANUAL_INTERVENTION",
+        "GLOBAL_KILL_SWITCH",
+        "MAILBOX_KILL_SWITCH"
+      ]
+    },
+    {
+      "id": "SEQUENCE_HASH_MATCHES_MANIFEST",
+      "status": "PASS",
+      "observed": {
+        "expected": "6d67db19633e5749a55b545e9b1a09b1ac25688234bf402b881618514c48738e",
+        "observed": "6d67db19633e5749a55b545e9b1a09b1ac25688234bf402b881618514c48738e"
+      }
+    },
+    {
+      "id": "MANIFEST_IS_HOLD",
+      "status": "PASS",
+      "observed": {
+        "status": "HOLD",
+        "external_send_authorized": false
+      }
+    },
+    {
+      "id": "ZERO_RECIPIENTS",
+      "status": "PASS",
+      "observed": 0
+    },
+    {
+      "id": "FAIL_CLOSED_RUNTIME",
+      "status": "PASS",
+      "observed": {
+        "global_kill_switch": true,
+        "mailbox_kill_switch": true,
+        "external_send_allowed": false,
+        "dry_run_only": true,
+        "max_external_side_effects": 0
+      }
+    },
+    {
+      "id": "ANNEX_A_BLOCKS_RELEASE",
+      "status": "PASS",
+      "observed": {
+        "annex_a_present": false,
+        "current_clients_present": true,
+        "unsubscribes_present": true,
+        "hard_bounces_present": true,
+        "snapshot_sha256": "UNKNOWN_ANNEX_A_ABSENT",
+        "snapshot_max_age_hours": 24,
+        "transactional_recheck_required": true,
+        "fail_closed": true
+      }
+    },
+    {
+      "id": "ALL_APPROVALS_FALSE",
+      "status": "PASS",
+      "observed": {
+        "copy_francisco": false,
+        "technical_paco": false,
+        "suppression_reconciled": false,
+        "qa_canary": false,
+        "release_jorge": false
+      }
+    },
+    {
+      "id": "UNKNOWN_NEVER_PASS",
+      "status": "PASS",
+      "observed": {
+        "required_real_consecutive_days": 14,
+        "synthetic_harness_result": "PASS_LOCAL",
+        "release_decision": "EXTEND",
+        "unknown_is_pass": false
+      }
+    },
+    {
+      "id": "NO_OPEN_PIXEL",
+      "status": "PASS",
+      "observed": {
+        "open_pixel": false,
+        "click_tracking": false,
+        "utm": true
+      }
+    },
+    {
+      "id": "EXTERNAL_SIDE_EFFECT_BUDGET_ZERO",
+      "status": "PASS",
+      "observed": 0
+    },
+    {
+      "id": "RESPONSE_PLAYBOOK_DRAFT_ONLY",
+      "status": "PASS",
+      "observed": {
+        "status": "DRAFT_REVIEW_REQUIRED",
+        "responses": 8
+      }
+    },
+    {
+      "id": "RESPONSE_PLAYBOOK_ONE_CTA_MAX",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "RESPONSE_PLAYBOOK_NO_COMMITMENTS",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "ANONYMOUS_REFERENCES_NOT_CASE_STUDIES",
+      "status": "PASS",
+      "observed": {
+        "status": "INTERNAL_REFERENCE_NOT_CASE_STUDY",
+        "publish_authorized": false
+      }
+    },
+    {
+      "id": "REFERENCE_SOURCE_IDS_EXIST",
+      "status": "PASS",
+      "observed": [
+        "hist_0e963901f3c04620eb0e",
+        "hist_cb9e4d265712763d16d6",
+        "ANON-PROP-001"
+      ]
+    }
+  ]
+}

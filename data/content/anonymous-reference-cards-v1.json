@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0.0",
+  "status": "INTERNAL_REFERENCE_NOT_CASE_STUDY",
+  "evidence_class": "historical_evidence",
+  "publish_authorized": false,
+  "rules": [
+    "no revelar cliente, planta o contacto",
+    "no llamar caso de éxito sin resultado y permiso verificables",
+    "no presentar propuesta como obra ejecutada",
+    "no publicar ahorro proyectado como resultado observado"
+  ],
+  "cards": [
+    {
+      "id": "ANON-REF-001",
+      "classification": "COMPLETED_HISTORICAL_RECORD",
+      "label": "Instalación fotovoltaica anónima en León",
+      "facts": {
+        "work_type": "INSTALACION FOTOVOLTAICA",
+        "capacity_kwp": 54.825,
+        "recorded_sale_mxn": 970243.27,
+        "recorded_payment_date": "2026-04-30"
+      },
+      "outcome_verified": false,
+      "source_record_id": "hist_0e963901f3c04620eb0e"
+    },
+    {
+      "id": "ANON-REF-002",
+      "classification": "COMPLETED_HISTORICAL_RECORD",
+      "label": "Mantenimiento eléctrico anónimo en León",
+      "facts": {
+        "work_type": "MANTENIMIENTO ELECTRICO",
+        "capacity_kwp": null,
+        "recorded_sale_mxn": 2312752.87,
+        "recorded_payment_date": "2026-07-08"
+      },
+      "outcome_verified": false,
+      "source_record_id": "hist_cb9e4d265712763d16d6"
+    },
+    {
+      "id": "ANON-REF-003",
+      "classification": "PROPOSAL_REFERENCE_ONLY",
+      "label": "Propuesta fotovoltaica anónima",
+      "facts": {
+        "capacity_kwp": 39,
+        "module_count": 60,
+        "module_wp": 650,
+        "proposed_price_mxn_including_tax": 796880.11
+      },
+      "outcome_verified": false,
+      "source_record_id": "ANON-PROP-001"
+    }
+  ]
+}

@@ -44,6 +44,10 @@ Estados permitidos para este registro:
 | DEC-031 | La respuesta positiva exige revisión humana y no cuenta como lead contractual | VERIFIED | Migración 006 y gate adversarial | La revisión crea CAPTURED; otra transición exige cinco criterios y evidencia | UAT M4 |
 | DEC-032 | Los exports live son privados, llevan checksum y dejan audit run | VERIFIED | API y migración 006 | Un CSV sintético siempre está vacío y etiquetado | UAT M4 |
 | DEC-033 | Gmail, Pub/Sub y mutaciones operativas permanecen cerrados en demo | VERIFIED | Runtime y pruebas E2E M4 | La interfaz puede probarse sin crear datos ni efectos externos | Staging M4 |
+| DEC-034 | Un canary acelerado puede aprobar el harness local pero nunca el release | VERIFIED | Delegación AVA, plan aprobado y migration 007 | Evidencia sintética fuerza EXTEND; PASS exige 14 días live en staging | M5 |
+| DEC-035 | El assistant inicial es determinista y sólo responde intenciones documentadas | VERIFIED | Transcripts, límites vinculantes y eval suite | Unknown, comercial, legal y técnico escalan; prompt injection se rechaza | M5 |
+| DEC-036 | Los 24 mensajes permanecen DRAFT_REVIEW_REQUIRED y el manifest en HOLD | VERIFIED | Campaign package M5 | Ningún copy, destinatario, buzón o volumen queda autorizado por existir en código | M5 |
+| DEC-037 | Las referencias anónimas no son casos de éxito hasta verificar outcome y permiso | VERIFIED | Histórico, propuestas y corrección de Jorge | Publicación bloqueada y outcome false | M5 |
 
 ## Jerarquia de evidencia
 
