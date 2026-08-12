@@ -5,14 +5,14 @@ import { firstPaymentSchema, uuidSchema } from "@/lib/operations/mutations";
 import { getMutationContext, mutationResponse, mutationUnavailable } from "@/lib/operations/route";
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+  const context = await getMutationContext(request);
+  if (!context.ok) return context.response;
   const { id } = await params;
   const opportunityId = uuidSchema.safeParse(id);
   const payload = firstPaymentSchema.safeParse(await request.json().catch(() => null));
   if (!opportunityId.success || !payload.success) {
     return NextResponse.json({ error: "FIRST_PAYMENT_INPUT_INVALID" }, { status: 400 });
   }
-  const context = await getMutationContext(request);
-  if (!context.ok) return context.response;
   const sourceUrl = new URL(payload.data.sourceUrl).toString();
   const observedAt = new Date(payload.data.observedAt).toISOString();
   const paidAt = new Date(payload.data.paidAt).toISOString();

@@ -85,7 +85,7 @@ test("privacy notice is visible and explicitly remains a legal draft", async ({ 
 
 test("control room never presents setup as live commercial truth", async ({ page }) => {
   await page.goto("/operacion");
-  await expect(page.getByText("synthetic_demo")).toBeVisible();
+  await expect(page.getByText("synthetic_demo", { exact: true })).toBeVisible();
   await expect(page.getByText("Modo sintético con tráfico cero.")).toBeVisible();
   await expect(page.getByText("Leads contractuales")).toBeVisible();
   await expect(page.getByText("Pipeline estricto")).toBeVisible();

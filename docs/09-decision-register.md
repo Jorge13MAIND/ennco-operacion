@@ -65,6 +65,12 @@ Estados permitidos para este registro:
 | DEC-052 | La aceptación está ligada a paquete, manifest y statement exactos | VERIFIED | Migración 011 y prueba de deriva | Reintento idéntico es idempotente, cambio de statement se rechaza | M9 |
 | DEC-053 | El segundo restore local es evidencia de harness, no de PITR, RPO o RTO productivo | VERIFIED | `evidence/m9-restore` | Continuidad live conserva gate separado | M9 live |
 | DEC-054 | Empresas sin contactos deben preservarse en export | VERIFIED | Corrección y pruebas de `buildCompaniesContactsExportRows` | El inventario de investigación no desaparece por falta de contacto | M9 |
+| DEC-055 | Aprobaciones incidentes tareas reuniones y roadmap se operan sólo por RPC canónico | VERIFIED | Migración y gate M020 | El DML directo autenticado queda revocado y el rollback falla cerrado | M4 |
+| DEC-056 | Un P0 sin acuse a quince minutos activa kill switch y una alerta P0 sin entrega a dos minutos abre incidente | VERIFIED | Watchdog y gate M020 local | La falla de notificación conserva registros y nunca deja salud verde | Staging M4 |
+| DEC-057 | El PASS local de SLA no prueba operador scheduler canal ni cronómetro live | VERIFIED | Arquitectura M4 y límites de M020 | El portal muestra `UNKNOWN` hasta tener heartbeat y configuración real | Staging M4 |
+| DEC-058 | La bandera de runtime no autoriza por sí sola un envío externo | VERIFIED | Trigger de mensajes, evaluación de salud y pruebas M020 | La autorización efectiva exige watchdog fresco, asignación activa, cero incidentes P0 o P1 y gates de campaña | Staging M4 |
+| DEC-059 | Cada recurrencia de incidente abre una ocurrencia nueva y una matriz de entregas obligatorias | VERIFIED | Ledger de incidentes, requisitos CLIENT EMAIL y TECKEL TELEGRAM, gate M020 | Un incidente repetido obtiene reloj, outbox y evidencia propios; una sola entrega no completa la alerta | Staging M4 |
+| DEC-060 | La aprobación de cierre usa digest canónico calculado en servidor y expira por drift | VERIFIED | RPC de solicitud, trigger de consumo y negativos M020 | Un hash arbitrario o una aprobación vencida no puede habilitar `CLOSED_WON` | M4 |
 
 ## Jerarquia de evidencia
 

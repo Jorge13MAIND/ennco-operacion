@@ -20,6 +20,13 @@ const inventory = [
   ["POST", "/api/v1/research/dedupe/[id]/resolve", "IMPLEMENTED_LOCAL_HOLD"],
   ["GET", "/api/v1/research/inventory/readiness", "IMPLEMENTED_LOCAL_HOLD"],
   ["POST", "/api/v1/research/inventory/snapshots", "IMPLEMENTED_LOCAL_HOLD"],
+  ["POST", "/api/v1/operations/provider-events/[id]/review", "IMPLEMENTED_LOCAL_HOLD"],
+  ["POST", "/api/v1/operations/approvals/[id]/decision", "IMPLEMENTED_LOCAL_HOLD"],
+  ["POST", "/api/v1/operations/opportunities/[id]/approval", "IMPLEMENTED_LOCAL_HOLD"],
+  ["POST", "/api/v1/operations/tasks/[id]/assign", "IMPLEMENTED_LOCAL_HOLD"],
+  ["POST", "/api/v1/operations/tasks/[id]/complete", "IMPLEMENTED_LOCAL_HOLD"],
+  ["POST", "/api/v1/operations/meetings/[id]/outcome", "IMPLEMENTED_LOCAL_HOLD"],
+  ["POST", "/api/v1/operations/incidents/[id]/transition", "IMPLEMENTED_LOCAL_HOLD"],
   ["POST", "/api/v1/leads", "DEFERRED_CONTRACT"],
   ["POST", "/api/v1/webhooks/meta", "DEFERRED_WHATSAPP_PHASE"],
 ];

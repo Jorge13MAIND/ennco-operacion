@@ -5,14 +5,14 @@ import { commercialEvidenceSchema, uuidSchema } from "@/lib/operations/mutations
 import { getMutationContext, mutationResponse, mutationUnavailable } from "@/lib/operations/route";
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+  const context = await getMutationContext(request);
+  if (!context.ok) return context.response;
   const { id } = await params;
   const leadId = uuidSchema.safeParse(id);
   const payload = commercialEvidenceSchema.safeParse(await request.json().catch(() => null));
   if (!leadId.success || !payload.success) {
     return NextResponse.json({ error: "COMMERCIAL_EVIDENCE_INPUT_INVALID" }, { status: 400 });
   }
-  const context = await getMutationContext(request);
-  if (!context.ok) return context.response;
   const sourceUrl = new URL(payload.data.sourceUrl).toString();
   const observedAt = new Date(payload.data.observedAt).toISOString();
   const checksum = commercialEvidenceLedgerChecksum({

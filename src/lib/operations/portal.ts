@@ -1,10 +1,12 @@
 import type { OperationsAccessContext } from "@/lib/auth/authorization";
 import { INITIAL_MILESTONES } from "@/lib/control-room/snapshot";
 import { civilDateValue, parseCapacityReadModel } from "@/lib/operations/capacity";
+import { operationsHealthResultSchema } from "@/lib/operations/sla";
 import { parseResearchPortalReadModel } from "@/lib/research/portal";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const OPERATION_MODULE_KEYS = [
+  "alertas",
   "respuestas",
   "leads",
   "empresas",
@@ -21,6 +23,7 @@ export const OPERATION_MODULE_KEYS = [
 export type OperationModuleKey = (typeof OPERATION_MODULE_KEYS)[number];
 
 export const OPERATION_MODULE_LABELS: Record<OperationModuleKey, string> = {
+  alertas: "Alertas e incidentes",
   respuestas: "Respuestas",
   leads: "Leads",
   empresas: "Empresas",
@@ -64,6 +67,12 @@ export type OperationsPortalSnapshot = {
     replySync: "HOLD" | "HEALTHY" | "DEGRADED";
     openP0: number;
     openP1: number;
+    operations: {
+      state: "HEALTHY" | "DEGRADED" | "UNKNOWN";
+      reasonCode: string | null;
+      lastWatchdogAt: string | null;
+      operatorAssignment: "ACTIVE" | "UNKNOWN";
+    };
     capacity: {
       state: "HEALTHY" | "WARNING" | "FULL" | "UNKNOWN";
       month: string;
@@ -96,6 +105,27 @@ function row(id: string, status: string, values: Record<string, string>): Portal
 
 export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
   const modules: Record<OperationModuleKey, PortalModule> = {
+    alertas: {
+      title: "Alertas e incidentes",
+      description: "Riesgos operativos, reloj SLA y evidencia de recuperación. Desconocido nunca cuenta como verde.",
+      emptyState: "No hay incidentes reales. El watchdog live permanece pendiente.",
+      columns: [
+        { key: "severidad", label: "Severidad" },
+        { key: "incidente", label: "Incidente" },
+        { key: "responsable", label: "Responsable" },
+        { key: "sla", label: "SLA" },
+        { key: "evidencia", label: "Evidencia" },
+        { key: "accion", label: "Siguiente estado" },
+      ],
+      rows: [row("incident-synthetic-1", "SIMULACION", {
+        severidad: "P0",
+        incidente: "Supresión ignorada, ejemplo sintético",
+        responsable: "Sin operador live asignado",
+        sla: "Acuse máximo 15 minutos",
+        evidencia: "Sin evento real ni entrega de alerta",
+        accion: "Sin acción live",
+      })],
+    },
     respuestas: {
       title: "Bandeja de respuestas",
       description: "Ejemplos de cómo se detienen secuencias y se asigna una siguiente acción.",
@@ -321,6 +351,12 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
       replySync: "HOLD",
       openP0: 10,
       openP1: 11,
+      operations: {
+        state: "UNKNOWN",
+        reasonCode: "WATCHDOG_NOT_LIVE_IN_SYNTHETIC_DEMO",
+        lastWatchdogAt: null,
+        operatorAssignment: "UNKNOWN",
+      },
       capacity: {
         state: "UNKNOWN",
         month: "Sin mes operativo",
@@ -382,6 +418,49 @@ export function sumFirstPaymentsMxn(payments: Array<Record<string, unknown>>): n
   }, 0);
 }
 
+const STRICT_PIPELINE_STAGES = new Set([
+  "QUALIFIED",
+  "TECHNICAL_VISIT",
+  "PROPOSAL",
+  "DECISION",
+]);
+
+export function isStrictQualifiedOpportunity(opportunity: Record<string, unknown>): boolean {
+  return STRICT_PIPELINE_STAGES.has(textValue(opportunity.stage, ""))
+    && opportunity.economic_buyer === true
+    && opportunity.active_pain === true
+    && opportunity.business_impact === true
+    && opportunity.timing_under_90_days === true
+    && Number(opportunity.value_mxn ?? 0) > 0
+    && Boolean(opportunity.next_action)
+    && Boolean(opportunity.next_action_at);
+}
+
+export function isOpenIncident(incident: Record<string, unknown>): boolean {
+  return !["RESOLVED", "REVIEWED"].includes(textValue(incident.status, "UNKNOWN"));
+}
+
+export function evaluateReplySync(
+  cursors: Array<Record<string, unknown>>,
+  evaluatedAt: Date,
+  maximumLagMs = 5 * 60 * 1000,
+): "HOLD" | "HEALTHY" | "DEGRADED" {
+  if (cursors.length === 0) return "HOLD";
+  if (cursors.some((cursor) => cursor.status === "ERROR")) return "DEGRADED";
+  if (cursors.some((cursor) => cursor.status !== "READY")) return "HOLD";
+  const evaluatedAtMs = evaluatedAt.getTime();
+  if (!Number.isFinite(evaluatedAtMs) || maximumLagMs <= 0) return "DEGRADED";
+  return cursors.every((cursor) => {
+    const lastSyncedAt = new Date(textValue(cursor.last_synced_at, "invalid")).getTime();
+    const watchExpiresAt = new Date(textValue(cursor.watch_expires_at, "invalid")).getTime();
+    return Number.isFinite(lastSyncedAt)
+      && Number.isFinite(watchExpiresAt)
+      && lastSyncedAt <= evaluatedAtMs
+      && evaluatedAtMs - lastSyncedAt <= maximumLagMs
+      && watchExpiresAt > evaluatedAtMs;
+  }) ? "HEALTHY" : "DEGRADED";
+}
+
 export async function loadOperationsPortal(access: OperationsAccessContext): Promise<OperationsPortalSnapshot> {
   if (access.evidenceClass === "synthetic_demo") return getSyntheticOperationsPortal();
   if (!access.organizationId) throw new Error("PORTAL_ORGANIZATION_REQUIRED");
@@ -419,6 +498,27 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       target_organization_id: organizationId,
     }),
   ]);
+  const operationsPromise = Promise.allSettled([
+    client.from("approval_requests")
+      .select("id,subject_type,subject_sha256,status,requested_by,requested_at,due_at,decided_by,decided_at")
+      .eq("organization_id", organizationId)
+      .order("requested_at", { ascending: false })
+      .limit(100),
+    client.from("operational_sla_cases")
+      .select("id,case_type,subject_type,subject_id,severity,status,owner_user_id,backup_user_id,due_at,completed_at,breach_recorded_at")
+      .eq("organization_id", organizationId)
+      .order("due_at", { ascending: true })
+      .limit(200),
+    client.from("incidents")
+      .select("id,severity,status,title,owner_user_id,incident_key,ack_due_at,containment_due_at,next_update_due_at,opened_at,acknowledged_at,contained_at,recovering_at,monitoring_at,resolved_at,reviewed_at,evidence_sha256,recovery_test_passed")
+      .eq("organization_id", organizationId)
+      .order("opened_at", { ascending: false })
+      .limit(100),
+    client.rpc("evaluate_operations_health", {
+      target_organization_id: organizationId,
+      target_evaluated_at: new Date().toISOString(),
+    }),
+  ]);
   const results = await Promise.all([
     client.from("runtime_controls").select("global_kill_switch,external_send_allowed").eq("organization_id", organizationId).maybeSingle(),
     client.from("accounts").select("id,legal_name,state,sector,source_confidence,updated_at", { count: "exact" }).eq("organization_id", organizationId).eq("is_deleted", false).limit(200),
@@ -430,10 +530,10 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     client.from("campaigns").select("id,name,status,manifest_sha256,shadow_canary_decision,updated_at").eq("organization_id", organizationId).order("updated_at", { ascending: false }).limit(100),
     client.from("opportunities").select("id,account_id,stage,value_mxn,next_action,next_action_at,economic_buyer,active_pain,business_impact,timing_under_90_days").eq("organization_id", organizationId).order("updated_at", { ascending: false }).limit(100),
     client.from("meetings").select("id,opportunity_id,scheduled_at,held_at,attendance_verified").eq("organization_id", organizationId).order("scheduled_at", { ascending: true }).limit(100),
-    client.from("tasks").select("id,account_id,contact_id,task_type,normalized_objective,due_at,status").eq("organization_id", organizationId).order("due_at", { ascending: true }).limit(100),
+    client.from("tasks").select("id,account_id,contact_id,task_type,normalized_objective,owner_user_id,due_at,status").eq("organization_id", organizationId).order("due_at", { ascending: true }).limit(100),
     client.from("roadmap_milestones").select("id,code,name,status,blocker,next_action,due_date").eq("organization_id", organizationId).order("code", { ascending: true }),
     client.from("approvals").select("id,subject_type,decision,decided_at").eq("organization_id", organizationId).order("decided_at", { ascending: false }).limit(100),
-    client.from("incidents").select("id,severity,status,title,opened_at").eq("organization_id", organizationId).in("status", ["OPEN", "ACKNOWLEDGED", "MITIGATED"]),
+    client.from("incidents").select("id,severity,status,title,owner_user_id,opened_at").eq("organization_id", organizationId).order("opened_at", { ascending: false }).limit(100),
     client.from("mailbox_sync_cursors").select("mailbox_id,status,last_synced_at,last_error_code,watch_expires_at").eq("organization_id", organizationId),
     client.from("campaign_release_gates").select("id,campaign_id,gate_code,status,evidence_class,observed_at,valid_until").eq("organization_id", organizationId).order("gate_code", { ascending: true }),
     client.from("first_send_batches").select("id,campaign_id,status,recipient_count,account_count,scheduled_for,approved_at,released_at,killed_at,kill_reason_code").eq("organization_id", organizationId).order("created_at", { ascending: false }),
@@ -456,6 +556,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult, monthlyReportsResult, reportIssuancesResult, recoveryExperimentsResult, handoffPackagesResult, handoffArtifactsResult, handoffChecksResult, handoffTrainingResult, finalAcceptancesResult, paymentsResult] = results;
   const [capacitySchedulesSettled, capacityEvaluationSettled] = await capacityPromise;
   const [researchAccountsSettled, researchCandidatesSettled, researchDedupeSettled, researchAssessmentSettled] = await researchPromise;
+  const [approvalRequestsSettled, operationalSlaSettled, operationsIncidentsSettled, operationsHealthSettled] = await operationsPromise;
   const capacitySchedulesResult = capacitySchedulesSettled.status === "fulfilled" && !capacitySchedulesSettled.value.error
     ? capacitySchedulesSettled.value
     : null;
@@ -474,6 +575,23 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const researchAssessmentResult = researchAssessmentSettled.status === "fulfilled" && !researchAssessmentSettled.value.error
     ? researchAssessmentSettled.value
     : null;
+  const approvalRequestsResult = approvalRequestsSettled.status === "fulfilled" && !approvalRequestsSettled.value.error
+    ? approvalRequestsSettled.value
+    : null;
+  const operationalSlaResult = operationalSlaSettled.status === "fulfilled" && !operationalSlaSettled.value.error
+    ? operationalSlaSettled.value
+    : null;
+  const operationsIncidentsResult = operationsIncidentsSettled.status === "fulfilled" && !operationsIncidentsSettled.value.error
+    ? operationsIncidentsSettled.value
+    : null;
+  const operationsHealthRaw = operationsHealthSettled.status === "fulfilled" && !operationsHealthSettled.value.error
+    ? operationsHealthSettled.value.data
+    : null;
+  const operationsHealthParsed = operationsHealthResultSchema.safeParse(operationsHealthRaw);
+  const operationsReadReady = approvalRequestsResult !== null
+    && operationalSlaResult !== null
+    && operationsIncidentsResult !== null
+    && operationsHealthParsed.success;
   const accounts = asRows(accountsResult.data);
   const contacts = asRows(contactsResult.data);
   const messages = asRows(messagesResult.data);
@@ -522,7 +640,10 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const opportunities = asRows(opportunitiesResult.data);
   const meetings = asRows(meetingsResult.data);
   const tasks = asRows(tasksResult.data);
-  const incidents = asRows(incidentsResult.data);
+  const incidents = operationsReadReady ? asRows(operationsIncidentsResult?.data) : asRows(incidentsResult.data);
+  const approvalRequests = operationsReadReady ? asRows(approvalRequestsResult?.data) : [];
+  const operationalSlaCases = operationsReadReady ? asRows(operationalSlaResult?.data) : [];
+  const operationsHealth = operationsReadReady && operationsHealthParsed.success ? operationsHealthParsed.data : null;
   const controls = controlsResult.data as DbRecord | null;
   const accountById = new Map(accounts.map((item) => [textValue(item.id), item]));
   const contactById = new Map(contacts.map((item) => [textValue(item.id), item]));
@@ -587,6 +708,8 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     const health = rolloutHealth.find((candidate) => textValue(candidate.campaign_id) === campaignId);
     const baseline = baselines.find((candidate) => textValue(candidate.campaign_id) === campaignId);
     const runtimeOpen = controls?.external_send_allowed === true && controls?.global_kill_switch === false;
+    const operationsOpen = operationsReadReady && operationsHealth?.state === "HEALTHY"
+      && operationsHealth.operator_assignment === "ACTIVE";
     const releaseReady = gates.length === 30 && passedGates === 30
       && (batch?.status === "READY" || wave?.status === "READY");
     return row(campaignId, textValue(campaign.status), {
@@ -601,18 +724,10 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       t0: baseline
         ? `${textValue(baseline.valid_first_deliveries)}/100. ${textValue(baseline.strict_leads, "0")} leads estrictos`
         : "T0 no congelado",
-      envio: runtimeOpen && releaseReady ? "LISTO EN VENTANA" : "HOLD",
+      envio: runtimeOpen && operationsOpen && releaseReady ? "LISTO EN VENTANA" : "HOLD",
     });
   });
-  const strictQualifiedOpportunities = opportunities.filter((opportunity) =>
-    opportunity.economic_buyer === true
-    && opportunity.active_pain === true
-    && opportunity.business_impact === true
-    && opportunity.timing_under_90_days === true
-    && Number(opportunity.value_mxn ?? 0) > 0
-    && Boolean(opportunity.next_action)
-    && Boolean(opportunity.next_action_at),
-  );
+  const strictQualifiedOpportunities = opportunities.filter(isStrictQualifiedOpportunity);
   const strictOpportunityIds = new Set(strictQualifiedOpportunities.map((opportunity) => textValue(opportunity.id)));
   const pipelineRows = opportunities.map((opportunity) => {
     const capacity = capacityByOpportunityId.get(textValue(opportunity.id));
@@ -638,24 +753,52 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     bloqueador: textValue(milestone.blocker, "Sin bloqueo"),
     siguiente: textValue(milestone.next_action),
   }));
-  const approvalRows = asRows(approvalsResult.data).map((approval) => row(textValue(approval.id), textValue(approval.decision), {
+  const approvalRows = approvalRequests.map((request) => row(textValue(request.id), textValue(request.status), {
+    decision: textValue(request.subject_type),
+    responsable: request.decided_by ? `Decidió ${textValue(request.decided_by).slice(0, 8)}` : "Pendiente de otro administrador",
+    estado: textValue(request.status),
+    impacto: `Vence ${dateValue(request.due_at)}`,
+    subject_sha256: textValue(request.subject_sha256),
+    actionable: request.status === "PENDING" ? "true" : "false",
+  })).concat(asRows(approvalsResult.data).map((approval) => row(textValue(approval.id), textValue(approval.decision), {
     decision: textValue(approval.subject_type),
     responsable: "Usuario autenticado",
     estado: textValue(approval.decision),
     impacto: dateValue(approval.decided_at),
-  })).concat(releaseGates.map((gate) => row(textValue(gate.id), textValue(gate.status), {
+  }))).concat(releaseGates.map((gate) => row(textValue(gate.id), textValue(gate.status), {
     decision: textValue(gate.gate_code),
     responsable: gate.gate_code === "EXPLICIT_SEND_APPROVAL_JORGE" ? "Jorge" : "Dueño del gate",
     estado: textValue(gate.status),
     impacto: gate.status === "PASS" ? `Evidencia ${dateValue(gate.observed_at)}` : "Mantiene el primer envío en HOLD",
   })));
+  const incidentActionByStatus: Record<string, string> = {
+    OPEN: "ACKNOWLEDGE",
+    ACKNOWLEDGED: "CONTAIN",
+    CONTAINED: "RECOVER",
+    RECOVERING: "MONITOR",
+    MONITORING: "RESOLVE",
+    RESOLVED: "REVIEW",
+  };
+  const incidentRows = incidents.map((incident) => {
+    const action = incidentActionByStatus[textValue(incident.status, "UNKNOWN")] ?? "";
+    return row(textValue(incident.id), textValue(incident.status), {
+      severidad: textValue(incident.severity),
+      incidente: textValue(incident.title),
+      responsable: incident.owner_user_id ? `Operador ${textValue(incident.owner_user_id).slice(0, 8)}` : "Sin operador asignado",
+      sla: incident.severity === "P0"
+        ? `Acuse ${dateValue(incident.ack_due_at)}`
+        : incident.severity === "P1" ? `Contención ${dateValue(incident.containment_due_at)}` : "Seguimiento operativo",
+      evidencia: incident.evidence_sha256 ? `SHA256 ${textValue(incident.evidence_sha256).slice(0, 12)}` : `Abierto ${dateValue(incident.opened_at)}`,
+      accion: action || "Ciclo terminado",
+      action,
+      actionable: operationsReadReady && action ? "true" : "false",
+    });
+  });
   const overdueTasks = tasks.filter((task) => task.status === "OPEN" && new Date(textValue(task.due_at, "2999-01-01")).getTime() < Date.now());
-  const openP0 = incidents.filter((incident) => incident.severity === "P0").length;
-  const openP1 = incidents.filter((incident) => incident.severity === "P1").length;
+  const openP0 = incidents.filter((incident) => incident.severity === "P0" && isOpenIncident(incident)).length;
+  const openP1 = incidents.filter((incident) => incident.severity === "P1" && isOpenIncident(incident)).length;
   const cursors = asRows(cursorsResult.data);
-  const replySync = cursors.length > 0 && cursors.every((cursor) => cursor.status === "READY")
-    ? "HEALTHY"
-    : cursors.some((cursor) => cursor.status === "ERROR") ? "DEGRADED" : "HOLD";
+  const replySync = evaluateReplySync(cursors, today);
   const contractualLeads = leads.filter((lead) => lead.contractual_qualified === true).length;
   const wonProjects = opportunities.filter((opportunity) => opportunity.stage === "CLOSED_WON").length;
   const firstPaymentsMxn = sumFirstPaymentsMxn(firstPayments);
@@ -673,6 +816,24 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const latestHandoffArtifacts = handoffArtifacts.filter((artifact) => textValue(artifact.package_id) === latestHandoffId).length;
   const liveTrainingHeld = handoffTraining.filter((training) => textValue(training.package_id) === latestHandoffId && training.status === "HELD" && training.evidence_class === "live").length;
   const finalAcceptance = finalAcceptances.find((acceptance) => textValue(acceptance.package_id) === latestHandoffId);
+  const taskActionRows = tasks.filter((task) => task.status === "OPEN").map((task) => row(textValue(task.id), textValue(task.status), {
+    objective: textValue(task.normalized_objective),
+    due: dateValue(task.due_at),
+    due_iso: textValue(task.due_at, "2999-01-01T00:00:00Z"),
+    owner: task.owner_user_id ? `Operador ${textValue(task.owner_user_id).slice(0, 8)}` : "Sin operador asignado",
+    assignable: task.owner_user_id ? "false" : "true",
+    completable: task.owner_user_id ? "true" : "false",
+  }));
+  const slaActionRows = operationalSlaCases.filter((item) => item.status === "OPEN" || item.status === "BREACHED").map((item) => row(textValue(item.id), textValue(item.status), {
+    objective: `SLA ${textValue(item.case_type)}`,
+    due: dateValue(item.due_at),
+    due_iso: textValue(item.due_at, "2999-01-01T00:00:00Z"),
+    owner: item.owner_user_id ? `Operador ${textValue(item.owner_user_id).slice(0, 8)}` : "Sin operador asignado",
+    completable: "false",
+  }));
+  const nextActionRows = [...slaActionRows, ...taskActionRows]
+    .sort((left, right) => new Date(left.values.due_iso ?? 0).getTime() - new Date(right.values.due_iso ?? 0).getTime())
+    .slice(0, 8);
 
   const base = getSyntheticOperationsPortal();
   return {
@@ -680,7 +841,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     generatedAt: new Date().toISOString(),
     realTruth: {
       newLeads: leads.filter((lead) => new Date(textValue(lead.created_at, "1970-01-01")).getTime() >= dayStart.getTime()).length,
-      pendingReplies: replyRows.length,
+      pendingReplies: replyRows.filter((reply) => reply.values.reviewable === "true").length,
       meetingsToday: meetings.filter((meeting) => {
         const scheduled = new Date(textValue(meeting.scheduled_at, "1970-01-01"));
         return scheduled >= dayStart && scheduled.getTime() < dayStart.getTime() + 24 * 60 * 60 * 1000;
@@ -693,10 +854,20 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     },
     health: {
       killSwitch: controls?.global_kill_switch !== false,
-      externalSendAllowed: controls?.external_send_allowed === true,
+      externalSendAllowed: controls?.external_send_allowed === true
+        && controls?.global_kill_switch === false
+        && operationsReadReady
+        && operationsHealth?.state === "HEALTHY"
+        && operationsHealth.operator_assignment === "ACTIVE",
       replySync,
-      openP0,
-      openP1,
+      openP0: operationsHealth?.open_p0 ?? openP0,
+      openP1: operationsHealth?.open_p1 ?? openP1,
+      operations: {
+        state: operationsHealth?.state ?? "UNKNOWN",
+        reasonCode: operationsHealth?.reason_code ?? (operationsReadReady ? null : "OPERATIONS_READ_MODEL_UNAVAILABLE"),
+        lastWatchdogAt: operationsHealth?.last_watchdog_at ?? null,
+        operatorAssignment: operationsHealth?.operator_assignment ?? "UNKNOWN",
+      },
       capacity: {
         state: capacityEvaluation?.state ?? "UNKNOWN",
         month: capacityEvaluation?.capacity_month ?? capacityMonth,
@@ -718,13 +889,10 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
         blockers: researchBlockers,
       },
     },
-    nextActions: tasks.filter((task) => task.status === "OPEN").slice(0, 8).map((task) => row(textValue(task.id), textValue(task.status), {
-      objective: textValue(task.normalized_objective),
-      due: dateValue(task.due_at),
-      owner: "Operador asignado",
-    })),
+    nextActions: nextActionRows,
     modules: {
       ...base.modules,
+      alertas: { ...base.modules.alertas, rows: incidentRows },
       respuestas: { ...base.modules.respuestas, rows: replyRows },
       leads: { ...base.modules.leads, rows: leadRows },
       empresas: { ...base.modules.empresas, rows: accountRows },

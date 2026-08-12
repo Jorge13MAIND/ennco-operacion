@@ -1,6 +1,14 @@
 import type { PortalModule, PortalRow } from "@/lib/operations/portal";
 import type { OperationModuleKey } from "@/lib/operations/portal";
-import { CompleteTaskButton, LeadQualificationAction, OpportunityTransitionAction, ReplyReviewAction } from "@/components/OperationsActions";
+import {
+  ApprovalDecisionAction,
+  AssignTaskButton,
+  CompleteTaskButton,
+  IncidentTransitionAction,
+  LeadQualificationAction,
+  OpportunityTransitionAction,
+  ReplyReviewAction,
+} from "@/components/OperationsActions";
 
 function StatusBadge({ value }: { value: string }) {
   const blocked = /BLOCK|HOLD|REJECT|ZERO|QUARANTIN/i.test(value);
@@ -12,7 +20,7 @@ export function PortalRowsTable({ module, actionKind, evidenceClass }: {
   actionKind?: OperationModuleKey;
   evidenceClass?: "synthetic_demo" | "live";
 }) {
-  const showsAction = evidenceClass === "live" && (actionKind === "respuestas" || actionKind === "leads" || actionKind === "pipeline");
+  const showsAction = evidenceClass === "live" && ["alertas", "respuestas", "leads", "pipeline", "aprobaciones"].includes(actionKind ?? "");
   return (
     <section className="panel">
       <div className="panel-head portal-panel-head">
@@ -49,6 +57,12 @@ export function PortalRowsTable({ module, actionKind, evidenceClass }: {
                       {actionKind === "leads" ? <LeadQualificationAction leadId={item.id} qualified={item.values.qualified === "true"} /> : null}
                       {actionKind === "pipeline" ? <OpportunityTransitionAction meetingId={item.values.meeting_id} opportunityId={item.id} opportunityStage={item.status} /> : null}
                       {actionKind === "respuestas" && item.values.reviewable === "true" ? <ReplyReviewAction providerEventId={item.id} /> : null}
+                      {actionKind === "aprobaciones" && item.values.actionable === "true"
+                        ? <ApprovalDecisionAction requestId={item.id} subjectSha256={item.values.subject_sha256 ?? ""} />
+                        : null}
+                      {actionKind === "alertas" && item.values.actionable === "true"
+                        ? <IncidentTransitionAction action={item.values.action ?? ""} incidentId={item.id} />
+                        : null}
                     </td>
                   ) : null}
                 </tr>
@@ -70,7 +84,11 @@ export function CompactActionTable({ rows, evidenceClass }: { rows: PortalRow[];
             <strong>{item.values.objective}</strong>
             <span>{item.values.owner} · {item.values.due}</span>
           </div>
-          {evidenceClass === "live" && item.status === "OPEN" ? <CompleteTaskButton taskId={item.id} /> : <StatusBadge value={item.status} />}
+          {evidenceClass === "live" && item.status === "OPEN" && item.values.assignable === "true"
+            ? <AssignTaskButton taskId={item.id} />
+            : evidenceClass === "live" && item.status === "OPEN" && item.values.completable === "true"
+              ? <CompleteTaskButton taskId={item.id} />
+            : <StatusBadge value={item.status} />}
         </article>
       ))}
     </div>

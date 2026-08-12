@@ -21,10 +21,24 @@ function Result({ status, errorMessage }: { status: MutationStatus; errorMessage
   return <span aria-live="assertive" className="status blocked" role="alert">{errorMessage ?? "Rechazado por gate"}</span>;
 }
 
-async function mutate(url: string, body?: unknown): Promise<void> {
+type PendingMutationCommand = { payloadKey: string; idempotencyKey: string };
+
+function newIdempotencyKey(): string {
+  return Array.from(crypto.getRandomValues(new Uint8Array(32)), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function selectMutationCommand(current: PendingMutationCommand | undefined, payload: unknown): PendingMutationCommand {
+  const payloadKey = JSON.stringify(payload);
+  return current?.payloadKey === payloadKey ? current : { payloadKey, idempotencyKey: newIdempotencyKey() };
+}
+
+async function mutate(url: string, body?: unknown, idempotencyKey?: string): Promise<void> {
   const response = await fetch(url, {
     method: "POST",
-    headers: body === undefined ? undefined : { "Content-Type": "application/json" },
+    headers: body === undefined ? undefined : {
+      "Content-Type": "application/json",
+      ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}),
+    },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   if (!response.ok) {
@@ -45,31 +59,69 @@ async function mutateWithResult<T>(url: string, body: unknown): Promise<T> {
 
 export function CompleteTaskButton({ taskId }: { taskId: string }) {
   const [status, setStatus] = useState<MutationStatus>("idle");
-  async function run() {
+  const pendingCommand = useRef<PendingMutationCommand | undefined>(undefined);
+  async function run(formData: FormData) {
     setStatus("pending");
+    const body = { evidenceSha256: String(formData.get("evidenceSha256")) };
+    const command = selectMutationCommand(pendingCommand.current, body);
+    pendingCommand.current = command;
     try {
-      await mutate(`/api/v1/operations/tasks/${taskId}/complete`);
+      await mutate(`/api/v1/operations/tasks/${taskId}/complete`, body, command.idempotencyKey);
+      pendingCommand.current = undefined;
       setStatus("done");
     } catch {
       setStatus("error");
     }
   }
   return (
-    <div className="inline-operation">
-      <button className="text-button" disabled={status === "pending" || status === "done"} onClick={() => void run()} type="button">Marcar hecha</button>
+    <form action={(data) => void run(data)} className="inline-operation">
+      <label>Evidencia SHA256<input aria-label="Evidencia SHA256 de cierre" maxLength={64} minLength={64} name="evidenceSha256" pattern="[a-f0-9]{64}" required /></label>
+      <button className="text-button" disabled={status === "pending" || status === "done"} type="submit">Marcar hecha</button>
       <Result status={status} />
-    </div>
+    </form>
+  );
+}
+
+export function AssignTaskButton({ taskId }: { taskId: string }) {
+  const [status, setStatus] = useState<MutationStatus>("idle");
+  const pendingCommand = useRef<PendingMutationCommand | undefined>(undefined);
+  async function run(formData: FormData) {
+    setStatus("pending");
+    const body = {
+      ownerUserId: String(formData.get("ownerUserId")),
+      backupUserId: String(formData.get("backupUserId")),
+    };
+    const command = selectMutationCommand(pendingCommand.current, body);
+    pendingCommand.current = command;
+    try {
+      await mutate(`/api/v1/operations/tasks/${taskId}/assign`, body, command.idempotencyKey);
+      pendingCommand.current = undefined;
+      setStatus("done");
+    } catch {
+      setStatus("error");
+    }
+  }
+  return (
+    <form action={(data) => void run(data)} className="compact-operation-form">
+      <label>Responsable UUID<input name="ownerUserId" pattern="[0-9a-f-]{36}" required /></label>
+      <label>Suplente UUID<input name="backupUserId" pattern="[0-9a-f-]{36}" required /></label>
+      <button className="text-button" disabled={status === "pending" || status === "done"} type="submit">Asignar tarea</button>
+      <Result status={status} />
+    </form>
   );
 }
 
 export function ReplyReviewAction({ providerEventId }: { providerEventId: string }) {
   const [status, setStatus] = useState<MutationStatus>("idle");
+  const pendingCommand = useRef<PendingMutationCommand | undefined>(undefined);
   async function submit(formData: FormData) {
     setStatus("pending");
+    const body = { classification: String(formData.get("classification")) };
+    const command = selectMutationCommand(pendingCommand.current, body);
+    pendingCommand.current = command;
     try {
-      await mutate(`/api/v1/operations/provider-events/${providerEventId}/review`, {
-        classification: String(formData.get("classification")),
-      });
+      await mutate(`/api/v1/operations/provider-events/${providerEventId}/review`, body, command.idempotencyKey);
+      pendingCommand.current = undefined;
       setStatus("done");
     } catch {
       setStatus("error");
@@ -83,6 +135,69 @@ export function ReplyReviewAction({ providerEventId }: { providerEventId: string
         <option value="NEGATIVE">Negativa</option>
       </select>
       <button className="text-button" disabled={status === "pending" || status === "done"} type="submit">Guardar</button>
+      <Result status={status} />
+    </form>
+  );
+}
+
+export function ApprovalDecisionAction({ requestId, subjectSha256 }: { requestId: string; subjectSha256: string }) {
+  const [status, setStatus] = useState<MutationStatus>("idle");
+  const pendingCommand = useRef<PendingMutationCommand | undefined>(undefined);
+  async function submit(formData: FormData) {
+    setStatus("pending");
+    const body = {
+      subjectSha256,
+      decision: String(formData.get("decision")),
+      rationale: String(formData.get("rationale")),
+    };
+    const command = selectMutationCommand(pendingCommand.current, body);
+    pendingCommand.current = command;
+    try {
+      await mutate(`/api/v1/operations/approvals/${requestId}/decision`, body, command.idempotencyKey);
+      pendingCommand.current = undefined;
+      setStatus("done");
+    } catch {
+      setStatus("error");
+    }
+  }
+  return (
+    <form action={(data) => void submit(data)} className="compact-operation-form">
+      <label>Decisión<select name="decision"><option value="APPROVED">Aprobar</option><option value="REJECTED">Rechazar</option></select></label>
+      <label>Rationale<input maxLength={2000} minLength={3} name="rationale" required /></label>
+      <button className="text-button" disabled={status === "pending" || status === "done"} type="submit">Registrar decisión</button>
+      <Result status={status} />
+    </form>
+  );
+}
+
+export function IncidentTransitionAction({ incidentId, action }: { incidentId: string; action: string }) {
+  const [status, setStatus] = useState<MutationStatus>("idle");
+  const pendingCommand = useRef<PendingMutationCommand | undefined>(undefined);
+  async function submit(formData: FormData) {
+    setStatus("pending");
+    const body = {
+      action,
+      evidenceSha256: String(formData.get("evidenceSha256")),
+      detail: String(formData.get("detail")),
+      recoveryTestPassed: formData.get("recoveryTestPassed") === "on",
+    };
+    const command = selectMutationCommand(pendingCommand.current, body);
+    pendingCommand.current = command;
+    try {
+      await mutate(`/api/v1/operations/incidents/${incidentId}/transition`, body, command.idempotencyKey);
+      pendingCommand.current = undefined;
+      setStatus("done");
+    } catch {
+      setStatus("error");
+    }
+  }
+  return (
+    <form action={(data) => void submit(data)} className="compact-operation-form">
+      <strong>{action}</strong>
+      <label>Detalle verificable<textarea maxLength={4000} minLength={3} name="detail" required /></label>
+      <label>Evidencia SHA256<input maxLength={64} minLength={64} name="evidenceSha256" pattern="[a-f0-9]{64}" required /></label>
+      {action === "RESOLVE" ? <label><input name="recoveryTestPassed" required type="checkbox" /> Prueba de recuperación aprobada</label> : null}
+      <button className="text-button" disabled={status === "pending" || status === "done"} type="submit">Aplicar transición</button>
       <Result status={status} />
     </form>
   );
@@ -224,8 +339,24 @@ export function OpportunityTransitionAction({ opportunityId, opportunityStage, m
   const [meetingStatus, setMeetingStatus] = useState<MutationStatus>("idle");
   const [paymentStatus, setPaymentStatus] = useState<MutationStatus>("idle");
   const [capacityStatus, setCapacityStatus] = useState<MutationStatus>("idle");
+  const [approvalStatus, setApprovalStatus] = useState<MutationStatus>("idle");
   const [capacityError, setCapacityError] = useState<string>();
+  const pendingMeetingCommand = useRef<PendingMutationCommand | undefined>(undefined);
   const pendingCapacityCommand = useRef<CapacityCommand | undefined>(undefined);
+  const pendingApprovalCommand = useRef<PendingMutationCommand | undefined>(undefined);
+  async function requestApproval(formData: FormData) {
+    setApprovalStatus("pending");
+    const body = { requestReason: String(formData.get("requestReason")) };
+    const command = selectMutationCommand(pendingApprovalCommand.current, body);
+    pendingApprovalCommand.current = command;
+    try {
+      await mutate(`/api/v1/operations/opportunities/${opportunityId}/approval`, body, command.idempotencyKey);
+      pendingApprovalCommand.current = undefined;
+      setApprovalStatus("done");
+    } catch {
+      setApprovalStatus("error");
+    }
+  }
   async function transition(formData: FormData) {
     setTransitionStatus("pending");
     try {
@@ -248,15 +379,24 @@ export function OpportunityTransitionAction({ opportunityId, opportunityStage, m
     setMeetingStatus("pending");
     try {
       if (meetingId) {
-        await mutate(`/api/v1/operations/meetings/${meetingId}/outcome`, {
-          heldAt: new Date(String(formData.get("heldAt"))).toISOString(),
-          attendanceVerified: true,
+        const body = {
+          outcomeStatus: String(formData.get("outcomeStatus")),
+          occurredAt: new Date(String(formData.get("occurredAt"))).toISOString(),
           outcomeNotes: String(formData.get("notes") || ""),
-        });
+          evidenceSha256: String(formData.get("evidenceSha256")),
+        };
+        const command = selectMutationCommand(pendingMeetingCommand.current, body);
+        pendingMeetingCommand.current = command;
+        await mutate(`/api/v1/operations/meetings/${meetingId}/outcome`, body, command.idempotencyKey);
+        pendingMeetingCommand.current = undefined;
       } else {
-        await mutate(`/api/v1/operations/opportunities/${opportunityId}/meetings`, {
+        const body = {
           scheduledAt: new Date(String(formData.get("scheduledAt"))).toISOString(),
-        });
+        };
+        const command = selectMutationCommand(pendingMeetingCommand.current, body);
+        pendingMeetingCommand.current = command;
+        await mutate(`/api/v1/operations/opportunities/${opportunityId}/meetings`, body, command.idempotencyKey);
+        pendingMeetingCommand.current = undefined;
       }
       setMeetingStatus("done");
     } catch {
@@ -324,12 +464,23 @@ export function OpportunityTransitionAction({ opportunityId, opportunityStage, m
         <button className="button" disabled={transitionStatus === "pending"} type="submit">Guardar transición</button>
         <Result status={transitionStatus} />
       </form>
+      {opportunityStage === "DECISION" ? (
+        <form action={(data) => void requestApproval(data)} className="compact-operation-form subform">
+          <strong>Solicitar aprobación para cierre</strong>
+          <p className="fine">El servidor congela y firma el estado actual de la oportunidad. La decisión requiere otro administrador.</p>
+          <label>Motivo de solicitud<input maxLength={2000} minLength={3} name="requestReason" required /></label>
+          <button className="button" disabled={approvalStatus === "pending" || approvalStatus === "done"} type="submit">Solicitar aprobación</button>
+          <Result status={approvalStatus} />
+        </form>
+      ) : null}
       {meetingId ? (
         <form action={(data) => void meeting(data)} className="compact-operation-form subform">
           <strong>Resultado de reunión</strong>
-          <label>Hora realizada<input name="heldAt" required type="datetime-local" /></label>
+          <label>Resultado<select name="outcomeStatus"><option value="HELD">Realizada</option><option value="NO_SHOW">No se presentó</option><option value="CANCELLED">Cancelada</option><option value="RESCHEDULED">Reprogramada</option></select></label>
+          <label>Hora del resultado<input name="occurredAt" required type="datetime-local" /></label>
           <label>Notas verificables<textarea maxLength={10000} name="notes" required /></label>
-          <button className="button" disabled={meetingStatus === "pending"} type="submit">Registrar asistencia</button>
+          <label>Evidencia SHA256<input maxLength={64} minLength={64} name="evidenceSha256" pattern="[a-f0-9]{64}" required /></label>
+          <button className="button" disabled={meetingStatus === "pending"} type="submit">Registrar resultado</button>
           <Result status={meetingStatus} />
         </form>
       ) : (

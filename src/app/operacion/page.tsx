@@ -50,6 +50,15 @@ export default async function OperationsPage() {
         <div><span>Kill switch</span><strong>{snapshot.health.killSwitch ? "ACTIVO" : "INACTIVO"}</strong></div>
         <div><span>Envío externo</span><strong>{snapshot.health.externalSendAllowed ? "HABILITADO" : "BLOQUEADO"}</strong></div>
         <div><span>Reply sync</span><strong>{snapshot.health.replySync}</strong></div>
+        <div>
+          <span>Watchdog operativo</span>
+          <strong className={`status ${snapshot.health.operations.state !== "HEALTHY" ? "blocked" : ""}`}>
+            {snapshot.health.operations.state}. Operador {snapshot.health.operations.operatorAssignment}
+          </strong>
+          <span>{snapshot.health.operations.lastWatchdogAt
+            ? `Última corrida ${new Intl.DateTimeFormat("es-MX", { dateStyle: "short", timeStyle: "short" }).format(new Date(snapshot.health.operations.lastWatchdogAt))}`
+            : snapshot.health.operations.reasonCode ?? "Sin evidencia"}</span>
+        </div>
         <div><span>Riesgos</span><strong>{snapshot.health.openP0} P0 / {snapshot.health.openP1} P1</strong></div>
         <div>
           <span>Capacidad {civilDateValue(snapshot.health.capacity.month)}</span>
@@ -80,6 +89,7 @@ export default async function OperationsPage() {
         <section className="panel quick-links-panel">
           <div className="panel-head"><h2>Operar</h2></div>
           <div className="quick-links">
+            <Link href={"/operacion/alertas" as Route}><strong>Atender incidente</strong><span>Acusar, contener y documentar recuperación</span></Link>
             <Link href={"/operacion/respuestas" as Route}><strong>Responder interés</strong><span>Revisar bandeja y detener secuencias</span></Link>
             <Link href={"/operacion/leads" as Route}><strong>Calificar lead</strong><span>Aplicar definición contractual estricta</span></Link>
             <Link href={"/operacion/pipeline" as Route}><strong>Actualizar oportunidad</strong><span>Registrar valor y siguiente acción</span></Link>

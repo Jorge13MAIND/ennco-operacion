@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import type { NextResponse } from "next/server";
 
 import { operationsRpcRejected, operationsRpcResponse, parseOperationsMutationInput } from "@/lib/operations/http";
 import { uuidSchema } from "@/lib/operations/mutations";
 import { getMutationContext } from "@/lib/operations/route";
-import { taskCompletionCommandSchema, taskCompletionResultSchema } from "@/lib/operations/sla";
+import { taskAssignmentCommandSchema, taskAssignmentResultSchema } from "@/lib/operations/sla";
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
   const context = await getMutationContext(request);
@@ -12,17 +12,18 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   if (!taskId.success) return operationsRpcRejected("TASK_ID_INVALID", 400);
   const parsed = await parseOperationsMutationInput({
     request,
-    schema: taskCompletionCommandSchema,
+    schema: taskAssignmentCommandSchema,
     trustedValues: { organizationId: context.organizationId, taskId: taskId.data },
     protectedBodyKeys: ["taskId", "task_id"],
   });
   if (!parsed.ok) return parsed.response;
-  const { data, error } = await context.client.rpc("complete_operational_task_v2", {
+  const { data, error } = await context.client.rpc("assign_operational_task", {
     target_organization_id: context.organizationId,
     target_task_id: taskId.data,
-    target_completion_evidence_sha256: parsed.data.evidenceSha256,
+    target_owner_user_id: parsed.data.ownerUserId,
+    target_backup_user_id: parsed.data.backupUserId,
     target_idempotency_key: parsed.data.idempotencyKey,
   });
-  if (error) return operationsRpcRejected("TASK_COMPLETION_REJECTED");
-  return operationsRpcResponse(taskCompletionResultSchema, data);
+  if (error) return operationsRpcRejected("TASK_ASSIGNMENT_REJECTED");
+  return operationsRpcResponse(taskAssignmentResultSchema, data);
 }

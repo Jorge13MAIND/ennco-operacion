@@ -4,14 +4,14 @@ import { opportunityTransitionSchema, uuidSchema } from "@/lib/operations/mutati
 import { getMutationContext, mutationResponse, mutationUnavailable } from "@/lib/operations/route";
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+  const context = await getMutationContext(request);
+  if (!context.ok) return context.response;
   const { id } = await params;
   const opportunityId = uuidSchema.safeParse(id);
   const payload = opportunityTransitionSchema.safeParse(await request.json().catch(() => null));
   if (!opportunityId.success || !payload.success) {
     return NextResponse.json({ error: "OPPORTUNITY_TRANSITION_INPUT_INVALID" }, { status: 400 });
   }
-  const context = await getMutationContext(request);
-  if (!context.ok) return context.response;
   const { data, error } = await context.client.rpc("transition_opportunity", {
     target_organization_id: context.organizationId,
     target_opportunity_id: opportunityId.data,
