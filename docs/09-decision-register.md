@@ -1,6 +1,6 @@
 # Decision Register
 
-Snapshot: 2026-08-11 20:38 CST.
+Snapshot: 2026-08-13.
 
 Estados permitidos para este registro:
 
@@ -83,6 +83,10 @@ Estados permitidos para este registro:
 | DEC-070 | Toda evidencia enterprise se liga a fuente limpia antes de generar artefactos | VERIFIED | Snapshot de commit y tree incluye archivos nuevos y sidecars SHA256 | Un worktree sucio o commit distinto aborta la captura | M9 |
 | DEC-071 | El contrato SLO local nunca sustituye telemetría administrada | VERIFIED | Seis SLI, siete series, ventanas y burn rate fail closed | Cero denominadores live produce `UNKNOWN` y congela funciones | M9 |
 | DEC-072 | CSP se prueba sobre build productivo e hidratación real | VERIFIED | Nonce exacto, cero violaciones y journey interactivo Playwright | Prerender estático sin nonce queda prohibido para la raíz | M9 |
+| DEC-073 | Gmail API es el único sender comercial recomendado | VERIFIED | Arquitectura M4, documentación oficial Gmail y controles canónicos de campaña | El envío y threading permanecen dentro de los cuatro buzones Workspace; ningún proveedor paralelo puede enviar | Activación M4 y M6 |
+| DEC-074 | Apollo se usa únicamente como fuente de investigación y enriquecimiento | VERIFIED | Workbench M019 y documentación oficial de enriquecimiento Apollo | Los resultados regresan con fuente, fecha y confianza; Apollo no es CRM, ledger de supresión, atribución ni sender | Checkpoint Apollo |
+| DEC-075 | Resend queda prohibido para cold outreach y limitado a alertas transaccionales | VERIFIED | Política de uso aceptable vigente de Resend | Prospectos y listas no solicitadas nunca se envían por Resend | Checkpoint de notificaciones |
+| DEC-076 | El proyecto continúa con un Activation Pack y no requiere reinicio | VERIFIED | M0 a M23 PASS_LOCAL, Control Room operativo en synthetic_demo y gates externos separados | Investigación, panel, adapters mock, QA y dry runs avanzan mientras compras, DNS y credenciales siguen bloqueados | Siguiente checkpoint ejecutivo |
 
 ## Jerarquia de evidencia
 

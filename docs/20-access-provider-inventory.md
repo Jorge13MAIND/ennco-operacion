@@ -1,6 +1,6 @@
 # Inventario de accesos y proveedores
 
-Fecha de corte: 2026-08-12. Este documento no autoriza compra, alta, conexion ni cambio de credenciales.
+Fecha de corte: 2026-08-13. Este documento no autoriza compra, alta, conexion ni cambio de credenciales.
 
 ## Estado de propiedad
 
@@ -11,12 +11,12 @@ Fecha de corte: 2026-08-12. Este documento no autoriza compra, alta, conexion ni
 | Vercel | ENNCO | BLOCKED_EXTERNAL | Proyecto, roles, MFA, variables y rollback | Produccion |
 | Google Workspace | ENNCO | BLOCKED_EXTERNAL | Dominios, cuatro buzones, admins, MFA y offboarding | M4 y M6 |
 | Google Cloud | ENNCO | BLOCKED_EXTERNAL | Proyecto, billing, Pub/Sub, KMS, IAM y audit logs | M2 y M4 |
-| Resend | ENNCO | UNKNOWN | Cuenta, dominio transaccional, DPA, retencion y export | M4 |
+| Resend transaccional | ENNCO | OPTIONAL | Cuenta, dominio transaccional, DPA, retencion, export y confirmacion de uso sin cold outreach | M4 |
 | Sentry | ENNCO | UNKNOWN | Organizacion, region, scrub PII, retencion y export | M2 |
 | Checkly | ENNCO | UNKNOWN | Cuenta, probes, retencion y export | M4 |
 | Telegram | ENNCO | BLOCKED_EXTERNAL | Bot dedicado, canal, rotacion y regla sin PII | Alertas |
 | 1Password | ENNCO | UNKNOWN | Vault, admins, recovery y offboarding | Seguridad |
-| Apollo | ENNCO | UNKNOWN | Acceso, DPA, creditos, limites y export | Investigacion |
+| Apollo enriquecimiento | ENNCO | OPTIONAL_RECOMMENDED | Acceso, DPA, creditos, limites, export y aislamiento del sender | Investigacion |
 | Google Postmaster | ENNCO | BLOCKED_EXTERNAL | Dominio verificado y cuenta ENNCO | M6 |
 
 ## Campos de transferencia obligatorios
