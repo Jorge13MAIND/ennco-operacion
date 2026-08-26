@@ -168,8 +168,8 @@
     },
     {
       "action": "CREATE_SHARED_SMTP_MAILBOXES",
-      "status": "SUPERSEDED_BY_DEC_101",
-      "requires": "GOOGLE_WORKSPACE_SIGNUP_BY_JORGE"
+      "status": "DONE_VIA_GOOGLE_WORKSPACE",
+      "requires": "WARMUP_CONNECTION_PENDING_FRANCISCO_ACCESS"
     },
     {
       "action": "CHANGE_DNS",
@@ -225,6 +225,30 @@
       "RENAME_PROFILE_TO_FRANCISCO",
       "DEACTIVATE_TECKEL_MAILBOXES",
       "ARCHIVE_LEGACY_SEQUENCES"
+    ]
+  },
+  "google_workspace_2026_08_26": {
+    "organization": "ENNCO (nueva, primario enncoenergia.com, secundario enncoindustrial.com)",
+    "admin": "francisco@enncoenergia.com",
+    "domains_verified": [
+      "enncoenergia.com",
+      "enncoindustrial.com"
+    ],
+    "dkim": {
+      "enncoenergia.com": "AUTHENTICATING_2048_selector_google",
+      "enncoindustrial.com": "AUTHENTICATING_2048_selector_google"
+    },
+    "mailboxes_created": [
+      "francisco@enncoenergia.com (admin, M29 allowlist)",
+      "fcuellar@enncoenergia.com (reserva, era el 4o diferido DEC-100)",
+      "francisco@enncoindustrial.com (M29 allowlist)",
+      "fcuellar@enncoindustrial.com (M29 allowlist)"
+    ],
+    "signin_instructions": "PENDIENTES de enviar a francisco.cuellar@ennco.com.mx (decision Jorge/junta)",
+    "trial": "14 dias; requiere tarjeta antes del corte",
+    "next": [
+      "CONNECT_MAILBOXES_TO_WARMUP (requiere acceso de Francisco o instrucciones enviadas)",
+      "VERIFY_DKIM_PROPAGATION_24H"
     ]
   }
 }
