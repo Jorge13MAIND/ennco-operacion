@@ -189,5 +189,42 @@
   ],
   "outreach_eligible_records": 0,
   "real_recipients_enrolled": 0,
-  "real_messages_sent": 0
+  "real_messages_sent": 0,
+  "apollo_live_inventory_2026_08_26": {
+    "verified_via": "APOLLO_MCP_READ_ONLY",
+    "profile": {
+      "name": "George Pittaluga",
+      "email": "george@teckel-ai.com",
+      "credits_remaining": 4010,
+      "credits_used_cycle": 0
+    },
+    "sequences_total": 13,
+    "sequences_active": [
+      {
+        "id": "6a84de0b7ef90d001087ef02",
+        "name": "Orquestador Teckel | Piloto 2026-08-19 09:00 CDMX | HOLD",
+        "max_per_day": 1,
+        "unique_scheduled": 0,
+        "pause_pending": "MANUAL_TOGGLE_BLOCKED_FOR_AGENT"
+      }
+    ],
+    "mailboxes": [
+      {
+        "id": "6a3c56df4c0d0000145aebe8",
+        "email": "george@teckel-ai.com",
+        "default": true
+      },
+      {
+        "id": "6a5b93707b27cd0014a6fa30",
+        "email": "george@tryteckelai.com",
+        "default": false
+      }
+    ],
+    "pending_ui_actions": [
+      "PAUSE_ORQUESTADOR_SEQUENCE",
+      "RENAME_PROFILE_TO_FRANCISCO",
+      "DEACTIVATE_TECKEL_MAILBOXES",
+      "ARCHIVE_LEGACY_SEQUENCES"
+    ]
+  }
 }
