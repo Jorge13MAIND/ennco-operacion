@@ -33,16 +33,22 @@ export function createDispatchProof(input: {
   if (input.secret.length < 32) throw new Error("DISPATCH_SECRET_INVALID");
   const nonce = randomUUID();
   const expiresAt = formatExpiry(new Date(Date.now() + (input.ttlSeconds ?? 300) * 1000));
+  // El command_id identifica LA INVOCACIÓN (el ledger de ticks lo usa como
+  // llave de idempotencia para que un reintento caiga en la misma fila). Un
+  // valor constante colapsaría todos los ticks de un tipo en una sola fila.
+  // El payload firmado usa el nombre canónico del comando, que el servidor
+  // recalcula por su cuenta.
+  const commandId = `${input.commandName}:${nonce}`;
   const payloadSha256 = sha256Hex([input.commandName, ...input.payloadParts].join("\n"));
   const signature = createHmac("sha256", input.secret).update([
     input.organizationId,
-    input.commandName,
+    commandId,
     nonce,
     expiresAt,
     payloadSha256,
   ].join("\n"), "utf8").digest("hex");
   return {
-    proof_command_id: input.commandName,
+    proof_command_id: commandId,
     proof_nonce: nonce,
     proof_expires_at: expiresAt,
     proof_signature: signature,

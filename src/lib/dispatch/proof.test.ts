@@ -9,6 +9,7 @@ const organizationId = "11111111-1111-4111-8111-111111111111";
 function mirrorSignature(input: {
   organizationId: string;
   commandName: string;
+  commandId: string;
   nonce: string;
   expiresAt: string;
   payloadParts: readonly string[];
@@ -18,7 +19,7 @@ function mirrorSignature(input: {
     .digest("hex");
   return createHmac("sha256", secret).update([
     input.organizationId,
-    input.commandName,
+    input.commandId,
     input.nonce,
     input.expiresAt,
     payloadSha256,
@@ -30,11 +31,12 @@ describe("dispatch proof", () => {
     const payloadParts = dispatchPayloads.claimHybridDispatch(organizationId, true);
     const proof = createDispatchProof({ organizationId, commandName: "claim_hybrid_dispatch", payloadParts, secret });
 
-    expect(proof.proof_command_id).toBe("claim_hybrid_dispatch");
+    expect(proof.proof_command_id).toBe(`claim_hybrid_dispatch:${proof.proof_nonce}`);
     expect(proof.proof_expires_at).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/u);
     expect(proof.proof_signature).toBe(mirrorSignature({
       organizationId,
       commandName: "claim_hybrid_dispatch",
+      commandId: proof.proof_command_id,
       nonce: proof.proof_nonce,
       expiresAt: proof.proof_expires_at,
       payloadParts,
