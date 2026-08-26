@@ -1,0 +1,7 @@
+{
+  "source_url": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv",
+  "download_date": "2026-08-26",
+  "sha256": "43c9bfacdd83a0b3ea422bad467c693cf283bfa23e563d77dad4d266a495d830",
+  "description": "PROFEPA - Certificados Emitidos dentro del PNAA (datos.gob.mx dataset: certificados_emitidos_programa_nacional_auditoria_ambiental; metadata_modified 2026-02-19; licencia CC-BY-4.0)",
+  "dataset_page": "https://www.datos.gob.mx/dataset/certificados_emitidos_programa_nacional_auditoria_ambiental"
+}

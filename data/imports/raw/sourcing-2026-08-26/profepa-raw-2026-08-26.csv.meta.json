@@ -1,0 +1,7 @@
+{
+  "source_url": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv",
+  "download_date": "2026-08-26",
+  "sha256": "9d9da387b1ecc8eb59f57280e9756fc978ff99ef1ee07a502304aa2a3818f850",
+  "description": "PROFEPA - Certificados Vigentes a la fecha del PNAA (datos.gob.mx dataset: certificados_vigentes_fecha_programa_nacional_auditoria_ambiental; metadata_modified 2026-02-19; licencia CC-BY-4.0)",
+  "dataset_page": "https://www.datos.gob.mx/dataset/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental"
+}
