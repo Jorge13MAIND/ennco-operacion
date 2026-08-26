@@ -41,12 +41,67 @@
     "apollo_mailbox_credits_allowed": true
   },
   "domain_target": 2,
-  "selected_domains": [],
+  "selected_domains": [
+    {
+      "domain": "enncoindustrial.com",
+      "priority": 1,
+      "status": "PURCHASED",
+      "registrar": "VERCEL_REGISTRAR_TEAM_TECKEL",
+      "purchased_at": "2026-08-26",
+      "purchased_by": "JORGE_DIRECT_CHECKOUT",
+      "price_usd": 11.25,
+      "auto_renew": true,
+      "registrant": "ENNCO_FRANCISCO_CUELLAR",
+      "dns": {
+        "mx": "smtp.google.com",
+        "spf": "v=spf1 include:_spf.google.com ~all",
+        "dmarc": "v=DMARC1; p=none; rua=mailto:francisco@enncoindustrial.com",
+        "dkim": "PENDING_GOOGLE_WORKSPACE"
+      }
+    },
+    {
+      "domain": "enncoenergia.com",
+      "priority": 2,
+      "status": "PURCHASED",
+      "registrar": "VERCEL_REGISTRAR_TEAM_TECKEL",
+      "purchased_at": "2026-08-26",
+      "purchased_by": "JORGE_DIRECT_CHECKOUT",
+      "price_usd": 11.25,
+      "auto_renew": true,
+      "registrant": "ENNCO_FRANCISCO_CUELLAR",
+      "dns": {
+        "mx": "smtp.google.com",
+        "spf": "v=spf1 include:_spf.google.com ~all",
+        "dmarc": "v=DMARC1; p=none; rua=mailto:francisco@enncoenergia.com",
+        "dkim": "PENDING_GOOGLE_WORKSPACE"
+      }
+    }
+  ],
   "domain_candidates": [
-    { "priority": 1, "domain": "enncoindustrial.com", "availability": "PENDING_APOLLO_CHECKOUT", "purchase_status": "NOT_PURCHASED" },
-    { "priority": 2, "domain": "enncoenergia.com", "availability": "PENDING_APOLLO_CHECKOUT", "purchase_status": "NOT_PURCHASED" },
-    { "priority": 3, "domain": "enncoindustrial.com.mx", "availability": "UNKNOWN", "purchase_status": "NOT_PURCHASED" },
-    { "priority": 4, "domain": "enncoenergia.com.mx", "availability": "UNKNOWN", "purchase_status": "NOT_PURCHASED" }
+    {
+      "priority": 1,
+      "domain": "enncoindustrial.com",
+      "availability": "PENDING_APOLLO_CHECKOUT",
+      "purchase_status": "NOT_PURCHASED"
+    },
+    {
+      "priority": 2,
+      "domain": "enncoenergia.com",
+      "availability": "PENDING_APOLLO_CHECKOUT",
+      "purchase_status": "NOT_PURCHASED"
+    },
+    {
+      "priority": 3,
+      "domain": "enncoindustrial.com.mx",
+      "availability": "UNKNOWN",
+      "purchase_status": "NOT_PURCHASED"
+    },
+    {
+      "priority": 4,
+      "domain": "enncoenergia.com.mx",
+      "availability": "UNKNOWN",
+      "purchase_status": "NOT_PURCHASED"
+    }
   ],
   "mailbox_target": 3,
   "mailbox_local_parts": [
@@ -67,19 +122,70 @@
     "budget_fx_mxn_per_usd": 18
   },
   "tool_boundaries": {
-    "apollo": ["RESEARCH", "VERIFICATION", "WARMUP", "MAILBOX_HEALTH", "SEQUENCES", "CONTROLLED_EXECUTION"],
-    "ennco_platform": ["SOURCE_OF_TRUTH", "SUPPRESSION", "APPROVALS", "MANIFEST", "ATTRIBUTION", "LEADS", "PIPELINE", "ALERTS", "KILL_SWITCH"],
-    "gmail_api": ["REPLIES", "BOUNCES", "OUT_OF_OFFICE", "THREAD_IDENTITY"],
-    "resend": ["TRANSACTIONAL_ALERTS", "FOLIOS", "PDF_NOTIFICATIONS"],
+    "apollo": [
+      "RESEARCH",
+      "VERIFICATION",
+      "WARMUP",
+      "MAILBOX_HEALTH",
+      "SEQUENCES",
+      "CONTROLLED_EXECUTION"
+    ],
+    "ennco_platform": [
+      "SOURCE_OF_TRUTH",
+      "SUPPRESSION",
+      "APPROVALS",
+      "MANIFEST",
+      "ATTRIBUTION",
+      "LEADS",
+      "PIPELINE",
+      "ALERTS",
+      "KILL_SWITCH"
+    ],
+    "gmail_api": [
+      "REPLIES",
+      "BOUNCES",
+      "OUT_OF_OFFICE",
+      "THREAD_IDENTITY"
+    ],
+    "resend": [
+      "TRANSACTIONAL_ALERTS",
+      "FOLIOS",
+      "PDF_NOTIFICATIONS"
+    ],
     "resend_cold_outreach_allowed": false
   },
   "external_actions": [
-    { "action": "RECONVERT_APOLLO", "status": "IN_PROGRESS", "owner": "TECKEL", "requires": "PAUSE_ARCHIVE_RENAME" },
-    { "action": "PURCHASE_DOMAINS", "status": "APPROVED_PENDING_CHECKOUT", "requires": "FINAL_APOLLO_CHECKOUT_CONFIRMATION" },
-    { "action": "CREATE_SHARED_SMTP_MAILBOXES", "status": "APPROVED_PENDING_CHECKOUT", "requires": "FINAL_APOLLO_CHECKOUT_CONFIRMATION" },
-    { "action": "CHANGE_DNS", "status": "BLOCKED_EXTERNAL", "requires": "DNS_AUTHORIZATION" },
-    { "action": "CONNECT_OAUTH", "status": "BLOCKED_EXTERNAL", "requires": "FRANCISCO_CONSENT" },
-    { "action": "SEND_PILOT", "status": "BLOCKED_EXTERNAL", "requires": "EXPLICIT_PILOT_APPROVAL" }
+    {
+      "action": "RECONVERT_APOLLO",
+      "status": "IN_PROGRESS",
+      "owner": "TECKEL",
+      "requires": "PAUSE_ARCHIVE_RENAME"
+    },
+    {
+      "action": "PURCHASE_DOMAINS",
+      "status": "DONE",
+      "requires": "NONE_PURCHASED_OUTSIDE_APOLLO_PER_DEC_101_2026_08_26"
+    },
+    {
+      "action": "CREATE_SHARED_SMTP_MAILBOXES",
+      "status": "SUPERSEDED_BY_DEC_101",
+      "requires": "GOOGLE_WORKSPACE_SIGNUP_BY_JORGE"
+    },
+    {
+      "action": "CHANGE_DNS",
+      "status": "DONE_NEW_DOMAINS_ONLY",
+      "requires": "DKIM_PENDING_WORKSPACE_SIGNUP"
+    },
+    {
+      "action": "CONNECT_OAUTH",
+      "status": "BLOCKED_EXTERNAL",
+      "requires": "FRANCISCO_CONSENT"
+    },
+    {
+      "action": "SEND_PILOT",
+      "status": "BLOCKED_EXTERNAL",
+      "requires": "EXPLICIT_PILOT_APPROVAL"
+    }
   ],
   "outreach_eligible_records": 0,
   "real_recipients_enrolled": 0,
