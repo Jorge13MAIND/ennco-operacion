@@ -557,6 +557,9 @@
 
 /* ---------- 14. Feed operativo (Hoy) ---------- */
 
+.cr-root .operations-dashboard-grid { align-items: start; }
+.cr-root .cr-dashboard-aside { display: grid; gap: 16px; align-content: start; min-width: 0; }
+
 .cr-root .cr-feed { display: grid; }
 .cr-root .cr-feed-item {
   display: flex;

@@ -2,6 +2,7 @@ import type { Route } from "next";
 import Link from "next/link";
 
 import { GoldenPathControl } from "@/components/GoldenPathControl";
+import { OperationsFeed } from "@/components/OperationsFeed";
 import { CompactActionTable, PortalRowsTable } from "@/components/PortalTable";
 import { requireOperationsAccess } from "@/lib/auth/authorization";
 import { civilDateValue } from "@/lib/operations/capacity";
@@ -14,6 +15,18 @@ function money(value: number): string {
   return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(value);
 }
 
+function greetingParts(): [string, string] {
+  const hour = Number(new Intl.DateTimeFormat("en-US", { hour: "numeric", hour12: false, timeZone: "America/Mexico_City" }).format(new Date()));
+  if (hour >= 5 && hour < 12) return ["Buenos", "días"];
+  if (hour >= 12 && hour < 19) return ["Buenas", "tardes"];
+  return ["Buenas", "noches"];
+}
+
+function longDate(): string {
+  const value = new Intl.DateTimeFormat("es-MX", { weekday: "long", day: "numeric", month: "long", timeZone: "America/Mexico_City" }).format(new Date());
+  return `${value.charAt(0).toLocaleUpperCase("es-MX")}${value.slice(1)}`;
+}
+
 export default async function OperationsPage() {
   const access = await requireOperationsAccess();
   const snapshot = await loadOperationsPortal(access);
@@ -24,8 +37,8 @@ export default async function OperationsPage() {
       <header className="operations-page-heading">
         <div>
           <p className="eyebrow">Control Room · Hoy</p>
-          <h1>Decide qué atender primero.</h1>
-          <p>Verdad operativa actualizada {new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" }).format(new Date(snapshot.generatedAt))}.</p>
+          <h1>{greetingParts()[0]} <span className="cr-accent-text">{greetingParts()[1]}</span>.</h1>
+          <p>{longDate()} · Decide qué atender primero. Verdad operativa actualizada {new Intl.DateTimeFormat("es-MX", { timeStyle: "short", timeZone: "America/Mexico_City" }).format(new Date(snapshot.generatedAt))}.</p>
         </div>
         <span className="badge">{operationalLabel(snapshot.evidenceClass)}</span>
       </header>
@@ -63,16 +76,22 @@ export default async function OperationsPage() {
           </div>
           <CompactActionTable evidenceClass={snapshot.evidenceClass} rows={snapshot.nextActions} />
         </section>
-        <section className="panel quick-links-panel">
-          <div className="panel-head"><div><p className="panel-kicker">Atajos</p><h2>Operar</h2></div></div>
-          <div className="quick-links">
-            <Link href={"/operacion/alertas" as Route}><strong>Atender incidente</strong><span>Acusar, contener y documentar recuperación</span></Link>
-            <Link href={"/operacion/respuestas" as Route}><strong>Responder interés</strong><span>Revisar bandeja y detener secuencias</span></Link>
-            <Link href={"/operacion/leads" as Route}><strong>Calificar lead</strong><span>Aplicar la definición contractual</span></Link>
-            <Link href={"/operacion/pipeline" as Route}><strong>Actualizar oportunidad</strong><span>Registrar valor y siguiente acción</span></Link>
-            <Link href={"/operacion/infraestructura" as Route}><strong>Revisar infraestructura</strong><span>Dominios, buzones, warmup y presupuesto</span></Link>
-          </div>
-        </section>
+        <div className="cr-dashboard-aside">
+          <section className="panel quick-links-panel">
+            <div className="panel-head"><div><p className="panel-kicker">Atajos</p><h2>Operar</h2></div></div>
+            <div className="quick-links">
+              <Link href={"/operacion/alertas" as Route}><strong>Atender incidente</strong><span>Acusar, contener y documentar recuperación</span></Link>
+              <Link href={"/operacion/respuestas" as Route}><strong>Responder interés</strong><span>Revisar bandeja y detener secuencias</span></Link>
+              <Link href={"/operacion/leads" as Route}><strong>Calificar lead</strong><span>Aplicar la definición contractual</span></Link>
+              <Link href={"/operacion/pipeline" as Route}><strong>Actualizar oportunidad</strong><span>Registrar valor y siguiente acción</span></Link>
+              <Link href={"/operacion/infraestructura" as Route}><strong>Revisar infraestructura</strong><span>Dominios, buzones, warmup y presupuesto</span></Link>
+            </div>
+          </section>
+          <section aria-label="Registro operativo" className="panel cr-feed-panel">
+            <div className="panel-head"><div><p className="panel-kicker">Actividad</p><h2>Pulso del sistema</h2></div></div>
+            <OperationsFeed snapshot={snapshot} />
+          </section>
+        </div>
       </div>
 
       <div className="operations-section-heading">
