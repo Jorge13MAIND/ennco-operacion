@@ -25,6 +25,18 @@ const surfaces = [
 for (const surface of surfaces) {
   test(`${surface.name} has no automated WCAG A or AA violations`, async ({ page }) => {
     await page.goto(surface.path);
+    // El contraste se evalúa sobre el estado final: las animaciones de entrada
+    // componen opacity/transform y falsean el color efectivo si el scan corre
+    // a mitad de un frame. Las animaciones infinitas (dots decorativos) se
+    // excluyen porque nunca terminan y no pintan texto.
+    await page.evaluate(() => Promise.all(
+      document.getAnimations()
+        .filter((animation) => {
+          const timing = animation.effect?.getTiming();
+          return timing?.iterations !== Infinity;
+        })
+        .map((animation) => animation.finished.catch(() => undefined)),
+    ));
     const result = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
       .analyze();

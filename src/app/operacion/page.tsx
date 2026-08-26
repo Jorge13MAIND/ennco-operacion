@@ -2,6 +2,7 @@ import type { Route } from "next";
 import Link from "next/link";
 
 import { GoldenPathControl } from "@/components/GoldenPathControl";
+import { MetricValue } from "@/components/MetricValue";
 import { OperationsFeed } from "@/components/OperationsFeed";
 import { CompactActionTable, PortalRowsTable } from "@/components/PortalTable";
 import { requireOperationsAccess } from "@/lib/auth/authorization";
@@ -10,10 +11,6 @@ import { loadOperationsPortal } from "@/lib/operations/portal";
 import { operationalLabel } from "@/lib/operations/presentation";
 
 export const dynamic = "force-dynamic";
-
-function money(value: number): string {
-  return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(value);
-}
 
 function greetingParts(): [string, string] {
   const hour = Number(new Intl.DateTimeFormat("en-US", { hour: "numeric", hour12: false, timeZone: "America/Mexico_City" }).format(new Date()));
@@ -99,14 +96,14 @@ export default async function OperationsPage() {
         <p>Actividad, señales y revenue se cuentan por separado.</p>
       </div>
       <section aria-label="Verdad comercial" className="metric-grid operations-metrics">
-        <div className="metric"><span>Leads nuevos hoy</span><strong>{snapshot.realTruth.newLeads}</strong></div>
-        <div className="metric"><span>Respuestas pendientes</span><strong>{snapshot.realTruth.pendingReplies}</strong></div>
-        <div className="metric"><span>Reuniones hoy</span><strong>{snapshot.realTruth.meetingsToday}</strong></div>
-        <div className="metric"><span>Tareas vencidas</span><strong>{snapshot.realTruth.overdueTasks}</strong></div>
-        <div className="metric"><span>Leads contractuales</span><strong>{snapshot.realTruth.contractualLeads}</strong></div>
-        <div className="metric"><span>Pipeline estricto</span><strong>{snapshot.realTruth.qualifiedPipeline}</strong></div>
-        <div className="metric"><span>Proyectos ganados</span><strong>{snapshot.realTruth.wonProjects}</strong></div>
-        <div className="metric"><span>Primeros pagos</span><strong>{money(snapshot.realTruth.firstPaymentsMxn)}</strong></div>
+        <div className="metric"><span>Leads nuevos hoy</span><strong><MetricValue value={snapshot.realTruth.newLeads} /></strong></div>
+        <div className="metric"><span>Respuestas pendientes</span><strong><MetricValue value={snapshot.realTruth.pendingReplies} /></strong></div>
+        <div className="metric"><span>Reuniones hoy</span><strong><MetricValue value={snapshot.realTruth.meetingsToday} /></strong></div>
+        <div className="metric"><span>Tareas vencidas</span><strong><MetricValue value={snapshot.realTruth.overdueTasks} /></strong></div>
+        <div className="metric"><span>Leads contractuales</span><strong><MetricValue value={snapshot.realTruth.contractualLeads} /></strong></div>
+        <div className="metric"><span>Pipeline estricto</span><strong><MetricValue value={snapshot.realTruth.qualifiedPipeline} /></strong></div>
+        <div className="metric"><span>Proyectos ganados</span><strong><MetricValue value={snapshot.realTruth.wonProjects} /></strong></div>
+        <div className="metric"><span>Primeros pagos</span><strong><MetricValue format="mxn" value={snapshot.realTruth.firstPaymentsMxn} /></strong></div>
       </section>
 
       <details className="operations-technical-details">

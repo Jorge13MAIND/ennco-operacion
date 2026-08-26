@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.0.0",
   "evidenceClass": "LOCAL_WORKTREE_VISUAL_QA",
-  "baselineCommit": "3176add8b827c88a220143e1d98a7cfe2ac7a103",
+  "baselineCommit": "481470ba733d9a0df15bd3b6d7e56c895a022595",
   "sourceTreeClean": false,
-  "sourceFingerprint": "a07a9f2850efa03473fc72abe5885b6b79b578eacf684acba5872c6fbf134065",
+  "sourceFingerprint": "cd5464dc8640a60634c8bad2e3cc03df2504261b542028b09dd9d79b5dd68e93",
   "sourceHashes": {
     "next.config.ts": "bfe695713fa8522c0e8794509afe33014bb87262639e0b7e8f278fe5f1aee770",
     "public/brand/ennco-lockup-knockout.svg": "c436e495a935a430f902308065149c009de884d80c96cc2062a248a77ca79bf3",
@@ -37,7 +37,7 @@
     "src/app/ingreso/page.tsx": "d9148cfef3d48769a1da68963b488ab23c1f5d57b6eb563c83c480c298364547",
     "src/app/layout.tsx": "98ada2e46338e0064d31ffdbe6b207f2e45cc94f0448dbf80f5c34bb83c31729",
     "src/app/operacion/layout.tsx": "3612a5d3d956a1026af3cc3286d316e29e38b7e2b8956ddee89b31c9c20d66c1",
-    "src/app/operacion/page.tsx": "4e65e27241cb0f38d5774126bdf27731b7033fefdc04adb0db8a1f7b9b6b8cd3",
+    "src/app/operacion/page.tsx": "adf2b446f4c1271977a462cbb21d4b8772de076d7c2585552c0d66bd0ba1545b",
     "src/app/page.tsx": "730bfbc68c2852e22246a26086832b85538e6485627b8da82367eb26e782808d",
     "src/components/OperationsNav.tsx": "b5a15f4a784ec0f0535432fff4ff0af3ba040a5816b7cf4e131f9036039873f9",
     "src/components/PortalTable.tsx": "9434701c5353f7ee6c467ef6619cfbec258b07dc002d7b1fc29c7b1b961cf9a0",
@@ -45,7 +45,7 @@
     "src/components/PrequoteForm.tsx": "8da672ce4e1cf8103762a4b5a35638f1a1fd368af876fa3eddbbb3e5e4e50527",
     "src/components/SiteHeader.tsx": "ec8095d8b46a28b926ffa91ca809057efae58babc4b1d4d9b5a76add83bae6d9",
     "src/styles/base.css": "6af2ebb96d2bef1d6572bc24a293d32031794958daa56198e463573480310684",
-    "src/styles/control-room.css": "cd784af522535638fc1c21db487b3a573dce574cca016654eea034ace1daa035",
+    "src/styles/control-room.css": "e60ec1f84a8d737d35442d1e569ede5a46863cee278643c1af56c6dfc0af0f5d",
     "src/styles/operations.css": "711c72ad45facbd130d018b61344a084c9984013fd7d15705089931f2eeaf418",
     "src/styles/public.css": "5965e709fc3b1550a8c3363a33e0962a7eeacf5f6df91fb6e76445bf597fb228",
     "src/styles/tokens.css": "a1ad1d5a868ad989d75b6a08de17eee1e180ec18ce950f0d18bdd59703d9f1df"
@@ -57,28 +57,28 @@
     "evidence/m31-ux-redesign/before/diagnostic-mobile.png": "f21c2c0265713c158ae47223117c9ac831351618d802fe825cd7870d05b73df6"
   },
   "captureHashes": {
-    "evidence/m31-ux-redesign/after/desktop-1280-control-room.png": "9e16589c8ec88b9123467f46dacff03c4e312d0d23bdfdf403747e5735e13b02",
-    "evidence/m31-ux-redesign/after/desktop-1280-diagnostic.png": "6cc4b83f06e8dc1c603ac5e3daf079bbb6d47909290c8412ac5b6a017c90e790",
+    "evidence/m31-ux-redesign/after/desktop-1280-control-room.png": "1de04fd6275083f6d2d88df7ec80956878072f48fea098d02e65d7a6efb0c7e0",
+    "evidence/m31-ux-redesign/after/desktop-1280-diagnostic.png": "048a693fd8d01245028443561d8616996d3acfb7e6a5839dbc1c9c13aa872d7e",
     "evidence/m31-ux-redesign/after/desktop-1280-home.png": "2ba92bdc9cad05ffd70a491a2ed6da5fe4c3949b0bb5d61cc319eacd6c915017",
     "evidence/m31-ux-redesign/after/desktop-1280-identity.png": "1061e780bb0a914add8726867f6c59491eca3d8ce69e7474954ae85572f59e96",
-    "evidence/m31-ux-redesign/after/desktop-1280-responses.png": "79f71dab001038be001a5c8a4e2c18d4f26188a5ae0867a75ea31bb73bd9961a",
-    "evidence/m31-ux-redesign/after/desktop-1440-control-room.png": "8fcb52ea48a9fb6d622cc2bcd830159837d72c612665eae6eee5cbe4ebe27abd",
-    "evidence/m31-ux-redesign/after/desktop-1440-diagnostic.png": "141bc980646fea126aa9e3d989182987f0c9def1815a29e38353e2b7fcd6a011",
-    "evidence/m31-ux-redesign/after/desktop-1440-home.png": "79df9a4d699710a406c96bf358054ceff3a3d6050cd4f4aedd00af34f4b9808c",
+    "evidence/m31-ux-redesign/after/desktop-1280-responses.png": "01e8eba2a821d2043a3f9efb460fbab81eeca050c0ebd4ae7aa210809083a502",
+    "evidence/m31-ux-redesign/after/desktop-1440-control-room.png": "b58cf1fdedaab48eb8189e504b74af00b9c8237f0378555f1a0501818c46faa9",
+    "evidence/m31-ux-redesign/after/desktop-1440-diagnostic.png": "eea362e6a7915406ac757e8705814e83b6212675d66c36b64b98a22ce5c1e7f1",
+    "evidence/m31-ux-redesign/after/desktop-1440-home.png": "3be3de0095a1c8a200876e02f3d1c0dc9ac7d0aaa5094c551049bca1025d7dc1",
     "evidence/m31-ux-redesign/after/desktop-1440-identity.png": "dda69e59d3b4ce69c7cacd584c57a46f6a3273074180f99ac1b0e1dcf8844815",
-    "evidence/m31-ux-redesign/after/desktop-1440-responses.png": "6133a41e434e0c2e97feaa372f364c16b5514b703ace29f595196521f8d9dd2e",
-    "evidence/m31-ux-redesign/after/mobile-390-control-room.png": "2d0ccef9f491e62338181bd54d6894580bd2b40c47a883542ccfc829ed775b09",
-    "evidence/m31-ux-redesign/after/mobile-390-diagnostic.png": "8e718d7564f538f39662922f1f5e902ffe440d2ac7440c989873d3269eee65f1",
+    "evidence/m31-ux-redesign/after/desktop-1440-responses.png": "c631feddb44474eef5e2a07e2e158165bf35c5eb85f3de879b9c4db03b81d731",
+    "evidence/m31-ux-redesign/after/mobile-390-control-room.png": "beae7ca5d53845c700260ea3079444841a0e0d21a8f7786f126473f69e7aa834",
+    "evidence/m31-ux-redesign/after/mobile-390-diagnostic.png": "33b24a2eed3129953b5e660db374b33cc81d5af03d8dd2dea4aafbc8f48d82cc",
     "evidence/m31-ux-redesign/after/mobile-390-home.png": "0a51bc24010f76143898cc1672384412e8595723ec717c7e5da471097c2ee665",
     "evidence/m31-ux-redesign/after/mobile-390-identity.png": "6c92ed7b2ed746912b1869cca7e57eefe5ed63564cd03df54f54bddbfe6f7bff",
-    "evidence/m31-ux-redesign/after/mobile-390-responses.png": "97389173465349218aea982d465721979a9d1ac4fa0d983db3ee1e0938908e41",
-    "evidence/m31-ux-redesign/after/tablet-768-control-room.png": "042a210f3d2d6f9dabc5e13f0cbd57faa1e3ca092796d745a38546980158641b",
-    "evidence/m31-ux-redesign/after/tablet-768-diagnostic.png": "0be281168cc433c49e69aa15d763ec5fac45baac6d1f8e6085119b17eb293d3f",
+    "evidence/m31-ux-redesign/after/mobile-390-responses.png": "7f2f36c302dd32f76e5631f2cb8eca9822ad748c3e441fdca8eab48ba0bf4d1c",
+    "evidence/m31-ux-redesign/after/tablet-768-control-room.png": "9d57e9c299b5889efca6ef1ffdd05db4c2665a5703d9ac4a66acd3b430104ed0",
+    "evidence/m31-ux-redesign/after/tablet-768-diagnostic.png": "4aaf2c875ed6f5cd4fcea3b3fdc6fd3958c29066a7b14fb65ae8bde181f7be51",
     "evidence/m31-ux-redesign/after/tablet-768-home.png": "34c8e844589ab6e68207d02a709c68cdb1005d741a36c7b4a7847a5bacf8bd42",
     "evidence/m31-ux-redesign/after/tablet-768-identity.png": "005aedb8059139cbcc1a61204fd3410150ceda289a8f3836c178a1fc7bf902fe",
-    "evidence/m31-ux-redesign/after/tablet-768-responses.png": "356bc040fc1daf5ac85da84ce38a2496d5f2b070d404937f3c46b40272d176fd"
+    "evidence/m31-ux-redesign/after/tablet-768-responses.png": "f367f5c42a68ba71e41babc686e7a0a6bfbc65c5bb4d18361cf7dc77ed8961d0"
   },
-  "generatedAt": "2026-08-26T02:29:14.032Z",
+  "generatedAt": "2026-08-26T02:51:10.768Z",
   "externalSideEffects": 0,
   "matrix": {
     "viewports": 4,
@@ -94,7 +94,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0,
-        "lcp": 200
+        "lcp": 260
       }
     },
     {
@@ -105,7 +105,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0,
-        "lcp": 68
+        "lcp": 72
       }
     },
     {
@@ -127,7 +127,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0.0003428935486593364,
-        "lcp": 100
+        "lcp": 104
       }
     },
     {
@@ -149,7 +149,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0,
-        "lcp": 92
+        "lcp": 88
       }
     },
     {
@@ -181,8 +181,8 @@
       "scrollWidth": 1280,
       "cspViolations": [],
       "vitals": {
-        "cls": 0.0005164515495300292,
-        "lcp": 88
+        "cls": 0.00046377382278442377,
+        "lcp": 84
       }
     },
     {
@@ -193,7 +193,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0.00015218830108642577,
-        "lcp": 68
+        "lcp": 72
       }
     },
     {
@@ -204,7 +204,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0.000030344934202730656,
-        "lcp": 100
+        "lcp": 88
       }
     },
     {
@@ -215,7 +215,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0,
-        "lcp": 64
+        "lcp": 60
       }
     },
     {
@@ -248,7 +248,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0.00024770231296618783,
-        "lcp": 60
+        "lcp": 84
       }
     },
     {
@@ -292,7 +292,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0.0009110649679364795,
-        "lcp": 68
+        "lcp": 80
       }
     },
     {
@@ -303,7 +303,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0.00036661216289316656,
-        "lcp": 56
+        "lcp": 76
       }
     }
   ],
@@ -314,30 +314,30 @@
         {
           "run": 1,
           "cls": 0,
-          "lcp": 684
+          "lcp": 704
         },
         {
           "run": 2,
           "cls": 0,
-          "lcp": 688
+          "lcp": 704
         },
         {
           "run": 3,
           "cls": 0,
-          "lcp": 696
+          "lcp": 704
         },
         {
           "run": 4,
           "cls": 0,
-          "lcp": 692
+          "lcp": 712
         },
         {
           "run": 5,
           "cls": 0,
-          "lcp": 680
+          "lcp": 704
         }
       ],
-      "lcpP75Ms": 692,
+      "lcpP75Ms": 704,
       "sampleCount": 5
     },
     {
@@ -346,30 +346,30 @@
         {
           "run": 1,
           "cls": 0,
-          "lcp": 696
+          "lcp": 732
         },
         {
           "run": 2,
           "cls": 0,
-          "lcp": 740
+          "lcp": 736
         },
         {
           "run": 3,
           "cls": 0,
-          "lcp": 716
+          "lcp": 736
         },
         {
           "run": 4,
           "cls": 0,
-          "lcp": 708
+          "lcp": 732
         },
         {
           "run": 5,
           "cls": 0,
-          "lcp": 724
+          "lcp": 716
         }
       ],
-      "lcpP75Ms": 724,
+      "lcpP75Ms": 736,
       "sampleCount": 5
     }
   ],

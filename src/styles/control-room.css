@@ -588,7 +588,7 @@
 
 .cr-root .cr-feed-item div { display: grid; gap: 3px; min-width: 0; }
 .cr-root .cr-feed-item p { margin: 0; color: var(--cr-ink); font-size: 0.8rem; line-height: 1.45; }
-.cr-root .cr-feed-item span { color: var(--cr-muted); font-family: var(--font-data); font-size: 0.62rem; }
+.cr-root .cr-feed-item span { color: var(--cr-body); font-family: var(--font-data); font-size: 0.62rem; }
 
 /* ---------- 15. Animaciones (guardadas por reduced motion) ---------- */
 
@@ -610,13 +610,45 @@
   animation-delay: calc(var(--cr-i, 0) * 70ms);
 }
 
-/* Candidatos a LCP: nunca parten de opacity 0. */
+/* Candidatos a LCP (heading y hero): nunca parten de opacity 0. */
+.cr-root .operations-page-heading,
+.cr-root .command-status,
+.cr-root .portal-module-title,
 .cr-root .cr-anim-solid { animation: cr-slide-up 0.45s var(--cr-ease) both; }
+
+.cr-root .operations-disclosure,
+.cr-root .operations-dashboard-grid > .panel,
+.cr-root .cr-dashboard-aside > .panel,
+.cr-root .operations-metrics .metric,
+.cr-root .cr-feed-item { animation: cr-fade-up 0.5s var(--cr-ease) both; }
+
+.cr-root .cr-dashboard-aside > .panel:nth-child(2) { animation-delay: 90ms; }
+.cr-root .operations-metrics .metric:nth-child(2) { animation-delay: 50ms; }
+.cr-root .operations-metrics .metric:nth-child(3) { animation-delay: 100ms; }
+.cr-root .operations-metrics .metric:nth-child(4) { animation-delay: 150ms; }
+.cr-root .operations-metrics .metric:nth-child(5) { animation-delay: 200ms; }
+.cr-root .operations-metrics .metric:nth-child(6) { animation-delay: 250ms; }
+.cr-root .operations-metrics .metric:nth-child(7) { animation-delay: 300ms; }
+.cr-root .operations-metrics .metric:nth-child(8) { animation-delay: 350ms; }
+.cr-root .cr-feed-item:nth-child(2) { animation-delay: 60ms; }
+.cr-root .cr-feed-item:nth-child(3) { animation-delay: 120ms; }
+.cr-root .cr-feed-item:nth-child(4) { animation-delay: 180ms; }
+.cr-root .cr-feed-item:nth-child(5) { animation-delay: 240ms; }
+.cr-root .cr-feed-item:nth-child(6) { animation-delay: 300ms; }
+
 .cr-root .cr-pulse-dot { animation: cr-pulse 1.8s ease-in-out infinite; }
 
 @media (prefers-reduced-motion: reduce) {
   .cr-root .cr-anim,
   .cr-root .cr-anim-solid,
+  .cr-root .operations-page-heading,
+  .cr-root .command-status,
+  .cr-root .portal-module-title,
+  .cr-root .operations-disclosure,
+  .cr-root .operations-dashboard-grid > .panel,
+  .cr-root .cr-dashboard-aside > .panel,
+  .cr-root .operations-metrics .metric,
+  .cr-root .cr-feed-item,
   .cr-root .cr-pulse-dot { animation: none; }
 }
 
