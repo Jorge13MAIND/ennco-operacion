@@ -695,6 +695,7 @@ begin
   return jsonb_build_object(
     'status','CLAIMED','dry_run',dry_run,
     'message_id',message_id_value,'release_id',release_record.id,
+    'mailbox_id',release_record.mailbox_id,
     'manifest_sha256',release_record.manifest_sha256,
     'touch_number',candidate.touch_value,'to_email',candidate.contact_email,
     'subject',candidate.subject_value,'body_text',candidate.body_value,
@@ -1264,6 +1265,7 @@ begin
     'messages_today',messages_today,
     'active_release',case when release_record.id is null then null else jsonb_build_object(
       'release_id',release_record.id,'status',release_record.status,
+      'mailbox_id',release_record.mailbox_id,
       'daily_cap',release_record.daily_cap_snapshot,'sent_today',sent_count,
       'budget_remaining',release_record.daily_cap_snapshot-sent_count,
       'expires_at',release_record.expires_at) end,

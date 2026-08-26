@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { classifyGmailMessage, collectGmailHistory, GmailHistoryResetRequiredError, type GmailMessageMetadata } from "@/lib/gmail/history";
+import { classifyGmailMessage, collectGmailHistory, extractGmailEventContext, GmailHistoryResetRequiredError, type GmailMessageMetadata } from "@/lib/gmail/history";
 
 function message(headers: Array<{ name: string; value: string }>): GmailMessageMetadata {
   return {
@@ -32,13 +32,31 @@ describe("Gmail history synchronization", () => {
     })).rejects.toBeInstanceOf(GmailHistoryResetRequiredError);
   });
 
-  it("classifies deterministic reply and auto reply signals and quarantines DSN metadata", () => {
+  it("classifies deterministic reply, auto reply and DSN bounce signals", () => {
     expect(classifyGmailMessage(message([{ name: "In-Reply-To", value: "outbound" }]))).toBe("REPLY");
     expect(classifyGmailMessage(message([{ name: "Auto-Submitted", value: "auto-replied" }]))).toBe("AUTO_REPLY");
     expect(classifyGmailMessage(message([
       { name: "From", value: "MAILER-DAEMON@example.test" },
       { name: "Content-Type", value: "multipart/report; report-type=delivery-status" },
-    ]))).toBe("UNKNOWN");
+    ]))).toBe("HARD_BOUNCE");
+    expect(classifyGmailMessage(message([
+      { name: "From", value: "Mail Delivery Subsystem <mailer-daemon@googlemail.com>" },
+      { name: "X-Failed-Recipients", value: "buyer@example.test" },
+      { name: "In-Reply-To", value: "<msg-29000000-0000-4000-8000-000000000012@ennco.com.mx>" },
+    ]))).toBe("HARD_BOUNCE");
     expect(classifyGmailMessage(message([{ name: "From", value: "unknown@example.test" }]))).toBe("UNKNOWN");
+  });
+
+  it("extracts the related platform message id and failed recipient from a DSN", () => {
+    const context = extractGmailEventContext(message([
+      { name: "From", value: "Mail Delivery Subsystem <mailer-daemon@googlemail.com>" },
+      { name: "X-Failed-Recipients", value: "Buyer@Example.Test" },
+      { name: "References", value: "<msg-29000000-0000-4000-8000-000000000012@ennco.com.mx>" },
+      { name: "Subject", value: "Delivery Status Notification (Failure)" },
+    ]));
+    expect(context.relatedOutboundMessageId).toBe("29000000-0000-4000-8000-000000000012");
+    expect(context.failedRecipient).toBe("buyer@example.test");
+    expect(context.normalizedFrom).toBe("mailer-daemon@googlemail.com");
+    expect(context.subject).toContain("Delivery Status Notification");
   });
 });

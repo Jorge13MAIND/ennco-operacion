@@ -1,4 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "crons": [
+    { "path": "/api/v1/internal/cron/dispatch", "schedule": "*/5 15-19 * * 1-5" },
+    { "path": "/api/v1/internal/cron/gmail-sync", "schedule": "*/5 13-23 * * 1-5" },
+    { "path": "/api/v1/internal/cron/watchdog", "schedule": "*/30 13-23 * * 1-5" },
+    { "path": "/api/v1/internal/cron/daily-snapshot", "schedule": "45 15 * * 1-5" },
+    { "path": "/api/v1/internal/cron/daily-snapshot", "schedule": "30 0 * * 2-6" }
+  ]
 }
