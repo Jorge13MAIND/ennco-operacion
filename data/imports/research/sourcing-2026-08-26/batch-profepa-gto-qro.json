@@ -1,0 +1,919 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_class": "historical_evidence",
+  "handling_class": "restricted_real_source_data",
+  "generated_from": {
+    "builder": "build-sourcing-batches-2026-08-26",
+    "manifest": {
+      "builder": "build-sourcing-batches-2026-08-26",
+      "source_file": "profepa-gto-qro.csv",
+      "file_sha256": "f62c2383e138bd941fb03ec55f365aafc6b4b7ea5c3c4e21c946428f8e62c2ea",
+      "part": 1,
+      "parts": 1
+    }
+  },
+  "destination": {
+    "endpoint": "/api/v1/research/imports",
+    "method": "POST",
+    "external_effects_executed": false,
+    "authorization_state": "RESEARCH_ONLY_HOLD",
+    "outreach_eligible_records": 0
+  },
+  "headers": {
+    "Idempotency-Key": "fdd9f7bf4624de42575cb7ac8b7ab95ca583bb4dd4540cd3028469424cf9c800"
+  },
+  "request": {
+    "sourceName": "ENNCO sourcing 2026-08-26 PROFEPA PNAA GTO-QRO",
+    "sourceSha256": "f62c2383e138bd941fb03ec55f365aafc6b4b7ea5c3c4e21c946428f8e62c2ea",
+    "manifestSha256": "bea436088fb1ad2d1a0d0ea34a17f45909e74848ecff4d636bde8c2da4317ea7",
+    "rows": [
+      {
+        "externalRecordId": "profepa-20260826:002",
+        "sourceRow": 2,
+        "rawFingerprint": "e64e6c077a916acefc8a8b5b0941e35945e8ea633ec8629e6a7795eb50a03804",
+        "legalName": "MANTENIMIENTO INTEGRAL FINSA, S.A. DE C.V. (PARQUE INDUSTRIAL FINSA QUERÉTARO I)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental (CERTIFICADO_VIGENTE, vigencia 2025)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:003",
+        "sourceRow": 3,
+        "rawFingerprint": "7eca8538dd19a741a0fc7e3dcd8752122763fcff50642854b96b750be14a551e",
+        "legalName": "HELLA AUTOMOTIVE MÉXICO, S.A. DE C.V. PLANTA PL7",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2025)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:004",
+        "sourceRow": 4,
+        "rawFingerprint": "d41b5c170b27e649c062c17a69ab0fe59f17659e9527f82de7eace6bce08903f",
+        "legalName": "ELECTRÓNICA CLARION, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2025)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:005",
+        "sourceRow": 5,
+        "rawFingerprint": "4de34e6a4ae1df6336595d500e7af67ecc1c63efe44fc066a670f94fbb634c33",
+        "legalName": "SAFRAN LANDING SYSTEMS SERVICES AMERICAS, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2025)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:006",
+        "sourceRow": 6,
+        "rawFingerprint": "365c0243298086ad259aad8da599555cf524087a74db7b8d42b64bb64b6ddc41",
+        "legalName": "EVONIK INDUSTRIES DE MÉXICO, S.A. DE C.V., CENTRO DE DISTRIBUCIÓN QUERÉTARO",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental (CERTIFICADO_VIGENTE, vigencia 2025)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:007",
+        "sourceRow": 7,
+        "rawFingerprint": "cf7695531e02204effa67c294f6871b0eb92906fc5ffac5bc7b437be9e587bfd",
+        "legalName": "DANA DE MÉXICO CORPORACIÓN, S. DE R. L. DE C.V. (DIVISIÓN ENGRANES CÓNICOS)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:009",
+        "sourceRow": 9,
+        "rawFingerprint": "f2d65a599b57d4464e1ae18de76e7901184d40cce6a3fb847af8f053f0ef6f0d",
+        "legalName": "INTERNATIONAL PAPER MÉXICO COMPANY, S. DE R.L. DE C.V. - PLANTA SAN JOSÉ ITURBIDE",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:010",
+        "sourceRow": 10,
+        "rawFingerprint": "4593bebc47af812854a5584ae4792a77c16637380719b0bb9670293699a9a0e5",
+        "legalName": "ILUMINACIÓN ESPECIALIZADA DE OCCIDENTE, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2025)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:011",
+        "sourceRow": 11,
+        "rawFingerprint": "a378ce1c8450e43aaaf1d36432a51099bb4ebb114eb956a94d005ae2446758b8",
+        "legalName": "FÁBRICA NACIONAL DE LIJA, S.A. DE C.V. (PLANTA QUERÉTARO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2025)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:012",
+        "sourceRow": 12,
+        "rawFingerprint": "da678ec2c147621185f7296244b83a158c5a8b5189fdfd442218defad9ddd392",
+        "legalName": "CONSORCIO INDUSTRIAL MEXICANO DE AUTOPARTES, S. DE R.L. DE C.V., PLANTA SILAO",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:013",
+        "sourceRow": 13,
+        "rawFingerprint": "1fd7cd75010dcc15780cb5b68596e4dcab458eedf9a77abf0d76a771ee19a3e0",
+        "legalName": "MANTENIMIENTO INTEGRAL FINSA, S.A. DE C.V. (PARQUE INDUSTRIAL FINSA QUERETARO II)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:014",
+        "sourceRow": 14,
+        "rawFingerprint": "40e29c7881eb54c8f811362e207fd3037c86df2507635aebabd18f1046f0748d",
+        "legalName": "KAESER COMPRESORES DE MÉXICO, S. DE R.L. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental (CERTIFICADO_VIGENTE, vigencia 2025)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:015",
+        "sourceRow": 15,
+        "rawFingerprint": "9f932dd3579e60277c0bea5e7bee8edea460cb51b4cd785a00f82723953fbe6e",
+        "legalName": "FLEX N GATE MÉXICO, S. DE R.L. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:016",
+        "sourceRow": 16,
+        "rawFingerprint": "8026f26b862f0bfd233d5d3d4955a71ebed6fbcb1a584bdbb982f6ea691eadb8",
+        "legalName": "ITALAISE, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2025)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:017",
+        "sourceRow": 17,
+        "rawFingerprint": "108c8715f06975daa5a4e24c21c719d68908b266299c27576a4c71e430f56430",
+        "legalName": "CARTONES PONDEROSA, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:018",
+        "sourceRow": 18,
+        "rawFingerprint": "d3f2924ac95120e72a1f529f57a919e2b83eb4de900e9d71b7b020edb7afb1d6",
+        "legalName": "BUSSMANN, S. DE R.L. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:019",
+        "sourceRow": 19,
+        "rawFingerprint": "0ab9252e653ff591dbc4ac3900215de0d6dbeaa8732c0f88895db68195420e28",
+        "legalName": "IMBERA, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:020",
+        "sourceRow": 20,
+        "rawFingerprint": "16c0fe50adb10246fffed27524bb9c035ec8af5591b421dd5b55b2569148c648",
+        "legalName": "PROCTER & GAMBLE MANUFACTURING MÉXICO, S. DE R.L. DE C.V. (PLANTA MARISCALA)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:021",
+        "sourceRow": 21,
+        "rawFingerprint": "31746b7e77507e9a69c22536053fed5a0d21a5d2ede7349fc9ab9ae83f8b9232",
+        "legalName": "ECOFIBRAS PONDEROSA, S.A. DE C.V. (CENTRO DE ACOPIO QUERÉTARO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:022",
+        "sourceRow": 22,
+        "rawFingerprint": "a2c87411bff125aad387d98464af26532c7bce55e3a715854ff7067323c89492",
+        "legalName": "VENTRAMEX, S. DE R.L. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:023",
+        "sourceRow": 23,
+        "rawFingerprint": "4634737108c648d7930851ff57393f542d40d7d48ec1c5c4791012a9178eb06b",
+        "legalName": "ENVASES UNIVERSALES DE MÉXICO, S.A.P.I. DE CV. PLANTA SAN JUAN DEL RÍO",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:024",
+        "sourceRow": 24,
+        "rawFingerprint": "7e41770de3f01f1223ed11b87259fa810f6ca5071e1cc4b94ec473439c1590d0",
+        "legalName": "ENERGÍA SAN LUIS DE LA PAZ, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:025",
+        "sourceRow": 25,
+        "rawFingerprint": "6b16b9799be56517b36b023a734f7d350f600da841d6eb3588eb788a66881db6",
+        "legalName": "PROPIMEX, S. DE R.L. DE C.V. (CEDIS SAN JUAN DEL RÍO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:026",
+        "sourceRow": 26,
+        "rawFingerprint": "f65b4292a7d437c34af0f86c9661cba7a4a224bfce3eb3af564abb79806ca8f1",
+        "legalName": "STEERINGMEX, S. DE R.L. DE C.V. (PLANTA 65)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:027",
+        "sourceRow": 27,
+        "rawFingerprint": "50358f9c8913941e94b1696ddcbffa409b79a65d10f427f325f3a8699968bd24",
+        "legalName": "AVON COSMETICS MANUFACTURING, S. DE R.L. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:028",
+        "sourceRow": 28,
+        "rawFingerprint": "03bb5bb4ee91b234e3e3eaa8c28e99d595504f6c3d15a1fa7d9ed564fc63b7c1",
+        "legalName": "AUTOLIV STEERING WHEELS MÉXICO, S. DE R.L. DE C.V. (PLANTA CMX)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:029",
+        "sourceRow": 29,
+        "rawFingerprint": "0d007271656d0607eb337ae3b82f3fdbb09ebf01ef37034c430ce87d56152e2b",
+        "legalName": "W.H. BRADY, S. DE R.L. DE C.V., PLANTA QUERÉTARO",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:030",
+        "sourceRow": 30,
+        "rawFingerprint": "0814f73fb6a69a331d41cd611b4bffd6703ec64919aaab417544df778065a680",
+        "legalName": "OPERACIÓN Y MANUFACTURA INTERCERAMIC, S.A. DE C.V. PLANTA 10",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:031",
+        "sourceRow": 31,
+        "rawFingerprint": "d14e4534df3b636879e08d7a337ec71eb5b9dff270d6e93683b5a95c7bb11874",
+        "legalName": "PETRAMIN, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:032",
+        "sourceRow": 32,
+        "rawFingerprint": "8ca3736e757ab644322f4c82c3e92021783f9132ddba6a9ce6331cb8b84860fb",
+        "legalName": "PPG AP RESINAS, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:033",
+        "sourceRow": 33,
+        "rawFingerprint": "bbc31b1ed3ba12ecafffaf84ab2a58fdabc0eccbd5e305c641d29720384b8ed4",
+        "legalName": "AEROPUERTO DEL BAJÍO, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:034",
+        "sourceRow": 34,
+        "rawFingerprint": "6b0a3119dfd5df5a17839fb0029a5124c23d2697b882f12c2e50dcf8927aaa65",
+        "legalName": "INDUSTRIA ENVASADORA DE QUERÉTARO, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:035",
+        "sourceRow": 35,
+        "rawFingerprint": "c13bfb3fb1e715da0b5f8a9514874335cdc5fad4786d8fe6924fb973112e306a",
+        "legalName": "MITSUBISHI ELECTRIC DE MÉXICO, S.A. DE C.V. (PLANTA I)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:036",
+        "sourceRow": 36,
+        "rawFingerprint": "134ed5502d395096945de47953cdfe91574590e00e3cd24bad448364926411f4",
+        "legalName": "PROCTER & GAMBLE MANUFACTURING MÉXICO, S. DE R.L. DE C.V. PLANTA MILENIO",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:037",
+        "sourceRow": 37,
+        "rawFingerprint": "8291a00560e8ae9896700bd642468e0f105c36fdb12a50bdf9d8da74daccd007",
+        "legalName": "TROQUELADORA BATESVILLE DE MÉXICO, S. DE R.L. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2026)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:038",
+        "sourceRow": 38,
+        "rawFingerprint": "10ac6977533d88d425bdfdc30f9fb9ecbcb1d81c51f2c2db578d63abd3e702f9",
+        "legalName": "MUNICIPIO DE QUERÉTARO (MANEJO INTEGRAL DE RESIDUOS)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:039",
+        "sourceRow": 39,
+        "rawFingerprint": "8f827b866dc3213f84e88c3b315bdc83636ad57e14f4ea27e33bb297fc5f5f68",
+        "legalName": "MITSUBISHI ELECTRIC DE MÉXICO, S.A. DE C.V. (PLANTA II)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:042",
+        "sourceRow": 42,
+        "rawFingerprint": "31c2392d0c3ec9d3583e3ecfb8039b867a656e38f228530c4a94ac12f33bb907",
+        "legalName": "GILL INDUSTRIES OF MÉXICO, S. DE R.L. DE C.V. PLANTA QUERÉTARO",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:043",
+        "sourceRow": 43,
+        "rawFingerprint": "ede31bde718a17b780bace8c320705e0795408ba935760ba796f32cceaa2eb95",
+        "legalName": "TELÉFONOS DE MÉXICO, S.A.B. DE C.V., TRIARA.COM",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:044",
+        "sourceRow": 44,
+        "rawFingerprint": "89f73582f3a503047a352c6cc01f84d75ad1c393f6a80d871ef70d025c158fc4",
+        "legalName": "LUBRICANTES FUCHS DE MÉXICO, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:045",
+        "sourceRow": 45,
+        "rawFingerprint": "fa4ce10870208f1e87491d4cefdf00a3ba408efd6d92900b295fc974797d8d45",
+        "legalName": "INDUSTRIAS FRIGUS THERME, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:046",
+        "sourceRow": 46,
+        "rawFingerprint": "61b9b271d5161baf2ac2c1f10ab24506880454eef9d6173f35c4defbfc09d712",
+        "legalName": "EFFEM MÉXICO INC. Y COMPAĄÍA, S. EN N.C. DE C.V. (MARS MÉXICO PLANTA QUERÉTARO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:048",
+        "sourceRow": 48,
+        "rawFingerprint": "9b7998298085284c5a3895914bf19b1ec3153ca6d78abf9c12f9ad9b219382b9",
+        "legalName": "AUTOLIV STEERING WHEELS MÉXICO, S. DE R.L. DE C.V. (PLANTA AQW)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:049",
+        "sourceRow": 49,
+        "rawFingerprint": "6a7f277f3c37b3d4defe85b9c290a2506f72e80a171e46cedd9ebf3bc8787714",
+        "legalName": "LEAR MEXICAN TRIM OPERATIONS, S. DE R.L DE C.V., PLANTA SAN FELIPE",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:050",
+        "sourceRow": 50,
+        "rawFingerprint": "43c1b0ec669b83294326da746ce5f9fea4c6855c8f17a6d3b721072088af8234",
+        "legalName": "ALEN DEL NORTE, S.A. DE C.V. (PLANTA QUERÉTARO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:051",
+        "sourceRow": 51,
+        "rawFingerprint": "0302ee96049735e1931f80914838cef4b808a0f17d8997d0b9bbe2eb7d08e6aa",
+        "legalName": "NESTLÉ MÉXICO, S.A. DE C.V. (PLANTA QUERÉTARO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:053",
+        "sourceRow": 53,
+        "rawFingerprint": "0c075cb09a0df4d26fe1d657feb60e448c3b5b8e4e71c3c7fe7e2cd950594f07",
+        "legalName": "ECOFIBRAS PONDEROSA, S.A. DE C.V. (CENTRO DE ACOPIO SAN NICOLAS TEQUISQUIAPAN)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:055",
+        "sourceRow": 55,
+        "rawFingerprint": "5f5b5e990eec56e13dd4ad5501488010aceb2b06dccee6b9a9fd1452ce43e20a",
+        "legalName": "VIBRACOUSTIC DE MÉXICO, S.A. DE C.V. (PLANTA QUERÉTARO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:056",
+        "sourceRow": 56,
+        "rawFingerprint": "20c0c219c1e7126b51f7c83bb301da6a97817493b18e366639dbaece1bafa44f",
+        "legalName": "KIRCHHOFF AUTOMOTIVE MÉXICO, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:057",
+        "sourceRow": 57,
+        "rawFingerprint": "fa28baeb09a48f6e3747b9c2d0ddb2e5a33b377da4dab0dd5f03ef7cca4cd192",
+        "legalName": "THOR QUIMICOS DE MÉXICO, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:058",
+        "sourceRow": 58,
+        "rawFingerprint": "79109902aee8a5bd1c000ff203cd419d4321d70f90ee9d6c3981dbe2355d0730",
+        "legalName": "OPERADORA TURÍSTICA VICTORIA, S.A. DE C.V. (GRAND FIESTA AMERICANA QUERÉTARO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental Turistica (CERTIFICADO_VIGENTE, vigencia 2027)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_vigentes_fecha_programa_nacional_auditoria_ambiental/certificados_vigentes_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:065",
+        "sourceRow": 65,
+        "rawFingerprint": "023ba15220e46d8f397ae6adc58da753a25522fc2defe87510760e4388585d69",
+        "legalName": "GILL INDUSTRIES OF MÉXICO, S. DE R.L. DE C.V. PLANTA QUERÉTARO",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:066",
+        "sourceRow": 66,
+        "rawFingerprint": "ea6796def8762da315aba5dda7b63864b0e2afcb339dcaf2584ce463b3aaf80c",
+        "legalName": "TELÉFONOS DE MÉXICO, S.A.B. DE C.V., TRIARA.COM",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:067",
+        "sourceRow": 67,
+        "rawFingerprint": "f034bd16182a38d820b5b21798d6e268e6b416a5da6404d87cf02ac8c8e79198",
+        "legalName": "INDUSTRIAS FRIGUS THERME, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:068",
+        "sourceRow": 68,
+        "rawFingerprint": "31635767ceb2bbadc019ac0a4faae402ad5f23785c515774daf340cec10a76ba",
+        "legalName": "LUBRICANTES FUCHS DE MÉXICO, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:069",
+        "sourceRow": 69,
+        "rawFingerprint": "1a9196799359ea4e51461ed911c8e079f977b088a9051f1abc9b80f9bc4d1f8c",
+        "legalName": "EFFEM MÉXICO INC. Y COMPAĄÍA, S. EN N.C. DE C.V. (MARS MÉXICO PLANTA QUERÉTARO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:071",
+        "sourceRow": 71,
+        "rawFingerprint": "43f118ed4d47f0994382d0a7acfe731fd1951c28c2a615a7940abe311f7128c1",
+        "legalName": "AUTOLIV STEERING WHEELS MÉXICO, S. DE R.L. DE C.V. (PLANTA AQW)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:072",
+        "sourceRow": 72,
+        "rawFingerprint": "ac291509d30ca80d3e6cea224be72a28162c1c4cd0f2a9b2d326ce72e9abcf20",
+        "legalName": "ALEN DEL NORTE, S.A. DE C.V. (PLANTA QUERÉTARO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:073",
+        "sourceRow": 73,
+        "rawFingerprint": "084815c6f294530d0019da31faa29cbfafd9786f7d0d99416b6dd3c08bd906af",
+        "legalName": "LEAR MEXICAN TRIM OPERATIONS, S. DE R.L DE C.V., PLANTA SAN FELIPE",
+        "primaryDomain": null,
+        "city": null,
+        "state": "GUANAJUATO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:075",
+        "sourceRow": 75,
+        "rawFingerprint": "0c71276bb71fcbf1650271dff04ec320f63eb86bd3279eebf63886ce00da5f37",
+        "legalName": "NESTLÉ MÉXICO, S.A. DE C.V. (PLANTA QUERÉTARO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:076",
+        "sourceRow": 76,
+        "rawFingerprint": "6305a367c2e9d49c8264f8330283aeefa4689001904fa9919df87d73adb5856a",
+        "legalName": "ECOFIBRAS PONDEROSA, S.A. DE C.V. (CENTRO DE ACOPIO SAN NICOLAS TEQUISQUIAPAN)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:078",
+        "sourceRow": 78,
+        "rawFingerprint": "85d52e02305a6e77217cd265c3dffe9d6791053b763f8a118b466ec2169b748d",
+        "legalName": "VIBRACOUSTIC DE MÉXICO, S.A. DE C.V. (PLANTA QUERÉTARO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:079",
+        "sourceRow": 79,
+        "rawFingerprint": "f035cd79165fbc3304f2487e7f81044823b3224acd8b3fbfe46e7612716ad064",
+        "legalName": "KIRCHHOFF AUTOMOTIVE MÉXICO, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:080",
+        "sourceRow": 80,
+        "rawFingerprint": "5f22bf4bb22a63552967bbf71a3a6a27e99fcdbcead27f67e7ad648a4975eaf3",
+        "legalName": "THOR QUIMICOS DE MÉXICO, S.A. DE C.V.",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Industria Limpia (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      },
+      {
+        "externalRecordId": "profepa-20260826:081",
+        "sourceRow": 81,
+        "rawFingerprint": "6cb29feb304a4dfb67ac4a62e804358063d9529e355dd9fc9db722cf866d43fa",
+        "legalName": "OPERADORA TURÍSTICA VICTORIA, S.A. DE C.V. (GRAND FIESTA AMERICANA QUERÉTARO)",
+        "primaryDomain": null,
+        "city": null,
+        "state": "QUERETARO",
+        "industrialPark": null,
+        "sector": "Certificado PNAA Calidad Ambiental Turistica (CERTIFICADO_EMITIDO_EN_EL_ANIO, vigencia no publicada)",
+        "sourceUrl": "https://repodatos.atdt.gob.mx/api_update/profepa/certificados_emitidos_programa_nacional_auditoria_ambiental/certificados_emitidos_pnaa.csv"
+      }
+    ]
+  },
+  "reconciliation": {
+    "source_records": 65,
+    "contacts": 0,
+    "leads": 0,
+    "opportunities": 0,
+    "outreach_eligible_records": 0,
+    "excluded_cfe": [
+      {
+        "source_row": 8,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SALVATIERRA, SUBESTACIÓN SENDAI",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 40,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SAN JUAN DEL RÍO, SUBESTACIÓN VIZARRÓN",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 41,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SAN JUAN DEL RIO, SUBESTACIONES LA MANSIÓN, SAN JUAN DEL RIO ORIENTE Y TEQUISQUIAPAN II",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 47,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SAN JUAN DEL RÍO, SUBESTACIÓN CORONEO",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 52,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SALVATIERRA, SUBESTACIONES ACÁMBARO, OJO SECO, URIANGATO, GUARAPO, JARAL DEL PROGRESO, SALVATIERRA Y TARANDACUAO.",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 54,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA CELAYA, SUBESTACIONES AMISTAD BAJÍO, APASEO ORIENTE, CELAYA SUR, CORTÁZAR, HACIENDA, APASEO, CELAYA UNO, CELAYA PONIENTE, CHIPILO, DOLORES HIDALGO, FIPE SAN MIGUEL, LA CALIFORNIA, SAN FELIPE, SAN MIGUE",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 59,
+        "legal_name": "CFE DISTRIBUCION, GERENCIA BAJIO, ZONA QUERÉTARO, SUBESTACIONES SAN JOSÉ ITURBIDE Y LA SOLEDAD",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 60,
+        "legal_name": "CFE DISTRIBUCION, GERENCIA BAJIO, ZONA QUERÉTARO, SUBESTACIONES LA GRIEGA, QUERÉTARO INDUSTRIAL, QUERÉTARO MANIOBRAS, QUERÉTARO SUR, SAN ILDEFONSO, SATÉLITE, TEPEYAC, CIMATARIO, AEROESPACIAL, MICRO PARQUE, BUENAVISTA NORTE Y MARQUÉS ORIENTE",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 61,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SAN JUAN DEL RÍO, SUBESTACIÓN SAN JUAN MANIOBRAS",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 62,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SAN JUAN DEL RÍO, SUBESTACIÓN EZEQUIEL MONTES",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 63,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SAN JUAN DEL RIO, SUBESTACIONES LA MANSIÓN, SAN JUAN DEL RIO ORIENTE Y TEQUISQUIAPAN II",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 64,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SAN JUAN DEL RÍO, SUBESTACIÓN VIZARRÓN",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 70,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SAN JUAN DEL RÍO, SUBESTACIÓN CORONEO",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 74,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SALVATIERRA, SUBESTACIONES ACÁMBARO, OJO SECO, URIANGATO, GUARAPO, JARAL DEL PROGRESO, SALVATIERRA Y TARANDACUAO.",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 77,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA CELAYA, SUBESTACIONES AMISTAD BAJÍO, APASEO ORIENTE, CELAYA SUR, CORTÁZAR, HACIENDA, APASEO, CELAYA UNO, CELAYA PONIENTE, CHIPILO, DOLORES HIDALGO, FIPE SAN MIGUEL, LA CALIFORNIA, SAN FELIPE, SAN MIGUE",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 82,
+        "legal_name": "CFE DISTRIBUCION, GERENCIA BAJIO, ZONA QUERÉTARO, SUBESTACIONES SAN JOSÉ ITURBIDE Y LA SOLEDAD",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 83,
+        "legal_name": "CFE DISTRIBUCION, GERENCIA BAJIO, ZONA QUERÉTARO, SUBESTACIONES LA GRIEGA, QUERÉTARO INDUSTRIAL, QUERÉTARO MANIOBRAS, QUERÉTARO SUR, SAN ILDEFONSO, SATÉLITE, TEPEYAC, CIMATARIO, AEROESPACIAL, MICRO PARQUE, BUENAVISTA NORTE Y MARQUÉS ORIENTE",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 84,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SAN JUAN DEL RÍO, SUBESTACIÓN SAN JUAN MANIOBRAS",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      },
+      {
+        "source_row": 85,
+        "legal_name": "CFE DISTRIBUCIÓN, GERENCIA BAJÍO, ZONA SAN JUAN DEL RÍO, SUBESTACIÓN EZEQUIEL MONTES",
+        "marker": "EXCLUIDO_PARAESTATAL_CFE"
+      }
+    ],
+    "source_rows_total": 84,
+    "ingestable_rows_total": 65
+  },
+  "artifact_sha256": "47ba2fdaca9ee902c80c16da06a29063d6ef21c9cea24e6035db9ceadfc778af"
+}

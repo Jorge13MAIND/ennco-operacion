@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "builder": "build-sourcing-batches-2026-08-26",
+  "post_order": [
+    {
+      "order": 1,
+      "path": "data/imports/research/company-directory-seed-batch.json",
+      "note": "27 semillas del directorio (batch previo, aún sin ejecutar)"
+    },
+    {
+      "order": 2,
+      "path": "data/imports/research/sourcing-2026-08-26/batch-tier1-top50.json",
+      "source_name": "ENNCO sourcing 2026-08-26 Tier 1 top 50",
+      "rows": 50,
+      "idempotency_key": "a8a84a0715dacb456a76960da6008b20e4d8c4a6011d6faf268cd68e4eee81dd"
+    },
+    {
+      "order": 3,
+      "path": "data/imports/research/sourcing-2026-08-26/batch-profepa-gto-qro.json",
+      "source_name": "ENNCO sourcing 2026-08-26 PROFEPA PNAA GTO-QRO",
+      "rows": 65,
+      "idempotency_key": "fdd9f7bf4624de42575cb7ac8b7ab95ca583bb4dd4540cd3028469424cf9c800"
+    },
+    {
+      "order": 4,
+      "path": "data/imports/research/sourcing-2026-08-26/batch-parques-industriales.json",
+      "source_name": "ENNCO sourcing 2026-08-26 parques industriales GTO-QRO",
+      "rows": 422,
+      "idempotency_key": "560a89f300816f3faca11b6bdbdffb65068b51d6b4923ba1867a3a3bb33144fd"
+    },
+    {
+      "order": 5,
+      "path": "data/imports/research/sourcing-2026-08-26/batch-denue-manufactura-parte-1.json",
+      "source_name": "ENNCO sourcing 2026-08-26 DENUE manufactura 101+ (parte 1/3)",
+      "rows": 450,
+      "idempotency_key": "532e85206962f16ea2fec1cb9b45c772499ca70aaec50fed7f5bbf9c148a38cf"
+    },
+    {
+      "order": 6,
+      "path": "data/imports/research/sourcing-2026-08-26/batch-denue-manufactura-parte-2.json",
+      "source_name": "ENNCO sourcing 2026-08-26 DENUE manufactura 101+ (parte 2/3)",
+      "rows": 450,
+      "idempotency_key": "e7efd6d247c00fcac6a3b4a453e96b7a27ccc2a59f72ac159f1b235be8b6f935"
+    },
+    {
+      "order": 7,
+      "path": "data/imports/research/sourcing-2026-08-26/batch-denue-manufactura-parte-3.json",
+      "source_name": "ENNCO sourcing 2026-08-26 DENUE manufactura 101+ (parte 3/3)",
+      "rows": 394,
+      "idempotency_key": "51f6348bd14f4a701ca6c05b38b8ffb5d66cb6446c0e8124efcdf5a0ddf12f98"
+    }
+  ],
+  "totals": {
+    "batches": 6,
+    "rows": 1831,
+    "excluded_anexo_a": 3,
+    "excluded_cfe": 19
+  }
+}
