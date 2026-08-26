@@ -52,6 +52,21 @@ resultado en vivo. Antes de entrar con la cuenta admin de ENNCO
 (`contacto@ennco.com.mx`): **cámbiale la contraseña** (la actual viajó por
 WhatsApp y el programa la considera comprometida; DEC-021).
 
+### 2b. Tu acceso de operador a la plataforma (~5 min) — desbloquea la carga de leads
+
+Descubierto 26-ago: toda la carga de datos al Research Workbench exige
+sesión de operador con MFA (AAL2) y **ningún usuario de producción ha
+completado su primer acceso**. Sin esto, las 1,831 empresas del sourcing
+(batches ya preparados y verificados en el repo) no pueden entrar.
+
+1. `ennco-operacion.vercel.app/ingreso` → "¿Olvidaste tu contraseña?" con
+   `george@teckel-ai.com` → te llega el enlace de recuperación al correo.
+2. Crea una contraseña SOLO para el Control Room (no reutilices ninguna).
+3. La plataforma te pide inscribir TOTP: escanea el QR con tu app de
+   autenticación (1Password o Google Authenticator) y confirma el código.
+4. Con tu sesión viva, yo ejecuto los 7 POST de ingest desde tu navegador
+   (extensión) — tú solo miras. Cero contraseñas por chat, como siempre.
+
 ### 3. DKIM del dominio principal `ennco.com.mx` (~8 min)
 
 En `admin.google.com` (admin de ENNCO):

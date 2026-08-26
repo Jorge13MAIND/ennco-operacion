@@ -11,6 +11,10 @@ Preparado por Teckel. Cuatro puntos, ~60 minutos en total.
 3. **Firma del Anexo A por BoldSign** (las 3 empresas ya confirmadas, 5 min).
 4. **Dos claves técnicas** (5 min): vincular la tarjeta de facturación al
    proyecto de Google Cloud, y el consentimiento del buzón contacto@.
+5. **Una pregunta de alcance** (1 min): el Anexo A excluye a **POSCO MPPC**
+   (Celaya). Existe **POSCO MVWPC** (Villagrán), entidad hermana del mismo
+   grupo. ¿La exclusión alcanza a todo el grupo POSCO o solo a MPPC? De la
+   respuesta depende si MVWPC entra o sale del universo de prospección.
 
 ## Cómo funciona la secuencia
 
