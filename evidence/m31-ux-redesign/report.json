@@ -1,11 +1,12 @@
 {
   "schemaVersion": "1.0.0",
   "evidenceClass": "LOCAL_WORKTREE_VISUAL_QA",
-  "baselineCommit": "f35c77a8140e954712432d0921ad76dabb1d8f06",
+  "baselineCommit": "6a9d39df1879c8e0fe51004965986ce8f17139bd",
   "sourceTreeClean": false,
-  "sourceFingerprint": "0a75fba6c4d3861160bd4f746193af4846257e17ea5dff98d46c66d47f5674e3",
+  "sourceFingerprint": "14e59b6d0cb3222d65df64a2362ff92098a72379a3396d3b33a1743bd35e02f8",
   "sourceHashes": {
     "next.config.ts": "bfe695713fa8522c0e8794509afe33014bb87262639e0b7e8f278fe5f1aee770",
+    "public/brand/ennco-lockup-knockout.svg": "c436e495a935a430f902308065149c009de884d80c96cc2062a248a77ca79bf3",
     "public/brand/ennco-lockup.svg": "daef7c8c652d4c30efdd05b757600a6917c80031a1dcae37158b8d5f6346a322",
     "public/brand/ennco-mark.svg": "e165d1d68b948c65a150c92b112e965d1d086d03438742e7d3718512c0255a79",
     "public/media/ennco/industrial-rooftop-mobile.avif": "e58b9c2343a235df30942797491133aab65bc1e9e423a512b2794cdb4c8b422d",
@@ -28,14 +29,14 @@
     "public/media/generated/engineering-texture.webp": "91ad93ec1fd7382cbe4c8f71f3f973cbd32138fb1c25251b1025037a81ef534f",
     "public/media/generated/thermal-field.avif": "419c6b88b4307d77892508413d4074da41f4ebd1dcc8b2b2beba523b21526e1a",
     "public/media/generated/thermal-field.webp": "920d3fd69d90d01a030bf6ee8f02598f3718293de34996dc3fea34ad33bae5aa",
-    "public/media/manifest.json": "33e9d2bfe765856b52e23c9d5f61c46ee57e087db175b6a5ebf47dc08c06712d",
+    "public/media/manifest.json": "e19fb3dfe926d748ca96a6aeac65af7c392589a4cf652237a36ca81038cf3353",
     "scripts/m23-load-gate.k6.js": "0b23006bb8e35e25cffb4c35f4e61589435fa2c94b01e5417138b561052d9ffe",
     "scripts/m31-ux-browser-gate.mjs": "fd85d2c545faea2f75c6e40d5454e462b7dec6ff73b423d63aef3fe267d569f0",
     "src/app/diagnostico/page.tsx": "5f5054ccc76d474b3a45b775c29f4d23f71b39fa0cddf681e359570ed9b4a9d3",
-    "src/app/globals.css": "9a0716c155852c68624b819364933c264ede0ac1f017e1d9ea7551a541c41715",
+    "src/app/globals.css": "72399f2e2b1a46587bf1f3d230490c2ac1e2c21e0a52d58d2b127d66e79be728",
     "src/app/ingreso/page.tsx": "d9148cfef3d48769a1da68963b488ab23c1f5d57b6eb563c83c480c298364547",
     "src/app/layout.tsx": "98ada2e46338e0064d31ffdbe6b207f2e45cc94f0448dbf80f5c34bb83c31729",
-    "src/app/operacion/layout.tsx": "df5b2d7521eab96d15a7a98e57392d991613f7c509d4f65243c38a5886df4b76",
+    "src/app/operacion/layout.tsx": "3612a5d3d956a1026af3cc3286d316e29e38b7e2b8956ddee89b31c9c20d66c1",
     "src/app/operacion/page.tsx": "7ee17429d6449b3b6316aeb126721ab57c5a79fb98b69b6b226fb3370b19db52",
     "src/app/page.tsx": "730bfbc68c2852e22246a26086832b85538e6485627b8da82367eb26e782808d",
     "src/components/OperationsNav.tsx": "b5a15f4a784ec0f0535432fff4ff0af3ba040a5816b7cf4e131f9036039873f9",
@@ -44,6 +45,7 @@
     "src/components/PrequoteForm.tsx": "8da672ce4e1cf8103762a4b5a35638f1a1fd368af876fa3eddbbb3e5e4e50527",
     "src/components/SiteHeader.tsx": "ec8095d8b46a28b926ffa91ca809057efae58babc4b1d4d9b5a76add83bae6d9",
     "src/styles/base.css": "6af2ebb96d2bef1d6572bc24a293d32031794958daa56198e463573480310684",
+    "src/styles/control-room.css": "47fc78a350ff821e5a3c84cd8d3f96d8004d7d4ed29672d3b1cc2d541c39ee6c",
     "src/styles/operations.css": "711c72ad45facbd130d018b61344a084c9984013fd7d15705089931f2eeaf418",
     "src/styles/public.css": "5965e709fc3b1550a8c3363a33e0962a7eeacf5f6df91fb6e76445bf597fb228",
     "src/styles/tokens.css": "a1ad1d5a868ad989d75b6a08de17eee1e180ec18ce950f0d18bdd59703d9f1df"
@@ -55,28 +57,28 @@
     "evidence/m31-ux-redesign/before/diagnostic-mobile.png": "f21c2c0265713c158ae47223117c9ac831351618d802fe825cd7870d05b73df6"
   },
   "captureHashes": {
-    "evidence/m31-ux-redesign/after/desktop-1280-control-room.png": "474759586a550b34cbc65fc2df10e2520dcd69dad2fe0276a2f05d8518115c43",
-    "evidence/m31-ux-redesign/after/desktop-1280-diagnostic.png": "f2099b53739b78647fbd8200c1736f68647954cf5c594d254a9ee9f95ed1015e",
+    "evidence/m31-ux-redesign/after/desktop-1280-control-room.png": "7c15f7ece859a3c5ab01d8ef579d85f774a6338f74f02b57c67ff6ac1d076eea",
+    "evidence/m31-ux-redesign/after/desktop-1280-diagnostic.png": "6cf77e0968f4500af90c377fafef0c96c034d23cfe3a1da09e7827b4c4806018",
     "evidence/m31-ux-redesign/after/desktop-1280-home.png": "2ba92bdc9cad05ffd70a491a2ed6da5fe4c3949b0bb5d61cc319eacd6c915017",
     "evidence/m31-ux-redesign/after/desktop-1280-identity.png": "1061e780bb0a914add8726867f6c59491eca3d8ce69e7474954ae85572f59e96",
-    "evidence/m31-ux-redesign/after/desktop-1280-responses.png": "d3d6dcf06a8eb411cd6f203580a9a3361bf3b958b3654e85c01557988d632e34",
-    "evidence/m31-ux-redesign/after/desktop-1440-control-room.png": "35fa7768eee760f909ba11a5389874194bec2d125c678c54ef6564e2b92439a1",
-    "evidence/m31-ux-redesign/after/desktop-1440-diagnostic.png": "aea54cc15bc71ef4ed6ac03f5e7da11d2688e58cb52329579b2c3c9a96e8b76b",
-    "evidence/m31-ux-redesign/after/desktop-1440-home.png": "085410d26123e5a9bff316c688e1f1281422a3b391b5e67595293db9432ab099",
+    "evidence/m31-ux-redesign/after/desktop-1280-responses.png": "749f0016cc9732bebed251593aef1c1b9a94e6c745e4ab025dc5785c82d74280",
+    "evidence/m31-ux-redesign/after/desktop-1440-control-room.png": "a8ee7a1c0c25fa749035c83d5754a1c883c12d1f1920e5ec9ab81be3a8a38079",
+    "evidence/m31-ux-redesign/after/desktop-1440-diagnostic.png": "5df914a1dea201541b99371406604fbb4547292619aebc94cca8206822e230e7",
+    "evidence/m31-ux-redesign/after/desktop-1440-home.png": "79df9a4d699710a406c96bf358054ceff3a3d6050cd4f4aedd00af34f4b9808c",
     "evidence/m31-ux-redesign/after/desktop-1440-identity.png": "dda69e59d3b4ce69c7cacd584c57a46f6a3273074180f99ac1b0e1dcf8844815",
-    "evidence/m31-ux-redesign/after/desktop-1440-responses.png": "ef9a26db7f0dc4bf9d6a172edd20593fc784cdc0d3e6b5aeaaf0fd57d18f9a8e",
-    "evidence/m31-ux-redesign/after/mobile-390-control-room.png": "3417ca3238b599a5a77ae47bad14f9d1a4ec75f7926a3f94d9c5e03302a0759b",
-    "evidence/m31-ux-redesign/after/mobile-390-diagnostic.png": "9a1b49ad30756dc427bd6a4c7695eda9aaf6314f44ac3db390ca4bd40d7489e4",
+    "evidence/m31-ux-redesign/after/desktop-1440-responses.png": "6133a41e434e0c2e97feaa372f364c16b5514b703ace29f595196521f8d9dd2e",
+    "evidence/m31-ux-redesign/after/mobile-390-control-room.png": "0aa7a1434d1ff998af3808315654adca57761e98917ecc203681f49b26638338",
+    "evidence/m31-ux-redesign/after/mobile-390-diagnostic.png": "82aa8ec37b9bc41517dff8b4dea13a20a011b74a45d9ce18ea8629f5789e55a5",
     "evidence/m31-ux-redesign/after/mobile-390-home.png": "0a51bc24010f76143898cc1672384412e8595723ec717c7e5da471097c2ee665",
     "evidence/m31-ux-redesign/after/mobile-390-identity.png": "6c92ed7b2ed746912b1869cca7e57eefe5ed63564cd03df54f54bddbfe6f7bff",
-    "evidence/m31-ux-redesign/after/mobile-390-responses.png": "fc15301f99321209c6d0f4565f93ae1a5c9ec66e9dde702e0323c28142bf9825",
-    "evidence/m31-ux-redesign/after/tablet-768-control-room.png": "6b8cf816eb999b6eac38c40039b42b452b7150df6fde96b580672335726bb63e",
-    "evidence/m31-ux-redesign/after/tablet-768-diagnostic.png": "4f0141efafa72f849a77c3ff39d5e269708dae99f51fe4377272df35afb89983",
+    "evidence/m31-ux-redesign/after/mobile-390-responses.png": "97389173465349218aea982d465721979a9d1ac4fa0d983db3ee1e0938908e41",
+    "evidence/m31-ux-redesign/after/tablet-768-control-room.png": "934e49af32b9967ec5d3daeb000734dd3c00dfa27e68c011cbfda2a98e9f7746",
+    "evidence/m31-ux-redesign/after/tablet-768-diagnostic.png": "706e2695e47b9d23c6cbc9675ae51163ed52ff769c9be866fde5eb0fc7097376",
     "evidence/m31-ux-redesign/after/tablet-768-home.png": "34c8e844589ab6e68207d02a709c68cdb1005d741a36c7b4a7847a5bacf8bd42",
     "evidence/m31-ux-redesign/after/tablet-768-identity.png": "005aedb8059139cbcc1a61204fd3410150ceda289a8f3836c178a1fc7bf902fe",
-    "evidence/m31-ux-redesign/after/tablet-768-responses.png": "30f6f5ff64d016af19360e726dfd6159669f5a9722585bb87e6537da9b4f102d"
+    "evidence/m31-ux-redesign/after/tablet-768-responses.png": "356bc040fc1daf5ac85da84ce38a2496d5f2b070d404937f3c46b40272d176fd"
   },
-  "generatedAt": "2026-08-26T00:26:35.286Z",
+  "generatedAt": "2026-08-26T02:24:32.206Z",
   "externalSideEffects": 0,
   "matrix": {
     "viewports": 4,
@@ -92,7 +94,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0,
-        "lcp": 268
+        "lcp": 296
       }
     },
     {
@@ -103,7 +105,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0,
-        "lcp": 80
+        "lcp": 88
       }
     },
     {
@@ -114,7 +116,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0.00000797244727366255,
-        "lcp": 92
+        "lcp": 100
       }
     },
     {
@@ -124,8 +126,8 @@
       "scrollWidth": 1440,
       "cspViolations": [],
       "vitals": {
-        "cls": 0,
-        "lcp": 128
+        "cls": 0.00010688670803326476,
+        "lcp": 140
       }
     },
     {
@@ -135,8 +137,8 @@
       "scrollWidth": 1440,
       "cspViolations": [],
       "vitals": {
-        "cls": 0,
-        "lcp": 64
+        "cls": 0.00010688670803326476,
+        "lcp": 68
       }
     },
     {
@@ -147,7 +149,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0,
-        "lcp": 88
+        "lcp": 96
       }
     },
     {
@@ -179,7 +181,7 @@
       "scrollWidth": 1280,
       "cspViolations": [],
       "vitals": {
-        "cls": 0,
+        "cls": 0.00019349346160888673,
         "lcp": 80
       }
     },
@@ -190,8 +192,8 @@
       "scrollWidth": 1280,
       "cspViolations": [],
       "vitals": {
-        "cls": 0,
-        "lcp": 64
+        "cls": 0.00015218830108642577,
+        "lcp": 68
       }
     },
     {
@@ -202,7 +204,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0.000030344934202730656,
-        "lcp": 100
+        "lcp": 92
       }
     },
     {
@@ -213,7 +215,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0,
-        "lcp": 64
+        "lcp": 60
       }
     },
     {
@@ -234,7 +236,7 @@
       "scrollWidth": 768,
       "cspViolations": [],
       "vitals": {
-        "cls": 0,
+        "cls": 0.00024770231296618783,
         "lcp": 72
       }
     },
@@ -245,8 +247,8 @@
       "scrollWidth": 768,
       "cspViolations": [],
       "vitals": {
-        "cls": 0,
-        "lcp": 60
+        "cls": 0.00024770231296618783,
+        "lcp": 64
       }
     },
     {
@@ -257,7 +259,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0,
-        "lcp": 56
+        "lcp": 60
       }
     },
     {
@@ -268,7 +270,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0,
-        "lcp": 60
+        "lcp": 56
       }
     },
     {
@@ -279,7 +281,7 @@
       "cspViolations": [],
       "vitals": {
         "cls": 0,
-        "lcp": 92
+        "lcp": 88
       }
     },
     {
@@ -289,8 +291,8 @@
       "scrollWidth": 390,
       "cspViolations": [],
       "vitals": {
-        "cls": 0,
-        "lcp": 76
+        "cls": 0.00036661216289316656,
+        "lcp": 68
       }
     },
     {
@@ -300,7 +302,7 @@
       "scrollWidth": 390,
       "cspViolations": [],
       "vitals": {
-        "cls": 0,
+        "cls": 0.00036661216289316656,
         "lcp": 56
       }
     }
@@ -312,30 +314,30 @@
         {
           "run": 1,
           "cls": 0,
-          "lcp": 620
+          "lcp": 692
         },
         {
           "run": 2,
           "cls": 0,
-          "lcp": 608
+          "lcp": 700
         },
         {
           "run": 3,
           "cls": 0,
-          "lcp": 628
+          "lcp": 700
         },
         {
           "run": 4,
           "cls": 0,
-          "lcp": 616
+          "lcp": 688
         },
         {
           "run": 5,
           "cls": 0,
-          "lcp": 620
+          "lcp": 704
         }
       ],
-      "lcpP75Ms": 620,
+      "lcpP75Ms": 700,
       "sampleCount": 5
     },
     {
@@ -344,30 +346,30 @@
         {
           "run": 1,
           "cls": 0,
-          "lcp": 648
+          "lcp": 744
         },
         {
           "run": 2,
           "cls": 0,
-          "lcp": 628
+          "lcp": 736
         },
         {
           "run": 3,
           "cls": 0,
-          "lcp": 652
+          "lcp": 728
         },
         {
           "run": 4,
           "cls": 0,
-          "lcp": 644
+          "lcp": 732
         },
         {
           "run": 5,
           "cls": 0,
-          "lcp": 624
+          "lcp": 724
         }
       ],
-      "lcpP75Ms": 648,
+      "lcpP75Ms": 736,
       "sampleCount": 5
     }
   ],

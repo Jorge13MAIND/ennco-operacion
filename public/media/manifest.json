@@ -18,6 +18,16 @@
       "alt": "ENNCO, Energy & Innovation Consulting"
     },
     {
+      "id": "ennco_official_lockup_knockout",
+      "kind": "official_logo",
+      "source_sha256": "c436e495a935a430f902308065149c009de884d80c96cc2062a248a77ca79bf3",
+      "source_label": "Derived from ennco-lockup.svg (ENNCO Illustrator master, page 15)",
+      "crop": "Mechanical recolor of the navy wordmark fills to white for dark surfaces. Gold bolt untouched. No redraw or generative modification.",
+      "outputs": ["/brand/ennco-lockup-knockout.svg"],
+      "usage": "Brand identification on dark surfaces (Control Room sidebar)",
+      "alt": "ENNCO, Energy & Innovation Consulting"
+    },
+    {
       "id": "industrial_rooftop",
       "kind": "ennco_project_photo",
       "source_sha256": "f7987736158823b86a4d8d0a95c8a65c48a3eb408cac1e283c72c461e45d98ab",
