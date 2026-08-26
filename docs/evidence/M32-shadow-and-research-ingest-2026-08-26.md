@@ -30,6 +30,27 @@ ocurre el 27-ago por la mañana. No se debe afirmar antes de verla.
 correcto hoy: no hay release activo porque el copy no está aprobado y no hay
 buzones conectados. El motor tiene que quedarse quieto.
 
+## 1b. Bloqueadores abiertos del buzón primario (estado real en producción)
+
+`public.mailboxes`, único registro: `contacto@ennco.com.mx`
+(ruta `EXISTING_PRIMARY_GMAIL_RAMP`), con `health_status = HOLD` y
+`kill_switch = true`, que es lo correcto mientras falte lo siguiente:
+
+| Campo | Estado | Se destraba con |
+|---|---|---|
+| `credential_status` | UNKNOWN | consentimiento OAuth + KMS (sesión con Jorge) |
+| `auth_dkim` | false | DKIM de `ennco.com.mx` (paso 3 del runbook) |
+| `sender_identity_verified` | false | consentimiento del buzón |
+| `gmail/outlook/yahoo_seed_verified` | false ×3 | corrida de seeds tras credencial |
+| `reply_sync_verified` | false | sync de respuestas tras credencial |
+| `list_unsubscribe_verified`, `one_click_unsubscribe_verified` | false ×2 | releases de baja |
+| `blocklist_status` | UNKNOWN | verificación de listas |
+
+`auth_spf` y `auth_dmarc` ya están en true. Los 3 buzones del carril aislado
+existen en Google Workspace pero **todavía no están registrados en la
+plataforma**: su alta pasa por el flujo autenticado con evidencia de proveedor,
+no por inserción manual en la base (una fila puesta a mano sería un falso verde).
+
 ## 2. Batches de ingest listos (bloqueados por una llave humana)
 
 `scripts/build-sourcing-batches-2026-08-26.mts` convierte las fuentes congeladas
@@ -63,8 +84,20 @@ que exige rol de operador **con sesión AAL2**. Ningún usuario de producción h
 completado su primer acceso (`auth.mfa_factors` vacío para los dos usuarios).
 Sin ese primer ingreso con TOTP, ningún dato entra al Workbench.
 
-Procedimiento cuando exista la sesión (paso 2b del runbook de Jorge): con su
-sesión viva en el navegador, se ejecutan los 7 POST a `/api/v1/research/imports`
-en el orden de `data/imports/research/sourcing-2026-08-26/INDEX.json`, cada uno
-con su `Idempotency-Key`, y se concilia la respuesta (`created`) contra el
-`source_records` del artefacto.
+### Cómo se ejecutará (no es un curl)
+
+`getMutationContext` corre `evaluateMutationRequest` antes que la autorización:
+exige cabecera `Origin` **idéntica** al `appUrl` configurado y `sec-fetch-site`
+`same-origin`, además de la cookie de sesión con AAL2. Un `curl` desde la
+terminal falla en las tres condiciones, y extraer la cookie de sesión de Jorge
+para inyectarla en un script sería manipular su credencial. Por lo tanto:
+
+Los 7 POST se ejecutan **desde la página del propio sitio**, en el navegador de
+Jorge ya autenticado, en el orden de
+`data/imports/research/sourcing-2026-08-26/INDEX.json`, cada uno con su
+`Idempotency-Key`. El payload viaja dentro del propio snippet porque la CSP
+(`connect-src 'self' https://*.supabase.co`) impide que la página descargue los
+archivos desde un servidor local; para los batches grandes se arma el arreglo
+por partes en `window` y se envía al final. Cada respuesta se concilia:
+`created` debe igualar el `source_records` del artefacto, y un reenvío debe
+devolver `DUPLICATE` sin crear nada.
