@@ -75,6 +75,10 @@ Fecha de este corte: 25 de agosto de 2026, America/Mexico_City.
 | Commit base del worktree | `f35c77a8140e954712432d0921ad76dabb1d8f06` |
 | Remoto Git configurado | Ninguno en este checkout |
 | Estado Git al crear este handover | 185 entradas, 87 tracked modificadas y 98 untracked |
+
+> Actualización 2026-08-25 (noche): el worktree se consolidó en commits y se
+> configuró el remoto privado `https://github.com/Jorge13MAIND/ennco-revenue-platform`.
+> Ver sección 27.
 | Envío externo | Bloqueado |
 | Kill switch | Activo por diseño |
 | Datos sintéticos como verdad live | Prohibido |
@@ -772,4 +776,53 @@ El handover está completo cuando otra persona puede:
 6. Ejecutar los gates mínimos.
 7. Generar una preview verificable.
 8. Explicar con honestidad qué está live, qué es local y qué sigue bloqueado.
+
+## 27. Addendum 2026-08-25 · Rediseño "Centro de Comando" ejecutado
+
+Por decisión explícita de Jorge (2026-08-25), el Control Room y el acceso se
+rediseñaron como réplica del dashboard demo de Atlas (`atlas.teckel-ai.com/demo`)
+con la marca ENNCO. Esta dirección sustituye, para el Control Room y `/ingreso`,
+la capa cromática de la dirección `Ingeniería premium` de la sección 6. La
+portada pública, `/diagnostico` y `/privacidad` NO se tocaron y conservan la
+dirección previa (verificado con capturas byte-idénticas del gate M31).
+
+Sistema nuevo, en un solo archivo aditivo:
+
+- `src/styles/control-room.css`, 100% scoped a `.cr-root` (montado en
+  `src/app/operacion/layout.tsx`) y a `main.auth-shell` (`/ingreso`).
+- Piel activa `data-cr-skin="atlas"`: canvas `#f5f5f7`, sidebar `#0a0a0a`,
+  acento cyan `#0E7490`/`#22D3EE`, CTA pill con gradiente cyan→azul, cards
+  blancas radius 16, easing `cubic-bezier(.16,1,.3,1)`.
+- Variante latente `data-cr-skin="ennco"` (navy/oro) definida en el mismo
+  archivo; el swap es un atributo en el layout.
+- Tipografía: Aileron se conserva (Geist sigue prohibida), con la escala del
+  demo (h1 36→48px, eyebrows 10-11px tracking .18-.25em, tabular-nums).
+- Logo: `public/brand/ennco-lockup-knockout.svg` (wordmark en blanco para la
+  sidebar oscura, rayo oro intacto; recoloreo mecánico registrado en
+  `public/media/manifest.json`). El header conserva el lockup original.
+- Pantalla Hoy: saludo por hora con acento en gradiente, hero de autorización
+  oscuro, KPI cards con count-up (`src/components/MetricValue.tsx`, SSR
+  renderiza el valor final) y feed "Pulso del sistema"
+  (`src/components/OperationsFeed.tsx`, sólo datos reales del snapshot).
+  El orden de producto (autorización → acciones → verdad comercial) no cambió.
+- Animaciones CSS con `prefers-reduced-motion` respetado;
+  `tests/e2e/accessibility.spec.ts` ahora espera `document.getAnimations()`
+  antes del scan de axe (mide el estado final, no frames intermedios).
+
+Contratos intactos: cero cambios en `src/lib/**`, APIs, migraciones, supresión,
+kill switch, precotización y `PortalTableFilter`/`StatusBadge`/`data-label`.
+
+Verificación del corte: typecheck, lint, build, unitarias 11/11, E2E 257/257
+(13 skipped por diseño), axe 90/90 y M31 `PASS_LOCAL` con `failures: []`
+(LCP móvil p75 704/736 ms contra presupuesto 2500 ms).
+
+## 28. Estado de continuidad (2026-08-25, noche)
+
+- Backup físico: `~/dev/ennco-backup-20260825-2014.tar.gz` (sin node_modules).
+- Worktree consolidado: commit `6a9d39d` (checkpoint) + commits por fase del
+  rediseño sobre `main`.
+- Remoto privado configurado y pusheado:
+  `https://github.com/Jorge13MAIND/ennco-revenue-platform`.
+- Producción NO fue tocada: el rediseño vive sólo en el repo local y el remoto.
+  El deploy a `ennco-operacion.vercel.app` espera aprobación explícita.
 
