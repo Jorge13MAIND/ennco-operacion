@@ -75,4 +75,48 @@ describe("Gmail outbound client", () => {
     expect(String(error)).not.toContain(accessToken);
     expect(String(error)).not.toContain(providerSecret);
   });
+
+  it("stamps a deterministic Message-ID derived from the platform message id", async () => {
+    const fetchImpl = vi.fn(async (_input: string | URL | Request, init?: RequestInit) => {
+      const payload = JSON.parse(String(init?.body)) as { raw: string };
+      const decoded = Buffer.from(payload.raw, "base64url").toString("utf8");
+      expect(decoded).toContain(`Message-ID: <msg-${baseInput.authorization.message_id}@ennco.com.mx>`);
+      return new Response(JSON.stringify({ id: "gmail-message-1", threadId: "gmail-thread-1" }), { status: 200 });
+    });
+    const client = new GmailOutboundClient({ accessToken, fetchImpl });
+    await client.sendTouch({ ...baseInput, touch_number: 1 });
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
+  });
+
+  it("threads a follow-up touch and targets the original Gmail thread", async () => {
+    const thread = {
+      provider_thread_id: "gmail-thread-1",
+      previous_provider_message_id: `<msg-${baseInput.authorization.message_id}@ennco.com.mx>`,
+    };
+    const fetchImpl = vi.fn(async (_input: string | URL | Request, init?: RequestInit) => {
+      const payload = JSON.parse(String(init?.body)) as { raw: string; threadId?: string };
+      expect(payload.threadId).toBe("gmail-thread-1");
+      const decoded = Buffer.from(payload.raw, "base64url").toString("utf8");
+      expect(decoded).toContain(`In-Reply-To: ${thread.previous_provider_message_id}`);
+      expect(decoded).toContain(`References: ${thread.previous_provider_message_id}`);
+      return new Response(JSON.stringify({ id: "gmail-message-2", threadId: "gmail-thread-1" }), { status: 200 });
+    });
+    const client = new GmailOutboundClient({ accessToken, fetchImpl });
+    const result = await client.sendTouch({ ...baseInput, touch_number: 2, thread });
+    expect(result.provider_thread_id).toBe("gmail-thread-1");
+  });
+
+  it("rejects a follow-up without thread info and a first touch with one", async () => {
+    const fetchImpl = vi.fn(async () => new Response("{}", { status: 200 }));
+    const client = new GmailOutboundClient({ accessToken, fetchImpl });
+    await expect(client.sendTouch({ ...baseInput, touch_number: 2 })).rejects.toMatchObject({
+      code: "GMAIL_TOUCH_INPUT_INVALID",
+    });
+    await expect(client.sendTouch({
+      ...baseInput,
+      touch_number: 1,
+      thread: { provider_thread_id: "t", previous_provider_message_id: "<x@y>" },
+    })).rejects.toMatchObject({ code: "GMAIL_TOUCH_INPUT_INVALID" });
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
 });

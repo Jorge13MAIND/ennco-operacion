@@ -315,4 +315,42 @@ describe("runtime configuration", () => {
       }),
     ).toThrow("APP_ENV_PLATFORM_MISMATCH");
   });
+
+  it("keeps the dispatch engine fail closed until its release gates are complete", () => {
+    const config = getRuntimeConfig({});
+    expect(config.dispatchReleased).toBe(false);
+    expect(config.dispatchMode).toBe("shadow");
+
+    expect(() => getRuntimeConfig({ ENNCO_DISPATCH_RELEASED: "true" })).toThrow(
+      "DISPATCH_RELEASE_GATES_INCOMPLETE",
+    );
+
+    const dispatchSecrets = {
+      ENNCO_DISPATCH_SECRET: "synthetic-dispatch-secret-at-least-32-chars",
+      CRON_SECRET: "synthetic-cron-secret-at-least-32-characters",
+    };
+
+    expect(() => getRuntimeConfig({
+      ...dedicated,
+      ENNCO_DEMO_MODE: "false",
+      ENNCO_DISPATCH_RELEASED: "true",
+    })).toThrow("DISPATCH_RELEASE_GATES_INCOMPLETE");
+
+    const shadow = getRuntimeConfig({
+      ...dedicated,
+      ...dispatchSecrets,
+      ENNCO_DEMO_MODE: "false",
+      ENNCO_DISPATCH_RELEASED: "true",
+    });
+    expect(shadow.dispatchReleased).toBe(true);
+    expect(shadow.dispatchMode).toBe("shadow");
+
+    expect(() => getRuntimeConfig({
+      ...dedicated,
+      ...dispatchSecrets,
+      ENNCO_DEMO_MODE: "false",
+      ENNCO_DISPATCH_RELEASED: "true",
+      ENNCO_DISPATCH_MODE: "live",
+    })).toThrow("DISPATCH_LIVE_REQUIRES_GMAIL_AND_UNSUBSCRIBE_RELEASES");
+  });
 });

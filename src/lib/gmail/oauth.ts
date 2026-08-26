@@ -54,6 +54,10 @@ const kmsEncryptResponseSchema = z.object({
   ciphertext: z.string().regex(/^[A-Za-z0-9+/]+={0,2}$/u).min(24).max(65536),
 }).passthrough();
 
+const kmsDecryptResponseSchema = z.object({
+  plaintext: z.string().regex(/^[A-Za-z0-9+/]+={0,2}$/u).min(24).max(65536),
+}).passthrough();
+
 export const gmailOAuthStartResultSchema = z.object({
   status: z.enum(["STARTED", "DUPLICATE"]),
   authorization_id: z.uuid(),
@@ -268,6 +272,26 @@ export class GoogleKmsEnvelopeClient {
       keyName: this.input.keyName,
       keyVersion: key.data.primary.name.split("/").at(-1) ?? "",
     };
+  }
+
+  async decryptText(envelope: Pick<KmsEnvelope, "ciphertext" | "keyName">): Promise<string> {
+    if (!envelope.ciphertext) throw new Error("KMS_CIPHERTEXT_REQUIRED");
+    if (envelope.keyName !== this.input.keyName) throw new Error("KMS_KEY_NAME_MISMATCH");
+    const fetchImpl = this.input.fetchImpl ?? fetch;
+    const accessToken = await this.input.accessTokenProvider();
+    if (!accessToken) throw new Error("KMS_ACCESS_TOKEN_REQUIRED");
+    const decryptResponse = await fetchImpl(`https://cloudkms.googleapis.com/v1/${this.input.keyName}:decrypt`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ ciphertext: envelope.ciphertext }),
+      cache: "no-store",
+    });
+    const decryptJson: unknown = await decryptResponse.json().catch(() => null);
+    const decrypted = decryptResponse.ok ? kmsDecryptResponseSchema.safeParse(decryptJson) : null;
+    if (!decrypted || !decrypted.success) throw new Error("KMS_DECRYPT_FAILED");
+    const plaintext = Buffer.from(decrypted.data.plaintext, "base64").toString("utf8");
+    if (plaintext.length < 20) throw new Error("KMS_DECRYPTED_PLAINTEXT_INVALID");
+    return plaintext;
   }
 }
 

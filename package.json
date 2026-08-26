@@ -74,6 +74,7 @@
     "verify:managed-crypto-db": "supabase/tests/run-managed-crypto-compatibility-gate.sh",
     "verify:provider-coverage-db": "bash supabase/tests/run-provider-operator-coverage-alignment-gate.sh",
     "verify:hybrid-outbound-db": "bash supabase/tests/run-hybrid-accelerated-outbound-gate.sh",
+    "verify:hybrid-dispatch-db": "bash supabase/tests/run-hybrid-dispatch-gate.sh",
     "verify:gmail-oauth-kms-db": "bash supabase/tests/run-gmail-oauth-kms-broker-gate.sh",
     "verify:suppression-privacy-db": "supabase/tests/run-suppression-privacy-gate.sh",
     "verify:m8-readiness": "node --experimental-strip-types scripts/m8-contractual-reporting.mts --repo .",

@@ -15,10 +15,9 @@ function formatMetric(value: number, format: "integer" | "mxn"): string {
  * y sólo sin prefers-reduced-motion. El dato nunca se altera: sólo se recorre.
  */
 export function MetricValue({ value, format = "integer" }: { value: number; format?: "integer" | "mxn" }) {
-  const [display, setDisplay] = useState(() => formatMetric(value, format));
+  const [animated, setAnimated] = useState<string | null>(null);
 
   useEffect(() => {
-    setDisplay(formatMetric(value, format));
     if (value === 0) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const started = performance.now();
@@ -27,12 +26,15 @@ export function MetricValue({ value, format = "integer" }: { value: number; form
     const tick = (now: number) => {
       const progress = Math.min((now - started) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplay(formatMetric(Math.round(value * eased), format));
+      setAnimated(progress < 1 ? formatMetric(Math.round(value * eased), format) : null);
       if (progress < 1) frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
+    return () => {
+      cancelAnimationFrame(frame);
+      setAnimated(null);
+    };
   }, [value, format]);
 
-  return <>{display}</>;
+  return <>{animated ?? formatMetric(value, format)}</>;
 }

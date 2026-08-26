@@ -9,15 +9,22 @@ const organizationId = "11111111-1111-4111-8111-111111111111";
 const body = {
   account: {
     provider_code: "APOLLO", environment: "PRODUCTION", ownership_status: "UNKNOWN",
-    terms_status: "UNKNOWN", plan_name: "Professional", legal_owner: "UNKNOWN", seat_count: 1,
+    terms_status: "UNKNOWN", plan_name: "Professional", legal_owner: "UNKNOWN",
+    custody_model: "TECKEL_MANAGED_FOR_ENNCO", workspace_mode: "ENNCO_DEDICATED",
+    sender_identity: "FRANCISCO_CUELLAR", terms_risk: "ACCEPTED_BY_TECKEL",
+    legacy_teckel_assets: "UNKNOWN", legacy_contact_count: 192,
+    legacy_sequence_count: 13, active_sequence_count: 1, teckel_mailbox_active_count: 2,
+    primary_mailbox_connected: false, primary_mailbox_ref_sha256: null,
+    team_ref_sha256: null, admin_email_sha256: null, seat_count: 1,
     billing_frequency: "MONTHLY", external_account_ref_sha256: null, mfa_status: "UNKNOWN",
     recovery_status: "UNKNOWN", monthly_budget_mxn: 1782, hard_cap_mxn: 1782,
     evidence_sha256: "a".repeat(64), renewal_at: null, delivery_status: "BLOCKED",
     last_audited_at: null, verified_at: null, active: false,
   },
   budget: {
-    cycle_start: "2026-08-01", cycle_end: "2026-09-01", credit_limit: 500,
-    credits_consumed: 0, research_credit_cap: 500, infrastructure_credit_spend: 0,
+    cycle_start: "2026-08-01", cycle_end: "2026-09-01", credit_limit: 4010,
+    credits_consumed: 0, research_credit_cap: 300, infrastructure_credit_spend: 0,
+    minimum_credit_buffer: 110,
     phone_enrichment_allowed: false, status: "BLOCKED", evidence_sha256: "b".repeat(64),
     observed_at: "2026-08-20T18:00:00.000Z",
   },
@@ -52,7 +59,7 @@ describe("POST provider infrastructure snapshot", () => {
     }, error: null });
     const response = await POST(request());
     expect(response.status).toBe(200);
-    expect(rpc).toHaveBeenCalledWith("apply_outbound_provider_snapshot", {
+    expect(rpc).toHaveBeenCalledWith("apply_apollo_dedicated_provider_snapshot", {
       target_organization_id: organizationId,
       target_snapshot: body,
       target_idempotency_key: "d".repeat(64),
@@ -63,7 +70,7 @@ describe("POST provider infrastructure snapshot", () => {
   it("rejects obsolete backup, cap drift and extra fields before database mutation", async () => {
     for (const invalid of [
       { ...body, gates: [{ ...body.gates[0], gate_code: "OPERATOR_BACKUP" }] },
-      { ...body, budget: { ...body.budget, credit_limit: 501 } },
+      { ...body, budget: { ...body.budget, credit_limit: 400 } },
       { ...body, unexpected: true },
     ]) {
       const response = await POST(request(invalid));

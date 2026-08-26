@@ -38,6 +38,12 @@ const runtimeSchema = z.object({
   googleKmsKeyName: z.string().regex(/^projects\/[^/]+\/locations\/[^/]+\/keyRings\/[^/]+\/cryptoKeys\/[^/]+$/u).optional(),
   gmailOauthStateSecret: z.string().min(32).optional(),
   gmailOauthCompletionSecret: z.string().min(32).optional(),
+  dispatchReleased: z.boolean(),
+  dispatchMode: z.enum(["shadow", "live"]),
+  dispatchSecret: z.string().min(32).optional(),
+  cronSecret: z.string().min(32).optional(),
+  telegramBotToken: z.string().min(20).optional(),
+  telegramChatId: z.string().min(3).optional(),
 });
 
 export type RuntimeConfig = z.infer<typeof runtimeSchema>;
@@ -110,6 +116,12 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     googleKmsKeyName: environment.GOOGLE_KMS_KEY_NAME || undefined,
     gmailOauthStateSecret: environment.ENNCO_GMAIL_OAUTH_STATE_SECRET || undefined,
     gmailOauthCompletionSecret: environment.ENNCO_GMAIL_OAUTH_COMPLETION_SECRET || undefined,
+    dispatchReleased: envBoolean(environment.ENNCO_DISPATCH_RELEASED, false),
+    dispatchMode: environment.ENNCO_DISPATCH_MODE === "live" ? "live" : "shadow",
+    dispatchSecret: environment.ENNCO_DISPATCH_SECRET || undefined,
+    cronSecret: environment.CRON_SECRET || undefined,
+    telegramBotToken: environment.TELEGRAM_BOT_TOKEN || undefined,
+    telegramChatId: environment.TELEGRAM_CHAT_ID || undefined,
   });
 
   const configuredValues = [config.supabaseUrl, config.supabasePublishableKey, config.organizationId];
@@ -202,6 +214,24 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
   }
   if (config.externalSendAllowed && !config.unsubscribeReleased) {
     throw new Error("EXTERNAL_SEND_REQUIRES_UNSUBSCRIBE");
+  }
+  if (
+    config.dispatchReleased
+    && (
+      config.demoMode
+      || configuredCount !== configuredValues.length
+      || !config.dispatchSecret
+      || !config.cronSecret
+    )
+  ) {
+    throw new Error("DISPATCH_RELEASE_GATES_INCOMPLETE");
+  }
+  if (
+    config.dispatchReleased
+    && config.dispatchMode === "live"
+    && (!config.gmailOauthReleased || !config.gmailWebhookReleased || !config.unsubscribeReleased)
+  ) {
+    throw new Error("DISPATCH_LIVE_REQUIRES_GMAIL_AND_UNSUBSCRIBE_RELEASES");
   }
 
   return config;
