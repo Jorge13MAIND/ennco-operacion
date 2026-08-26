@@ -1,0 +1,769 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-26T20:41:21Z",
+  "credit_snapshot_before": {
+    "credit_usage_stats": {
+      "lead_credit": {
+        "limit": 4010,
+        "consumed": 0,
+        "left_over": 4010
+      },
+      "direct_dial_credit": {
+        "limit": 4000,
+        "consumed": 4000,
+        "left_over": 0
+      },
+      "export_credit": {
+        "limit": 0,
+        "consumed": 0,
+        "left_over": 0
+      },
+      "conversation_credit": {
+        "limit": 4000,
+        "consumed": 0,
+        "left_over": 4000
+      },
+      "ai_credit": {
+        "limit": 800000,
+        "consumed": 0,
+        "left_over": 800000
+      },
+      "power_up_credit": {
+        "limit": 0,
+        "consumed": 0,
+        "left_over": 0
+      },
+      "inbound_website_visitor_credit": {
+        "limit": 100,
+        "consumed": 0,
+        "left_over": 100
+      },
+      "dialer": {
+        "limit": 990,
+        "consumed": 0,
+        "left_over": 990
+      },
+      "web_search_record_credit": {
+        "limit": 200,
+        "consumed": 1,
+        "left_over": 199
+      },
+      "contact_website_visitor_credit": {
+        "limit": 0,
+        "consumed": 0,
+        "left_over": 0
+      },
+      "broadcast_credit": {
+        "limit": 50000,
+        "consumed": 0,
+        "left_over": 50000
+      }
+    },
+    "current_credit_cycle": {
+      "start_date": "2026-08-24T22:30:53.000+00:00",
+      "end_date": "2026-09-24T22:30:54.000+00:00"
+    }
+  },
+  "credit_snapshot_after": {
+    "credit_usage_stats": {
+      "lead_credit": {
+        "limit": 4010,
+        "consumed": 10,
+        "left_over": 4000
+      },
+      "direct_dial_credit": {
+        "limit": 4000,
+        "consumed": 4000,
+        "left_over": 0
+      },
+      "export_credit": {
+        "limit": 0,
+        "consumed": 0,
+        "left_over": 0
+      },
+      "conversation_credit": {
+        "limit": 4000,
+        "consumed": 0,
+        "left_over": 4000
+      },
+      "ai_credit": {
+        "limit": 800000,
+        "consumed": 0,
+        "left_over": 800000
+      },
+      "power_up_credit": {
+        "limit": 0,
+        "consumed": 0,
+        "left_over": 0
+      },
+      "inbound_website_visitor_credit": {
+        "limit": 100,
+        "consumed": 0,
+        "left_over": 100
+      },
+      "dialer": {
+        "limit": 990,
+        "consumed": 0,
+        "left_over": 990
+      },
+      "web_search_record_credit": {
+        "limit": 200,
+        "consumed": 1,
+        "left_over": 199
+      },
+      "contact_website_visitor_credit": {
+        "limit": 0,
+        "consumed": 0,
+        "left_over": 0
+      },
+      "broadcast_credit": {
+        "limit": 50000,
+        "consumed": 0,
+        "left_over": 50000
+      }
+    },
+    "current_credit_cycle": {
+      "start_date": "2026-08-24T22:30:53.000+00:00",
+      "end_date": "2026-09-24T22:30:54.000+00:00"
+    }
+  },
+  "constraints": {
+    "enrichment_executed": false,
+    "outreach_executed": false,
+    "mutations_executed": false,
+    "lead_credits_spent": 10,
+    "lead_credits_spent_note": "apollo_mixed_companies_search cobra 1 credito por request con resultados; la busqueda de personas es gratis. Ver credit_variance_note.",
+    "monthly_lead_credit_budget": 4010
+  },
+  "credit_variance_note": "DESVIACION DOCUMENTADA: los snapshots NO son identicos. lead_credit paso de 0 a 10 consumidos (10 de 4,010 mensuales, 0.25%, ciclo resetea 2026-09-24). Causa: apollo_mixed_companies_search NO es gratis — su propio schema documenta 'exactly 1 credit per request that returns at least one result; 0 credits if there are no matches'. La premisa 'las busquedas search son gratis' solo aplica a apollo_mixed_people_api_search (verificado: 15 busquedas de personas, 0 creditos). Se detecto tras la primera busqueda de empresa (snapshot intermedio 0->1) y desde ahi se minimizo: sondas con 0 resultados (gratis), 2 dominios agrupados en 1 request, y descubrimiento de personas via dominio (gratis) en vez de busquedas de empresa especulativas. 10 requests de empresa con resultados = 10 lead credits. CERO creditos de enrichment/export/power-up; direct_dial ya estaba en 4000/4000 desde el baseline (no lo toco esta corrida). Ningun match/enrich/create/update fue llamado.",
+  "field_availability_note": "El MCP de Apollo devuelve la busqueda de personas en forma recortada: expone id, first_name, last_name_obfuscated (apellidos enmascarados, esperado), title, last_refreshed_at, has_email, has_direct_phone y organization.name. NO expone seniority, city, state, linkedin_url, email_status ni organization id/domain/employee_count por persona; esos campos van en null (no es dato faltante en Apollo: enrichment los revelaria). estimated_num_employees tampoco viene en la respuesta de empresas de este MCP (null).",
+  "accounts": [
+    {
+      "external_record_id": "tier1-20260826:001",
+      "legal_name": "STEERINGMEX",
+      "location_expected": "El Marqués, Querétaro",
+      "resolution": "MATCHED",
+      "match_scope": "MX_ENTITY",
+      "apollo_organization_id": "67270ee10b702b0001501e37",
+      "apollo_organization_name": "Steeringmex S. de R.L. de C.V.",
+      "organization_domain": null,
+      "estimated_num_employees": null,
+      "candidates": [
+        {
+          "apollo_person_id": "5f4d8dcb1f85b000013b2793",
+          "name": "Oscar Ca***o",
+          "title": "Maintenance Supervisor",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": false,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-08-05T20:29:07.000+00:00",
+          "organization_name": "Steeringmex S. de R.L. de C.V.",
+          "fit": "mantenimiento (prioridad 1); seniority supervisor, no gerente"
+        }
+      ],
+      "notes": "Apollo tiene DOS records duplicados de la misma entidad: 67270ee10b702b0001501e37 ('Steeringmex S. de R.L. de C.V.', usado como primario porque los contactos cuelgan de el) y 670322eb00a5820001b5aed7 ('STEERINGMEX S. de RL de CV', mismo logo). La busqueda de personas se corrio con ambos ids. Fallback por seniority solo agrego a Silverio Ca***s (id 619df4e85194ca0001213245, 'Incoming Quality Manager') — DESCARTADO: calidad, fuera de las funciones objetivo. Cobertura delgada: 1 candidato."
+    },
+    {
+      "external_record_id": "tier1-20260826:002",
+      "legal_name": "VENTRAMEX",
+      "location_expected": "El Marqués, Querétaro",
+      "resolution": "MATCHED",
+      "match_scope": "MX_ENTITY",
+      "apollo_organization_id": "6732e4989696e7000161d231",
+      "apollo_organization_name": "VENTRAMEX S DE RL DE CV",
+      "organization_domain": null,
+      "estimated_num_employees": null,
+      "candidates": [
+        {
+          "apollo_person_id": "68d42b661ffca500018a001a",
+          "name": "Jorge Mo***a",
+          "title": "Maintenance Leader",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-06-10T03:23:48.260+00:00",
+          "organization_name": "VENTRAMEX S DE RL DE CV",
+          "fit": "mantenimiento (prioridad 1); email disponible via enrichment"
+        },
+        {
+          "apollo_person_id": "5ac4b337a6da9801cc023839",
+          "name": "Jose Me***a",
+          "title": "Tooling Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": false,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-01-01T02:23:00.331+00:00",
+          "organization_name": "VENTRAMEX S DE RL DE CV",
+          "fit": "ingenieria/herramentales (borderline); unico title 'manager' de la cuenta"
+        }
+      ],
+      "notes": "Match unico y limpio. Headcount 12m -12.5%. Fallback por seniority devolvio 8 personas; descartados 6 supervisores de produccion/logistica/materiales/embarques/calidad-laboratorio (funcion no objetivo o seniority bajo): Pablo Gu***z y Victor Ga***a (Production Supervisor), Edy Fr***o (Logistics), Willibaldo Go***z (Materiales), Jesus Ma***z (Embarques), Yuridia Cr***z (Calidad Lab)."
+    },
+    {
+      "external_record_id": "tier1-20260826:003",
+      "legal_name": "CONSORCIO INDUSTRIAL MEXICANO DE AUTOPARTES (CIMA)",
+      "location_expected": "Silao, Guanajuato",
+      "resolution": "MATCHED",
+      "match_scope": "MX_ENTITY",
+      "apollo_organization_id": "6729a99f2bce890001d3c567",
+      "apollo_organization_name": "Consorcio Industrial Mexicano de Autopartes S. de R.L. de C.V.",
+      "organization_domain": null,
+      "estimated_num_employees": null,
+      "candidates": [
+        {
+          "apollo_person_id": "65dd2284ed3ebe000169700f",
+          "name": "Arturo He***z",
+          "title": "Supervisor",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": false,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-04-11T23:15:46.000+00:00",
+          "organization_name": "Consorcio Industrial Mexicano de Autopartes S. de R.L. de C.V.",
+          "fit": "FLAG: titulo generico 'Supervisor', funcion no determinable sin enrichment; unico contacto manager+ del record"
+        }
+      ],
+      "notes": "Org match limpio por nombre completo. Busqueda por titulos objetivo: 0. Fallback por seniority: solo 1 persona con titulo generico. Cobertura muy delgada — Apollo casi no tiene gente indexada en esta razon social."
+    },
+    {
+      "external_record_id": "tier1-20260826:004",
+      "legal_name": "PROCTER & GAMBLE MANUFACTURING MEXICO (planta Mariscala)",
+      "location_expected": "Apaseo el Grande, Guanajuato",
+      "resolution": "MATCHED",
+      "match_scope": "GLOBAL_PARENT",
+      "apollo_organization_id": "54a1218a69702d94a403bf02",
+      "apollo_organization_name": "Procter & Gamble",
+      "organization_domain": "pg.com",
+      "estimated_num_employees": null,
+      "candidates": [
+        {
+          "apollo_person_id": "57d66886a6da9854624f3549",
+          "name": "Kathya Ri***s",
+          "title": "Senior Director - Mariscala Plant Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-08-06T16:18:41.000+00:00",
+          "organization_name": "Procter & Gamble",
+          "fit": "PLANTA (prioridad 2) — el titulo confirma explicitamente la planta Mariscala; email y direct dial disponibles via enrichment"
+        },
+        {
+          "apollo_person_id": "6a5b50e5b5846f000144b8cd",
+          "name": "Miguel Lo***o",
+          "title": "Manufacturing Manager - Utilities Process Engineering",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-08-05T22:42:14.483+00:00",
+          "organization_name": "Procter & Gamble",
+          "fit": "utilities/energia (facilities, prioridad 3) — perfil ideal para conversacion de energia"
+        },
+        {
+          "apollo_person_id": "54a7f7117468696b7f5f3959",
+          "name": "Dulce So***o",
+          "title": "Hair Care Making Operations Department Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-08-06T14:11:05.157+00:00",
+          "organization_name": "Procter & Gamble",
+          "fit": "operaciones (prioridad 4)"
+        },
+        {
+          "apollo_person_id": "67f35f1d08b7d80001d59f13",
+          "name": "Andres Ri***a",
+          "title": "Engineering Senior Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-08-18T20:27:44.091+00:00",
+          "organization_name": "Procter & Gamble",
+          "fit": "ingenieria (prioridad 5), seniority alto"
+        },
+        {
+          "apollo_person_id": "627646be3cdb9400013e6580",
+          "name": "Diego Ga***a",
+          "title": "Engineering Project Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-08-19T18:58:54.861+00:00",
+          "organization_name": "Procter & Gamble",
+          "fit": "ingenieria de proyectos (prioridad 5)"
+        }
+      ],
+      "notes": "No existe record MX separado ('Procter & Gamble Manufacturing Mexico', 'Procter & Gamble Mexico' y 'Procter & Gamble'+loc MX devolvieron 0). Personal de planta vive bajo el corporativo global (pg.com, revenue 87B, NYSE:PG). Personas filtradas con person_locations=['Guanajuato, Mexico','Queretaro, Mexico'] (empleados de Mariscala viven en ambos estados; Apaseo el Grande colinda con Queretaro). 13 personas totales; la #1 confirma Mariscala en su propio titulo. Descartados: Dionisio Ra***z (Gerente de Ingenieria de Costos — finanzas), Mario Ma***o / Alejandro Sa***o / Karla Ur***e (Engineering Project Managers adicionales), Alejandra To***r (New Initiatives Senior EPM). CAVEAT: sin enrichment no se puede garantizar que los 4 restantes sean de Mariscala y no de otra operacion P&G en el corredor."
+    },
+    {
+      "external_record_id": "tier1-20260826:005",
+      "legal_name": "AUTOLIV STEERING WHEELS MEXICO",
+      "location_expected": "El Marqués, Querétaro",
+      "resolution": "MATCHED",
+      "match_scope": "MX_ENTITY",
+      "apollo_organization_id": "55fa1ed1f3e5bb717e002421",
+      "apollo_organization_name": "Autoliv Steering Wheels Mexico",
+      "organization_domain": null,
+      "estimated_num_employees": null,
+      "candidates": [
+        {
+          "apollo_person_id": "5f540dd2e2be2d0001046319",
+          "name": "Victor Tr***o",
+          "title": "Maintenance Supervisor",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-06-09T04:30:51.186+00:00",
+          "organization_name": "Autoliv Steering Wheels Mexico",
+          "fit": "mantenimiento (prioridad 1)"
+        },
+        {
+          "apollo_person_id": "57de80a9a6da987b015d71c7",
+          "name": "Gustavo Lu***a",
+          "title": "Ing. Control // Supervisor Mantto.",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": false,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-05-27T00:14:18.000+00:00",
+          "organization_name": "Autoliv Steering Wheels Mexico",
+          "fit": "mantenimiento/control (prioridad 1)"
+        },
+        {
+          "apollo_person_id": "5e7766ee14e7fc0001dcc2da",
+          "name": "Alejandro Oc***a",
+          "title": "Gerente General de Ingeniería",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": false,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-07-07T22:02:57.000+00:00",
+          "organization_name": "Autoliv Steering Wheels Mexico",
+          "fit": "ingenieria (prioridad 5) pero nivel gerente general — decisor probable"
+        },
+        {
+          "apollo_person_id": "54ebd4b5746869444cfdc42e",
+          "name": "Mauricio Es***a",
+          "title": "Plant Manager at Autoliv Aguascalientes",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-07-27T13:42:08.855+00:00",
+          "organization_name": "Autoliv Steering Wheels Mexico",
+          "fit": "FLAG: planta (prioridad 2) pero su titulo dice planta AGUASCALIENTES, no El Marques — verificar antes de usar"
+        }
+      ],
+      "notes": "Apollo SI tiene la entidad MX especifica (SIC 3714, NAICS 336390, headcount creciendo ~5% a 24m). Los 4 hits del title-search entraron; el Plant Manager va flagged por mencion de Aguascalientes en su titulo (Autoliv opera varias plantas en MX bajo este record)."
+    },
+    {
+      "external_record_id": "tier1-20260826:006",
+      "legal_name": "LEAR MEXICAN TRIM OPERATIONS (planta León)",
+      "location_expected": "León, Guanajuato",
+      "resolution": "MATCHED",
+      "match_scope": "GLOBAL_PARENT",
+      "apollo_organization_id": "54a1354269702d4494608000",
+      "apollo_organization_name": "Lear Corporation",
+      "organization_domain": "lear.com",
+      "estimated_num_employees": null,
+      "candidates": [
+        {
+          "apollo_person_id": "54a5255b7468692fa2b20281",
+          "name": "Elias De***o",
+          "title": "Maintenance Supervisor",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": false,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-07-03T20:13:40.863+00:00",
+          "organization_name": "Lear Corporation",
+          "fit": "mantenimiento (prioridad 1), ubicado en Leon"
+        },
+        {
+          "apollo_person_id": "6768f06c60c89300019060da",
+          "name": "Roberto Sa***n",
+          "title": "Maintenance Supervisor",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": false,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-05-03T02:06:03.742+00:00",
+          "organization_name": "Lear Corporation",
+          "fit": "mantenimiento (prioridad 1), ubicado en Leon"
+        },
+        {
+          "apollo_person_id": "6808cfa160c39e0001e8ac83",
+          "name": "Ricardo Vi***y",
+          "title": "Operations Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2025-10-21T22:57:53.303+00:00",
+          "organization_name": "Lear Corporation",
+          "fit": "operaciones (prioridad 4); record menos fresco (oct-2025)"
+        },
+        {
+          "apollo_person_id": "54c27b77746869163914229d",
+          "name": "Ismael Ch***a",
+          "title": "Engineering Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-07-21T12:50:19.056+00:00",
+          "organization_name": "Lear Corporation",
+          "fit": "ingenieria (prioridad 5)"
+        }
+      ],
+      "notes": "La entidad MX exacta SI existe en Apollo: 'Lear Mexican Trim Operations S. de R.L. de C.V.' (id 66fbc64bfd45ad0001e6e991, headcount 12m -25%) pero su unico contacto manager+ es Julian El***o (Internal Control SOX Manager — DESCARTADO, finanzas/auditoria). El personal de planta vive bajo el corporativo global Lear Corporation (lear.com, NYSE:LEA, revenue 23.3B); candidatos filtrados con person_locations=['León, Guanajuato, Mexico']. CAVEAT: Lear tiene mas de un sitio en Leon; no se puede confirmar por persona que sea la planta Trim especifica sin enrichment."
+    },
+    {
+      "external_record_id": "tier1-20260826:007",
+      "legal_name": "KIRCHHOFF AUTOMOTIVE MEXICO",
+      "location_expected": "Querétaro, Querétaro",
+      "resolution": "MATCHED",
+      "match_scope": "GLOBAL_PARENT",
+      "apollo_organization_id": "54a1364a69702d407ffe0d01",
+      "apollo_organization_name": "KIRCHHOFF Automotive",
+      "organization_domain": "kirchhoff-automotive.com",
+      "estimated_num_employees": null,
+      "candidates": [
+        {
+          "apollo_person_id": "68f668ec30836c0001d9094c",
+          "name": "Luis Ca***o",
+          "title": "Maintenance Leader",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-06-20T09:26:48.000+00:00",
+          "organization_name": "KIRCHHOFF Automotive",
+          "fit": "mantenimiento (prioridad 1), ubicado en Queretaro"
+        },
+        {
+          "apollo_person_id": "54a3b18174686938ac216f0b",
+          "name": "Frank Th***e",
+          "title": "Plant Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-08-26T00:01:28.377+00:00",
+          "organization_name": "KIRCHHOFF Automotive",
+          "fit": "planta (prioridad 2); record refrescado hoy; email + direct dial via enrichment"
+        },
+        {
+          "apollo_person_id": "57dfd5f0a6da980af97c404a",
+          "name": "Mauricio Sa***o",
+          "title": "Plant Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": false,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-07-27T15:04:34.000+00:00",
+          "organization_name": "KIRCHHOFF Automotive",
+          "fit": "planta (prioridad 2)"
+        }
+      ],
+      "notes": "No existe record MX separado ('Kirchhoff Automotive Mexico' = 0; 'Kirchhoff Automotive'+loc MX = 0). Match al global KIRCHHOFF Automotive (kirchhoff-automotive.com, revenue 2.1B, owned by KIRCHHOFF Group id 5da6706721d95f0001baa0e1); candidatos filtrados con person_locations=['Querétaro, Mexico']. Dos Plant Managers en Queretaro es consistente con que Kirchhoff opera mas de una planta ahi; distinguir sitio requiere enrichment."
+    },
+    {
+      "external_record_id": "tier1-20260826:008",
+      "legal_name": "TROQUELADORA BATESVILLE DE MEXICO",
+      "location_expected": "Querétaro, Querétaro",
+      "resolution": "MATCHED",
+      "match_scope": "MX_ENTITY",
+      "apollo_organization_id": "62a9fe1b849cc9008bda51c3",
+      "apollo_organization_name": "Troqueladora Batesville de México S de RL de CV.",
+      "organization_domain": null,
+      "estimated_num_employees": null,
+      "candidates": [
+        {
+          "apollo_person_id": "57d6e601a6da98543970c010",
+          "name": "Abraham Ar***e",
+          "title": "General Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-07-08T18:09:06.000+00:00",
+          "organization_name": "Troqueladora Batesville de México S de RL de CV.",
+          "fit": "direccion de planta (prioridad 2) — decisor maximo del sitio; email + direct dial via enrichment"
+        },
+        {
+          "apollo_person_id": "54a9de537468692d1cbd8d19",
+          "name": "Thomas De***n",
+          "title": "Tooling and Engineering Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": false,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-08-07T20:52:09.000+00:00",
+          "organization_name": "Troqueladora Batesville de México S de RL de CV.",
+          "fit": "ingenieria (prioridad 5)"
+        },
+        {
+          "apollo_person_id": "684f2ba3ebc23100018f0b7e",
+          "name": "Victor Ga***o",
+          "title": "Toolroom Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": false,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-07-09T11:04:46.000+00:00",
+          "organization_name": "Troqueladora Batesville de México S de RL de CV.",
+          "fit": "herramentales (borderline ingenieria/mantenimiento)"
+        }
+      ],
+      "notes": "Match unico y limpio (SIC 3461/3714 metal stampings, NAICS 336390; headcount decreciendo: -7.7% a 12m). Title-search dio 1 (Thomas); fallback por seniority dio 10, de los que entraron GM y Toolroom Manager. Descartados: 3 Sales Account Managers (Uriel Hu***a, Carlos Za***e, Roberto Gu***a), Financial Controller (Jonatan Bl***s), Quality Manager (Migue Di***z), Packing Supervisor (Enoc Ri***o), Tool Crib Supervisor (Jorge Ni***o, seniority bajo)."
+    },
+    {
+      "external_record_id": "tier1-20260826:009",
+      "legal_name": "BUSSMANN (Eaton)",
+      "location_expected": "Querétaro, Querétaro",
+      "resolution": "MATCHED",
+      "match_scope": "GLOBAL_PARENT",
+      "apollo_organization_id": "5592316a73696418a56bc100",
+      "apollo_organization_name": "Eaton",
+      "organization_domain": "eaton.com",
+      "estimated_num_employees": null,
+      "candidates": [
+        {
+          "apollo_person_id": "64c02a67d73bca0001674490",
+          "name": "Bernardo Ye***a",
+          "title": "Facilities Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-07-01T20:35:24.780+00:00",
+          "organization_name": "Eaton",
+          "fit": "facilities (prioridad 3), ubicado en Queretaro — perfil ideal para energia"
+        },
+        {
+          "apollo_person_id": "65129a6f52d617000110f4c3",
+          "name": "Samuel Ti***i",
+          "title": "Site Operations Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-08-06T16:17:38.593+00:00",
+          "organization_name": "Eaton",
+          "fit": "operaciones de sitio (prioridad 4, nivel decisor de planta)"
+        },
+        {
+          "apollo_person_id": "650af31d171bb800015a1531",
+          "name": "Luis Ga***a",
+          "title": "Operations Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": false,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-07-31T11:33:29.000+00:00",
+          "organization_name": "Eaton",
+          "fit": "operaciones (prioridad 4)"
+        },
+        {
+          "apollo_person_id": "55c888d573696410dc9c5c06",
+          "name": "Ruben Al***a",
+          "title": "Engineering Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-08-15T21:12:52.702+00:00",
+          "organization_name": "Eaton",
+          "fit": "ingenieria (prioridad 5)"
+        },
+        {
+          "apollo_person_id": "5571489f73696458a4db2f00",
+          "name": "Phabel Sa***z",
+          "title": "Opex Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-08-09T21:24:03.863+00:00",
+          "organization_name": "Eaton",
+          "fit": "excelencia operacional (operaciones-adjacente); buen angulo para eficiencia energetica"
+        }
+      ],
+      "notes": "'Bussmann' no existe como record propio en Apollo (0 con y sin filtro MX); la marca vive dentro del corporativo Eaton (eaton.com, NYSE:ETN, revenue 27.4B). Candidatos filtrados con person_locations=['Querétaro, Mexico']. CAVEAT: Eaton tiene mas de una operacion en el area de Queretaro; no se puede confirmar por persona que pertenezca especificamente a la planta Bussmann (fusibles) sin enrichment. Descartados: Victor Es***a (Plant Finance Manager — finanzas), Sofia Ag***r (Design Engineering Manager — diseno, menos afin a piso), Axel An***l (Engineering OMLDP — programa junior)."
+    },
+    {
+      "external_record_id": "tier1-20260826:010",
+      "legal_name": "INDUSTRIA ENVASADORA DE QUERETARO (IEQSA)",
+      "location_expected": "Querétaro, Querétaro",
+      "resolution": "MATCHED",
+      "match_scope": "MX_ENTITY",
+      "apollo_organization_id": "54a121c469702d94a4d3d502",
+      "apollo_organization_name": "Industria Envasadora de Queretaro",
+      "organization_domain": "ieqsa.com.mx",
+      "estimated_num_employees": null,
+      "candidates": [
+        {
+          "apollo_person_id": "642327eab731f5000105d17a",
+          "name": "Mario Gu***o",
+          "title": "Administrador de Mantenimiento",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-08-04T16:45:52.477+00:00",
+          "organization_name": "Industria Envasadora de Queretaro",
+          "fit": "mantenimiento (prioridad 1)"
+        },
+        {
+          "apollo_person_id": "673a32530492fe000111e2f8",
+          "name": "Ramon He***z",
+          "title": "Administrador de Mantenimiento",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-06-20T14:47:58.000+00:00",
+          "organization_name": "Industria Envasadora de Queretaro",
+          "fit": "mantenimiento (prioridad 1); email + direct dial via enrichment"
+        },
+        {
+          "apollo_person_id": "685195dac2cd420001439a15",
+          "name": "Alejandro Ro***z",
+          "title": "Operations Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "maybe",
+          "last_refreshed_at": "2026-06-22T02:20:58.000+00:00",
+          "organization_name": "Industria Envasadora de Queretaro",
+          "fit": "operaciones (prioridad 4)"
+        },
+        {
+          "apollo_person_id": "54a1e90f7468694f8fa38916",
+          "name": "Salvador Sh***o",
+          "title": "Engineering Manager",
+          "seniority": null,
+          "city": null,
+          "state": null,
+          "linkedin_url": null,
+          "email_status": null,
+          "has_email": true,
+          "has_direct_phone": "yes",
+          "last_refreshed_at": "2026-07-10T00:46:43.000+00:00",
+          "organization_name": "Industria Envasadora de Queretaro",
+          "fit": "ingenieria (prioridad 5)"
+        }
+      ],
+      "notes": "Match unico y limpio: record MX completo con dominio ieqsa.com.mx, telefono +52 442 211 8200, NAICS 312111 (soft drink manufacturing — enlatadora del sistema Coca-Cola). Los 4 hits del title-search son relevantes y entraron; los 4 tienen has_email=true. La cuenta con mejor cobertura de mantenimiento del lote."
+    }
+  ],
+  "method_summary": {
+    "company_searches_with_results": 10,
+    "company_searches_zero_result_free": 8,
+    "people_searches_all_free": 15,
+    "prohibited_tools_called": 0,
+    "notes": "Resolucion por nombre para entidades MX; para multinacionales sin record MX util, sondeo GRATIS de personas por dominio (pg.com, lear.com, kirchhoff-automotive.com, eaton.com) filtrado por ubicacion de la persona, y el org id del padre se pinneo despues (lear.com + kirchhoff-automotive.com agrupados en 1 solo request). Fallback por seniority ejecutado en cuentas con 0-1 hits de titulo."
+  }
+}
