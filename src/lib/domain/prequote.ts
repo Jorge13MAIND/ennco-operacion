@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import modelDraft from "../../../data/prequote/model-draft-v2.json";
+import approvedModel from "../../../data/prequote/model-approved-v3.json";
 import { NEED_TYPES, TARIFFS, ZONES } from "@/lib/domain/types";
 import type { PrequoteAssumption, PrequoteEstimate, PrequoteInput } from "@/lib/domain/types";
 import { PRIVACY_NOTICE_VERSION } from "@/lib/privacy/notice";
@@ -24,20 +24,29 @@ const prequoteModelSchema = z.object({
     min: z.number().positive(),
     max: z.number().positive(),
     evidenceStatus: z.enum([
-      "EXTRAPOLATED_NO_MATCHING_HISTORY",
-      "OBSERVED_30_TO_55_KWP",
-      "OBSERVED_SMALL_PROJECTS",
+      "PACO_APPROVED_FROM_30_KWP",
+      "PACO_APPROVED_UNDER_30_KWP",
     ]),
   }).refine((tier) => tier.max >= tier.min, "INVALID_INVESTMENT_RANGE")).min(1),
+  industrialInvestmentPolicy: z.literal("TECHNICAL_COMMERCIAL_REVIEW_REQUIRED"),
+  commercialReferences: z.object({
+    hiddenDefectsWarrantyMonths: z.number().int().positive(),
+    cashDiscountPct: numericRangeSchema,
+    installedModuleStartingPriceMxn: z.number().positive(),
+    contractualPriceRequiresCommercialValidation: z.literal(true),
+    installationDateDependsOnMaterialsAndWorkSchedule: z.literal(true),
+    automaticCommitmentsAllowed: z.literal(false),
+  }),
   publicInputMonthlySpendStrictLeadThresholdMxn: z.number().positive(),
   industrialCapacityThresholdKwp: z.number().positive(),
   modelApprovalRequiredBy: z.string().min(1),
+  approvalSourcePath: z.string().min(1),
   sourceManifestPath: z.string().min(1),
 });
 
 export type PrequoteModel = z.infer<typeof prequoteModelSchema>;
 
-export const DRAFT_PREQUOTE_MODEL: PrequoteModel = prequoteModelSchema.parse(modelDraft);
+export const APPROVED_PREQUOTE_MODEL: PrequoteModel = prequoteModelSchema.parse(approvedModel);
 
 export const prequoteInputSchema = z.object({
   needType: z.enum(NEED_TYPES),
@@ -84,34 +93,34 @@ function assumptions(model: PrequoteModel, tariff: PrequoteInput["tariff"]): Pre
   return [
     {
       key: "effective_rate",
-      label: "Costo efectivo observado",
+      label: "Tarifa efectiva de referencia",
       value: `${model.effectiveEnergyRateMxnPerKwh.min.toFixed(2)} a ${model.effectiveEnergyRateMxnPerKwh.max.toFixed(2)}`,
       unit: "MXN/kWh",
-      source: "Cuatro propuestas anónimas ENNCO. La tarifa CFE seleccionada requiere recibo para cálculo técnico.",
+      source: "Rango validado por Paco. La tarifa CFE seleccionada requiere recibo para cálculo técnico.",
       sourceDate: model.sourceDate,
     },
     {
       key: "monthly_yield",
-      label: "Producción mensual observada",
+      label: "Producción mensual estimada",
       value: `${model.monthlyYieldKwhPerKwp.min} a ${model.monthlyYieldKwhPerKwp.max}`,
       unit: "kWh/kWp",
-      source: "Cuatro propuestas anónimas ENNCO de 2026.",
+      source: "Rango validado por Paco para la estimación preliminar.",
       sourceDate: model.sourceDate,
     },
     {
       key: "module",
-      label: "Potencia de módulo observada",
+      label: "Potencia de módulo de referencia",
       value: `${model.moduleWp.min} a ${model.moduleWp.max}`,
       unit: "Wp",
-      source: "Propuestas ENNCO y ficha técnica LONGi Hi-MO X10 650 W.",
+      source: "Rango validado por Paco y contrastado con propuestas ENNCO y ficha técnica de fabricante.",
       sourceDate: model.sourceDate,
     },
     {
       key: "area",
-      label: "Área preliminar de ingeniería",
+      label: "Superficie preliminar requerida",
       value: `${model.roofAreaM2PerKwp.min} a ${model.roofAreaM2PerKwp.max}`,
       unit: "m²/kWp",
-      source: "Dimensión física del módulo más margen preliminar de acceso y separación.",
+      source: "Rango validado por Paco. Requiere levantamiento, estructura, acceso y sembrado.",
       sourceDate: model.sourceDate,
     },
     {
@@ -131,7 +140,7 @@ function modelStatusAt(model: PrequoteModel, now: Date): PrequoteEstimate["model
 
 export function calculatePrequote(
   input: PrequoteInput,
-  model: PrequoteModel = DRAFT_PREQUOTE_MODEL,
+  model: PrequoteModel = APPROVED_PREQUOTE_MODEL,
   now: Date = new Date(),
 ): PrequoteEstimate {
   const calculatedAt = now.toISOString();
@@ -141,9 +150,10 @@ export function calculatePrequote(
     modelStatus: modelStatusAt(model, now),
     modelValidUntil: model.validUntil,
     calculatedAt,
+    commercialReferences: model.commercialReferences,
     assumptions: assumptions(model, input.tariff),
     disclaimer:
-      "Estimación preliminar. No constituye oferta, precio final, garantía, beneficio fiscal definitivo ni compromiso de instalación. Requiere recibo, revisión y visita técnica.",
+      "Estimación preliminar sujeta a revisión del recibo CFE, tarifa, condiciones del sitio, estructura, distancias, obra eléctrica y revisión técnica. No constituye oferta, precio contractual ni fecha de instalación.",
   };
 
   if (!isSolarSizingRequest(input)) {
@@ -151,7 +161,8 @@ export function calculatePrequote(
       ...shared,
       estimateKind: "SERVICE_REVIEW",
       capacityKwp: zeroRange,
-      investmentMxn: zeroRange,
+      investmentMxn: null,
+      investmentStatus: "NOT_APPLICABLE",
       roofAreaM2: zeroRange,
       estimatedMonthlyKwh: zeroRange,
       panelCount: zeroRange,
@@ -179,10 +190,12 @@ export function calculatePrequote(
       (estimatedMonthlyKwh.max * targetFraction) / model.monthlyYieldKwhPerKwp.min - input.existingCapacityKwp,
     ),
   };
-  const investmentTier = selectInvestmentTier(capacityKwp.max, model);
-  const investmentMxn = {
-    min: capacityKwp.min * investmentTier.min,
-    max: capacityKwp.max * investmentTier.max,
+  const industrialReviewRequired = capacityKwp.max >= model.industrialCapacityThresholdKwp;
+  const minimumInvestmentTier = selectInvestmentTier(capacityKwp.min, model);
+  const maximumInvestmentTier = selectInvestmentTier(capacityKwp.max, model);
+  const investmentMxn = industrialReviewRequired ? null : {
+    min: capacityKwp.min * minimumInvestmentTier.min,
+    max: capacityKwp.max * maximumInvestmentTier.max,
   };
   const roofAreaM2 = {
     min: capacityKwp.min * model.roofAreaM2PerKwp.min,
@@ -192,32 +205,30 @@ export function calculatePrequote(
     min: Math.ceil((capacityKwp.min * 1000) / model.moduleWp.max),
     max: Math.ceil((capacityKwp.max * 1000) / model.moduleWp.min),
   };
-  const extrapolated = capacityKwp.max >= model.industrialCapacityThresholdKwp;
-
   let verdict: PrequoteEstimate["verdict"] = "COMMERCIAL_REVIEW";
   if (input.monthlySpendMxn < 8_000) verdict = "OUT_OF_SCOPE";
-  else if (
-    input.monthlySpendMxn > model.publicInputMonthlySpendStrictLeadThresholdMxn
-    && extrapolated
-  ) verdict = "INDUSTRIAL_REVIEW";
+  else if (industrialReviewRequired) verdict = "INDUSTRIAL_REVIEW";
 
   return {
     ...shared,
     estimateKind: "SOLAR_RANGE",
     capacityKwp,
     investmentMxn,
+    investmentStatus: industrialReviewRequired
+      ? "TECHNICAL_COMMERCIAL_REVIEW_REQUIRED"
+      : "PRELIMINARY_RANGE",
     roofAreaM2,
     estimatedMonthlyKwh,
     panelCount,
     verdict,
-    evidenceConfidence: extrapolated ? "EXTRAPOLATED_REVIEW_REQUIRED" : "SOURCE_RANGE",
+    evidenceConfidence: industrialReviewRequired ? "INDUSTRIAL_REVIEW_REQUIRED" : "SOURCE_RANGE",
     limitations: [
-      "Las referencias disponibles no superan 54.825 kWp. Un proyecto industrial requiere validación específica.",
+      "Los proyectos iguales o mayores a 100 kWp requieren validación técnica y comercial porque el histórico propio no permite establecer un rango definitivo.",
       "La tarifa CFE no se reduce a un precio universal por kWh. El recibo define el cálculo técnico.",
       "El área incluye un margen preliminar. No sustituye levantamiento, estructura ni sembrado.",
-      investmentTier.evidenceStatus === "EXTRAPOLATED_NO_MATCHING_HISTORY"
-        ? "La banda industrial es una extrapolación y requiere validación técnica."
-        : "La banda de inversión se apoya en referencias anónimas de ENNCO.",
+      industrialReviewRequired
+        ? "No se presenta un rango automático de inversión para 100 kWp o más."
+        : "La banda de inversión fue validada por Paco y sigue sujeta a revisión comercial.",
     ],
   };
 }

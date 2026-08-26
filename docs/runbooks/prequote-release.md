@@ -7,7 +7,7 @@ Liberar una versión de precotización sólo cuando el código, el modelo, la pr
 ## Precondiciones
 
 1. La versión candidata tiene hash y source manifest.
-2. Paco registra aprobación, fecha y vigencia.
+2. La aprobación de Paco del 20 de agosto de 2026 está ligada a `ENNCO-PREQ-2026-08-PACO-01` y a su fuente SHA256.
 3. El aviso de privacidad tiene versión y SHA256 del contenido aprobados por ENNCO, con revisión legal documentada.
 4. El proyecto Supabase es exclusivo de ENNCO.
 5. Los secretos viven en vault y la configuración privada de base usa el mismo secreto HMAC.
@@ -17,12 +17,12 @@ Liberar una versión de precotización sólo cuando el código, el modelo, la pr
 
 ## Preparación del modelo
 
-1. Copiar el JSON candidato sin modificar la versión aprobada.
+1. Usar `data/prequote/model-approved-v3.json` sin modificar su versión.
 2. Ejecutar `npm run verify:prequote-model`.
 3. Revisar los cuatro backtests y todas las flags de fuente.
-4. Insertar el modelo en `prequote_models` como `DRAFT_REVIEW_REQUIRED`.
-5. Registrar la aprobación de Paco mediante el flujo de cuatro ojos que corresponda.
-6. Cambiar a `APPROVED` sólo con `approved_by`, `approved_at`, `valid_from` y `valid_until`.
+4. Insertar el modelo en `prequote_models` como `APPROVED` sólo mediante el flujo de cuatro ojos, con `approved_by`, `approved_at`, `valid_from` y `valid_until`.
+5. Adjuntar el SHA256 de `data/prequote/paco-approved-parameters-2026-08-20.json` a la evidencia de aprobación.
+6. Confirmar que los proyectos de 100 kWp o más no reciben inversión automática.
 7. Confirmar que el JSON compilado y la fila aprobada tienen exactamente la misma versión y hash.
 
 ## Canary aislado

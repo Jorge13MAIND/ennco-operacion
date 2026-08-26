@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 
+import "@fontsource/aileron/latin-400.css";
+import "@fontsource/aileron/latin-600.css";
+import "@fontsource/aileron/latin-700.css";
+import "@fontsource/aileron/latin-800.css";
+
 import "./globals.css";
 
 import { getRuntimeConfig } from "@/lib/runtime/config";
@@ -11,6 +16,10 @@ export function generateMetadata(): Metadata {
     metadataBase: new URL(config.appUrl),
     title: "ENNCO | Sistema comercial",
     description: "Sistema operativo comercial de ENNCO.",
+    icons: {
+      icon: "/brand/ennco-mark.svg",
+      shortcut: "/brand/ennco-mark.svg",
+    },
     robots: PRIVATE_ROBOTS,
   };
 }

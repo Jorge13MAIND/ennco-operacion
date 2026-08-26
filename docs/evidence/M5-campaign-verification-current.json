@@ -1,0 +1,251 @@
+{
+  "status": "PASS",
+  "evidence_class": "synthetic_demo",
+  "release_decision": "EXTEND",
+  "sequence_sha256": "6d67db19633e5749a55b545e9b1a09b1ac25688234bf402b881618514c48738e",
+  "manifest_sha256": "63138ec9a3033ee0dbe88c490edf123dcde6088ee8b141202c43558c2e147afe",
+  "check_count": 31,
+  "pass_count": 31,
+  "failure_count": 0,
+  "checks": [
+    {
+      "id": "SEQUENCE_DRAFT_ONLY",
+      "status": "PASS",
+      "observed": "DRAFT_REVIEW_REQUIRED"
+    },
+    {
+      "id": "SYNTHETIC_EVIDENCE_ONLY",
+      "status": "PASS",
+      "observed": "synthetic_demo"
+    },
+    {
+      "id": "SENDER_FROZEN",
+      "status": "PASS",
+      "observed": {
+        "name": "Francisco Cuellar",
+        "title": "CEO",
+        "company": "ENNCO"
+      }
+    },
+    {
+      "id": "EIGHT_TOUCHES",
+      "status": "PASS",
+      "observed": 8
+    },
+    {
+      "id": "CADENCE_MATCHES",
+      "status": "PASS",
+      "observed": [
+        0,
+        3,
+        7,
+        14,
+        28,
+        42,
+        60,
+        75
+      ]
+    },
+    {
+      "id": "TOUCH_OFFSETS_MATCH",
+      "status": "PASS",
+      "observed": [
+        0,
+        3,
+        7,
+        14,
+        28,
+        42,
+        60,
+        75
+      ]
+    },
+    {
+      "id": "THREE_ROLE_VARIANTS",
+      "status": "PASS",
+      "observed": 24
+    },
+    {
+      "id": "COPY_UNDER_100_WORDS",
+      "status": "PASS",
+      "observed": 55
+    },
+    {
+      "id": "SUBJECTS_UNDER_70_CHARS",
+      "status": "PASS",
+      "observed": 54
+    },
+    {
+      "id": "ONE_CTA_MAX",
+      "status": "PASS",
+      "observed": []
+    },
+    {
+      "id": "FRANCISCO_SIGNATURE",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "INITIAL_SIGNAL_GROUNDED",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "NO_UNICODE_DASHES",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "NO_PROHIBITED_COMMITMENTS",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "EXPLICIT_STOP_RULES",
+      "status": "PASS",
+      "observed": [
+        "HUMAN_REPLY",
+        "HARD_BOUNCE",
+        "UNSUBSCRIBE",
+        "DNC",
+        "SUPPRESSION_MATCH",
+        "MANUAL_INTERVENTION",
+        "GLOBAL_KILL_SWITCH",
+        "MAILBOX_KILL_SWITCH"
+      ]
+    },
+    {
+      "id": "SEQUENCE_HASH_MATCHES_MANIFEST",
+      "status": "PASS",
+      "observed": {
+        "expected": "6d67db19633e5749a55b545e9b1a09b1ac25688234bf402b881618514c48738e",
+        "observed": "6d67db19633e5749a55b545e9b1a09b1ac25688234bf402b881618514c48738e"
+      }
+    },
+    {
+      "id": "MANIFEST_IS_HOLD",
+      "status": "PASS",
+      "observed": {
+        "status": "HOLD",
+        "external_send_authorized": false
+      }
+    },
+    {
+      "id": "ZERO_RECIPIENTS",
+      "status": "PASS",
+      "observed": 0
+    },
+    {
+      "id": "FAIL_CLOSED_RUNTIME",
+      "status": "PASS",
+      "observed": {
+        "global_kill_switch": true,
+        "mailbox_kill_switch": true,
+        "external_send_allowed": false,
+        "dry_run_only": true,
+        "max_external_side_effects": 0
+      }
+    },
+    {
+      "id": "ANNEX_A_SNAPSHOT_MATCHES",
+      "status": "PASS",
+      "observed": {
+        "expected": "8e986eff74dee10d3f619f7562ee6b7d18207c3c5e080cd82656cc0e88d46af1",
+        "observed": "8e986eff74dee10d3f619f7562ee6b7d18207c3c5e080cd82656cc0e88d46af1"
+      }
+    },
+    {
+      "id": "ANNEX_A_ACCOUNT_BINDING_BLOCKS_RELEASE",
+      "status": "PASS",
+      "observed": {
+        "suppression_reconciled": false,
+        "release_blockers": [
+          "ANNEX_A_DATABASE_BINDING_PENDING",
+          "RECIPIENTS_EMPTY",
+          "DOMAINS_NOT_PURCHASED",
+          "MAILBOXES_NOT_PROVISIONED",
+          "DNS_AUTH_UNKNOWN",
+          "REPUTATION_WINDOW_NOT_STARTED",
+          "COPY_NOT_APPROVED",
+          "REAL_CANARY_NOT_COMPLETED",
+          "EXPLICIT_SEND_APPROVAL_ABSENT"
+        ]
+      }
+    },
+    {
+      "id": "ONLY_TECHNICAL_APPROVAL_PRESENT",
+      "status": "PASS",
+      "observed": {
+        "copy_francisco": false,
+        "technical_paco": true,
+        "suppression_reconciled": false,
+        "qa_canary": false,
+        "release_jorge": false
+      }
+    },
+    {
+      "id": "UNKNOWN_NEVER_PASS",
+      "status": "PASS",
+      "observed": {
+        "required_real_consecutive_days": 42,
+        "synthetic_harness_result": "PASS_LOCAL",
+        "release_decision": "EXTEND",
+        "unknown_is_pass": false
+      }
+    },
+    {
+      "id": "APOLLO_WARMUP_MINIMUM_42_DAYS",
+      "status": "PASS",
+      "observed": 42
+    },
+    {
+      "id": "NO_OPEN_PIXEL",
+      "status": "PASS",
+      "observed": {
+        "open_pixel": false,
+        "click_tracking": false,
+        "utm": true
+      }
+    },
+    {
+      "id": "EXTERNAL_SIDE_EFFECT_BUDGET_ZERO",
+      "status": "PASS",
+      "observed": 0
+    },
+    {
+      "id": "RESPONSE_PLAYBOOK_DRAFT_ONLY",
+      "status": "PASS",
+      "observed": {
+        "status": "DRAFT_REVIEW_REQUIRED",
+        "responses": 8
+      }
+    },
+    {
+      "id": "RESPONSE_PLAYBOOK_ONE_CTA_MAX",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "RESPONSE_PLAYBOOK_NO_COMMITMENTS",
+      "status": "PASS",
+      "observed": true
+    },
+    {
+      "id": "ANONYMOUS_REFERENCES_NOT_CASE_STUDIES",
+      "status": "PASS",
+      "observed": {
+        "status": "INTERNAL_REFERENCE_NOT_CASE_STUDY",
+        "publish_authorized": false
+      }
+    },
+    {
+      "id": "REFERENCE_SOURCE_IDS_EXIST",
+      "status": "PASS",
+      "observed": [
+        "hist_0e963901f3c04620eb0e",
+        "hist_cb9e4d265712763d16d6",
+        "ANON-PROP-001"
+      ]
+    }
+  ]
+}

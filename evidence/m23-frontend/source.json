@@ -7,8 +7,8 @@
   "evidence_class": "LOCAL_SOURCE_SNAPSHOT",
   "execution_context": "local",
   "schema_version": "1.0.0",
-  "source_commit": "5415523405f3d1644391b1878ea0ab619124bfd8",
-  "source_tree": "2c28acc154e3c8d602095eed56fceafe570da2bd",
-  "source_tree_clean": true,
-  "status": "PASS"
+  "source_commit": "f35c77a8140e954712432d0921ad76dabb1d8f06",
+  "source_tree": "4ff4f6f3012944e4e9c6581f2ce1b55c03b90a25",
+  "source_tree_clean": false,
+  "status": "FAIL"
 }

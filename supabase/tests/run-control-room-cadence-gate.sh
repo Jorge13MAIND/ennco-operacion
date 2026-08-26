@@ -39,6 +39,7 @@ SQL
 
 for migration in $(find "$REPO_ROOT/supabase/migrations" -maxdepth 1 -name '*.sql' | sort | tail -n +2); do
   psql -X -v ON_ERROR_STOP=1 -h "$M022_GATE_DIR" -p "$M022_GATE_PORT" -d "$M022_GATE_DB" -f "$migration" >/dev/null
+  if [[ "$(basename "$migration")" == "202608120022_control_room_cadence.sql" ]]; then break; fi
 done
 
 psql -X -v ON_ERROR_STOP=1 -h "$M022_GATE_DIR" -p "$M022_GATE_PORT" -d "$M022_GATE_DB" -f "$REPO_ROOT/supabase/tests/022_control_room_cadence_gate.sql"

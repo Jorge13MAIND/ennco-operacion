@@ -1,6 +1,6 @@
 # M6 Gate Report
 
-Fecha de corte: 2026-08-11 23:41 `America/Mexico_City`.
+Fecha de corte actualizada: 2026-08-20 `America/Mexico_City`.
 
 ## Veredicto
 
@@ -18,7 +18,7 @@ No se declara ejecutado el primer correo ni terminado el programa enterprise. Es
 ## Paquete de readiness
 
 - 30 gates exactos en el JSON y 30 en el enum SQL.
-- 22 de 22 checks locales.
+- 23 de 23 checks locales.
 - Cero gates marcados `PASS` con evidencia live.
 - Estado actual `HOLD` y decisión `EXTEND`.
 - Cero destinatarios y cero cuentas reales.
@@ -29,7 +29,7 @@ No se declara ejecutado el primer correo ni terminado el programa enterprise. Es
 
 Hashes principales:
 
-- Readiness packet: `f505d8ae74469f14db6416ea315cfb120591bda1609fbd8645b35ba401f1477d`.
+- Readiness packet: `3810bff49ef4253537d8ebeb65ed182c235bc88df399d1b85beacbfb77ae38cd`.
 - Domain ledger: `d7ac84580e573a16c7b0023491cd94906fb4e5ca56cdb2f387745540c442174a`.
 - Synthetic fixture: `87cc9ccaca20025d813109bcf760179259a38f685349177b788befd53d9cfaeb`.
 
@@ -84,7 +84,7 @@ Resultado:
 - RTM: 75 filas, 47 de 47 checklist, 0 fallas.
 - Importación: 28 de 28 checks.
 - Secret scan: 266 archivos, 0 hallazgos.
-- Campaign package: 29 de 29 checks.
+- Campaign package: 31 de 31 checks.
 - Canary acelerado: 14 de 14 escenarios, 13 fallas inyectadas, 0 efectos externos.
 - Core DB: PASS.
 - Storage forward, rollback y reapply: PASS.
@@ -127,17 +127,17 @@ El Control Room muestra `0/30 gates live`, `0 destinatarios reales`, `HOLD` y M6
 
 ## Bloqueos reales
 
-- Anexo A ausente.
+- Anexo A recibido. Razones sociales, 12 alias y seis dominios verificados; falta binding e importación transaccional en la base aislada.
 - Contrato ejecutado y certificado no archivados.
 - Evidencia acumulativa de inicio contractual incompleta.
 - Revisión legal pendiente.
 - Dominios y buzones no comprados.
 - DNS, seeds y Postmaster no ejecutados.
-- Cero de 35 días autenticados.
+- Cero de 42 días de warmup Apollo por buzón.
 - Cero de 14 días reales de canary.
 - Cero cuentas elegibles y cero contactos verificados para el piloto.
 - Copy sin aprobación de Francisco.
-- Revisión técnica sin aprobación de Paco.
+- Revisión técnica de Paco aprobada y ligada a la fuente `d3fc79b8...`.
 - Aprobación explícita de Jorge ausente.
 - Proveedores, staging y producción no autorizados.
 

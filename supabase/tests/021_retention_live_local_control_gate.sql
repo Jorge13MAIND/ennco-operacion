@@ -534,7 +534,7 @@ do $$ begin
 end $$;
 
 set role service_role;
-select set_config('app.retention_test_clock','2026-08-12T16:00:00Z',false);
+select set_config('app.retention_test_clock',clock_timestamp()::text,false);
 do $$ declare reconciled jsonb; begin
   reconciled:=app.run_retention_reconciler('32100000-0000-4000-8000-000000000001',repeat('0',64));
   if reconciled->>'status'<>'HEALTHY' then raise exception 'RETENTION_HEALTHY_RECONCILIATION_EXPECTED'; end if;

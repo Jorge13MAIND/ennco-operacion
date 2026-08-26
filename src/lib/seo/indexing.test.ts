@@ -62,7 +62,7 @@ describe("public indexing release", () => {
       rules: {
         userAgent: "*",
         allow: [...PUBLIC_INDEXABLE_ROUTES],
-        disallow: ["/", ...NEVER_INDEX_ROUTE_PREFIXES],
+        disallow: [...NEVER_INDEX_ROUTE_PREFIXES],
       },
       sitemap: "https://diagnostico.ennco.com.mx/sitemap.xml",
       host: "https://diagnostico.ennco.com.mx",
@@ -72,7 +72,7 @@ describe("public indexing release", () => {
   it("derives every sitemap date from the validated release timestamp", () => {
     const sitemap = buildSitemap(releasedConfig());
 
-    expect(sitemap).toHaveLength(2);
+    expect(sitemap).toHaveLength(3);
     expect(sitemap.map((entry) => new URL(entry.url).pathname)).toEqual(PUBLIC_INDEXABLE_ROUTES);
     expect(new Set(sitemap.map((entry) => entry.lastModified))).toEqual(
       new Set(["2026-08-11T09:00:00-06:00"]),

@@ -37,11 +37,11 @@
     "days": ["TUESDAY", "WEDNESDAY", "THURSDAY"]
   },
   "suppression": {
-    "annex_a_present": false,
+    "annex_a_present": true,
     "current_clients_present": true,
     "unsubscribes_present": true,
     "hard_bounces_present": true,
-    "snapshot_sha256": "UNKNOWN_ANNEX_A_ABSENT",
+    "snapshot_sha256": "8e986eff74dee10d3f619f7562ee6b7d18207c3c5e080cd82656cc0e88d46af1",
     "snapshot_max_age_hours": 24,
     "transactional_recheck_required": true,
     "fail_closed": true
@@ -74,26 +74,25 @@
   ],
   "approvals": {
     "copy_francisco": false,
-    "technical_paco": false,
+    "technical_paco": true,
     "suppression_reconciled": false,
     "qa_canary": false,
     "release_jorge": false
   },
   "canary": {
-    "required_real_consecutive_days": 14,
+    "required_real_consecutive_days": 42,
     "synthetic_harness_result": "PASS_LOCAL",
     "release_decision": "EXTEND",
     "unknown_is_pass": false
   },
   "release_blockers": [
-    "ANNEX_A_ABSENT",
+    "ANNEX_A_DATABASE_BINDING_PENDING",
     "RECIPIENTS_EMPTY",
     "DOMAINS_NOT_PURCHASED",
     "MAILBOXES_NOT_PROVISIONED",
     "DNS_AUTH_UNKNOWN",
     "REPUTATION_WINDOW_NOT_STARTED",
     "COPY_NOT_APPROVED",
-    "TECHNICAL_REVIEW_NOT_APPROVED",
     "REAL_CANARY_NOT_COMPLETED",
     "EXPLICIT_SEND_APPROVAL_ABSENT"
   ],

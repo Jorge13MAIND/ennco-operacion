@@ -68,15 +68,18 @@ export const taskAssignmentCommandSchema = z.object({
   organizationId: uuid,
   taskId: uuid,
   ownerUserId: uuid,
-  backupUserId: uuid,
+  backupUserId: uuid.nullable().optional(),
   idempotencyKey: sha256,
-}).strict().refine((value) => value.ownerUserId !== value.backupUserId, "TASK_OWNER_BACKUP_MUST_DIFFER");
+}).strict().refine(
+  (value) => value.backupUserId == null || value.ownerUserId !== value.backupUserId,
+  "TASK_OWNER_BACKUP_MUST_DIFFER",
+);
 
 export const taskAssignmentResultSchema = z.object({
   status: z.literal("ASSIGNED"),
   task_id: uuid,
   owner_user_id: uuid,
-  backup_user_id: uuid,
+  backup_user_id: uuid.nullable(),
   correlation_id: correlationId,
   replayed,
 }).strict();

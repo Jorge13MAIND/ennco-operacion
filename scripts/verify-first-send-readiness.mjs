@@ -11,9 +11,10 @@ const fixturePath = resolve(repo, "data/release/fixtures/first-send-synthetic-v1
 const manifestPath = resolve(repo, "data/campaigns/campaign-manifest-draft-v1.json");
 const sequencePath = resolve(repo, "data/campaigns/sequence-draft-v1.json");
 const migrationPath = resolve(repo, "supabase/migrations/202608110008_first_send_release.sql");
+const apolloAlignmentPath = resolve(repo, "supabase/migrations/202608140023_apollo_warmup_alignment.sql");
 
-const [packetBuffer, domainBuffer, fixtureBuffer, manifestBuffer, sequenceBuffer, migrationBuffer] = await Promise.all([
-  readFile(packetPath), readFile(domainPath), readFile(fixturePath), readFile(manifestPath), readFile(sequencePath), readFile(migrationPath),
+const [packetBuffer, domainBuffer, fixtureBuffer, manifestBuffer, sequenceBuffer, migrationBuffer, apolloAlignmentBuffer] = await Promise.all([
+  readFile(packetPath), readFile(domainPath), readFile(fixturePath), readFile(manifestPath), readFile(sequencePath), readFile(migrationPath), readFile(apolloAlignmentPath),
 ]);
 const packet = JSON.parse(packetBuffer.toString("utf8"));
 const domainLedger = JSON.parse(domainBuffer.toString("utf8"));
@@ -21,7 +22,7 @@ const fixture = JSON.parse(fixtureBuffer.toString("utf8"));
 const sha256 = (value) => createHash("sha256").update(value).digest("hex");
 const requiredGateCodes = [
   "ANNEX_A_RECONCILED", "EXECUTED_CONTRACT_ARCHIVED", "START_CONDITION_EVIDENCE",
-  "LEGAL_BASIS_APPROVED", "PRIVACY_NOTICE_APPROVED", "DOMAIN_AGE_35_DAYS", "SPF_PASS",
+  "LEGAL_BASIS_APPROVED", "PRIVACY_NOTICE_APPROVED", "APOLLO_WARMUP_42_DAYS", "SPF_PASS",
   "DKIM_PASS", "DMARC_PASS", "TLS_PASS", "FORWARD_REVERSE_DNS_PASS", "POSTMASTER_VERIFIED",
   "SEED_GMAIL_PASS", "SEED_WORKSPACE_PASS", "SEED_OUTLOOK_PASS", "SEED_YAHOO_PASS",
   "PILOT_EXACTLY_FIVE_ACCOUNTS", "CONTACTS_VERIFIED", "COPY_APPROVED_FRANCISCO",
@@ -36,13 +37,21 @@ function check(id, condition, observed) {
 
 const actualGateCodes = packet.gates.map((gate) => gate.code);
 const enumMatch = migrationBuffer.toString("utf8").match(/create type public\.first_send_gate_code as enum \(([\s\S]*?)\);/);
-const migrationGateCodes = enumMatch ? [...enumMatch[1].matchAll(/'([A-Z0-9_]+)'/g)].map((match) => match[1]) : [];
+const alignmentSql = apolloAlignmentBuffer.toString("utf8");
+const migrationGateCodes = enumMatch
+  ? [...enumMatch[1].matchAll(/'([A-Z0-9_]+)'/g)]
+      .map((match) => match[1])
+      .map((code) => code === "DOMAIN_AGE_35_DAYS" && alignmentSql.includes("rename value 'DOMAIN_AGE_35_DAYS' to 'APOLLO_WARMUP_42_DAYS'")
+        ? "APOLLO_WARMUP_42_DAYS"
+        : code)
+  : [];
 check("PACKET_HOLD", packet.status === "HOLD" && packet.release_decision === "EXTEND", { status: packet.status, release_decision: packet.release_decision });
 check("PACKET_SYNTHETIC", packet.evidence_class === "synthetic_demo", packet.evidence_class);
 check("ZERO_REAL_RECIPIENTS", packet.recipient_count === 0 && packet.account_count === 0 && packet.recipients.length === 0, { recipients: packet.recipient_count, accounts: packet.account_count });
 check("RUNTIME_FAIL_CLOSED", packet.runtime.external_send_allowed === false && packet.runtime.global_kill_switch === true && packet.runtime.mailbox_kill_switch === true && packet.runtime.external_side_effect_budget === 0, packet.runtime);
 check("EXACT_GATE_COVERAGE", JSON.stringify([...actualGateCodes].sort()) === JSON.stringify([...requiredGateCodes].sort()), { expected: requiredGateCodes.length, actual: actualGateCodes.length });
 check("MIGRATION_GATE_COVERAGE", JSON.stringify([...migrationGateCodes].sort()) === JSON.stringify([...requiredGateCodes].sort()), { expected: requiredGateCodes.length, actual: migrationGateCodes.length });
+check("APOLLO_WARMUP_42_DAY_TRIGGER", alignmentSql.includes("interval '42 days'") && alignmentSql.includes("messages_apollo_warmup_42_days"), true);
 check("NO_DUPLICATE_GATES", new Set(actualGateCodes).size === actualGateCodes.length, actualGateCodes.length);
 check("VALID_GATE_STATUSES", packet.gates.every((gate) => ["PASS_LOCAL", "UNKNOWN", "BLOCKED_EXTERNAL", "FAIL", "KILL"].includes(gate.status)), true);
 check("GATE_EVIDENCE_SHAPE", packet.gates.every((gate) => gate.evidence_sha256 === null || /^[a-f0-9]{64}$/.test(gate.evidence_sha256)), true);

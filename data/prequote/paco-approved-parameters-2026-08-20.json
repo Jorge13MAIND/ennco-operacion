@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0.0",
+  "source_id": "SRC-PACO-2026-08-20",
+  "received_date": "2026-08-20",
+  "supplied_by_role": "Paco, responsable técnico comercial ENNCO",
+  "relayed_by_role": "Jorge, sponsor Teckel",
+  "approval_scope": "Parámetros técnicos y referencias comerciales del precotizador preliminar",
+  "technical_parameters": {
+    "effective_energy_rate_mxn_per_kwh": {
+      "min": 2.8,
+      "max": 3.35
+    },
+    "monthly_yield_kwh_per_kwp": {
+      "min": 120,
+      "max": 165
+    },
+    "module_wp": {
+      "min": 620,
+      "max": 650
+    },
+    "roof_area_m2_per_kwp": {
+      "min": 5.2,
+      "max": 7.3
+    },
+    "investment_mxn_per_kwp_under_30": {
+      "min": 18000,
+      "max": 29000
+    },
+    "investment_mxn_per_kwp_from_30": {
+      "min": 17000,
+      "max": 24000
+    },
+    "industrial_review_threshold_kwp": 100
+  },
+  "commercial_references": {
+    "hidden_defects_warranty_months": 24,
+    "cash_payment_discount_pct": {
+      "min": 3,
+      "max": 6
+    },
+    "installed_module_starting_price_mxn": 11000,
+    "contractual_price_requires_commercial_validation": true,
+    "installation_date_depends_on_materials_and_work_schedule": true
+  },
+  "mandatory_rules": {
+    "projects_at_or_above_100_kwp_require_technical_and_commercial_validation": true,
+    "projects_at_or_above_100_kwp_have_no_automatic_investment_range": true,
+    "all_results_are_preliminary_estimates_or_ranges": true,
+    "receipt_tariff_site_structure_distances_electrical_work_and_technical_review_are_required": true,
+    "warranty_discount_starting_price_contract_price_and_installation_date_are_not_automatic_commitments": true
+  },
+  "approval_statement": "Jorge confirmó que estos son los valores solicitados a Paco y autorizó avanzar con el proyecto."
+}

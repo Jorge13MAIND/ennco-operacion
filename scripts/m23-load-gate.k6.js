@@ -9,9 +9,9 @@ if (!/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(baseUrl)) {
 
 const targets = {
   health: { path: "/api/v1/health", contains: '"external_send_allowed":false' },
-  home: { path: "/", contains: "De la planta correcta" },
-  diagnostic: { path: "/diagnostico", contains: "Con el recibo empieza" },
-  portal: { path: "/operacion", contains: "Qué requiere atención" },
+  home: { path: "/", contains: "Energía que se convierte en capacidad operativa" },
+  diagnostic: { path: "/diagnostico", contains: "Una referencia clara antes de decidir" },
+  portal: { path: "/operacion", contains: "Decide qué atender primero" },
 };
 
 export const options = {
@@ -29,6 +29,7 @@ export const options = {
     http_req_failed: ["rate==0"],
     http_req_duration: ["p(95)<800"],
     dropped_iterations: ["count==0"],
+    checks: ["rate==1"],
   },
   noConnectionReuse: false,
   userAgent: "ENNCO-M023-local-load-gate/1.0",

@@ -1,73 +1,62 @@
-# Estimacion de proveedores ENNCO
+# Estimación optimizada de proveedores ENNCO
 
-Fecha de consulta: 2026-08-13.
+Fecha de corte: 20 de agosto de 2026.
 
-Esto es una estimacion para decidir. No es una cotizacion ni autoriza compras. Para servicios publicados en USD se usa un escenario redondo de `18 MXN/USD`, antes de impuestos y posibles comisiones bancarias.
+Estado: `APPROVAL_READY`, sin compras ejecutadas.
 
-## Presupuesto minimo de staging
+Tipo de cambio presupuestal: 18 MXN por USD. Todas las cifras son antes de IVA, comisiones, variación cambiaria y consumo extraordinario. El checkout de cada proveedor prevalece sobre esta estimación.
 
-| Componente | Supuesto | Estimado mensual MXN |
-|---|---|---:|
-| Google Workspace Starter | 4 buzones a 126-168 MXN por usuario al mes | 504-672 |
-| Supabase Pro sin PITR | 25 USD al mes | 450 |
-| Vercel Pro | 20 USD al mes | 360 |
-| Google Cloud Pub/Sub y KMS | Volumen inicial bajo; Pub/Sub dentro de primera banda gratuita y pocas operaciones KMS | 0-100 |
-| Dos dominios | Reserva anual estimada de 600-1,500 MXN prorrateada | 50-125 |
-| Total staging obligatorio | Sin Apollo ni herramientas opcionales | **1,364-1,707** |
+## Baseline mensual
 
-## Presupuesto de produccion con recuperacion
+| Componente | Construcción MXN | Producción MXN | Estado |
+|---|---:|---:|---|
+| Apollo Professional mensual, 1 asiento | 1,782 | 1,782 | Precio exacto pendiente de checkout |
+| Google Workspace Starter, 4 usuarios | 504 a 605 | 504 a 605 | Pendiente de compra |
+| Dos dominios independientes, prorrateo | 50 a 125 | 50 a 125 | Candidatos no verificados ni comprados |
+| Vercel Pro | 360 | 360 | Proyecto actual es preview personal, migración ENNCO pendiente |
+| Supabase Pro | 450 | 450 | Cuenta ENNCO pendiente |
+| Supabase PITR | 0 | 1,800 | Se activa antes de datos reales |
+| Google Cloud | 0 a 200 | 0 a 200 | Proyecto ENNCO pendiente |
+| Resend, Sentry, Checkly y Postmaster | 0 inicial | 0 inicial | Free tiers sujetos a límites vigentes |
+| Total estimado | **3,146 a 3,522** | **4,946 a 5,322** | Antes de impuestos |
 
-| Componente | Supuesto | Estimado mensual MXN |
-|---|---|---:|
-| Staging obligatorio anterior | Mismo conjunto | 1,364-1,707 |
-| Supabase PITR | Add-on de 100 USD al mes, sustituyendo el costo sin PITR para calcular el total | +1,800 |
-| Total produccion obligatorio | Incluye PITR, antes de impuestos | **3,164-3,507** |
+## Decisión Apollo
 
-El RPO de 15 minutos depende de PITR. Podemos construir staging con Supabase Pro, pero no declarar continuidad productiva hasta activar y probar PITR.
+Professional reemplaza el baseline Basic. La razón no es una preferencia: Basic admite un buzón por usuario, mientras Professional admite múltiples buzones Google Workspace bajo el mismo usuario. Se contratará mensual y se evaluará anual después de 90 días de adopción verificada.
 
-## Estimacion Apollo
+El precio de MXN 1,782 supone 99 USD. La página pública actual no entrega el precio estático en el HTML auditado, por lo que el gate de compra exige capturar el checkout exacto y su renovación antes de pagar.
 
-### Creditos necesarios
+## Protección de presupuesto
 
-- Meta operativa: 150 contactos verificados.
-- Escenario de planeacion: 70% a 80% de candidatos investigados terminan con rol correcto y dato utilizable.
-- Candidatos requeridos: `150 / 0.80 = 188` a `150 / 0.70 = 215`.
-- Reserva de sustitucion de 15%: 216 a 247.
-- Recomendacion de compra o disponibilidad: **250 a 300 creditos de email verificado**.
+- Cap Apollo de 500 créditos mensuales para ENNCO.
+- Cero compras de teléfono.
+- Cero créditos Apollo para dominios o buzones.
+- Cero plan anual antes de 90 días.
+- Cero IP dedicada durante el piloto.
+- Cero Instantly, Smartlead, HubSpot o segundo secuenciador antes de 100 entregas válidas.
+- PITR sólo antes de importar datos reales a producción.
+- Un segundo asiento Apollo requiere evidencia de que el acceso colaborador seguro no es posible.
+- Cada proveedor necesita owner, hard cap, renovación, alerta y evidencia de exportación.
 
-Apollo publica que un email verificado consume un credito por contacto y que no cobra cuando no consigue verificarlo. El plan gratuito publica 900 creditos al ano, entregados mensualmente, equivalente a 75 al mes. Alcanzaria para probar calidad, pero no para producir 150 contactos con reserva durante un solo mes.
+## Escenario de reutilización
 
-### Opciones
+La reutilización de Apollo Teckel no forma parte del presupuesto. Sólo puede descontar aproximadamente MXN 1,782 mensuales si Apollo autoriza por escrito el uso administrado exacto para investigación y warmup de ENNCO. Una respuesta ambigua, negativa o ausente después de dos días hábiles conserva la compra de la cuenta nueva.
 
-| Opcion | Uso | Estimado |
-|---|---|---:|
-| Free | Piloto de cobertura y calidad, hasta la asignacion mensual disponible | 0 MXN |
-| Basic, 1 asiento | Filtros, CSV y API de enriquecimiento; 49 USD al mes con facturacion anual | 882 MXN equivalentes al mes |
-| Compromiso Basic anual | 49 USD por 12 meses | 10,584 MXN antes de impuestos |
-| Add-on de 250-300 creditos | Preferible si Apollo lo cotiza sin exigir un plan sobredimensionado | UNKNOWN hasta entrar a billing |
+## Límites
 
-Recomendacion: ejecutar primero un piloto de 25 a 50 contactos con Free o trial. Comprar Basic sólo si la cobertura, cargo y empresa coinciden con el Workbench y si necesitamos CSV o API. No usar sus secuencias.
-
-## Herramientas opcionales
-
-| Herramienta | Inicio recomendado | Plan pagado estimado |
-|---|---|---:|
-| Sentry | Developer gratuito durante staging | Team 26 USD, 468 MXN al mes |
-| Checkly | Hobby gratuito durante staging | Starter 24 USD, 432 MXN al mes |
-| Resend transaccional | Free para alertas internas de bajo volumen | Pro 20 USD, 360 MXN al mes |
-| Telegram | Bot dedicado sin PII | 0 MXN esperado |
-
-Con Apollo Basic y sin opciones pagadas, el costo productivo equivalente queda en **4,046-4,389 MXN al mes**, pero Apollo se cobra anualmente bajo el precio citado. Si además se contratan Sentry Team, Checkly Starter y Resend Pro, el equivalente sube a **5,306-5,649 MXN al mes**.
+- Esto no es una cotización ni autorización de gasto.
+- No se verificó disponibilidad ni precio de los cuatro dominios candidatos.
+- No se creó ninguna cuenta de proveedor.
+- No se ejecutó checkout.
+- No se modificó DNS.
+- No se enviaron mensajes.
 
 ## Fuentes oficiales
 
-- Google Workspace México: <https://workspace.google.com/intl/es-419_mx/>
-- Supabase: <https://supabase.com/pricing>
-- Vercel: <https://vercel.com/pricing>
-- Google Cloud Pub/Sub: <https://cloud.google.com/pubsub/pricing>
-- Google Cloud KMS: <https://cloud.google.com/kms/pricing>
-- Apollo: <https://www.apollo.io/pricing>
-- Créditos Apollo: <https://www.apollo.io/pricing/about-credits>
-- Sentry: <https://sentry.io/pricing/>
-- Checkly: <https://www.checklyhq.com/pricing/>
-- Resend: <https://resend.com/docs/knowledge-base/what-is-resend-pricing>
+- [Apollo Terms](https://www.apollo.io/terms)
+- [Apollo mailbox limits](https://knowledge.apollo.io/hc/en-us/articles/4409127806093-Link-Your-Mailbox-to-Apollo)
+- [Apollo domains, mailboxes and warmup](https://knowledge.apollo.io/hc/en-us/articles/33476090833549-Generate-a-Domain-and-Mailbox-to-Reach-Prospects)
+- [Google Workspace México](https://workspace.google.com/intl/es-419_mx/)
+- [Vercel pricing](https://vercel.com/pricing)
+- [Supabase pricing](https://supabase.com/pricing)
+- [Resend pricing](https://resend.com/docs/knowledge-base/what-is-resend-pricing)

@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.1.0",
+  "annex_id": "ENNCO-ANNEX-A-2026-08-13",
+  "status": "IDENTITY_AND_DOMAIN_VERIFIED_ACCOUNT_BINDING_PENDING",
+  "authority": "DIRECT_USER_CONFIRMATION_FROM_WHATSAPP_EXCERPT",
+  "confirmed_at": "2026-08-14T00:00:00-06:00",
+  "identity_verified_at": "2026-08-20T12:00:00-06:00",
+  "scope_statement": "ONLY_THESE_THREE_COMPANIES_AS_OF_CONFIRMATION",
+  "external_send_authorized": false,
+  "entries": [
+    {
+      "name_as_received": "POSCO MPPC",
+      "normalized_name": "POSCO MPPC",
+      "legal_name": "POSCO MPPC, S.A. DE C.V.",
+      "aliases": [
+        "POSCO MPPC",
+        "POSCO MPPC SA DE CV",
+        "POSCO MPPC S.A. DE C.V."
+      ],
+      "source_timestamp": "2026-08-13T14:24:04-06:00",
+      "identity_resolution": "VERIFIED_PUBLIC_SOURCE",
+      "domains": [
+        {
+          "domain": "poscomppc.com.mx",
+          "usage": "CORPORATE_WEBSITE_AND_PRIVACY",
+          "confidence": "HIGH",
+          "source_url": "https://poscomppc.com.mx/AvisoDePrivacidadVisitantes.php"
+        },
+        {
+          "domain": "poscomppc.com",
+          "usage": "CORPORATE_EMAIL_AND_WEBSITE",
+          "confidence": "HIGH",
+          "source_url": "https://poscomppc.com.mx/linea_etica/index.php"
+        }
+      ],
+      "account_id": null,
+      "account_binding_status": "PENDING_LIVE_DATABASE",
+      "suppression_state": "HOLD_FAIL_CLOSED"
+    },
+    {
+      "name_as_received": "MPE PLASTIC",
+      "normalized_name": "MPE PLASTIC",
+      "legal_name": "MATERIAS PLASTICAS Y ELASTOMEROS DE MEXICO, S.A. DE C.V.",
+      "aliases": [
+        "MPE PLASTIC",
+        "MPE PLASTICS",
+        "MPE MEXICO",
+        "MATERIAS PLASTICAS Y ELASTOMEROS DE MEXICO",
+        "MATERIAS PLASTICAS Y ELASTOMEROS DE MEXICO SA DE CV"
+      ],
+      "source_timestamp": "2026-08-13T14:24:17-06:00",
+      "identity_resolution": "VERIFIED_PUBLIC_SOURCE",
+      "domains": [
+        {
+          "domain": "mpeplastics.com",
+          "usage": "CORPORATE_WEBSITE_AND_EMAIL",
+          "confidence": "HIGH",
+          "source_url": "https://www.mpeplastics.com/contatti/"
+        }
+      ],
+      "account_id": null,
+      "account_binding_status": "PENDING_LIVE_DATABASE",
+      "suppression_state": "HOLD_FAIL_CLOSED"
+    },
+    {
+      "name_as_received": "TEJAS EL AGUILA",
+      "normalized_name": "TEJAS EL AGUILA",
+      "legal_name": "LAPROBA EL AGUILA SA DE CV",
+      "aliases": [
+        "TEJAS EL AGUILA",
+        "LAPROBA EL AGUILA",
+        "LAPROBA EL AGUILA SA DE CV",
+        "LAPROBA EL AGUILA S.A. DE C.V."
+      ],
+      "source_timestamp": "2026-08-13T14:24:24-06:00",
+      "identity_resolution": "VERIFIED_PUBLIC_SOURCE",
+      "domains": [
+        {
+          "domain": "tejaselaguila.com",
+          "usage": "CORPORATE_WEBSITE",
+          "confidence": "HIGH",
+          "source_url": "https://www.tejaselaguila.com/aviso-de-privacidad/"
+        },
+        {
+          "domain": "tejaselaguila.mx",
+          "usage": "CORPORATE_EMAIL",
+          "confidence": "HIGH",
+          "source_url": "https://www.tejaselaguila.com/"
+        },
+        {
+          "domain": "tejaselaguila.net",
+          "usage": "CORPORATE_INTRANET_ALIAS",
+          "confidence": "HIGH",
+          "source_url": "https://www.tejaselaguila.com/"
+        }
+      ],
+      "account_id": null,
+      "account_binding_status": "PENDING_LIVE_DATABASE",
+      "suppression_state": "HOLD_FAIL_CLOSED"
+    }
+  ],
+  "reconciliation": {
+    "name_count": 3,
+    "alias_count": 12,
+    "domain_count": 6,
+    "legal_entity_resolution": "VERIFIED_PUBLIC_SOURCE",
+    "domain_resolution": "VERIFIED_PUBLIC_SOURCE",
+    "account_binding": "PENDING_LIVE_DATABASE",
+    "transactional_database_import": "NOT_EXECUTED",
+    "outreach_eligible_records": 0,
+    "release_state": "HOLD"
+  }
+}

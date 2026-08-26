@@ -1,5 +1,6 @@
 import type { PortalModule, PortalRow } from "@/lib/operations/portal";
 import type { OperationModuleKey } from "@/lib/operations/portal";
+import { PortalTableFilter } from "@/components/PortalTableFilter";
 import {
   ApprovalDecisionAction,
   AssignTaskButton,
@@ -9,10 +10,11 @@ import {
   OpportunityTransitionAction,
   ReplyReviewAction,
 } from "@/components/OperationsActions";
+import { operationalLabel } from "@/lib/operations/presentation";
 
 function StatusBadge({ value }: { value: string }) {
   const blocked = /BLOCK|HOLD|REJECT|ZERO|QUARANTIN|UNKNOWN|DEGRADED|INCOMPLETE|BREACH|^P[01]$/i.test(value);
-  return <span className={`status ${blocked ? "blocked" : ""}`}>{value}</span>;
+  return <span className={`status ${blocked ? "blocked" : ""}`}>{operationalLabel(value)}</span>;
 }
 
 export function PortalRowsTable({ module, actionKind, evidenceClass }: {
@@ -20,6 +22,7 @@ export function PortalRowsTable({ module, actionKind, evidenceClass }: {
   actionKind?: OperationModuleKey;
   evidenceClass?: "synthetic_demo" | "live";
 }) {
+  const tableId = `portal-table-${(actionKind ?? module.title).toLocaleLowerCase("es-MX").replace(/[^a-z0-9]+/gu, "-")}`;
   const showsAction = evidenceClass === "live" && ["alertas", "respuestas", "leads", "pipeline", "aprobaciones"].includes(actionKind ?? "");
   return (
     <section className="panel">
@@ -36,8 +39,10 @@ export function PortalRowsTable({ module, actionKind, evidenceClass }: {
           <p>{module.emptyState}</p>
         </div>
       ) : (
-        <div aria-label={`Tabla: ${module.title}`} className="table-wrap" role="region" tabIndex={0}>
-          <table>
+        <>
+          <PortalTableFilter tableId={tableId} total={module.rows.length} />
+          <div aria-label={`Tabla: ${module.title}`} className="table-wrap" id={tableId} role="region" tabIndex={0}>
+              <table>
             <thead>
               <tr>
                 {module.columns.map((column) => <th key={column.key}>{column.label}</th>)}
@@ -47,7 +52,7 @@ export function PortalRowsTable({ module, actionKind, evidenceClass }: {
             </thead>
             <tbody>
               {module.rows.map((item) => (
-                <tr key={item.id}>
+                <tr data-search={[item.status, operationalLabel(item.status), ...Object.values(item.values)].join(" ").toLocaleLowerCase("es-MX")} key={item.id}>
                   {module.columns.map((column) => (
                     <td data-label={column.label} key={column.key}>{item.values[column.key] ?? "Sin dato"}</td>
                   ))}
@@ -68,8 +73,9 @@ export function PortalRowsTable({ module, actionKind, evidenceClass }: {
                 </tr>
               ))}
             </tbody>
-          </table>
-        </div>
+              </table>
+          </div>
+        </>
       )}
     </section>
   );

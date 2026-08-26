@@ -6,6 +6,7 @@ import { PortalRowsTable } from "@/components/PortalTable";
 import { CapacityConfigAction } from "@/components/OperationsActions";
 import { requireOperationsAccess } from "@/lib/auth/authorization";
 import { isOperationModuleKey, loadOperationsPortal, OPERATION_MODULE_LABELS } from "@/lib/operations/portal";
+import { operationalLabel } from "@/lib/operations/presentation";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,7 @@ export default async function OperationModulePage({ params }: { params: Promise<
           <p className="eyebrow">Control Room · {OPERATION_MODULE_LABELS[module]}</p>
           <h1>{selected.title}</h1>
         </div>
-        <span className="badge">{snapshot.evidenceClass}</span>
+        <span className="badge">{operationalLabel(snapshot.evidenceClass)}</span>
       </div>
       {snapshot.evidenceClass === "synthetic_demo" && module !== "roadmap" && module !== "aprobaciones" ? (
         <div className="notice operations-disclosure">

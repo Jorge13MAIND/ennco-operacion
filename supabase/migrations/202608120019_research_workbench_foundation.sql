@@ -971,8 +971,8 @@ end;
 $$;
 
 create or replace function app.research_request_sha(target_payload jsonb)
-returns text language sql immutable set search_path = public, pg_catalog as $$
-  select encode(public.digest(target_payload::text, 'sha256'), 'hex')
+returns text language sql immutable set search_path = extensions, public, pg_catalog as $$
+  select encode(digest(target_payload::text, 'sha256'), 'hex')
 $$;
 
 create or replace function app.research_lock_command(
@@ -1190,7 +1190,7 @@ begin
   canonical:=jsonb_build_object('decision',decision,'verified_accounts',verified_accounts,
     'verified_contacts',verified_contacts,'target_accounts',75,'target_contacts',150,
     'outreach_state','RESEARCH_ONLY_HOLD','outreach_eligible_records',0,'blockers',to_jsonb(all_blockers));
-  checksum:=encode(public.digest(canonical::text,'sha256'),'hex');
+  checksum:=app.research_request_sha(canonical);
   return jsonb_build_object('status','ASSESSED','decision',decision,'verified_accounts',verified_accounts,
     'verified_contacts',verified_contacts,'target_accounts',75,'target_contacts',150,
     'outreach_state','RESEARCH_ONLY_HOLD','outreach_eligible_records',0,
@@ -1217,10 +1217,10 @@ begin
   if assessment->>'assessment_checksum'<>target_assessment_checksum then
     raise exception 'RESEARCH_ASSESSMENT_STALE_OR_TENANT_MISMATCH';
   end if;
-  snapshot_sha:=encode(public.digest(jsonb_build_object(
+  snapshot_sha:=app.research_request_sha(jsonb_build_object(
     'organization_id',target_organization_id,'assessment',assessment,
     'idempotency_key',target_idempotency_key
-  )::text,'sha256'),'hex');
+  ));
   perform set_config('app.research_rpc_write','true',true);
   insert into public.research_inventory_snapshots (
     organization_id,assessment_checksum,snapshot_sha256,decision,verified_accounts,verified_contacts,

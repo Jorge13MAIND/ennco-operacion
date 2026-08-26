@@ -1,0 +1,53 @@
+{
+  "version": "ENNCO-PREQ-2026-08-PACO-01",
+  "status": "APPROVED",
+  "sourceDate": "2026-08-20",
+  "validUntil": "2026-09-19T23:59:59-06:00",
+  "effectiveEnergyRateMxnPerKwh": {
+    "min": 2.8,
+    "max": 3.35
+  },
+  "monthlyYieldKwhPerKwp": {
+    "min": 120,
+    "max": 165
+  },
+  "moduleWp": {
+    "min": 620,
+    "max": 650
+  },
+  "roofAreaM2PerKwp": {
+    "min": 5.2,
+    "max": 7.3
+  },
+  "investmentMxnPerKwp": [
+    {
+      "minKwp": 30,
+      "min": 17000,
+      "max": 24000,
+      "evidenceStatus": "PACO_APPROVED_FROM_30_KWP"
+    },
+    {
+      "minKwp": 0,
+      "min": 18000,
+      "max": 29000,
+      "evidenceStatus": "PACO_APPROVED_UNDER_30_KWP"
+    }
+  ],
+  "industrialInvestmentPolicy": "TECHNICAL_COMMERCIAL_REVIEW_REQUIRED",
+  "commercialReferences": {
+    "hiddenDefectsWarrantyMonths": 24,
+    "cashDiscountPct": {
+      "min": 3,
+      "max": 6
+    },
+    "installedModuleStartingPriceMxn": 11000,
+    "contractualPriceRequiresCommercialValidation": true,
+    "installationDateDependsOnMaterialsAndWorkSchedule": true,
+    "automaticCommitmentsAllowed": false
+  },
+  "publicInputMonthlySpendStrictLeadThresholdMxn": 20000,
+  "industrialCapacityThresholdKwp": 100,
+  "modelApprovalRequiredBy": "Paco",
+  "approvalSourcePath": "data/prequote/paco-approved-parameters-2026-08-20.json",
+  "sourceManifestPath": "data/prequote/source-manifest.json"
+}

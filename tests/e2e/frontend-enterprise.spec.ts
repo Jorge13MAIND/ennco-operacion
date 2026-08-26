@@ -44,9 +44,55 @@ test("skip link bypasses repeated navigation and moves focus to the main landmar
   await expect(page).toHaveURL(/#main-content$/);
 });
 
+test("Control Room keeps ENNCO identity, private context, grouped navigation and session exit", async ({ page }) => {
+  await page.goto("/operacion");
+
+  const header = page.locator("header.site-header-operations");
+  await expect(header.locator("img[src='/brand/ennco-lockup.svg']")).toBeVisible();
+  await expect(header.getByRole("button", { name: "Cerrar sesión" })).toBeVisible();
+  await expect(page.getByText("Demo sintético", { exact: true })).toBeVisible();
+  await expect(page.getByText("synthetic_demo", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("BLOCKED_EXTERNAL", { exact: true })).toHaveCount(0);
+
+  const viewportWidth = page.viewportSize()?.width ?? 1440;
+  if (viewportWidth > 860) {
+    await expect(header.getByText("Control Room", { exact: true })).toBeVisible();
+    await expect(header.getByText("Operación privada", { exact: true })).toBeVisible();
+    const desktopNavigation = page.locator("aside.operations-sidebar");
+    await expect(desktopNavigation.getByRole("heading", { name: "Control" })).toBeVisible();
+    await expect(desktopNavigation.getByRole("heading", { name: "Comercial" })).toBeVisible();
+    await expect(desktopNavigation.getByRole("heading", { name: "Gobierno" })).toBeVisible();
+  } else {
+    await page.getByText("Menú de operación", { exact: true }).click();
+    const mobileNavigation = page.getByRole("navigation", { name: "Módulos de operación" });
+    await expect(mobileNavigation.getByRole("heading", { name: "Control" })).toBeVisible();
+    await expect(mobileNavigation.getByRole("heading", { name: "Comercial" })).toBeVisible();
+    await expect(mobileNavigation.getByRole("heading", { name: "Gobierno" })).toBeVisible();
+  }
+
+  const authorization = page.getByRole("region", { name: "Autorización efectiva" });
+  const commercialTruth = page.getByRole("region", { name: "Verdad comercial" });
+  await expect(authorization).toBeVisible();
+  await expect(commercialTruth).toBeVisible();
+  expect((await authorization.boundingBox())?.y ?? Number.POSITIVE_INFINITY)
+    .toBeLessThan((await commercialTruth.boundingBox())?.y ?? Number.NEGATIVE_INFINITY);
+});
+
+test("session exit returns to an explicit signed-out access state", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-standard", "One deterministic server-action run is sufficient.");
+  await page.goto("/operacion");
+  await page.getByRole("button", { name: "Cerrar sesión" }).click();
+  await expect(page).toHaveURL(/\/ingreso\?reason=signed_out$/);
+  await expect(page.getByText("La sesión se cerró correctamente.")).toBeVisible();
+});
+
 test("production CSP nonce is propagated to every executable script and hydration remains available", async ({ page }) => {
   const response = await page.goto("/");
   const csp = response?.headers()["content-security-policy"] ?? "";
+  test.skip(
+    csp.includes("'unsafe-eval'"),
+    "The general E2E suite uses next dev; exact nonce propagation is enforced by the production M23 gate.",
+  );
   const nonce = csp.match(/'nonce-([^']+)'/)?.[1];
   expect(nonce).toBeTruthy();
   const scriptNonces = await page.locator("script").evaluateAll((scripts) => scripts.map((script) => script.nonce));

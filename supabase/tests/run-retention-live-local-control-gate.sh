@@ -37,6 +37,7 @@ grant select,insert,update,delete on storage.objects to anon,authenticated,servi
 SQL
 for migration in $(find "$REPO_ROOT/supabase/migrations" -maxdepth 1 -type f -name '*.sql' | sort | tail -n +2); do
   "${PSQL[@]}" -f "$migration" >/dev/null
+  if [[ "$(basename "$migration")" == "202608120021_retention_live_local_control.sql" ]]; then break; fi
 done
 "${PSQL[@]}" -f "$REPO_ROOT/supabase/tests/021_retention_live_local_control_gate.sql"
 

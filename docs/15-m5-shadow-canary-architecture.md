@@ -39,7 +39,7 @@ El release congela:
 8. Kill switches.
 9. Aprobaciones.
 
-Una diferencia entre runtime y manifiesto devuelve `HOLD`. El manifiesto actual conserva kill switches activos, envío externo deshabilitado, cero destinatarios y Anexo A ausente.
+Una diferencia entre runtime y manifiesto devuelve `HOLD`. El manifiesto actual conserva kill switches activos, envío externo deshabilitado, cero destinatarios y snapshot local del Anexo A. Falta binding e importación en la base aislada.
 
 ## Assistant acotado
 
@@ -105,12 +105,11 @@ El evaluador devuelve:
 - 14 días reales no observados.
 - Staging administrado no provisionado.
 - Proveedores reales no conectados.
-- Anexo A ausente.
+- Binding e importación transaccional del Anexo A no ejecutados.
 - Dominios y buzones no comprados.
 - DNS y reputación no iniciados.
 - Copy sin aprobación de Francisco.
-- Revisión comercial sin aprobación de Paco.
+- Revisión comercial de Paco aprobada; no autoriza por sí sola el release.
 - Aprobación explícita de Jorge ausente.
 
 Ninguno bloquea pruebas locales. Todos bloquean el primer envío.
-

@@ -93,7 +93,9 @@ export async function renderPrequotePdf(payload: PrequotePdfTokenPayload): Promi
       y: 526,
       width: 252,
       label: "Inversión preliminar",
-      value: `${mxn(payload.estimate.investmentMxn.min)} a ${mxn(payload.estimate.investmentMxn.max)}`,
+      value: payload.estimate.investmentMxn
+        ? `${mxn(payload.estimate.investmentMxn.min)} a ${mxn(payload.estimate.investmentMxn.max)}`
+        : "Revisión requerida",
     });
     drawRange(page, fonts, {
       x: 42,
@@ -131,14 +133,21 @@ export async function renderPrequotePdf(payload: PrequotePdfTokenPayload): Promi
     });
   });
 
-  page.drawRectangle({ x: 42, y: 128, width: 528, height: 76, color: rgb(1, 0.97, 0.86) });
-  page.drawText("REQUIERE VALIDACIÓN", { x: 60, y: 178, size: 9, font: bold, color: blue });
-  page.drawText("Recibo CFE, revisión del sitio y validación del equipo técnico ENNCO.", { x: 60, y: 153, size: 11, font: bold, color: navy });
+  page.drawRectangle({ x: 42, y: 122, width: 528, height: 88, color: rgb(1, 0.97, 0.86) });
+  page.drawText("REFERENCIAS COMERCIALES SUJETAS A CONTRATO", { x: 60, y: 188, size: 9, font: bold, color: blue });
+  page.drawText(
+    `Arranque: ${mxn(payload.estimate.commercialReferences.installedModuleStartingPriceMxn)} por módulo. Contado: ${payload.estimate.commercialReferences.cashDiscountPct.min}% a ${payload.estimate.commercialReferences.cashDiscountPct.max}%.`,
+    { x: 60, y: 165, size: 10, font: bold, color: navy },
+  );
+  page.drawText(
+    `Garantía de referencia: ${payload.estimate.commercialReferences.hiddenDefectsWarrantyMonths} meses por vicios ocultos. Precio final y fecha requieren validación.`,
+    { x: 60, y: 142, size: 9, font: regular, color: ink, maxWidth: 492, lineHeight: 11 },
+  );
 
-  page.drawText(payload.estimate.disclaimer, { x: 42, y: 88, size: 8, font: regular, color: muted, maxWidth: 528, lineHeight: 11 });
-  page.drawLine({ start: { x: 42, y: 58 }, end: { x: 570, y: 58 }, thickness: 1, color: rgb(0.86, 0.89, 0.92) });
-  page.drawText(`Modelo ${payload.estimate.modelVersion}`, { x: 42, y: 38, size: 7, font: regular, color: muted });
-  page.drawText("ENNCO | Partners in power and progress", { x: 374, y: 38, size: 7, font: bold, color: navy });
+  page.drawText(payload.estimate.disclaimer, { x: 42, y: 84, size: 8, font: regular, color: muted, maxWidth: 528, lineHeight: 10 });
+  page.drawLine({ start: { x: 42, y: 50 }, end: { x: 570, y: 50 }, thickness: 1, color: rgb(0.86, 0.89, 0.92) });
+  page.drawText(`Modelo ${payload.estimate.modelVersion}`, { x: 42, y: 30, size: 7, font: regular, color: muted });
+  page.drawText("ENNCO | Partners in power and progress", { x: 374, y: 30, size: 7, font: bold, color: navy });
 
   return document.save();
 }

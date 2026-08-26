@@ -82,17 +82,17 @@ El sistema exige SPF, DKIM, DMARC, TLS, DNS directo e inverso, seeds y Postmaste
 
 ## Bloqueos externos exactos
 
-- Anexo A conciliado y hasheado.
+- Anexo A vinculado, importado, conciliado y hasheado en la base operativa.
 - Contrato ejecutado y certificado archivados.
 - Evidencia acumulativa de inicio contractual.
 - Base legal y aviso de privacidad aprobados.
 - Compra y propiedad de dominios.
 - DNS y cuatro buzones.
-- 35 días autenticados.
+- 42 días completos de warmup Apollo por buzón.
 - 14 días reales de canary live.
 - Cinco cuentas elegibles y cinco contactos verificados.
 - Copy aprobado por Francisco.
-- Revisión técnica de Paco.
+- Revisión técnica de Paco, actualmente `PASS_LOCAL` con fuente congelada.
 - Aprobación explícita de Jorge.
 
 Hasta entonces, el Control Room muestra M6 como `BLOCKED`, gate `EXTEND` y envío `HOLD`.

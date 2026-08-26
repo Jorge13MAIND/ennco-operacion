@@ -83,17 +83,26 @@ export type PrequoteAssumption = {
 export type PrequoteEstimate = {
   estimateKind: "SOLAR_RANGE" | "SERVICE_REVIEW";
   capacityKwp: { min: number; max: number };
-  investmentMxn: { min: number; max: number };
+  investmentMxn: { min: number; max: number } | null;
+  investmentStatus: "PRELIMINARY_RANGE" | "TECHNICAL_COMMERCIAL_REVIEW_REQUIRED" | "NOT_APPLICABLE";
   roofAreaM2: { min: number; max: number };
   estimatedMonthlyKwh: { min: number; max: number };
   panelCount: { min: number; max: number };
   verdict: "OUT_OF_SCOPE" | "COMMERCIAL_REVIEW" | "INDUSTRIAL_REVIEW" | "TECHNICAL_REVIEW";
-  evidenceConfidence: "SOURCE_RANGE" | "EXTRAPOLATED_REVIEW_REQUIRED" | "TECHNICAL_REVIEW_REQUIRED";
+  evidenceConfidence: "SOURCE_RANGE" | "INDUSTRIAL_REVIEW_REQUIRED" | "TECHNICAL_REVIEW_REQUIRED";
   strictLeadStatus: "DOES_NOT_COUNT_WITHOUT_HUMAN_EVIDENCE";
   modelVersion: string;
   modelStatus: "DRAFT_REVIEW_REQUIRED" | "APPROVED" | "EXPIRED";
   modelValidUntil: string;
   calculatedAt: string;
+  commercialReferences: {
+    hiddenDefectsWarrantyMonths: number;
+    cashDiscountPct: { min: number; max: number };
+    installedModuleStartingPriceMxn: number;
+    contractualPriceRequiresCommercialValidation: true;
+    installationDateDependsOnMaterialsAndWorkSchedule: true;
+    automaticCommitmentsAllowed: false;
+  };
   assumptions: PrequoteAssumption[];
   limitations: string[];
   disclaimer: string;

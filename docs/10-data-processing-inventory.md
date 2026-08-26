@@ -51,7 +51,7 @@ Categorías previstas:
 |---|---|---|---|---|---|---|---|
 | DPI-01 | Identidad, acceso y autorización | `organizations`, `organization_users`, roles | Administrador ENNCO | PostgreSQL y Auth previsto | Admin y miembro de la organización | VERIFIED para código y política local, BLOCKED_EXTERNAL para Auth real | `src/lib/auth`, `src/lib/supabase`; proveedor no creado |
 | DPI-02 | Importar y depurar investigación industrial | `import_batches`, `accounts`, `account_aliases`, `contacts`, `source_evidence` | Archivos ENNCO, fuentes públicas y Apollo previsto | PostgreSQL | Operadores y auditor | VERIFIED para esquema e importación local, BLOCKED_EXTERNAL para Apollo | Migración líneas 46 a 124; `npm run verify:data` con 28 controles PASS |
-| DPI-03 | Evitar contacto prohibido o duplicado | `suppression_entries` con empresa, correo, dominio, tipo y razón | Anexo A, clientes actuales, baja, rebote y DNC | PostgreSQL y gate transaccional de envío | Admin, operador y worker técnico | VERIFIED para control local, BLOCKED_EXTERNAL para Anexo A | Migración líneas 126 a 146 y función `app.is_suppressed`; Anexo A no recibido |
+| DPI-03 | Evitar contacto prohibido o duplicado | `suppression_entries` con empresa, correo, dominio, tipo y razón | Anexo A, clientes actuales, baja, rebote y DNC | PostgreSQL y gate transaccional de envío | Admin, operador y worker técnico | VERIFIED para snapshot local, BLOCKED_EXTERNAL para binding e importación | Migración líneas 126 a 146, función `app.is_suppressed` y snapshot `8e986eff...`; cero registros elegibles |
 | DPI-04 | Captar una solicitud y calcular precotización | `prequote_models`, `prequotes` | Formulario público | PostgreSQL | Prospecto crea; operadores leen por RLS | VERIFIED para contrato de datos, BLOCKED_EXTERNAL para uso live | Migración líneas 148 a 188; aplicación actual usa `synthetic_demo` |
 | DPI-05 | Recibir y conservar temporalmente recibo o PDF | `prequote_documents`, ruta privada, checksum, tipo, tamaño y `retention_until` | Prospecto | Storage privado previsto | Operador autorizado después de escaneo | VERIFIED con stubs locales, BLOCKED_EXTERNAL para Storage real | Migración 002; magic bytes y cuarentena probados; antivirus real pendiente |
 | DPI-06 | Preparar y ejecutar outreach | campañas, secuencias, buzones, enrollments y `messages` | Investigación aprobada y manifest | Gmail API prevista | Revenue Operations y worker | VERIFIED para esquema y dry run, BLOCKED_EXTERNAL para envío | Migración líneas 204 a 315; kill switch y envío real deshabilitados |
@@ -96,7 +96,7 @@ Los nodos de proveedor y backup son arquitectura objetivo. Permanecen sin datos 
 ## Gaps de M2
 
 1. `P0-PRIV-001`, cerrado localmente: allowlist por tabla, saneamiento histórico y pruebas centinela evitan copiar PII o cuerpos al audit log. Falta revalidación en staging real.
-2. `P0-EXT-001`: Anexo A pendiente. Bloquea cualquier outreach real.
+2. `P0-EXT-001`: binding e importación transaccional del Anexo A pendientes. Bloquea cualquier outreach real.
 3. `P0-LEGAL-001`: base jurídica, aviso de privacidad y roles legales sin revisión.
 4. `P0-VENDOR-001`: ningún proveedor tiene DPA, región, subprocesadores, retención o borrado verificados.
 5. `P1-CONT-001`: restore lógico y de objetos sintéticos probado. PITR, Storage real y propagación de borrado a copias permanecen sin probar.

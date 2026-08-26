@@ -6,7 +6,7 @@
   "generated_at": "2026-08-11T23:20:00-06:00",
   "release_decision": "EXTEND",
   "campaign_manifest_path": "data/campaigns/campaign-manifest-draft-v1.json",
-  "campaign_manifest_sha256": "e423bdfb9446b1c5988133626353b0cc5bcb53a212b25fc9cbd752d686deb0da",
+  "campaign_manifest_sha256": "63138ec9a3033ee0dbe88c490edf123dcde6088ee8b141202c43558c2e147afe",
   "sequence_sha256": "6d67db19633e5749a55b545e9b1a09b1ac25688234bf402b881618514c48738e",
   "recipients": [],
   "recipient_count": 0,
@@ -24,12 +24,12 @@
     "scheduled_for": null
   },
   "gates": [
-    { "code": "ANNEX_A_RECONCILED", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
+    { "code": "ANNEX_A_RECONCILED", "status": "BLOCKED_EXTERNAL", "evidence_sha256": "8e986eff74dee10d3f619f7562ee6b7d18207c3c5e080cd82656cc0e88d46af1" },
     { "code": "EXECUTED_CONTRACT_ARCHIVED", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
     { "code": "START_CONDITION_EVIDENCE", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
     { "code": "LEGAL_BASIS_APPROVED", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
     { "code": "PRIVACY_NOTICE_APPROVED", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
-    { "code": "DOMAIN_AGE_35_DAYS", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
+    { "code": "APOLLO_WARMUP_42_DAYS", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
     { "code": "SPF_PASS", "status": "UNKNOWN", "evidence_sha256": null },
     { "code": "DKIM_PASS", "status": "UNKNOWN", "evidence_sha256": null },
     { "code": "DMARC_PASS", "status": "UNKNOWN", "evidence_sha256": null },
@@ -43,13 +43,13 @@
     { "code": "PILOT_EXACTLY_FIVE_ACCOUNTS", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
     { "code": "CONTACTS_VERIFIED", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
     { "code": "COPY_APPROVED_FRANCISCO", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
-    { "code": "TECHNICAL_APPROVED_PACO", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
+    { "code": "TECHNICAL_APPROVED_PACO", "status": "PASS_LOCAL", "evidence_sha256": "d3fc79b8bce4888253bcf4b611b7af1251f875d4725f7dce4cd3481f4681217d" },
     { "code": "SUPPRESSION_RECONCILED_24H", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
     { "code": "DRY_RUN_IDENTICAL", "status": "PASS_LOCAL", "evidence_sha256": "638b8201b5652fe4019756118d1c975323d6fe1fceb0c5188e3fab6ba4209e54" },
     { "code": "REPLY_SYNC_PASS", "status": "PASS_LOCAL", "evidence_sha256": "10b2fb73e959ec56d0b67d4b3493593e09032b80341d27572422b8e845a87a46" },
     { "code": "ALERTS_PASS", "status": "PASS_LOCAL", "evidence_sha256": "219b149808d5291c1e43cdc8c317ce48f3bf33dca1cff0c3e46961c50c1d5497" },
     { "code": "CANARY_LIVE_PASS", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
-    { "code": "MANIFEST_HASH_MATCH", "status": "PASS_LOCAL", "evidence_sha256": "e423bdfb9446b1c5988133626353b0cc5bcb53a212b25fc9cbd752d686deb0da" },
+    { "code": "MANIFEST_HASH_MATCH", "status": "PASS_LOCAL", "evidence_sha256": "63138ec9a3033ee0dbe88c490edf123dcde6088ee8b141202c43558c2e147afe" },
     { "code": "EXPLICIT_SEND_APPROVAL_JORGE", "status": "BLOCKED_EXTERNAL", "evidence_sha256": null },
     { "code": "SEND_WINDOW_VALID", "status": "UNKNOWN", "evidence_sha256": null },
     { "code": "MAILBOX_HEALTHY", "status": "UNKNOWN", "evidence_sha256": null },
@@ -57,4 +57,3 @@
   ],
   "next_action": "Resolver evidencia externa, reconstruir packet inmutable y pedir aprobación explícita del primer lote"
 }
-

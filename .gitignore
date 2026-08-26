@@ -11,3 +11,4 @@ supabase/.temp/
 *.log
 *.tsbuildinfo
 !.env.example
+.vercel

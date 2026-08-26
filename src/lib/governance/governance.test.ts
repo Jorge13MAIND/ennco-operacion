@@ -49,10 +49,9 @@ describe("governance validators", () => {
   });
 
   it("rejects an unknown risk status", () => {
-    const changed = risks.replace(
-      "| R-001 | P0 | Anexo A incompleto o tardío | No existe archivo aceptado y hasheado | Bloquear cualquier envío y desplazar reloj | Revenue Operations | OPEN |",
-      "| R-001 | P0 | Anexo A incompleto o tardío | No existe archivo aceptado y hasheado | Bloquear cualquier envío y desplazar reloj | Revenue Operations | INVENTED |",
-    );
+    const riskLine = risks.split("\n").find((line) => line.startsWith("| R-001 |"));
+    expect(riskLine).toBeDefined();
+    const changed = risks.replace(riskLine!, riskLine!.replace(/\| [A-Z_]+ \|$/u, "| INVENTED |"));
     const result = parseRiskRegister(changed);
 
     expect(result.failures).toContain("RISK_STATUS_INVALID_R-001");

@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_class": "synthetic_demo",
+  "profile": {
+    "id": "synthetic-user-francisco",
+    "team_id": "synthetic-team-teckel-dedicated-ennco",
+    "first_name": "Francisco",
+    "last_name": "Cuellar",
+    "email": "george@teckel-ai.com",
+    "num_credits_remaining": 4010,
+    "effective_num_lead_credits": 4010,
+    "num_lead_credits_used": 0
+  },
+  "email_accounts": [
+    {
+      "id": "synthetic-mailbox-primary",
+      "user_id": "synthetic-user-francisco",
+      "email": "contacto@ennco.com.mx",
+      "type": "gmail",
+      "active": true,
+      "last_synced_at": "2026-08-20T17:59:30.000Z",
+      "revoked_at": null,
+      "inactive_reason": null,
+      "email_daily_threshold": 20,
+      "is_opted_in_mailwarming": false,
+      "mailwarming_status": null,
+      "true_warmup_enabled": false,
+      "true_warmup_status": null
+    },
+    {
+      "id": "synthetic-mailbox-1",
+      "user_id": "synthetic-user-francisco",
+      "email": "francisco@enncoindustrial.test",
+      "type": "gmail",
+      "active": true,
+      "last_synced_at": "2026-08-20T17:59:30.000Z",
+      "revoked_at": null,
+      "inactive_reason": null,
+      "email_daily_threshold": 2,
+      "is_opted_in_mailwarming": true,
+      "mailwarming_status": "running",
+      "true_warmup_enabled": true,
+      "true_warmup_status": "active"
+    },
+    {
+      "id": "synthetic-mailbox-2",
+      "user_id": "synthetic-user-francisco",
+      "email": "fcuellar@enncoindustrial.test",
+      "type": "gmail",
+      "active": true,
+      "last_synced_at": "2026-08-20T17:59:30.000Z",
+      "revoked_at": null,
+      "inactive_reason": null,
+      "email_daily_threshold": 2,
+      "is_opted_in_mailwarming": true,
+      "mailwarming_status": "running",
+      "true_warmup_enabled": true,
+      "true_warmup_status": "active"
+    },
+    {
+      "id": "synthetic-mailbox-3",
+      "user_id": "synthetic-user-francisco",
+      "email": "francisco@enncoenergia.test",
+      "type": "gmail",
+      "active": true,
+      "last_synced_at": "2026-08-20T17:59:30.000Z",
+      "revoked_at": null,
+      "inactive_reason": null,
+      "email_daily_threshold": 2,
+      "is_opted_in_mailwarming": true,
+      "mailwarming_status": "running",
+      "true_warmup_enabled": true,
+      "true_warmup_status": "active"
+    }
+  ],
+  "expected": {
+    "observed_at": "2026-08-20T18:00:00.000Z",
+    "expected_profile_name": "Francisco Cuellar",
+    "expected_admin_email": "george@teckel-ai.com",
+    "expected_team_id": "synthetic-team-teckel-dedicated-ennco",
+    "primary_mailbox": "contacto@ennco.com.mx",
+    "expected_mailboxes": [
+      "contacto@ennco.com.mx",
+      "francisco@enncoindustrial.test",
+      "fcuellar@enncoindustrial.test",
+      "francisco@enncoenergia.test"
+    ],
+    "research_credit_cap": 300,
+    "maximum_sync_age_seconds": 300,
+    "maximum_daily_limit": 20
+  }
+}

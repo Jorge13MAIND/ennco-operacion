@@ -2,6 +2,8 @@
 
 Fecha de decision: 2026-08-13.
 
+Actualizacion 20-ago-2026: el baseline final es Apollo Professional mensual, un asiento, propiedad de ENNCO. Los dominios y cuatro buzones se compran fuera de Apollo. La arquitectura vigente esta en `docs/32-m24-provider-infrastructure.md`. Este documento no autoriza compra.
+
 Este documento congela la arquitectura recomendada. No autoriza compras, altas, DNS, credenciales, despliegue o envios.
 
 ## Decision ejecutiva
@@ -10,9 +12,9 @@ No se reinicia el proyecto. La plataforma propia de ENNCO permanece como sistema
 
 | Funcion | Herramienta | Decision | Uso permitido | No se usa para |
 |---|---|---|---|---|
-| Salida de correo comercial | Google Workspace y Gmail API | REQUIRED | Enviar desde los cuatro buzones aprobados, obtener message ID y conservar threading | Marketing masivo, compra de listas o envio sin campaign manifest |
-| Respuestas y cambios de buzon | Gmail API, Google Cloud Pub/Sub e History API | REQUIRED | Watch por buzon, cursor, reconciliacion y fallback por historial | Tratar una notificacion push como mensaje completo |
-| Datos de empresas y contactos | Apollo | OPTIONAL_RECOMMENDED | Enriquecer empresas, cargos y correos; importar resultados con fuente, fecha y confianza | CRM canonico, secuencias, supresion, atribucion o autorizacion de envio |
+| Salida de correo comercial | Apollo Sequences sobre cuatro buzones aprobados | REQUIRED_CONTRACTUAL | Ejecutar la secuencia congelada, rotar buzones y conservar provider IDs | Enviar sin manifest, supresion, aprobacion o kill switch ENNCO |
+| Respuestas y cambios de buzon | Apollo mas Gmail API, IMAP o proveedor de buzon | REQUIRED | Detectar reply y bounce, reconciliar contra el buzon real y detener secuencia | Usar el dashboard Apollo como unica evidencia |
+| Datos de empresas y contactos | Apollo | REQUIRED_CONTRACTUAL | Investigar y verificar empresas, cargos y correos; importar resultados con fuente, fecha y confianza | CRM canonico, supresion, atribucion o autorizacion de envio |
 | Alertas transaccionales | Resend | OPTIONAL_TRANSACTIONAL_ONLY | Avisos operativos a usuarios conocidos de ENNCO y Teckel | Cold outreach, listas compradas, datos scrapeados o prospectos sin opt-in |
 | Base, Auth, Storage y RLS | Supabase con PITR | REQUIRED_LIVE | Sistema de verdad operativo, documentos privados, audit log, outbox y restore | Compartir base o secretos con otros clientes |
 | Aplicacion y portal | Vercel | REQUIRED_LIVE | Portal, landing, APIs y rollback | Publicar antes de gates, privacidad y aprobacion |
@@ -21,11 +23,11 @@ No se reinicia el proyecto. La plataforma propia de ENNCO permanece como sistema
 | Errores y pruebas externas | Sentry y Checkly | RECOMMENDED | Trazas sin PII, pruebas sinteticas y alertas de disponibilidad | Sustituir logs comerciales o evidencia de leads |
 | Alerta interna | Telegram bot dedicado y correo de respaldo | RECOMMENDED | Incidentes Teckel sin PII | Canal del cliente o fuente de verdad |
 
-## Por que no Apollo como sender
+## Por que Apollo no es el sistema canonico
 
-Apollo puede ejecutar secuencias y detener o pausar contactos con sus propias reglas. Si tambien enviara, existirian dos motores de estado, dos reglas de detencion y dos historiales de actividad. Eso debilitaria la supresion transaccional, la idempotencia, el kill switch y la atribucion ya implementados.
+Apollo ejecutara las secuencias y el warmup, pero la plataforma ENNCO conserva el estado comercial y los gates. Antes de inscribir un contacto, ENNCO debe validar Anexo A, cliente actual, baja, rebote, campaign manifest, aprobacion y kill switch. Despues del envio, ENNCO reconcilia provider ID, reply, bounce, baja y siguiente accion.
 
-Apollo se trata como fuente de entrada. Cada dato vuelve al Workbench con URL o proveedor, fecha, confianza y resultado de verificacion. Ningun contacto de Apollo queda automaticamente elegible para outreach.
+Esto evita que un cambio manual en Apollo cree destinatarios, reactive un contacto suprimido o convierta una metrica de actividad en resultado comercial. Ningun contacto de Apollo queda automaticamente elegible para outreach.
 
 ## Por que no Resend para cold outbound
 
@@ -34,7 +36,7 @@ La politica vigente de Resend prohibe mensajes no solicitados, cold outreach, li
 ## Lo que Codex puede cerrar sin checkpoint externo
 
 1. Mantener y mejorar el Control Room local con datos sinteticos y estados reales de bloqueo.
-2. Preparar adaptadores Gmail, Pub/Sub, KMS, Apollo y Resend contra interfaces mock, sin credenciales ni red real.
+2. Preparar el adapter Apollo de datos, secuencias y eventos, mas el fallback Gmail o IMAP, contra interfaces mock y sin credenciales ni red real.
 3. Completar importaciones, deduplicacion, lineage, supresion fail closed y QA adversarial.
 4. Investigar hasta 75 empresas con fuentes publicas y mantenerlas en `RESEARCH_ONLY_HOLD`.
 5. Preparar hasta 150 candidatos a contacto. La verificacion de correo permanece parcial hasta contar con Apollo o una fuente aprobada.
@@ -47,11 +49,11 @@ La politica vigente de Resend prohibe mensajes no solicitados, cold outreach, li
 | Pieza | Estado local | Falta para live |
 |---|---|---|
 | Control Room | `PASS_LOCAL`, visible en `synthetic_demo` | Auth y datos de Supabase administrado; UAT ENNCO |
-| Campaign manifest, suppression, idempotencia y kill switch | `PASS_LOCAL` | Anexo A, dominios, buzones y gates live |
-| Gmail inbound | Parser Pub/Sub, proof, persistencia, History API y clasificacion probados localmente | Proyecto Google Cloud, OAuth, watch por buzon y canary real |
-| Gmail outbound | Cola y controles transaccionales construidos | Transport Gmail API, OAuth real, seeds y primer lote aprobado |
+| Campaign manifest, suppression, idempotencia y kill switch | `PASS_LOCAL` | Aplicar Anexo A ya congelado en Supabase ENNCO; dominios, buzones y gates live |
+| Reply y bounce | Parser Gmail y contratos de reconciliacion probados localmente | Tipo de buzon Apollo, credenciales, API o polling y canary real |
+| Outbound | Cola, enrollment gate Anexo A y reconciliación Apollo exacta construidos | Credenciales Apollo, API live, seeds y primer lote aprobado |
 | Workbench de investigacion | 27 semillas, 21 investigables, 6 en cuarentena, 0 contactos verificados | 75 empresas, 150 contactos y fuente aprobada de verificacion |
-| Apollo | Contrato de uso decidido | Cuenta, creditos y adapter/import auditado |
+| Apollo | `PASS_LOCAL` para contrato, read model y gate M24 | Compra Professional mensual bajo ENNCO, checkout, MFA, credenciales y adapter live |
 | Resend | Contrato de uso transaccional decidido | Cuenta opcional, dominio, adapter y destinos conocidos |
 | Produccion | `HOLD` | Proveedores ENNCO, DNS, credenciales, restore, CI remoto, staging y aprobaciones |
 
@@ -59,12 +61,12 @@ La politica vigente de Resend prohibe mensajes no solicitados, cold outreach, li
 
 Jorge o ENNCO deben autorizar o entregar:
 
-1. Anexo A vigente y copia ejecutada del contrato con certificado BoldSign.
-2. Presupuesto y alta de cuentas ENNCO para Supabase, Vercel, Google Workspace y Google Cloud.
-3. Compra de dos dominios y creacion de cuatro buzones, con MFA y owner ENNCO.
-4. Acceso o compra de creditos Apollo si se usa para la meta de 150 contactos.
+1. Copia ejecutada del contrato con certificado BoldSign. El Anexo A ya esta congelado y no se vuelve a pedir.
+2. Alta de cuenta Apollo a nombre de ENNCO, administrada por Teckel y pagada por Teckel durante las doce semanas.
+3. Checkout y compra de dos dominios y cuatro buzones, con MFA, owner ENNCO y evidencia de transferencia o registrador independiente.
+4. Compra de Apollo Professional mensual, un asiento, solo si el checkout conserva owner ENNCO y el presupuesto aprobado.
 5. DNS, OAuth, secretos, staging compartido, publicacion y cualquier envio real.
-6. Validacion de Paco para modelo, rangos, garantias, descuentos y compromisos tecnicos.
+6. La validacion de Paco ya esta archivada. No se vuelve a pedir.
 7. Aprobacion exacta de copy, manifiesto y primer lote de cinco cuentas.
 
 ## Orden recomendado desde este punto
@@ -81,9 +83,9 @@ Jorge o ENNCO deben autorizar o entregar:
 
 - Aprobar Bill of Materials y propietarios.
 - Crear cuentas ENNCO.
-- Comprar dominios y buzones.
+- Comprar Apollo, dominios y buzones bajo el contrato y con propiedad ENNCO comprobada.
 - Configurar Supabase, Vercel, Google Cloud y OAuth.
-- Decidir si Apollo se aprueba como fuente de enriquecimiento.
+- Registrar Professional mensual, un asiento y cuatro buzones Google Workspace. El portal debe mostrar owner, presupuesto y salud sin inferir autorizacion.
 
 ### Frente C. Staging aislado
 
@@ -97,7 +99,7 @@ Jorge o ENNCO deben autorizar o entregar:
 ### Frente D. Reputacion y primer lote
 
 - SPF, DKIM, DMARC y TLS.
-- Cinco semanas de trafico gradual real, sin redes artificiales de warmup.
+- Minimo seis semanas de warmup Apollo por buzon, mas seeds y trafico real controlado.
 - Treinta gates live.
 - Cinco cuentas exactas.
 - Aprobacion explicita de Jorge.
@@ -105,7 +107,7 @@ Jorge o ENNCO deben autorizar o entregar:
 
 ## Criterio de avance
 
-El siguiente milestone no es comprar todas las herramientas. Es entregar un `Activation Pack` que permita crear y conectar las cuentas correctas una sola vez. Mientras se decide y provisiona, investigacion, panel, QA, datos y dry runs siguen avanzando. Ningun estado local o sintetico autoriza trafico real.
+El siguiente milestone es cerrar el `Apollo Activation Pack`: plan, cuenta, propiedad, dominios, buzones, creditos, adapter y gates. Mientras se compra y provisiona, investigacion, panel, QA, datos y dry runs siguen avanzando. Ningun estado local, sintetico o score de warmup autoriza trafico real.
 
 ## Fuentes oficiales consultadas
 
@@ -113,4 +115,7 @@ El siguiente milestone no es comprar todas las herramientas. Es entregar un `Act
 - Gmail API, notificaciones push con Google Cloud Pub/Sub: <https://developers.google.com/workspace/gmail/api/guides/push>
 - Apollo, secuencias: <https://knowledge.apollo.io/hc/en-us/articles/4409237165837-Sequences-Overview>
 - Apollo, enriquecimiento CSV: <https://knowledge.apollo.io/hc/en-us/articles/4409226361229-Use-CSV-Enrichment>
+- Apollo, precios: <https://www.apollo.io/pricing>
+- Apollo, dominios y buzones: <https://knowledge.apollo.io/hc/en-us/articles/33476090833549-Generate-a-Domain-and-Mailbox-to-Reach-Prospects>
+- Apollo, warmup: <https://knowledge.apollo.io/hc/en-us/articles/26772718460045-Use-Email-Warmup-to-Improve-Deliverability>
 - Resend, politica de uso aceptable: <https://resend.com/legal/acceptable-use>

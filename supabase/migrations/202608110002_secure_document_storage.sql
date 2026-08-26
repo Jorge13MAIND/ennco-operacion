@@ -536,7 +536,30 @@ as $$
   );
 $$;
 
-alter table storage.objects enable row level security;
+do $$
+declare
+  storage_rls_enabled boolean;
+  storage_table_owner name;
+begin
+  select c.relrowsecurity, r.rolname
+  into storage_rls_enabled, storage_table_owner
+  from pg_catalog.pg_class c
+  join pg_catalog.pg_namespace n on n.oid = c.relnamespace
+  join pg_catalog.pg_roles r on r.oid = c.relowner
+  where n.nspname = 'storage'
+    and c.relname = 'objects';
+
+  if storage_rls_enabled is null then
+    raise exception 'MANAGED_STORAGE_OBJECTS_TABLE_REQUIRED';
+  end if;
+
+  if pg_has_role(current_user, storage_table_owner, 'USAGE') then
+    alter table storage.objects enable row level security;
+  elsif not storage_rls_enabled then
+    raise exception 'MANAGED_STORAGE_RLS_REQUIRED';
+  end if;
+end;
+$$;
 
 drop policy if exists ennco_sensitive_documents_read on storage.objects;
 drop policy if exists ennco_sensitive_documents_insert on storage.objects;

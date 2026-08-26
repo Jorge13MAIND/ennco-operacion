@@ -2,16 +2,32 @@ begin;
 
 drop trigger if exists messages_m022_rollback_fail_closed on public.messages;
 drop function if exists app.m022_block_real_outbound();
-drop trigger if exists control_cadence_policy_versions_m022_rollback_fail_closed on public.control_cadence_policy_versions;
-drop trigger if exists control_cadence_policy_items_m022_rollback_fail_closed on public.control_cadence_policy_items;
-drop trigger if exists control_cadence_occurrences_m022_rollback_fail_closed on public.control_cadence_occurrences;
-drop trigger if exists control_cadence_human_sessions_m022_rollback_fail_closed on public.control_cadence_human_sessions;
-drop trigger if exists control_cadence_attendance_m022_rollback_fail_closed on public.control_cadence_attendance;
-drop trigger if exists control_cadence_evidence_items_m022_rollback_fail_closed on public.control_cadence_evidence_items;
-drop trigger if exists control_cadence_delivery_requirements_m022_rollback_fail_closed on public.control_cadence_delivery_requirements;
-drop trigger if exists control_cadence_breaches_m022_rollback_fail_closed on public.control_cadence_breaches;
-drop trigger if exists control_cadence_reconciliation_runs_m022_rollback_fail_closed on public.control_cadence_reconciliation_runs;
-drop trigger if exists control_cadence_command_ledger_m022_rollback_fail_closed on public.control_cadence_command_ledger;
+do $$
+declare
+  target_table text;
+begin
+  foreach target_table in array array[
+    'control_cadence_policy_versions',
+    'control_cadence_policy_items',
+    'control_cadence_occurrences',
+    'control_cadence_human_sessions',
+    'control_cadence_attendance',
+    'control_cadence_evidence_items',
+    'control_cadence_delivery_requirements',
+    'control_cadence_breaches',
+    'control_cadence_reconciliation_runs',
+    'control_cadence_command_ledger'
+  ] loop
+    if to_regclass(format('public.%I', target_table)) is not null then
+      execute format(
+        'drop trigger if exists %I on public.%I',
+        target_table || '_m022_rollback_fail_closed',
+        target_table
+      );
+    end if;
+  end loop;
+end;
+$$;
 drop function if exists app.m022_rollback_fail_closed();
 
 create table if not exists public.control_cadence_policy_versions (

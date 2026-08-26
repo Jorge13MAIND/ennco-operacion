@@ -1,6 +1,15 @@
 import type { OperationsAccessContext } from "@/lib/auth/authorization";
 import { INITIAL_MILESTONES } from "@/lib/control-room/snapshot";
 import {
+  parseOutboundProviderReadiness,
+  providerBlockerLabel,
+} from "@/lib/infrastructure/provider";
+import {
+  hybridBlockerLabel,
+  isHybridOutboundReleaseAllowed,
+  parseHybridOutboundReadiness,
+} from "@/lib/infrastructure/hybrid-outbound";
+import {
   CONTROL_CADENCE_CODES,
   createUnknownControlCadenceHealth,
   isExternalSendAllowedWithCadence,
@@ -20,6 +29,7 @@ export const OPERATION_MODULE_KEYS = [
   "leads",
   "empresas",
   "precotizaciones",
+  "infraestructura",
   "campanas",
   "pipeline",
   "roadmap",
@@ -38,6 +48,7 @@ export const OPERATION_MODULE_LABELS: Record<OperationModuleKey, string> = {
   leads: "Leads",
   empresas: "Empresas",
   precotizaciones: "Precotizaciones",
+  infraestructura: "Infraestructura",
   campanas: "Campañas",
   pipeline: "Pipeline",
   roadmap: "Roadmap",
@@ -77,6 +88,42 @@ export type OperationsPortalSnapshot = {
     replySync: "HOLD" | "HEALTHY" | "DEGRADED";
     openP0: number;
     openP1: number;
+    outboundProvider: {
+      name: "Apollo";
+      state: "BLOCKED" | "WARMING" | "READY" | "UNKNOWN";
+      plan: string;
+      domainsReady: number;
+      domainsTarget: 2;
+      mailboxesReady: number;
+      mailboxesTarget: 3;
+      warmupDays: number;
+      warmupRequiredDays: 42;
+      ownership: "ENNCO" | "TECKEL" | "THIRD_PARTY" | "UNKNOWN";
+      releaseState: "HOLD" | "READY_FOR_CANARY";
+      activationGatesPassed: number;
+      activationGatesRequired: 15;
+      liveGatesPassed: number;
+      creditLimit: number | null;
+      creditsConsumed: number | null;
+      blockers: string[];
+    };
+    hybridOutbound: {
+      state: "BLOCKED" | "READY" | "UNKNOWN";
+      effectiveRelease: "HOLD" | "READY_FOR_CANARY" | "PAUSED" | "SCALE_ALLOWED" | "KILLED";
+      primaryMailboxReady: boolean;
+      primaryDailyCap: number;
+      primaryDeliveries: number;
+      isolatedMailboxesReady: number;
+      isolatedMailboxesTarget: 3;
+      isolatedWarmupDays: number[];
+      minimumAccounts: 75;
+      minimumContacts: 150;
+      operationalAccounts: 150;
+      operationalContacts: 300;
+      verifiedAccounts: number;
+      verifiedContacts: number;
+      blockers: string[];
+    };
     operations: {
       state: "HEALTHY" | "DEGRADED" | "UNKNOWN";
       reasonCode: string | null;
@@ -230,9 +277,26 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
       rows: [row("prequote-synthetic-1", sampleBadge, {
         folio: "ENN-PRE-DEMO0001",
         necesidad: "Solar nuevo",
-        modelo: "ENNCO-PREQ-2026-08-DRAFT-02",
-        estado: "Revisión técnica requerida",
+        modelo: "ENNCO-PREQ-2026-08-PACO-01",
+        estado: "Modelo validado. Resultado preliminar",
       })],
+    },
+    infraestructura: {
+      title: "Infraestructura comercial",
+      description: "Propiedad, presupuesto, dominios, buzones y evidencia live. Un activo configurado no equivale a autorización.",
+      emptyState: "No existe infraestructura ENNCO conectada.",
+      columns: [
+        { key: "control", label: "Control" },
+        { key: "objetivo", label: "Objetivo" },
+        { key: "estado", label: "Estado observado" },
+        { key: "siguiente", label: "Siguiente acción" },
+      ],
+      rows: [
+        row("infra-apollo", "HOLD", { control: "Apollo", objetivo: "Professional mensual, 1 asiento, propiedad ENNCO", estado: "No conectado", siguiente: "Aprobar compra y activar MFA" }),
+        row("infra-domains", "HOLD", { control: "Dominios", objetivo: "2 independientes", estado: "0/2", siguiente: "Comprar los primeros dos candidatos aptos" }),
+        row("infra-mailboxes", "HOLD", { control: "Buzones", objetivo: "4 Google Workspace", estado: "0/4", siguiente: "Crear, autenticar y calentar 42 días" }),
+        row("infra-evidence", "HOLD", { control: "Gates live", objetivo: "15/15", estado: "0/15", siguiente: "Sustituir evidencia sintética por evidencia de proveedor" }),
+      ],
     },
     campanas: {
       title: "Campañas",
@@ -301,17 +365,23 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         { key: "impacto", label: "Impacto" },
       ],
       rows: [
-        row("approval-annex-a", "BLOCKED_EXTERNAL", {
+        row("approval-annex-a", "IN_PROGRESS", {
           decision: "Anexo A vigente",
           responsable: "ENNCO",
-          estado: "Pendiente",
-          impacto: "Bloquea elegibilidad y cualquier outreach",
+          estado: "POSCO MPPC, MPE PLASTIC y TEJAS EL AGUILA",
+          impacto: "3 razones sociales, 12 alias y 6 dominios verificados. Falta binding transaccional en base",
         }),
-        row("approval-model", "BLOCKED_EXTERNAL", {
+        row("approval-model", "EVIDENCE_READY", {
           decision: "Modelo de precotización",
           responsable: "Paco",
-          estado: "Pendiente",
-          impacto: "Bloquea publicación de rangos",
+          estado: "Aprobado 20 ago 2026",
+          impacto: "Habilita el demo validado. Publicación real conserva gates legales y técnicos",
+        }),
+        row("approval-privacy", "BLOCKED_EXTERNAL", {
+          decision: "Aviso de privacidad 2026-08-11-v1",
+          responsable: "ENNCO + revisión legal",
+          estado: "Paquete exacto listo para aprobación",
+          impacto: "Sin aprobación ligada al SHA256 no se publica ni se habilita captura real",
         }),
       ],
     },
@@ -387,6 +457,25 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
       replySync: "HOLD",
       openP0: 10,
       openP1: 11,
+      outboundProvider: {
+        name: "Apollo",
+        state: "UNKNOWN",
+        plan: "Professional mensual pendiente de contratación",
+        domainsReady: 0,
+        domainsTarget: 2,
+        mailboxesReady: 0,
+        mailboxesTarget: 3,
+        warmupDays: 0,
+        warmupRequiredDays: 42,
+        ownership: "UNKNOWN",
+        releaseState: "HOLD",
+        activationGatesPassed: 0,
+        activationGatesRequired: 15,
+        liveGatesPassed: 0,
+        creditLimit: null,
+        creditsConsumed: null,
+        blockers: ["PROVIDER_NOT_CONNECTED_IN_SYNTHETIC_DEMO"],
+      },
       operations: {
         state: "UNKNOWN",
         reasonCode: "WATCHDOG_NOT_LIVE_IN_SYNTHETIC_DEMO",
@@ -414,14 +503,31 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
           "RESEARCH_DATABASE_NOT_LIVE",
           "RESEARCH_ACCOUNT_TARGET_NOT_MET",
           "RESEARCH_CONTACT_TARGET_NOT_MET",
-          "ANNEX_A_MISSING",
+          "ANNEX_A_DATABASE_BINDING_PENDING",
         ],
+      },
+      hybridOutbound: {
+        state: "UNKNOWN",
+        effectiveRelease: "HOLD",
+        primaryMailboxReady: false,
+        primaryDailyCap: 0,
+        primaryDeliveries: 0,
+        isolatedMailboxesReady: 0,
+        isolatedMailboxesTarget: 3,
+        isolatedWarmupDays: [],
+        minimumAccounts: 75,
+        minimumContacts: 150,
+        operationalAccounts: 150,
+        operationalContacts: 300,
+        verifiedAccounts: 0,
+        verifiedContacts: 0,
+        blockers: ["HYBRID_OUTBOUND_NOT_LIVE_IN_SYNTHETIC_DEMO"],
       },
       cadence: cadenceHealth,
     },
     nextActions: [
-      row("next-annex", "BLOCKED_EXTERNAL", { objective: "Importar y conciliar Anexo A", due: "Al recibirlo", owner: "Teckel + ENNCO" }),
-      row("next-model", "BLOCKED_EXTERNAL", { objective: "Validar modelo y rangos", due: "Antes de publicar", owner: "Paco" }),
+      row("next-annex", "BLOCKED_EXTERNAL", { objective: "Vincular en base las 3 empresas y sus 6 dominios bloqueados", due: "Antes de cargar destinatarios", owner: "Teckel Platform" }),
+      row("next-privacy", "BLOCKED_EXTERNAL", { objective: "Aprobar aviso 2026-08-11-v1 ligado a SHA256", due: "Antes de publicación real", owner: "ENNCO + revisión legal" }),
       row("next-m9", "BLOCKED_EXTERNAL", { objective: "Ejecutar gates live de entrega y aceptación", due: "M9", owner: "ENNCO + Teckel" }),
     ],
     modules,
@@ -486,6 +592,10 @@ export function sumFirstPaymentsMxn(payments: Array<Record<string, unknown>>): n
     const amount = Number(payment.amount_mxn ?? 0);
     return Number.isFinite(amount) && amount > 0 ? total + amount : total;
   }, 0);
+}
+
+export function providerBlockersForHybridPlan(blockers: string[]): string[] {
+  return blockers;
 }
 
 const STRICT_PIPELINE_STAGES = new Set([
@@ -596,6 +706,16 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       target_evaluated_at: evaluatedAt,
     }),
   ]);
+  const providerPromise = Promise.allSettled([
+    client.rpc("evaluate_outbound_provider_readiness", {
+      target_organization_id: organizationId,
+      target_evaluated_at: evaluatedAt,
+    }),
+    client.rpc("evaluate_hybrid_outbound_readiness", {
+      target_organization_id: organizationId,
+      target_evaluated_at: evaluatedAt,
+    }),
+  ]);
   const results = await Promise.all([
     client.from("runtime_controls").select("global_kill_switch,external_send_allowed").eq("organization_id", organizationId).maybeSingle(),
     client.from("accounts").select("id,legal_name,state,sector,source_confidence,updated_at", { count: "exact" }).eq("organization_id", organizationId).eq("is_deleted", false).limit(200),
@@ -635,6 +755,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const [researchAccountsSettled, researchCandidatesSettled, researchDedupeSettled, researchAssessmentSettled] = await researchPromise;
   const [approvalRequestsSettled, operationalSlaSettled, operationsIncidentsSettled, operationsHealthSettled] = await operationsPromise;
   const [cadenceHealthSettled] = await cadencePromise;
+  const [providerReadinessSettled, hybridReadinessSettled] = await providerPromise;
   const capacitySchedulesResult = capacitySchedulesSettled.status === "fulfilled" && !capacitySchedulesSettled.value.error
     ? capacitySchedulesSettled.value
     : null;
@@ -677,6 +798,26 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     expectedOrganizationId: organizationId,
     evaluatedAt,
   });
+  const providerRpcAvailable = providerReadinessSettled.status === "fulfilled"
+    && !providerReadinessSettled.value.error;
+  const providerReadiness = parseOutboundProviderReadiness({
+    rpcAvailable: providerRpcAvailable,
+    rpcData: providerRpcAvailable ? providerReadinessSettled.value.data : null,
+    expectedOrganizationId: organizationId,
+    evaluatedAt,
+  });
+  const hybridRpcAvailable = hybridReadinessSettled.status === "fulfilled"
+    && !hybridReadinessSettled.value.error;
+  const hybridReadiness = parseHybridOutboundReadiness({
+    rpcAvailable: hybridRpcAvailable,
+    rpcData: hybridRpcAvailable ? hybridReadinessSettled.value.data : null,
+    expectedOrganizationId: organizationId,
+    evaluatedAt,
+  });
+  const primaryMailboxReadiness = hybridReadiness.mailboxes.find((mailbox) =>
+    mailbox.route === "EXISTING_PRIMARY_GMAIL_RAMP");
+  const isolatedMailboxReadiness = hybridReadiness.mailboxes.filter((mailbox) =>
+    mailbox.route === "NEW_ISOLATED_MAILBOX_WARMUP");
   const accounts = asRows(accountsResult.data);
   const contacts = asRows(contactsResult.data);
   const messages = asRows(messagesResult.data);
@@ -809,7 +950,9 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       t0: baseline
         ? `${textValue(baseline.valid_first_deliveries)}/100. ${textValue(baseline.strict_leads, "0")} leads estrictos`
         : "T0 no congelado",
-      envio: runtimeOpen && operationsOpen && releaseReady ? "LISTO EN VENTANA" : "HOLD",
+      envio: runtimeOpen && operationsOpen && isHybridOutboundReleaseAllowed(hybridReadiness) && releaseReady
+        ? "LISTO EN VENTANA"
+        : "HOLD",
     });
   });
   const strictQualifiedOpportunities = opportunities.filter(isStrictQualifiedOpportunity);
@@ -920,6 +1063,83 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     .sort((left, right) => new Date(left.values.due_iso ?? 0).getTime() - new Date(right.values.due_iso ?? 0).getTime())
     .slice(0, 8);
 
+  const providerOwnership = providerReadiness.ownership === "ENNCO_OWNED"
+    ? "ENNCO"
+    : providerReadiness.ownership === "TECKEL_OWNED"
+      ? "TECKEL"
+      : providerReadiness.ownership === "THIRD_PARTY" ? "THIRD_PARTY" : "UNKNOWN";
+  const providerDisplayBlockers = providerBlockersForHybridPlan(providerReadiness.blockers);
+  const providerInfrastructureRows: PortalRow[] = [
+    row("hybrid-primary-mailbox", primaryMailboxReadiness?.state ?? "UNKNOWN", {
+      control: "Carril acelerado Tier 1",
+      objetivo: "contacto@ennco.com.mx. Gmail API. Máximo 50 cuentas y 20 correos diarios",
+      estado: primaryMailboxReadiness
+        ? `${primaryMailboxReadiness.effective_release}. ${primaryMailboxReadiness.valid_deliveries} entregas. Cap ${primaryMailboxReadiness.daily_cap}/día`
+        : "Sin lectura live",
+      siguiente: primaryMailboxReadiness?.state === "READY"
+        ? "Congelar canary exacto de cinco empresas"
+        : "Completar DKIM, seeds, OAuth, reply sync y manifiesto",
+    }),
+    row("hybrid-isolated-mailboxes", hybridReadiness.isolated_mailboxes_ready === 3 ? "PASS" : "WARMING", {
+      control: "Carril escalable aislado",
+      objetivo: "3 buzones en enncoindustrial.com y enncoenergia.com",
+      estado: `${hybridReadiness.isolated_mailboxes_ready}/3 listos. Warmup ${isolatedMailboxReadiness.map((mailbox) => `${mailbox.normalized_email} ${mailbox.warmup_days}/42`).join("; ") || "sin evidencia"}`,
+      siguiente: hybridReadiness.isolated_mailboxes_ready === 3
+        ? "Preparar canary aislado"
+        : "Completar 42 días sin prospectos",
+    }),
+    row("hybrid-inventory", hybridReadiness.inventory.verified_contacts >= 300 ? "PASS" : "EXTEND", {
+      control: "Inventario comercial",
+      objetivo: "Mínimo 75/150. Meta operativa 150/300",
+      estado: `${hybridReadiness.inventory.verified_accounts}/${hybridReadiness.inventory.operational_accounts} empresas. ${hybridReadiness.inventory.verified_contacts}/${hybridReadiness.inventory.operational_contacts} contactos`,
+      siguiente: "Guanajuato y Querétaro primero, dos roles por cuenta cuando sea posible",
+    }),
+    row("provider-account", providerReadiness.state, {
+      control: "Cuenta Apollo",
+      objetivo: "Workspace Teckel dedicado exclusivamente a ENNCO, identidad Francisco Cuellar",
+      estado: `${providerReadiness.plan}. Custodia ${providerOwnership}. ${providerReadiness.workspace_mode}`,
+      siguiente: providerReadiness.provider_account_id ? "Verificar identidad, team ID y archivo Teckel" : "Registrar el workspace Apollo reconvertido",
+    }),
+    row("provider-domains", providerReadiness.domains_ready === 2 ? "PASS" : "HOLD", {
+      control: "Dominios de outreach",
+      objetivo: "2 dominios administrados por Apollo: enncoindustrial.com y enncoenergia.com",
+      estado: `${providerReadiness.domains_ready}/${providerReadiness.domains_target} listos`,
+      siguiente: providerReadiness.domains_ready === 2 ? "Monitorear reputación" : "Comprar en Apollo e iniciar autenticación",
+    }),
+    row("provider-mailboxes", hybridReadiness.isolated_mailboxes_ready === 3 ? "PASS" : "WARMING", {
+      control: "Buzones aislados Apollo",
+      objetivo: "3 buzones aprobados. El cuarto está diferido hasta 100 entregas válidas",
+      estado: `${hybridReadiness.isolated_mailboxes_ready}/3 listos`,
+      siguiente: hybridReadiness.isolated_mailboxes_ready === 3 ? "Mantener salud diaria" : "Provisionar y completar warmup de 42 días",
+    }),
+    row("provider-budget", providerReadiness.credit_limit !== null ? "PASS" : "HOLD", {
+      control: "Presupuesto Apollo",
+      objetivo: "300 investigación, 3,600 infraestructura, buffer mínimo 110, cero teléfonos",
+      estado: providerReadiness.credit_limit === null
+        ? "Sin lectura live"
+        : `${providerReadiness.credits_consumed ?? 0}/${providerReadiness.credit_limit} créditos`,
+      siguiente: "Revisar consumo por contacto exacto",
+    }),
+    row("provider-gates", providerReadiness.release_state, {
+      control: "Gates de activación",
+      objetivo: "15/15 PASS con evidencia live",
+      estado: `${providerReadiness.activation_gates_passed}/15 totales. ${providerReadiness.live_gates_passed}/15 live`,
+      siguiente: providerReadiness.release_state === "READY_FOR_CANARY" ? "Congelar manifiesto" : "Cerrar evidencia faltante",
+    }),
+    ...providerDisplayBlockers.map((blocker, index) => row(`provider-blocker-${index + 1}`, "HOLD", {
+      control: `Bloqueador ${index + 1}`,
+      objetivo: blocker,
+      estado: "HOLD",
+      siguiente: providerBlockerLabel(blocker),
+    })),
+    ...hybridReadiness.blockers.map((blocker, index) => row(`hybrid-blocker-${index + 1}`, "HOLD", {
+      control: `Bloqueador híbrido ${index + 1}`,
+      objetivo: blocker,
+      estado: "HOLD",
+      siguiente: hybridBlockerLabel(blocker),
+    })),
+  ];
+
   const base = getSyntheticOperationsPortal();
   return {
     evidenceClass: "live",
@@ -939,7 +1159,8 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     },
     health: {
       killSwitch: controls?.global_kill_switch !== false,
-      externalSendAllowed: isExternalSendAllowedWithCadence(controls?.external_send_allowed === true
+      externalSendAllowed: isHybridOutboundReleaseAllowed(hybridReadiness)
+        && isExternalSendAllowedWithCadence(controls?.external_send_allowed === true
         && controls?.global_kill_switch === false
         && operationsReadReady
         && operationsHealth?.state === "HEALTHY"
@@ -947,6 +1168,42 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       replySync,
       openP0: operationsHealth?.open_p0 ?? openP0,
       openP1: operationsHealth?.open_p1 ?? openP1,
+      outboundProvider: {
+        name: "Apollo",
+        state: providerReadiness.state,
+        plan: providerReadiness.plan,
+        domainsReady: providerReadiness.domains_ready,
+        domainsTarget: 2,
+        mailboxesReady: hybridReadiness.isolated_mailboxes_ready,
+        mailboxesTarget: 3,
+        warmupDays: providerReadiness.warmup_days,
+        warmupRequiredDays: 42,
+        ownership: providerOwnership,
+        releaseState: providerReadiness.release_state,
+        activationGatesPassed: providerReadiness.activation_gates_passed,
+        activationGatesRequired: 15,
+        liveGatesPassed: providerReadiness.live_gates_passed,
+        creditLimit: providerReadiness.credit_limit,
+        creditsConsumed: providerReadiness.credits_consumed,
+        blockers: providerDisplayBlockers,
+      },
+      hybridOutbound: {
+        state: hybridReadiness.state,
+        effectiveRelease: hybridReadiness.effective_release,
+        primaryMailboxReady: hybridReadiness.primary_mailbox_ready,
+        primaryDailyCap: primaryMailboxReadiness?.daily_cap ?? 0,
+        primaryDeliveries: primaryMailboxReadiness?.valid_deliveries ?? 0,
+        isolatedMailboxesReady: hybridReadiness.isolated_mailboxes_ready,
+        isolatedMailboxesTarget: 3,
+        isolatedWarmupDays: isolatedMailboxReadiness.map((mailbox) => mailbox.warmup_days),
+        minimumAccounts: 75,
+        minimumContacts: 150,
+        operationalAccounts: 150,
+        operationalContacts: 300,
+        verifiedAccounts: hybridReadiness.inventory.verified_accounts,
+        verifiedContacts: hybridReadiness.inventory.verified_contacts,
+        blockers: hybridReadiness.blockers,
+      },
       operations: {
         state: operationsHealth?.state ?? "UNKNOWN",
         reasonCode: operationsHealth?.reason_code ?? (operationsReadReady ? null : "OPERATIONS_READ_MODEL_UNAVAILABLE"),
@@ -984,6 +1241,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       leads: { ...base.modules.leads, rows: leadRows },
       empresas: { ...base.modules.empresas, rows: accountRows },
       precotizaciones: { ...base.modules.precotizaciones, rows: prequoteRows },
+      infraestructura: { ...base.modules.infraestructura, rows: providerInfrastructureRows },
       campanas: { ...base.modules.campanas, rows: campaignRows },
       pipeline: { ...base.modules.pipeline, rows: pipelineRows },
       roadmap: { ...base.modules.roadmap, rows: roadmapRows },

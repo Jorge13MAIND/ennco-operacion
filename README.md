@@ -7,7 +7,7 @@ Sistema comercial E2E de ENNCO. Este repositorio contiene la experiencia públic
 - M0: paquete interno auditado y `EVIDENCE_READY`. Gate global `EXTEND` por insumos externos faltantes. No es cierre contractual.
 - M1: golden path local `PASS` con datos sintéticos y cero efectos externos.
 - M2: seguridad, Storage, audit allowlist, retención y restore local en `PASS`. Gate global `EXTEND` hasta validar proveedor, legal, secretos, antivirus, PITR y RTO.
-- M3: captación, precotizador, PDF, persistencia y analítica local en `PASS`. Gate global `EXTEND` hasta aprobar modelo, aviso, antivirus y Supabase real.
+- M3: captación, precotizador, PDF, persistencia y analítica local en `PASS`. Paco validó el modelo `ENNCO-PREQ-2026-08-PACO-01`; el gate global sigue `EXTEND` hasta aprobar aviso, antivirus, Supabase real y UAT.
 - M4: portal operativo, Gmail push, respuestas, calificación, pipeline y exportaciones locales en `PASS`. Gate global `EXTEND` hasta provisionar proveedores y ejecutar UAT ENNCO.
 - M5: secuencia, manifest, assistant acotado y shadow canary acelerado local en `PASS`. Gate global `EXTEND` porque han transcurrido cero de 14 días reales.
 - M6: paquete de primer envío, 30 gates, lote inmutable y bloqueo SQL local en `PASS`. Gate global `EXTEND`, campaña `HOLD`, cero destinatarios y cero envíos.
@@ -154,6 +154,44 @@ Un `PASS` local valida implementación y controles. No equivale a producción, r
 6. Ejecuta el golden path. Debe mostrar ocho etapas, cero efectos externos y estado `COMPLETED`.
 7. Repite con la misma llave. Debe mostrar `DUPLICATE`.
 
+### Preflight Apollo sin envíos
+
+El contrato sintético se verifica con:
+
+```bash
+npm run verify:apollo-api-contract
+```
+
+Cuando Paco termine la cuenta y la llave esté cargada como secreto de entorno, la captura live se ejecuta con:
+
+```bash
+npm run capture:apollo-api-readiness
+```
+
+La captura sólo consulta perfil, créditos, buzones y contactos guardados por email exacto. Siempre conserva el envío externo bloqueado. La llave nunca se escribe en evidencia o logs.
+
+### M29, salida híbrida
+
+El control vigente separa dos carriles. `contacto@ennco.com.mx` puede preparar un canary Tier 1 por Gmail API sólo con autenticación, seeds, historial, reply sync, supresión y manifiesto live. Los tres buzones aislados conservan 42 días completos de warmup sin prospectos.
+
+```bash
+npm run verify:hybrid-outbound-db
+npm test -- --run src/lib/infrastructure/hybrid-outbound.test.ts src/app/api/v1/operations/infrastructure/hybrid/hybrid-routes.test.ts
+```
+
+### M30, Gmail OAuth y KMS
+
+Estado productivo: `DEPLOYED_HOLD`. Ver `docs/evidence/M30-gmail-oauth-kms-gate-report.md`.
+
+El broker local usa MFA, PKCE, state cifrado e identidad exacta. El refresh token se cifra en Google Cloud KMS antes de persistirse en una bóveda sin acceso directo. La integración live permanece apagada hasta configurar Google Cloud y DKIM.
+
+```bash
+npm run verify:gmail-oauth-kms-db
+npm test -- --run src/lib/gmail/oauth.test.ts src/app/api/v1/operations/infrastructure/gmail/oauth/oauth-routes.test.ts
+```
+
+La rampa diaria del buzón principal es 5, 10, 15 y 20 según entregas acumuladas. Una queja, un rebote duro temprano o cualquier deriva de identidad, supresión, reply sync o manifiesto bloquea el envío. El mínimo de inventario sigue en 75/150 y la meta operativa es 150/300.
+
 El endpoint sintético devuelve 404 en producción. El assistant devuelve 503 hasta su release gate. La precotización usa exclusivamente un modelo draft y datos sintéticos. La superficie pública y el aviso legal permanecen en `HOLD`.
 
 ## Acceso y documentos
@@ -165,15 +203,15 @@ El endpoint sintético devuelve 404 en producción. El assistant devuelve 503 ha
 
 ## Bloqueos humanos visibles
 
-- Anexo A recibido, conciliado y hasheado.
+- Anexo A recibido, identidades y dominios verificados; M025 transaccional pasa localmente y falta aplicarlo en Supabase ENNCO aislado.
 - PDF ejecutado del contrato y certificado BoldSign archivados.
 - Evidencia de primer pago y constancia de inicio acumulativa.
 - Aprobación de compras, dominios, DNS, credenciales, producción y primer envío.
-- Validación técnica de Paco para cualquier modelo de precotización.
+- Cualquier cambio futuro del modelo de precotización requiere una nueva validación de Paco. La versión `ENNCO-PREQ-2026-08-PACO-01` ya tiene sus parámetros congelados.
 - Revisión legal del aviso de privacidad y aprobación de su versión final.
-- Propiedad ENNCO de repositorio y proveedores, con accesos recertificados.
+- Custodia Teckel de repositorio y proveedores para ENNCO, con accesos recertificados y exportación obligatoria.
 - Restore, auditoría, export y reimport en infraestructura administrada.
-- UAT, capacitación del operador y suplente, walkthrough y aceptación final.
+- UAT, capacitación del operador Teckel, walkthrough y aceptación final. ENNCO confirmó que no habrá suplente.
 
 Ninguno bloquea el trabajo interno seguro. Todos bloquean la acción externa que les corresponde.
 

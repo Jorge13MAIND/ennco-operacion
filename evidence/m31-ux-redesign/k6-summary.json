@@ -1,0 +1,192 @@
+{
+    "metrics": {
+        "http_req_sending": {
+            "p(90)": 0.028,
+            "p(95)": 0.052,
+            "avg": 0.06315270935960587,
+            "min": 0.003,
+            "med": 0.011,
+            "max": 3.398
+        },
+        "iteration_duration": {
+            "min": 1.078416,
+            "med": 10.338417,
+            "max": 67.241417,
+            "p(90)": 19.5775584,
+            "p(95)": 21.365916399999996,
+            "avg": 12.095530152709356
+        },
+        "vus": {
+            "max": 0,
+            "value": 0,
+            "min": 0
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 203,
+            "thresholds": {
+                "rate==0": false
+            },
+            "value": 0
+        },
+        "http_req_duration{expected_response:true}": {
+            "p(90)": 19.177599999999998,
+            "p(95)": 21.119199999999992,
+            "avg": 11.771059113300499,
+            "min": 0.99,
+            "med": 10.085,
+            "max": 64.874
+        },
+        "data_sent": {
+            "count": 28015,
+            "rate": 2799.030415464436
+        },
+        "dropped_iterations": {
+            "count": 0,
+            "rate": 0,
+            "thresholds": {
+                "count==0": false
+            }
+        },
+        "http_req_connecting": {
+            "min": 0,
+            "med": 0,
+            "max": 0.484,
+            "p(90)": 0,
+            "p(95)": 0.3689,
+            "avg": 0.030073891625615766
+        },
+        "http_req_receiving": {
+            "avg": 0.12299507389162562,
+            "min": 0.018,
+            "med": 0.063,
+            "max": 2.434,
+            "p(90)": 0.22420000000000007,
+            "p(95)": 0.3508999999999999
+        },
+        "iterations": {
+            "count": 203,
+            "rate": 20.282105098671444
+        },
+        "checks": {
+            "passes": 406,
+            "fails": 0,
+            "thresholds": {
+                "rate==1": false
+            },
+            "value": 1
+        },
+        "data_received": {
+            "count": 4203425,
+            "rate": 419971.958740803
+        },
+        "http_req_blocked": {
+            "p(90)": 0.022400000000000014,
+            "p(95)": 0.3937,
+            "avg": 0.07571428571428582,
+            "min": 0.001,
+            "med": 0.004,
+            "max": 4.377
+        },
+        "http_req_waiting": {
+            "med": 9.904,
+            "max": 62.099,
+            "p(90)": 18.6872,
+            "p(95)": 20.894399999999994,
+            "avg": 11.58491133004926,
+            "min": 0.937
+        },
+        "http_req_duration": {
+            "avg": 11.771059113300499,
+            "min": 0.99,
+            "med": 10.085,
+            "max": 64.874,
+            "p(90)": 19.177599999999998,
+            "p(95)": 21.119199999999992,
+            "thresholds": {
+                "p(95)<800": false
+            }
+        },
+        "http_req_tls_handshaking": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "vus_max": {
+            "value": 16,
+            "min": 16,
+            "max": 16
+        },
+        "http_reqs": {
+            "count": 203,
+            "rate": 20.282105098671444
+        }
+    },
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {},
+        "checks": {
+                "health returned 200": {
+                    "name": "health returned 200",
+                    "path": "::health returned 200",
+                    "id": "1a43b0500b9b85009cc040bfe4f4f8f3",
+                    "passes": 51,
+                    "fails": 0
+                },
+                "health returned the expected fail-closed surface": {
+                    "id": "d2420075a645a2c6991e527d5663f161",
+                    "passes": 51,
+                    "fails": 0,
+                    "name": "health returned the expected fail-closed surface",
+                    "path": "::health returned the expected fail-closed surface"
+                },
+                "home returned 200": {
+                    "path": "::home returned 200",
+                    "id": "f115509effaf628b447b2a514812d34f",
+                    "passes": 51,
+                    "fails": 0,
+                    "name": "home returned 200"
+                },
+                "home returned the expected fail-closed surface": {
+                    "passes": 51,
+                    "fails": 0,
+                    "name": "home returned the expected fail-closed surface",
+                    "path": "::home returned the expected fail-closed surface",
+                    "id": "b8545b42f4e524b76d0fd329dcc1b71d"
+                },
+                "diagnostic returned 200": {
+                    "fails": 0,
+                    "name": "diagnostic returned 200",
+                    "path": "::diagnostic returned 200",
+                    "id": "fd04a9965cac0ce652de653f2d93dbf4",
+                    "passes": 51
+                },
+                "diagnostic returned the expected fail-closed surface": {
+                    "name": "diagnostic returned the expected fail-closed surface",
+                    "path": "::diagnostic returned the expected fail-closed surface",
+                    "id": "2c41a5db3e5d91878272f20359bf6927",
+                    "passes": 51,
+                    "fails": 0
+                },
+                "portal returned 200": {
+                    "id": "a70827167aa2a97c0917ddd07a9a29b4",
+                    "passes": 50,
+                    "fails": 0,
+                    "name": "portal returned 200",
+                    "path": "::portal returned 200"
+                },
+                "portal returned the expected fail-closed surface": {
+                    "id": "0a17aaa19a15968c1363d2a0124ae11f",
+                    "passes": 50,
+                    "fails": 0,
+                    "name": "portal returned the expected fail-closed surface",
+                    "path": "::portal returned the expected fail-closed surface"
+                }
+            }
+    }
+}

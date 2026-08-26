@@ -2,7 +2,7 @@ import type { Metadata, MetadataRoute } from "next";
 
 import { PUBLIC_SURFACE_ORIGIN, type RuntimeConfig } from "@/lib/runtime/config";
 
-export const PUBLIC_INDEXABLE_ROUTES = ["/diagnostico", "/privacidad"] as const;
+export const PUBLIC_INDEXABLE_ROUTES = ["/", "/diagnostico", "/privacidad"] as const;
 export const NEVER_INDEX_ROUTE_PREFIXES = ["/api", "/ingreso", "/operacion"] as const;
 
 export type PublicIndexableRoute = (typeof PUBLIC_INDEXABLE_ROUTES)[number];
@@ -66,7 +66,7 @@ export function buildRobots(config: RuntimeConfig): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: [...PUBLIC_INDEXABLE_ROUTES],
-      disallow: ["/", ...NEVER_INDEX_ROUTE_PREFIXES],
+      disallow: [...NEVER_INDEX_ROUTE_PREFIXES],
     },
     sitemap: new URL("/sitemap.xml", config.appUrl).toString(),
     host: new URL(config.appUrl).origin,

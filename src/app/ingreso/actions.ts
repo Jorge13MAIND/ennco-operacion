@@ -32,13 +32,14 @@ export async function signIn(formData: FormData) {
   });
   if (error) redirectTo("/ingreso?reason=invalid");
 
-  const { data: assurance, error: assuranceError } =
-    await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-  if (assuranceError) redirectTo("/ingreso?reason=unavailable");
-
   const next = safeInternalNextPath(parsed.data.next);
-  if (config.requireMfa && assurance.currentLevel !== "aal2") {
-    redirectTo(`/ingreso/mfa?next=${encodeURIComponent(next)}`);
+  if (config.requireMfa) {
+    const { data: assurance, error: assuranceError } =
+      await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (assuranceError) redirectTo("/ingreso?reason=unavailable");
+    if (assurance.currentLevel !== "aal2") {
+      redirectTo(`/ingreso/mfa?next=${encodeURIComponent(next)}`);
+    }
   }
   redirectTo(next);
 }

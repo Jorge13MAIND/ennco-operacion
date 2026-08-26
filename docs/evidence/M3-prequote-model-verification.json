@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-12T04:01:44.006Z",
+  "generated_at": "2026-08-20T20:10:20.379Z",
   "evidence_class": "local_source_audit",
   "verdict": "PASS",
-  "model_version": "ENNCO-PREQ-2026-08-DRAFT-02",
-  "model_release_status": "DRAFT_REVIEW_REQUIRED",
+  "model_version": "ENNCO-PREQ-2026-08-PACO-01",
+  "model_release_status": "APPROVED",
   "model_approval_required_by": "Paco",
-  "source_count": 7,
+  "source_count": 8,
   "local_binary_sources_verified": 5,
   "historical_summary": {
     "rows": 20,
@@ -17,12 +17,12 @@
     {
       "id": "MODEL_VERSION_MATCH",
       "status": "PASS",
-      "details": "ENNCO-PREQ-2026-08-DRAFT-02"
+      "details": "ENNCO-PREQ-2026-08-PACO-01"
     },
     {
-      "id": "MODEL_REMAINS_REVIEW_GATED",
+      "id": "MODEL_TECHNICAL_INPUT_APPROVED",
       "status": "PASS",
-      "details": "DRAFT_REVIEW_REQUIRED/DRAFT_REVIEW_REQUIRED"
+      "details": "APPROVED/APPROVED"
     },
     {
       "id": "MODEL_APPROVER_IS_PACO",
@@ -30,14 +30,19 @@
       "details": "Paco"
     },
     {
+      "id": "MODEL_APPROVAL_SOURCE_PATH",
+      "status": "PASS",
+      "details": "data/prequote/paco-approved-parameters-2026-08-20.json"
+    },
+    {
       "id": "MODEL_HAS_EXPIRY",
       "status": "PASS",
-      "details": "2026-09-10T23:59:59-06:00"
+      "details": "2026-09-19T23:59:59-06:00"
     },
     {
       "id": "MODEL_NOT_EXPIRED_AT_SNAPSHOT",
       "status": "PASS",
-      "details": "2026-08-11 -> 2026-09-10T23:59:59-06:00"
+      "details": "2026-08-20 -> 2026-09-19T23:59:59-06:00"
     },
     {
       "id": "MODEL_SOURCE_MANIFEST_PATH",
@@ -45,14 +50,24 @@
       "details": "data/prequote/source-manifest.json"
     },
     {
+      "id": "PACO_APPROVAL_SOURCE_HASH",
+      "status": "PASS",
+      "details": "d3fc79b8bce4888253bcf4b611b7af1251f875d4725f7dce4cd3481f4681217d"
+    },
+    {
+      "id": "PACO_APPROVAL_SCOPE",
+      "status": "PASS",
+      "details": "Parámetros técnicos y referencias comerciales del precotizador preliminar"
+    },
+    {
       "id": "SOURCE_IDS_UNIQUE",
       "status": "PASS",
-      "details": "7 ids"
+      "details": "8 ids"
     },
     {
       "id": "SOURCES_HAVE_INTEGRITY_POINTER",
       "status": "PASS",
-      "details": "7 sources"
+      "details": "8 sources"
     },
     {
       "id": "CALIBRATION_SOURCE_COVERAGE",
@@ -105,9 +120,24 @@
       "details": "54.825 kWp max"
     },
     {
-      "id": "INDUSTRIAL_TIER_MARKED_EXTRAPOLATED",
+      "id": "NO_AUTOMATIC_INDUSTRIAL_INVESTMENT_TIER",
       "status": "PASS",
-      "details": "100 kWp tier"
+      "details": "TECHNICAL_COMMERCIAL_REVIEW_REQUIRED"
+    },
+    {
+      "id": "PACO_TECHNICAL_RANGES_MATCH",
+      "status": "PASS",
+      "details": "rate/yield/module/area"
+    },
+    {
+      "id": "PACO_INVESTMENT_BANDS_MATCH",
+      "status": "PASS",
+      "details": "{\"underThirtyTier\":{\"minKwp\":0,\"min\":18000,\"max\":29000,\"evidenceStatus\":\"PACO_APPROVED_UNDER_30_KWP\"},\"fromThirtyTier\":{\"minKwp\":30,\"min\":17000,\"max\":24000,\"evidenceStatus\":\"PACO_APPROVED_FROM_30_KWP\"}}"
+    },
+    {
+      "id": "COMMERCIAL_REFERENCES_ARE_NON_AUTOMATIC",
+      "status": "PASS",
+      "details": "{\"hiddenDefectsWarrantyMonths\":24,\"cashDiscountPct\":{\"min\":3,\"max\":6},\"installedModuleStartingPriceMxn\":11000,\"contractualPriceRequiresCommercialValidation\":true,\"installationDateDependsOnMaterialsAndWorkSchedule\":true,\"automaticCommitmentsAllowed\":false}"
     },
     {
       "id": "BACKTEST_CASE_COUNT",
@@ -146,14 +176,14 @@
       "source_id": "SRC-PROPOSAL-001",
       "input_monthly_spend_mxn": 15923.6,
       "predicted_capacity_kwp": {
-        "min": 26.737,
-        "max": 44.507
+        "min": 25.927,
+        "max": 42.653
       },
       "source_capacity_kwp": 39,
       "capacity_pass": true,
       "predicted_investment_mxn": {
-        "min": 427798.21,
-        "max": 1068166.96
+        "min": 466688.96,
+        "max": 1023660
       },
       "source_investment_mxn": 796880.11,
       "investment_pass": true,
@@ -165,14 +195,14 @@
       "source_id": "SRC-PROPOSAL-002",
       "input_monthly_spend_mxn": 13700.56,
       "predicted_capacity_kwp": {
-        "min": 23.005,
-        "max": 38.293
+        "min": 22.308,
+        "max": 36.698
       },
       "source_capacity_kwp": 32.5,
       "capacity_pass": true,
       "predicted_investment_mxn": {
-        "min": 368074.75,
-        "max": 919043.78
+        "min": 401536.09,
+        "max": 880750.29
       },
       "source_investment_mxn": 700214.2,
       "investment_pass": true,
@@ -184,14 +214,14 @@
       "source_id": "SRC-PROPOSAL-003",
       "input_monthly_spend_mxn": 15100,
       "predicted_capacity_kwp": {
-        "min": 28.172,
-        "max": 46.894
+        "min": 27.318,
+        "max": 44.94
       },
       "source_capacity_kwp": 35.48,
       "capacity_pass": true,
       "predicted_investment_mxn": {
-        "min": 450746.27,
-        "max": 1125465.84
+        "min": 491723.2,
+        "max": 1078571.43
       },
       "source_investment_mxn": 687334.8,
       "investment_pass": true,
@@ -206,14 +236,14 @@
       "source_id": "SRC-PROPOSAL-004",
       "input_monthly_spend_mxn": 19185.07,
       "predicted_capacity_kwp": {
-        "min": 33.109,
-        "max": 55.112
+        "min": 32.105,
+        "max": 52.816
       },
       "source_capacity_kwp": 44.64,
       "capacity_pass": true,
       "predicted_investment_mxn": {
-        "min": 529737.15,
-        "max": 1322697.72
+        "min": 545789.79,
+        "max": 1267585.31
       },
       "source_investment_mxn": 898680.25,
       "investment_pass": true,
@@ -263,6 +293,8 @@
   "limitations": [
     "Four proposals are commercial proposals, not as-built evidence.",
     "No delivered historical project in the supplied workbook reaches 100 kWp.",
-    "An approved model and a technical receipt review remain mandatory before live use."
+    "Paco approved the technical ranges and commercial references relayed on 2026-08-20.",
+    "Projects at or above 100 kWp have no automatic investment range.",
+    "Privacy approval, managed infrastructure, UAT and an explicit public release remain mandatory before live use."
   ]
 }

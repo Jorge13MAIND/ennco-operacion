@@ -2,9 +2,9 @@ import { expect, test } from "@playwright/test";
 
 test("home exposes the two primary surfaces", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("De la planta correcta");
-  await expect(page.getByRole("link", { name: "Abrir diagnóstico" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Ver Control Room" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Energía que se convierte en capacidad operativa");
+  await expect(page.getByRole("link", { name: "Evaluar mi proyecto" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Entrar al Control Room" })).toBeVisible();
 });
 
 test("application surfaces return the security header baseline", async ({ request }) => {
@@ -29,6 +29,9 @@ test("diagnostic calculates a synthetic range and returns a private PDF", async 
   await page.goto("/diagnostico");
   await page.getByRole("button", { name: "Generar referencia" }).click();
   await expect(page.getByText(/ENN-PRE-/)).toBeVisible();
+  await expect(page.getByText("Revisión técnica y comercial", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Precio de arranque: \$11,000 por módulo instalado/)).toBeVisible();
+  await expect(page.getByText(/Garantía de referencia: 24 meses por vicios ocultos/)).toBeVisible();
   await expect(page.getByText("Esta solicitud todavía no cuenta como lead contractual.")).toBeVisible();
   await expect(page.getByText(/Evidencia: synthetic_demo\. Persistencia: SYNTHETIC_NOT_PERSISTED\./)).toBeVisible();
 
@@ -86,12 +89,20 @@ test("privacy notice is visible and explicitly remains a legal draft", async ({ 
 
 test("control room never presents setup as live commercial truth", async ({ page }) => {
   await page.goto("/operacion");
-  await expect(page.getByText("synthetic_demo", { exact: true })).toBeVisible();
-  await expect(page.getByText("Modo sintético con tráfico cero.")).toBeVisible();
+  await expect(page.getByText("Demo sintético", { exact: true })).toBeVisible();
+  await expect(page.getByText("Modo sintético. Tráfico externo en cero.")).toBeVisible();
   await expect(page.getByText("Leads contractuales")).toBeVisible();
   await expect(page.getByText("Pipeline estricto")).toBeVisible();
   await expect(page.getByText("BLOQUEADO", { exact: true })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Módulos de operación" })).toBeVisible();
+  await expect(page.getByText("Vincular en base las 3 empresas y sus 6 dominios bloqueados")).toBeVisible();
+  await expect(page.getByText("Aprobar aviso 2026-08-11-v1 ligado a SHA256")).toBeVisible();
+  const desktopNavigation = page.locator("nav.operations-nav");
+  if (await desktopNavigation.isVisible()) {
+    await expect(desktopNavigation).toBeVisible();
+  } else {
+    await page.getByText("Menú de operación", { exact: true }).click();
+    await expect(page.locator(".operations-mobile-menu nav")).toBeVisible();
+  }
 });
 
 test("operations modules preserve synthetic disclosure and an empty operational pipeline", async ({ page }) => {
@@ -228,7 +239,8 @@ test("operational mutations reject cross-origin requests before authentication",
 
 test("identity surface keeps real access separate from the local demo", async ({ page }) => {
   await page.goto("/ingreso");
-  await expect(page.getByRole("heading", { level: 1, name: "Control Room ENNCO" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "El estado real antes que la apariencia de avance." })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "Control Room" })).toBeVisible();
   await expect(page.getByText("Modo local con tráfico cero.")).toBeVisible();
   await expect(page.getByRole("link", { name: "Abrir demo sintético" })).toBeVisible();
   await expect(page.getByRole("textbox", { name: "Correo" })).toHaveCount(0);

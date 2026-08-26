@@ -1,0 +1,24 @@
+# Evidence and source material must never be part of the hosted application bundle.
+/docs/
+/evidence/
+/tmp/
+/supabase/
+/tests/
+/playwright-report/
+/test-results/
+/coverage/
+
+# Real and synthetic operating datasets are excluded unless imported by runtime code below.
+/data/imports/
+/data/content/
+/data/assistant/
+/data/campaigns/
+/data/release/
+
+# Local build state.
+/.git/
+/.github/
+/.next/
+/node_modules/
+*.log
+*.tsbuildinfo

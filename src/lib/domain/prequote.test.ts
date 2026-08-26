@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import calibrationCases from "../../../data/prequote/calibration-cases.json";
-import { calculatePrequote, DRAFT_PREQUOTE_MODEL, prequoteInputSchema } from "@/lib/domain/prequote";
+import { APPROVED_PREQUOTE_MODEL, calculatePrequote, prequoteInputSchema } from "@/lib/domain/prequote";
 import type { PrequoteInput } from "@/lib/domain/types";
 import { PRIVACY_NOTICE_VERSION } from "@/lib/privacy/notice";
 
@@ -25,7 +25,7 @@ const validInput: PrequoteInput = {
   privacyNoticeVersion: PRIVACY_NOTICE_VERSION,
 };
 
-const fixedNow = new Date("2026-08-11T18:00:00.000Z");
+const fixedNow = new Date("2026-08-20T18:00:00.000Z");
 
 describe("prequote", () => {
   it("validates a complete prequote", () => {
@@ -36,21 +36,59 @@ describe("prequote", () => {
     expect(prequoteInputSchema.safeParse({ ...validInput, consent: false }).success).toBe(false);
   });
 
-  it("returns an auditable range and keeps the model in draft", () => {
-    const result = calculatePrequote(validInput, DRAFT_PREQUOTE_MODEL, fixedNow);
+  it("routes a 100 kWp or larger result to technical and commercial review without an automatic investment", () => {
+    const result = calculatePrequote(validInput, APPROVED_PREQUOTE_MODEL, fixedNow);
     expect(result.capacityKwp.min).toBeGreaterThan(200);
     expect(result.capacityKwp.max).toBeGreaterThan(result.capacityKwp.min);
-    expect(result.investmentMxn.max).toBeGreaterThan(result.investmentMxn.min);
+    expect(result.investmentMxn).toBeNull();
+    expect(result.investmentStatus).toBe("TECHNICAL_COMMERCIAL_REVIEW_REQUIRED");
     expect(result.verdict).toBe("INDUSTRIAL_REVIEW");
-    expect(result.modelStatus).toBe("DRAFT_REVIEW_REQUIRED");
-    expect(result.evidenceConfidence).toBe("EXTRAPOLATED_REVIEW_REQUIRED");
+    expect(result.modelStatus).toBe("APPROVED");
+    expect(result.evidenceConfidence).toBe("INDUSTRIAL_REVIEW_REQUIRED");
     expect(result.strictLeadStatus).toBe("DOES_NOT_COUNT_WITHOUT_HUMAN_EVIDENCE");
+  });
+
+  it("uses the approved under 30 kWp investment band", () => {
+    const result = calculatePrequote(
+      { ...validInput, monthlySpendMxn: 10_000 },
+      APPROVED_PREQUOTE_MODEL,
+      fixedNow,
+    );
+    expect(result.capacityKwp.max).toBeLessThan(30);
+    expect(result.investmentMxn).not.toBeNull();
+    expect(result.investmentMxn?.min).toBeCloseTo(result.capacityKwp.min * 18_000, 5);
+    expect(result.investmentMxn?.max).toBeCloseTo(result.capacityKwp.max * 29_000, 5);
+  });
+
+  it("uses the approved 30 kWp and larger investment band below the industrial threshold", () => {
+    const result = calculatePrequote(
+      { ...validInput, monthlySpendMxn: 40_000 },
+      APPROVED_PREQUOTE_MODEL,
+      fixedNow,
+    );
+    expect(result.capacityKwp.min).toBeGreaterThan(30);
+    expect(result.capacityKwp.max).toBeLessThan(100);
+    expect(result.investmentMxn).not.toBeNull();
+    expect(result.investmentMxn?.min).toBeCloseTo(result.capacityKwp.min * 17_000, 5);
+    expect(result.investmentMxn?.max).toBeCloseTo(result.capacityKwp.max * 24_000, 5);
+  });
+
+  it("keeps commercial references informational and forbids automatic commitments", () => {
+    const result = calculatePrequote(validInput, APPROVED_PREQUOTE_MODEL, fixedNow);
+    expect(result.commercialReferences).toEqual({
+      hiddenDefectsWarrantyMonths: 24,
+      cashDiscountPct: { min: 3, max: 6 },
+      installedModuleStartingPriceMxn: 11_000,
+      contractualPriceRequiresCommercialValidation: true,
+      installationDateDependsOnMaterialsAndWorkSchedule: true,
+      automaticCommitmentsAllowed: false,
+    });
   });
 
   it("never returns negative new capacity", () => {
     const result = calculatePrequote(
       { ...validInput, existingCapacityKwp: 10_000 },
-      DRAFT_PREQUOTE_MODEL,
+      APPROVED_PREQUOTE_MODEL,
       fixedNow,
     );
     expect(result.capacityKwp).toEqual({ min: 0, max: 0 });
@@ -60,19 +98,21 @@ describe("prequote", () => {
   it("routes non-sizing services to human technical review", () => {
     const result = calculatePrequote(
       { ...validInput, needType: "MAINTENANCE_THERMOGRAPHY" },
-      DRAFT_PREQUOTE_MODEL,
+      APPROVED_PREQUOTE_MODEL,
       fixedNow,
     );
     expect(result.estimateKind).toBe("SERVICE_REVIEW");
     expect(result.verdict).toBe("TECHNICAL_REVIEW");
     expect(result.capacityKwp).toEqual({ min: 0, max: 0 });
+    expect(result.investmentMxn).toBeNull();
+    expect(result.investmentStatus).toBe("NOT_APPLICABLE");
   });
 
   it("expires the model without silently using stale sources", () => {
     const result = calculatePrequote(
       validInput,
-      DRAFT_PREQUOTE_MODEL,
-      new Date("2026-09-11T12:00:00.000Z"),
+      APPROVED_PREQUOTE_MODEL,
+      new Date("2026-09-20T12:00:00.000Z"),
     );
     expect(result.modelStatus).toBe("EXPIRED");
   });
@@ -86,18 +126,19 @@ describe("prequote", () => {
         monthlySpendMxn,
         coverageTargetPct: calibrationCase.coverage_pct_for_test,
       },
-      DRAFT_PREQUOTE_MODEL,
+      APPROVED_PREQUOTE_MODEL,
       fixedNow,
     );
 
     expect(calibrationCase.capacity_kwp).toBeGreaterThanOrEqual(result.capacityKwp.min);
     expect(calibrationCase.capacity_kwp).toBeLessThanOrEqual(result.capacityKwp.max);
-    expect(calibrationCase.installed_price_mxn_including_tax).toBeGreaterThanOrEqual(result.investmentMxn.min);
-    expect(calibrationCase.installed_price_mxn_including_tax).toBeLessThanOrEqual(result.investmentMxn.max);
+    expect(result.investmentMxn).not.toBeNull();
+    expect(calibrationCase.installed_price_mxn_including_tax).toBeGreaterThanOrEqual(result.investmentMxn!.min);
+    expect(calibrationCase.installed_price_mxn_including_tax).toBeLessThanOrEqual(result.investmentMxn!.max);
   });
 
   it("keeps the roof envelope above the physical 650 W module area", () => {
     const physicalM2PerKwp = (2.382 * 1.134) / 0.65;
-    expect(DRAFT_PREQUOTE_MODEL.roofAreaM2PerKwp.min).toBeGreaterThan(physicalM2PerKwp);
+    expect(APPROVED_PREQUOTE_MODEL.roofAreaM2PerKwp.min).toBeGreaterThan(physicalM2PerKwp);
   });
 });

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "model_version": "ENNCO-PREQ-2026-08-DRAFT-02",
-  "snapshot_date": "2026-08-11",
-  "approval_status": "DRAFT_REVIEW_REQUIRED",
+  "model_version": "ENNCO-PREQ-2026-08-PACO-01",
+  "snapshot_date": "2026-08-20",
+  "approval_status": "APPROVED",
   "sources": [
     {
       "source_id": "SRC-HISTORY-001",
@@ -59,6 +59,14 @@
       "observed_at": "2026-08-11",
       "use": "tariff is multi-component and cannot be represented by a single universal MXN per kWh value",
       "limitations": "The receipt and region are required for a technical calculation."
+    },
+    {
+      "source_id": "SRC-PACO-2026-08-20",
+      "kind": "technical_commercial_approval",
+      "sha256": "d3fc79b8bce4888253bcf4b611b7af1251f875d4725f7dce4cd3481f4681217d",
+      "locator": "data/prequote/paco-approved-parameters-2026-08-20.json",
+      "use": "Approved technical ranges, commercial references and mandatory human-review rules",
+      "limitations": "Approval validates the preliminary model inputs. It does not publish the site, approve the privacy notice or create a contractual price or installation commitment."
     }
   ]
 }

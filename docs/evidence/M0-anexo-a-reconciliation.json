@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "annex_id": "ENNCO-ANNEX-A-2026-08-13",
+  "entry_count": 3,
+  "alias_count": 12,
+  "domain_count": 6,
+  "names": [
+    "MPE PLASTIC",
+    "POSCO MPPC",
+    "TEJAS EL AGUILA"
+  ],
+  "snapshot_sha256": "8e986eff74dee10d3f619f7562ee6b7d18207c3c5e080cd82656cc0e88d46af1",
+  "identity_resolution": "VERIFIED_PUBLIC_SOURCE",
+  "domain_resolution": "VERIFIED_PUBLIC_SOURCE",
+  "account_binding": "PENDING_LIVE_DATABASE",
+  "transactional_database_import": "NOT_EXECUTED",
+  "outreach_eligible_records": 0,
+  "release_state": "HOLD",
+  "failures": []
+}

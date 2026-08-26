@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { redirectTo } from "@/lib/auth/navigation";
 import { safeInternalNextPath } from "@/lib/auth/policy";
+import { getRuntimeConfig } from "@/lib/runtime/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const challengeSchema = z.object({
@@ -12,6 +13,7 @@ const challengeSchema = z.object({
 });
 
 export async function verifyMfa(formData: FormData) {
+  if (!getRuntimeConfig().requireMfa) redirectTo("/operacion");
   const parsed = challengeSchema.safeParse({
     factorId: formData.get("factorId"),
     code: formData.get("code"),

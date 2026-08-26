@@ -1,5 +1,25 @@
 begin;
 
+create or replace function app.digest(target_value text, target_algorithm text)
+returns bytea
+language sql
+immutable
+set search_path = extensions, public, pg_catalog
+as $$
+  select digest(target_value, target_algorithm)
+$$;
+revoke all on function app.digest(text, text) from public;
+do $$
+begin
+  if exists (select 1 from pg_roles where rolname = 'authenticated') then
+    grant execute on function app.digest(text, text) to authenticated;
+  end if;
+  if exists (select 1 from pg_roles where rolname = 'service_role') then
+    grant execute on function app.digest(text, text) to service_role;
+  end if;
+end;
+$$;
+
 drop trigger if exists retention_m021_rollback_fail_closed on public.deletion_batches;
 drop trigger if exists legal_holds_m021_rollback_fail_closed on public.legal_holds;
 drop trigger if exists deletion_items_m021_rollback_fail_closed on public.deletion_items;
@@ -283,7 +303,7 @@ returns boolean language sql stable set search_path=pg_catalog as $$
 $$;
 
 create or replace function app.retention_request_sha(target_request jsonb)
-returns text language sql immutable set search_path=public,pg_temp as $$
+returns text language sql immutable set search_path=app,extensions,public,pg_temp as $$
   select encode(digest(target_request::text,'sha256'),'hex')
 $$;
 
@@ -1073,7 +1093,7 @@ begin
 end $$;
 
 create or replace function app.canonical_retention_tombstone_manifest_sha256(target_tombstones jsonb)
-returns text language plpgsql immutable set search_path=public,pg_temp as $$
+returns text language plpgsql immutable set search_path=app,extensions,public,pg_temp as $$
 declare item jsonb; canonical_lines text[]:=array[]::text[]; item_timestamp timestamptz; subject_hash text; evidence_hash text;
 begin
   if jsonb_typeof(target_tombstones)<>'array' or jsonb_array_length(target_tombstones) not between 1 and 1000

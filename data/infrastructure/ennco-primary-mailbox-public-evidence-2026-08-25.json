@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0.0",
+  "evidence_class": "live",
+  "observed_at": "2026-08-25T18:29:04Z",
+  "mailbox": "contacto@ennco.com.mx",
+  "domain": "ennco.com.mx",
+  "domain_registration": {
+    "created_on": "2025-09-26",
+    "expires_on": "2026-09-26",
+    "last_updated_on": "2026-02-02",
+    "source": "registry.mx WHOIS"
+  },
+  "dns": {
+    "mx": [
+      "1 ASPMX.L.GOOGLE.COM.",
+      "5 ALT1.ASPMX.L.GOOGLE.COM.",
+      "5 ALT2.ASPMX.L.GOOGLE.COM.",
+      "10 ALT3.ASPMX.L.GOOGLE.COM.",
+      "10 ALT4.ASPMX.L.GOOGLE.COM."
+    ],
+    "spf": "v=spf1 include:_spf.google.com ~all",
+    "dmarc": "v=DMARC1; p=none",
+    "tested_dkim_selectors": {
+      "google": "NO_RECORD_OBSERVED",
+      "default": "NO_RECORD_OBSERVED"
+    }
+  },
+  "interpretation": {
+    "workspace_mx_observed": true,
+    "spf_record_observed": true,
+    "dmarc_record_observed": true,
+    "dkim_verified": false,
+    "tls_verified": false,
+    "blocklist_status": "UNKNOWN",
+    "sender_identity_verified": false,
+    "gmail_seed_verified": false,
+    "outlook_seed_verified": false,
+    "yahoo_seed_verified": false,
+    "reply_sync_verified": false,
+    "human_history_verified": false
+  },
+  "caveat": "La ausencia en los selectores google y default no demuestra ausencia universal de DKIM. El selector canónico debe obtenerse desde Google Admin. UNKNOWN permanece en HOLD."
+}

@@ -87,9 +87,10 @@ export function AssignTaskButton({ taskId }: { taskId: string }) {
   const pendingCommand = useRef<PendingMutationCommand | undefined>(undefined);
   async function run(formData: FormData) {
     setStatus("pending");
+    const backupUserId = String(formData.get("backupUserId") ?? "").trim();
     const body = {
       ownerUserId: String(formData.get("ownerUserId")),
-      backupUserId: String(formData.get("backupUserId")),
+      backupUserId: backupUserId || null,
     };
     const command = selectMutationCommand(pendingCommand.current, body);
     pendingCommand.current = command;
@@ -104,7 +105,7 @@ export function AssignTaskButton({ taskId }: { taskId: string }) {
   return (
     <form action={(data) => void run(data)} className="compact-operation-form">
       <label>Responsable UUID<input name="ownerUserId" pattern="[0-9a-f-]{36}" required /></label>
-      <label>Suplente UUID<input name="backupUserId" pattern="[0-9a-f-]{36}" required /></label>
+      <label>Suplente UUID, opcional<input name="backupUserId" pattern="[0-9a-f-]{36}" /></label>
       <button className="text-button" disabled={status === "pending" || status === "done"} type="submit">Asignar tarea</button>
       <Result status={status} />
     </form>

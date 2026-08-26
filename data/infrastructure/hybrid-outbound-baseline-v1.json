@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0.0",
+  "baseline_id": "ENNCO-M29-HYBRID-OUTBOUND-2026-08-25",
+  "evidence_class": "synthetic_demo",
+  "status": "HOLD",
+  "external_send_authorized": false,
+  "external_effects": 0,
+  "custody_model": "TECKEL_MANAGED_FOR_ENNCO",
+  "sender_identity": "Francisco Cuellar",
+  "primary_lane": {
+    "code": "EXISTING_PRIMARY_GMAIL_RAMP",
+    "mailbox": "contacto@ennco.com.mx",
+    "send_engine": "GMAIL_API",
+    "account_tier": "TIER_1_ONLY",
+    "maximum_accounts": 50,
+    "maximum_touches_per_contact": 3,
+    "maximum_daily_cap": 20,
+    "minimum_domain_age_days": 180,
+    "current_gate_state": "UNKNOWN",
+    "required_live_evidence": [
+      "HUMAN_HISTORY",
+      "SPF_ALIGNED",
+      "DKIM_ALIGNED",
+      "DMARC_PASS",
+      "TLS_PASS",
+      "BLOCKLIST_CLEAR",
+      "GMAIL_SEED_PASS",
+      "OUTLOOK_SEED_PASS",
+      "YAHOO_SEED_PASS",
+      "OAUTH_MINIMUM_SCOPES",
+      "REPLY_SYNC_UNDER_300_SECONDS",
+      "ANNEX_A_PRODUCTION_BOUND",
+      "EXACT_RELEASE_MANIFEST"
+    ],
+    "ramp": [
+      { "valid_deliveries_under": 20, "daily_cap": 5 },
+      { "valid_deliveries_under": 50, "daily_cap": 10 },
+      { "valid_deliveries_under": 100, "daily_cap": 15 },
+      { "valid_deliveries_at_least": 100, "daily_cap": 20 }
+    ]
+  },
+  "isolated_lane": {
+    "code": "NEW_ISOLATED_MAILBOX_WARMUP",
+    "send_engine": "APOLLO_SHARED_SMTP",
+    "domain_target": 2,
+    "mailbox_target": 3,
+    "warmup_required_days": 42,
+    "prospects_during_warmup_allowed": false,
+    "domains": [
+      { "domain": "enncoindustrial.com", "status": "NOT_VERIFIED_OR_PURCHASED" },
+      { "domain": "enncoenergia.com", "status": "NOT_VERIFIED_OR_PURCHASED" }
+    ],
+    "mailboxes": [
+      "francisco@enncoindustrial.com",
+      "fcuellar@enncoindustrial.com",
+      "francisco@enncoenergia.com"
+    ],
+    "deferred_mailbox": "fcuellar@enncoenergia.com",
+    "deferred_purchase_gate": "REVIEW_AFTER_100_VALID_DELIVERIES"
+  },
+  "inventory": {
+    "minimum_accounts": 75,
+    "minimum_contacts": 150,
+    "operational_accounts": 150,
+    "operational_contacts": 300,
+    "tier_1_contacts": 50,
+    "tier_2_contacts": 250,
+    "current_verified_accounts": 0,
+    "current_verified_contacts": 0
+  },
+  "stop_rules": [
+    "ANY_SPAM_COMPLAINT",
+    "EARLY_HARD_BOUNCE",
+    "HARD_BOUNCE_RATE_AT_LEAST_2_PERCENT",
+    "DELIVERY_UNDER_95_PERCENT",
+    "AUTHENTICATION_FAILURE",
+    "REPLY_SYNC_OVER_300_SECONDS",
+    "POSITIVE_REPLY_SLA_BREACH",
+    "PROVIDER_LEDGER_MISMATCH",
+    "SUPPRESSION_UNKNOWN",
+    "IDENTITY_AMBIGUOUS"
+  ],
+  "current_blockers": [
+    "PRIMARY_MAILBOX_LIVE_EVIDENCE_MISSING",
+    "GMAIL_OAUTH_NOT_CONNECTED",
+    "ANNEX_A_PRODUCTION_BINDING_UNVERIFIED",
+    "EXACT_FIVE_RECIPIENT_MANIFEST_ABSENT",
+    "ISOLATED_DOMAINS_NOT_PURCHASED",
+    "ISOLATED_MAILBOXES_NOT_PROVISIONED",
+    "EXPLICIT_CANARY_APPROVAL_ABSENT"
+  ],
+  "real_recipients_enrolled": 0,
+  "real_messages_sent": 0
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0.0",
+  "packet_id": "ENNCO-PRIVACY-APPROVAL-2026-08-20",
+  "status": "AWAITING_ENNCO_AND_LEGAL_REVIEW",
+  "notice_version": "2026-08-11-v1",
+  "notice_content_sha256": "d4a24f23350d8a3522f75a169938afe7bcd868c9c812b46aadcbc52681fc718e",
+  "canonical_source": "src/lib/privacy/notice.ts",
+  "preview_url": "https://ennco-operacion.vercel.app/privacidad",
+  "preview_state": "NOINDEX_SYNTHETIC_DEMO",
+  "required_decisions": [
+    "RESPONSIBLE_IDENTITY_AND_ADDRESS",
+    "DATA_CATEGORIES_AND_NO_SENSITIVE_DATA",
+    "PRIMARY_AND_SECONDARY_PURPOSES",
+    "PROCESSORS_TRANSFERS_AND_DPA",
+    "RETENTION_90_12_24_MONTHS",
+    "ARCO_CHANNEL_AND_IDENTITY_VERIFICATION",
+    "B2B_OUTREACH_LEGAL_BASIS",
+    "PRIVACY_OWNER_AND_RESPONSE_PROCESS"
+  ],
+  "approvals": {
+    "ennco_sponsor": null,
+    "legal_reviewer": null,
+    "approved_at": null
+  },
+  "release_effect": {
+    "public_surface_released": false,
+    "indexing_released": false,
+    "external_send_authorized": false
+  }
+}

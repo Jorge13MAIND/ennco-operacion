@@ -4,7 +4,7 @@ export const FIRST_SEND_GATE_CODES = [
   "START_CONDITION_EVIDENCE",
   "LEGAL_BASIS_APPROVED",
   "PRIVACY_NOTICE_APPROVED",
-  "DOMAIN_AGE_35_DAYS",
+  "APOLLO_WARMUP_42_DAYS",
   "SPF_PASS",
   "DKIM_PASS",
   "DMARC_PASS",
@@ -79,4 +79,3 @@ export function evaluateFirstSendReadiness(input: FirstSendReadinessInput): Firs
 
   return { decision: reasons.length === 0 ? "PASS" : "EXTEND", reasons };
 }
-

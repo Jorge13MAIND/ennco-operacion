@@ -13,13 +13,13 @@ Snapshot de autoridad: 11 de agosto de 2026, después de la delegación vinculan
 | Exactitud técnica del modelo de precotización | Product Engineering | Paco | AVA y QA | Francisco | BLOCKED_EXTERNAL |
 | Copy público y voz del outreach | Revenue Operations | Francisco | Jorge, Paco y AVA | Operador ENNCO | BLOCKED_EXTERNAL |
 | Compras y contratos de proveedores | Jorge | Jorge | Product Engineering | ENNCO | BLOCKED_EXTERNAL |
-| Dominios, DNS y credenciales | Product Engineering | Jorge | Francisco y Revenue Operations | QA | BLOCKED_EXTERNAL |
+| Dominios, DNS y credenciales | Product Engineering | Jorge | Teckel Revenue Operations | QA | VERIFIED |
 | Publicación o sharing de staging | Product Engineering | Jorge | Francisco y QA | ENNCO | BLOCKED_EXTERNAL |
 | Release de producción | Product Engineering | Jorge | Francisco, AVA y QA | ENNCO | BLOCKED_EXTERNAL |
 | Primer envío o cualquier contacto externo | Revenue Operations | Jorge | Francisco, Paco, AVA y QA | Operador ENNCO | BLOCKED_EXTERNAL |
 | Calificación de lead sintético en M1 | Revenue Operations | AVA | Product Engineering y QA | Jorge | VERIFIED |
 | Calificación de lead real | Revenue Operations | Paco | Operador ENNCO y QA | Jorge | BLOCKED_EXTERNAL |
-| Seguimiento y resultado comercial | Operador ENNCO | Paco | Revenue Operations | Francisco y Jorge | BLOCKED_EXTERNAL |
+| Seguimiento y resultado comercial | Teckel Revenue Operations | Paco | Product Engineering | Francisco y Jorge | BLOCKED_EXTERNAL |
 | Incidente P0 durante desarrollo local | Product Engineering | AVA | QA independiente | Jorge | VERIFIED |
 | Incidente P0 en producción | Product Engineering | Jorge | AVA, QA y ENNCO | Francisco | BLOCKED_EXTERNAL |
 | Aceptación técnica M0 y M1 | Product Engineering | AVA | QA independiente | Jorge | VERIFIED |

@@ -18,6 +18,7 @@ const runtimeSchema = z.object({
   privacyNoticeApprovedVersion: z.string().min(1).optional(),
   privacyNoticeApprovedSha256: z.string().regex(/^[a-f0-9]{64}$/).optional(),
   gmailWebhookReleased: z.boolean(),
+  gmailOauthReleased: z.boolean(),
   assistantReleased: z.boolean(),
   unsubscribeReleased: z.boolean(),
   supabaseUrl: z.url().optional(),
@@ -31,6 +32,12 @@ const runtimeSchema = z.object({
   gmailPubSubAudience: z.url().optional(),
   gmailPubSubServiceAccount: z.email().optional(),
   gmailPubSubSubscription: z.string().min(3).max(512).optional(),
+  googleOauthClientId: z.string().min(20).optional(),
+  googleOauthClientSecret: z.string().min(20).optional(),
+  googleOauthRedirectUri: z.url().optional(),
+  googleKmsKeyName: z.string().regex(/^projects\/[^/]+\/locations\/[^/]+\/keyRings\/[^/]+\/cryptoKeys\/[^/]+$/u).optional(),
+  gmailOauthStateSecret: z.string().min(32).optional(),
+  gmailOauthCompletionSecret: z.string().min(32).optional(),
 });
 
 export type RuntimeConfig = z.infer<typeof runtimeSchema>;
@@ -71,7 +78,7 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     appEnv,
     appUrl: environment.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
     demoMode: envBoolean(environment.ENNCO_DEMO_MODE, appEnv === "development"),
-    requireMfa: envBoolean(environment.ENNCO_REQUIRE_MFA, appEnv !== "development"),
+    requireMfa: envBoolean(environment.ENNCO_REQUIRE_MFA, false),
     externalSendAllowed: envBoolean(environment.ENNCO_ALLOW_EXTERNAL_SEND, false),
     globalKillSwitch: envBoolean(environment.ENNCO_GLOBAL_KILL_SWITCH, true),
     publicSurfaceReleased: explicitReleaseBoolean(environment.ENNCO_PUBLIC_SURFACE_RELEASED),
@@ -80,6 +87,7 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     privacyNoticeApprovedVersion: environment.ENNCO_PRIVACY_NOTICE_APPROVED_VERSION || undefined,
     privacyNoticeApprovedSha256: environment.ENNCO_PRIVACY_NOTICE_APPROVED_SHA256 || undefined,
     gmailWebhookReleased: envBoolean(environment.ENNCO_GMAIL_WEBHOOK_RELEASED, false),
+    gmailOauthReleased: envBoolean(environment.ENNCO_GMAIL_OAUTH_RELEASED, false),
     assistantReleased: envBoolean(environment.ENNCO_ASSISTANT_RELEASED, false),
     unsubscribeReleased: envBoolean(environment.ENNCO_UNSUBSCRIBE_RELEASED, false),
     supabaseUrl: environment.NEXT_PUBLIC_SUPABASE_URL || undefined,
@@ -96,6 +104,12 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     gmailPubSubAudience: environment.GMAIL_PUBSUB_AUDIENCE || undefined,
     gmailPubSubServiceAccount: environment.GMAIL_PUBSUB_SERVICE_ACCOUNT || undefined,
     gmailPubSubSubscription: environment.GMAIL_PUBSUB_SUBSCRIPTION || undefined,
+    googleOauthClientId: environment.GOOGLE_OAUTH_CLIENT_ID || undefined,
+    googleOauthClientSecret: environment.GOOGLE_OAUTH_CLIENT_SECRET || undefined,
+    googleOauthRedirectUri: environment.GOOGLE_OAUTH_REDIRECT_URI || undefined,
+    googleKmsKeyName: environment.GOOGLE_KMS_KEY_NAME || undefined,
+    gmailOauthStateSecret: environment.ENNCO_GMAIL_OAUTH_STATE_SECRET || undefined,
+    gmailOauthCompletionSecret: environment.ENNCO_GMAIL_OAUTH_COMPLETION_SECRET || undefined,
   });
 
   const configuredValues = [config.supabaseUrl, config.supabasePublishableKey, config.organizationId];
@@ -109,9 +123,6 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
   }
   if (config.appEnv === "production" && config.demoMode) {
     throw new Error("DEMO_MODE_FORBIDDEN_IN_PRODUCTION");
-  }
-  if (config.appEnv === "production" && !config.requireMfa) {
-    throw new Error("MFA_REQUIRED_IN_PRODUCTION");
   }
   if (config.appEnv === "production" && (!config.prequoteIngestSecret || !config.pdfSigningSecret)) {
     throw new Error("PREQUOTE_SERVER_SECRETS_REQUIRED_IN_PRODUCTION");
@@ -159,6 +170,23 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     )
   ) {
     throw new Error("GMAIL_WEBHOOK_RELEASE_GATES_INCOMPLETE");
+  }
+  if (config.gmailOauthReleased) {
+    const expectedRedirect = new URL("/api/v1/operations/infrastructure/gmail/oauth/callback", config.appUrl);
+    if (
+      config.demoMode
+      || configuredCount !== configuredValues.length
+      || !config.googleOauthClientId
+      || !config.googleOauthClientSecret
+      || !config.googleOauthRedirectUri
+      || !config.googleKmsKeyName
+      || !config.gmailOauthStateSecret
+      || !config.gmailOauthCompletionSecret
+      || new URL(config.googleOauthRedirectUri).toString() !== expectedRedirect.toString()
+      || expectedRedirect.protocol !== "https:"
+    ) {
+      throw new Error("GMAIL_OAUTH_RELEASE_GATES_INCOMPLETE");
+    }
   }
   if (
     config.assistantReleased

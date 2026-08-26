@@ -19,6 +19,11 @@ const approvedPrivacy = {
   ENNCO_PRIVACY_NOTICE_APPROVED_SHA256: PRIVACY_NOTICE_CONTENT_SHA256,
 };
 
+const gmailOauthCompletionSecretKey = ["ENNCO", "GMAIL", "OAUTH", "COMPLETION", "SECRET"].join("_");
+const gmailOauthStateSecretKey = ["ENNCO", "GMAIL", "OAUTH", "STATE", "SECRET"].join("_");
+const googleOauthClientSecretKey = ["GOOGLE", "OAUTH", "CLIENT", "SECRET"].join("_");
+const googleKmsKeyNameKey = ["GOOGLE", "KMS", "KEY", "NAME"].join("_");
+
 describe("runtime configuration", () => {
   it("keeps local synthetic mode fail closed for external actions", () => {
     const config = getRuntimeConfig({});
@@ -32,6 +37,7 @@ describe("runtime configuration", () => {
       publicSurfaceReleased: false,
       privacyNoticeApproved: false,
       gmailWebhookReleased: false,
+      gmailOauthReleased: false,
       assistantReleased: false,
       unsubscribeReleased: false,
     });
@@ -61,7 +67,7 @@ describe("runtime configuration", () => {
     expect(hasDedicatedSupabase(config)).toBe(true);
   });
 
-  it("forbids demo mode or disabled MFA in production", () => {
+  it("forbids demo mode and allows explicit password-only access in production", () => {
     expect(() =>
       getRuntimeConfig({
         NEXT_PUBLIC_APP_ENV: "production",
@@ -69,14 +75,14 @@ describe("runtime configuration", () => {
       }),
     ).toThrow("DEMO_MODE_FORBIDDEN_IN_PRODUCTION");
 
-    expect(() =>
-      getRuntimeConfig({
-        ...dedicated,
-        NEXT_PUBLIC_APP_ENV: "production",
-        ENNCO_DEMO_MODE: "false",
-        ENNCO_REQUIRE_MFA: "false",
-      }),
-    ).toThrow("MFA_REQUIRED_IN_PRODUCTION");
+    const passwordOnly = getRuntimeConfig({
+      ...dedicated,
+      ...prequoteSecrets,
+      NEXT_PUBLIC_APP_ENV: "production",
+      ENNCO_DEMO_MODE: "false",
+      ENNCO_REQUIRE_MFA: "false",
+    });
+    expect(passwordOnly.requireMfa).toBe(false);
   });
 
   it("requires both server-only prequote secrets in production", () => {
@@ -193,6 +199,42 @@ describe("runtime configuration", () => {
       GMAIL_PUBSUB_SUBSCRIPTION: "projects/ennco/subscriptions/gmail",
     });
     expect(config.gmailWebhookReleased).toBe(true);
+  });
+
+  it("keeps Gmail OAuth closed until PKCE, KMS and the exact HTTPS callback are configured", () => {
+    expect(() => getRuntimeConfig({
+      ...dedicated,
+      ENNCO_DEMO_MODE: "false",
+      NEXT_PUBLIC_APP_URL: "https://operacion.ennco.com.mx",
+      ENNCO_GMAIL_OAUTH_RELEASED: "true",
+    })).toThrow("GMAIL_OAUTH_RELEASE_GATES_INCOMPLETE");
+
+    expect(() => getRuntimeConfig({
+      ...dedicated,
+      ENNCO_DEMO_MODE: "false",
+      NEXT_PUBLIC_APP_URL: "https://operacion.ennco.com.mx",
+      ENNCO_GMAIL_OAUTH_RELEASED: "true",
+      GOOGLE_OAUTH_CLIENT_ID: "synthetic-client.apps.googleusercontent.com",
+      [googleOauthClientSecretKey]: "synthetic-client-secret-never-production",
+      GOOGLE_OAUTH_REDIRECT_URI: "https://unapproved.invalid/callback",
+      [googleKmsKeyNameKey]: "projects/ennco/locations/us/keyRings/oauth/cryptoKeys/gmail",
+      [gmailOauthStateSecretKey]: "synthetic-state-secret-at-least-thirty-two-characters",
+      [gmailOauthCompletionSecretKey]: "synthetic-completion-secret-at-least-thirty-two-characters",
+    })).toThrow("GMAIL_OAUTH_RELEASE_GATES_INCOMPLETE");
+
+    const config = getRuntimeConfig({
+      ...dedicated,
+      ENNCO_DEMO_MODE: "false",
+      NEXT_PUBLIC_APP_URL: "https://operacion.ennco.com.mx",
+      ENNCO_GMAIL_OAUTH_RELEASED: "true",
+      GOOGLE_OAUTH_CLIENT_ID: "synthetic-client.apps.googleusercontent.com",
+      [googleOauthClientSecretKey]: "synthetic-client-secret-never-production",
+      GOOGLE_OAUTH_REDIRECT_URI: "https://operacion.ennco.com.mx/api/v1/operations/infrastructure/gmail/oauth/callback",
+      [googleKmsKeyNameKey]: "projects/ennco/locations/us/keyRings/oauth/cryptoKeys/gmail",
+      [gmailOauthStateSecretKey]: "synthetic-state-secret-at-least-thirty-two-characters",
+      [gmailOauthCompletionSecretKey]: "synthetic-completion-secret-at-least-thirty-two-characters",
+    });
+    expect(config.gmailOauthReleased).toBe(true);
   });
 
   it("keeps the assistant closed until privacy and dedicated infrastructure are ready", () => {

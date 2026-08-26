@@ -7,8 +7,8 @@ Fecha de corte: 2026-08-13. Este documento no autoriza compra, alta, conexion ni
 | Componente | Propietario requerido | Estado actual | Evidencia requerida para PASS | Gate |
 |---|---|---|---|---|
 | Repositorio remoto | ENNCO | UNKNOWN | Organizacion, admin ENNCO, branch protection y export de repositorio | M9 live |
-| Supabase | ENNCO | BLOCKED_EXTERNAL | Proyecto, region, DPA, PITR, MFA, RLS y restore | M2 y M9 live |
-| Vercel | ENNCO | BLOCKED_EXTERNAL | Proyecto, roles, MFA, variables y rollback | Produccion |
+| Supabase | Teckel managed | IN_PROGRESS | Proyecto aislado, region, DPA, PITR, MFA, RLS, export y restore | M2 y M9 live |
+| Vercel | Teckel managed | IN_PROGRESS | Proyecto aislado, roles, MFA, variables, export y rollback | Produccion |
 | Google Workspace | ENNCO | BLOCKED_EXTERNAL | Dominios, cuatro buzones, admins, MFA y offboarding | M4 y M6 |
 | Google Cloud | ENNCO | BLOCKED_EXTERNAL | Proyecto, billing, Pub/Sub, KMS, IAM y audit logs | M2 y M4 |
 | Resend transaccional | ENNCO | OPTIONAL | Cuenta, dominio transaccional, DPA, retencion, export y confirmacion de uso sin cold outreach | M4 |
@@ -23,8 +23,8 @@ Fecha de corte: 2026-08-13. Este documento no autoriza compra, alta, conexion ni
 
 Cada componente live debe registrar:
 
-- Owner ENNCO y suplente.
-- Owner tecnico Teckel durante soporte.
+- Owner técnico Teckel.
+- Responsable de facturación y recuperación Teckel.
 - Cuenta y region.
 - MFA.
 - Roles y ultimo recertificado.
@@ -38,4 +38,4 @@ Cada componente live debe registrar:
 
 ## Regla de salida
 
-Teckel no se retira de un acceso hasta verificar que un admin ENNCO puede entrar, operar, exportar y recuperar la cuenta. La evidencia de acceso nunca incluye contrasenas, tokens, recovery codes ni capturas con secretos.
+Vercel y Supabase permanecen administrados por Teckel. La continuidad se acepta únicamente con export de código y datos, restore probado, runbooks y recuperación documentada. La evidencia de acceso nunca incluye contrasenas, tokens, recovery codes ni capturas con secretos.

@@ -1,53 +1,45 @@
-# Paquete de validacion tecnica para Paco
+# Validación técnica recibida de Paco
 
-Fecha: 2026-08-13.
+Solicitud enviada: 13 de agosto de 2026.
 
-Version a revisar: `ENNCO-PREQ-2026-08-DRAFT-02`.
+Respuesta recibida y autorizada para implementación por Jorge: 20 de agosto de 2026.
 
-Estado actual: `DRAFT_REVIEW_REQUIRED`. No esta publicado y no puede generar precios finales.
+Versión resultante: `ENNCO-PREQ-2026-08-PACO-01`.
 
-## Mensaje listo para WhatsApp
+Estado del modelo: `APPROVED` para sus parámetros técnicos y referencias comerciales. La publicación pública permanece bloqueada por privacidad, infraestructura, UAT y release explícito.
 
-Paco, te paso los supuestos que va a usar el precotizador inicial. No da precio final ni garantia. Solo entrega un rango preliminar y manda el caso a revision tecnica.
+## Parámetros aprobados
 
-Necesito que me confirmes si estos rangos son correctos o me pongas el valor que debemos usar:
+1. Tarifa efectiva de energía: 2.80 a 3.35 MXN/kWh.
+2. Producción mensual estimada: 120 a 165 kWh/kWp/mes.
+3. Potencia de módulos: 620 a 650 Wp.
+4. Superficie requerida: 5.2 a 7.3 m2/kWp.
+5. Inversión para proyectos menores a 30 kWp: 18,000 a 29,000 MXN/kWp.
+6. Inversión para proyectos de 30 a menos de 100 kWp: 17,000 a 24,000 MXN/kWp.
+7. Proyectos de 100 kWp o más: revisión técnica y comercial obligatoria, sin rango automático de inversión.
 
-1. Tarifa efectiva de energia: $2.80 a $3.35 MXN por kWh.
-2. Produccion mensual estimada: 115 a 160 kWh por kWp.
-3. Potencia de modulo: 620 a 650 Wp.
-4. Superficie requerida: 5.2 a 7.3 m2 por kWp.
-5. Inversion para proyectos menores a 30 kWp: $16,000 a $29,000 MXN por kWp.
-6. Inversion para proyectos de 30 a menos de 100 kWp: $16,000 a $24,000 MXN por kWp.
-7. Inversion para proyectos de 100 kWp o mas: $14,000 a $27,000 MXN por kWp. Este es el punto mas importante porque no tenemos un proyecto historico entregado mayor a 100 kWp y por ahora es una extrapolacion.
-8. El resultado debe mostrarse siempre como rango preliminar, sujeto a recibo, sitio, tarifa, estructura y revision tecnica.
-9. Garantias, descuento, precio contractual y fecha de instalacion nunca se automatizan.
+## Referencias comerciales
 
-Puedes responder de una de estas dos formas:
+- Garantía de referencia: 24 meses por vicios ocultos.
+- Descuento de contado: 3% a 6%.
+- Precio de arranque: 11,000 MXN por módulo instalado.
+- Precio contractual: requiere validación comercial y no se deriva automáticamente de MKT.
+- Fecha de instalación: depende de materiales y programación de obra.
 
-`APROBADO ENNCO-PREQ-2026-08-DRAFT-02`
+Estas referencias se muestran siempre como sujetas al contrato final. El sistema no aplica descuentos, garantías, precios contractuales ni fechas de forma automática.
 
-o
+## Regla de presentación
 
-`CORREGIR: punto X, usar ________`
+Todos los cálculos son estimaciones o rangos preliminares. Requieren recibo CFE, tarifa, condiciones del sitio, estructura, distancias, obra eléctrica y revisión técnica.
 
-## Lo que se aprueba
+## Evidencia auditable
 
-La respuesta debe cubrir:
+- Fuente congelada: `data/prequote/paco-approved-parameters-2026-08-20.json`.
+- Modelo versionado: `data/prequote/model-approved-v3.json`.
+- Manifest de fuentes: `data/prequote/source-manifest.json`.
+- Histórico ENNCO: 20 proyectos, ninguno elegible de 100 kWp o más.
+- Backtest: cuatro propuestas anónimas.
 
-- Bandas completas, no sólo un promedio.
-- Vigencia sugerida de 30 dias.
-- Uso de rangos en lugar de precio final.
-- Apagado del modelo si una fuente critica vence.
-- Escalamiento humano de garantias, descuentos y fecha de instalacion.
-- Tratamiento de proyectos de 100 kWp o mas como extrapolados hasta incorporar evidencia comparable.
+## Regla de versión
 
-## Evidencia de origen
-
-- Historico ENNCO de 20 proyectos. Ningun proyecto elegible supera 54.825 kWp.
-- Cuatro propuestas anonimizadas usadas para backtesting.
-- Ficha de modulo LONGi y metodologia de tarifas CFE.
-- Backtest local: cuatro de cuatro casos dentro de las bandas.
-
-## Regla de version
-
-Una correccion produce una version nueva. La aprobacion de esta version no se puede reutilizar si cambian bandas, fuentes, vigencia o formula.
+Cualquier cambio de rango, condición comercial, fórmula, fuente o vigencia produce una versión nueva. Esta aprobación no puede reutilizarse para una versión distinta.

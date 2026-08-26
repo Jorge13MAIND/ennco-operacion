@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0.0",
+  "manifest_id": "ENNCO-M29-ACCELERATED-TIER1-DRAFT-V1",
+  "status": "HOLD",
+  "evidence_class": "synthetic_demo",
+  "lane": "ACCELERATED_TIER1_CANARY",
+  "sender": {
+    "name": "Francisco Cuellar",
+    "mailbox": "contacto@ennco.com.mx",
+    "engine": "GMAIL_API"
+  },
+  "recipients": [],
+  "recipient_count": 0,
+  "account_count": 0,
+  "pilot_account_limit": 5,
+  "contact_policy": {
+    "tier": "TIER_1",
+    "one_contact_per_account": true,
+    "verified_max_age_days": 30,
+    "maximum_touches": 3,
+    "maximum_words": 100,
+    "plain_text_only": true,
+    "first_touch_link_allowed": false,
+    "first_touch_attachment_allowed": false,
+    "open_tracking": false,
+    "whatsapp_cold_allowed": false,
+    "linkedin": "MANUAL_ONLY"
+  },
+  "schedule": {
+    "timezone": "America/Mexico_City",
+    "window_start": "09:30",
+    "window_end": "11:30",
+    "scheduled_for": null
+  },
+  "hashes": {
+    "copy_sha256": null,
+    "sequence_sha256": null,
+    "suppression_sha256": null,
+    "route_evidence_sha256": null,
+    "manifest_sha256": null
+  },
+  "runtime": {
+    "global_kill_switch": true,
+    "mailbox_kill_switch": true,
+    "external_send_allowed": false,
+    "dry_run_only": true,
+    "max_external_side_effects": 0
+  },
+  "approvals": {
+    "copy": false,
+    "suppression": false,
+    "technical": false,
+    "release": false
+  },
+  "release_blockers": [
+    "RECIPIENTS_EMPTY",
+    "PRIMARY_MAILBOX_LIVE_EVIDENCE_MISSING",
+    "COPY_HASH_MISSING",
+    "SUPPRESSION_HASH_MISSING",
+    "ROUTE_EVIDENCE_HASH_MISSING",
+    "EXPLICIT_RELEASE_APPROVAL_MISSING"
+  ]
+}

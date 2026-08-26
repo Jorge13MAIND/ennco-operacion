@@ -30,7 +30,7 @@ describe("outreach release gate", () => {
       manifestHashMatches: true,
       suppressionSnapshotCurrent: true,
       mailboxHealthy: true,
-      domainReadyDays: 35,
+      domainReadyDays: 42,
       shadowCanaryDecision: "PASS",
     });
     expect(result).toEqual({ decision: "SEND_ALLOWED", reasons: [] });

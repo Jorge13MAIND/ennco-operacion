@@ -28,6 +28,10 @@ function mxnRange(value: { min: number; max: number }): string {
   return `${formatter.format(value.min)} a ${formatter.format(value.max)}`;
 }
 
+function mxn(value: number): string {
+  return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(value);
+}
+
 function numberRange(value: { min: number; max: number }, unit: string): string {
   const formatter = new Intl.NumberFormat("es-MX", { maximumFractionDigits: 0 });
   return `${formatter.format(value.min)} a ${formatter.format(value.max)} ${unit}`;
@@ -35,7 +39,7 @@ function numberRange(value: { min: number; max: number }, unit: string): string 
 
 function confidenceLabel(value: PrequoteEstimate["evidenceConfidence"]): string {
   if (value === "SOURCE_RANGE") return "Rango respaldado por referencias";
-  if (value === "EXTRAPOLATED_REVIEW_REQUIRED") return "Extrapolación, revisión técnica requerida";
+  if (value === "INDUSTRIAL_REVIEW_REQUIRED") return "Proyecto industrial, revisión técnica y comercial requerida";
   return "Revisión técnica requerida";
 }
 
@@ -169,7 +173,7 @@ export function PrequoteForm({ demoMode, attribution }: PrequoteFormProps) {
         </fieldset>
 
         <fieldset className="form-step">
-          <legend><span>2</span> Datos técnicos</legend>
+          <legend><span>2</span> Consumo y objetivo</legend>
           <div className="form-grid">
             <div className="field">
               <label htmlFor="monthlySpendMxn">Gasto mensual CFE</label>
@@ -192,6 +196,12 @@ export function PrequoteForm({ demoMode, attribution }: PrequoteFormProps) {
               <label htmlFor="coverageTargetPct">Cobertura objetivo, %</label>
               <input defaultValue="75" id="coverageTargetPct" max="100" min="30" name="coverageTargetPct" step="0.1" type="number" />
             </div>
+          </div>
+        </fieldset>
+
+        <fieldset className="form-step">
+          <legend><span>3</span> Sitio</legend>
+          <div className="form-grid">
             <div className="field">
               <label htmlFor="city">Ciudad</label>
               <input defaultValue={demoMode ? "León" : undefined} id="city" name="city" required />
@@ -211,13 +221,13 @@ export function PrequoteForm({ demoMode, attribution }: PrequoteFormProps) {
             <div className="field full">
               <label htmlFor="receipt">Recibo CFE, opcional</label>
               <input disabled id="receipt" type="file" />
-              <small>La carga queda cerrada hasta conectar el antivirus y Storage privado aprobados.</small>
+              <small>Documento sensible. La carga permanece cerrada hasta confirmar antivirus y almacenamiento privado.</small>
             </div>
           </div>
         </fieldset>
 
         <fieldset className="form-step">
-          <legend><span>3</span> Contacto</legend>
+          <legend><span>4</span> Contacto</legend>
           <div className="form-grid">
             <div className="field">
               <label htmlFor="company">Empresa</label>
@@ -256,17 +266,32 @@ export function PrequoteForm({ demoMode, attribution }: PrequoteFormProps) {
       </form>
 
       <aside aria-live="polite" className="result-card">
-        <span className="badge">Modelo preliminar en revisión</span>
-        <h2>Referencia técnica</h2>
+        <div className="result-card-heading">
+          <span className="result-step">5</span>
+          <div><span className="badge">Resultado preliminar</span><h2>Referencia técnica</h2></div>
+        </div>
         {!result ? (
-          <p className="lede">Completa los tres pasos. El resultado será un rango, no una cotización.</p>
+          <div className="result-empty">
+            <p className="lede">Completa las cuatro etapas. Aquí aparecerán los rangos, supuestos y nivel de confianza.</p>
+            <ul>
+              <li>Capacidad estimada</li>
+              <li>Área y módulos</li>
+              <li>Inversión preliminar</li>
+              <li>Condiciones de revisión</li>
+            </ul>
+          </div>
         ) : (
           <>
             <p><strong>{result.folio}</strong></p>
             {result.estimate.estimateKind === "SOLAR_RANGE" ? (
               <div className="result-grid">
                 <div className="result-item"><span>Capacidad</span><strong>{numberRange(result.estimate.capacityKwp, "kWp")}</strong></div>
-                <div className="result-item"><span>Inversión</span><strong>{mxnRange(result.estimate.investmentMxn)}</strong></div>
+                <div className="result-item">
+                  <span>Inversión</span>
+                  <strong>{result.estimate.investmentMxn
+                    ? mxnRange(result.estimate.investmentMxn)
+                    : "Revisión técnica y comercial"}</strong>
+                </div>
                 <div className="result-item"><span>Área</span><strong>{numberRange(result.estimate.roofAreaM2, "m²")}</strong></div>
                 <div className="result-item"><span>Módulos</span><strong>{numberRange(result.estimate.panelCount, "")}</strong></div>
               </div>
@@ -276,6 +301,15 @@ export function PrequoteForm({ demoMode, attribution }: PrequoteFormProps) {
                 <p>Este servicio no genera precio, garantía ni fecha automáticos.</p>
               </div>
             )}
+            <div className="notice">
+              <strong>Referencias comerciales sujetas al contrato final.</strong>
+              <p>
+                Precio de arranque: {mxn(result.estimate.commercialReferences.installedModuleStartingPriceMxn)} por módulo instalado.
+                Pago de contado: {result.estimate.commercialReferences.cashDiscountPct.min}% a {result.estimate.commercialReferences.cashDiscountPct.max}%.
+                Garantía de referencia: {result.estimate.commercialReferences.hiddenDefectsWarrantyMonths} meses por vicios ocultos.
+              </p>
+              <p>El precio contractual y la fecha de instalación requieren validación comercial, disponibilidad de materiales y programación de obra.</p>
+            </div>
             <p className="fine">{result.estimate.disclaimer}</p>
             <p className="fine">Confianza: {confidenceLabel(result.estimate.evidenceConfidence)}. Esta solicitud todavía no cuenta como lead contractual.</p>
             <a

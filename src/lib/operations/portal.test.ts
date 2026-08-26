@@ -6,8 +6,23 @@ import {
   getSyntheticOperationsPortal,
   isOpenIncident,
   isStrictQualifiedOpportunity,
+  providerBlockersForHybridPlan,
   sumFirstPaymentsMxn,
 } from "@/lib/operations/portal";
+
+describe("provider blockers under the hybrid plan", () => {
+  it("preserves every provider blocker without hiding drift", () => {
+    expect(providerBlockersForHybridPlan([
+      "OUTREACH_MAILBOX_COUNT_NOT_THREE",
+      "OUTREACH_DOMAIN_COUNT_NOT_TWO",
+      "APOLLO_ACCOUNT_NOT_CONFIGURED",
+    ])).toEqual([
+      "OUTREACH_MAILBOX_COUNT_NOT_THREE",
+      "OUTREACH_DOMAIN_COUNT_NOT_TWO",
+      "APOLLO_ACCOUNT_NOT_CONFIGURED",
+    ]);
+  });
+});
 
 describe("sumFirstPaymentsMxn", () => {
   it("sums only positive first payments and ignores unsafe values", () => {

@@ -28,8 +28,9 @@ async function sha256(filePath) {
   return createHash("sha256").update(await readFile(filePath)).digest("hex");
 }
 
-const model = await json("data/prequote/model-draft-v2.json");
+const model = await json("data/prequote/model-approved-v3.json");
 const sourceManifest = await json("data/prequote/source-manifest.json");
+const pacoApproval = await json("data/prequote/paco-approved-parameters-2026-08-20.json");
 const calibrationCases = await json("data/prequote/calibration-cases.json");
 const historicalProjects = await json("data/imports/normalized/historical_projects.json");
 const localSources = parseSourceArguments(sourceArguments);
@@ -42,11 +43,16 @@ function check(id, condition, details) {
 
 check("MODEL_VERSION_MATCH", model.version === sourceManifest.model_version, model.version);
 check(
-  "MODEL_REMAINS_REVIEW_GATED",
-  model.status === "DRAFT_REVIEW_REQUIRED" && sourceManifest.approval_status === "DRAFT_REVIEW_REQUIRED",
+  "MODEL_TECHNICAL_INPUT_APPROVED",
+  model.status === "APPROVED" && sourceManifest.approval_status === "APPROVED",
   `${model.status}/${sourceManifest.approval_status}`,
 );
 check("MODEL_APPROVER_IS_PACO", model.modelApprovalRequiredBy === "Paco", model.modelApprovalRequiredBy);
+check(
+  "MODEL_APPROVAL_SOURCE_PATH",
+  model.approvalSourcePath === "data/prequote/paco-approved-parameters-2026-08-20.json",
+  model.approvalSourcePath,
+);
 check("MODEL_HAS_EXPIRY", Number.isFinite(Date.parse(model.validUntil)), model.validUntil);
 check(
   "MODEL_NOT_EXPIRED_AT_SNAPSHOT",
@@ -57,6 +63,19 @@ check(
   "MODEL_SOURCE_MANIFEST_PATH",
   model.sourceManifestPath === "data/prequote/source-manifest.json",
   model.sourceManifestPath,
+);
+
+const pacoApprovalSha256 = await sha256(resolve(repoRoot, "data/prequote/paco-approved-parameters-2026-08-20.json"));
+const pacoManifestSource = sourceManifest.sources.find((source) => source.source_id === "SRC-PACO-2026-08-20");
+check(
+  "PACO_APPROVAL_SOURCE_HASH",
+  pacoManifestSource?.sha256 === pacoApprovalSha256,
+  pacoApprovalSha256,
+);
+check(
+  "PACO_APPROVAL_SCOPE",
+  pacoApproval.approval_scope === "Parámetros técnicos y referencias comerciales del precotizador preliminar",
+  pacoApproval.approval_scope,
 );
 
 const sourceIds = new Set(sourceManifest.sources.map((source) => source.source_id));
@@ -94,11 +113,45 @@ check("HISTORY_SOLAR_COUNT", solarProjects.length === 18, `${solarProjects.lengt
 check("HISTORY_MAX_CAPACITY", Math.abs(maxHistoricalKwp - 54.825) < 0.0001, `${maxHistoricalKwp} kWp`);
 check("NO_MATCHING_100_KWP_HISTORY", solarProjects.every((row) => row.capacity_kwp < 100), `${maxHistoricalKwp} kWp max`);
 check(
-  "INDUSTRIAL_TIER_MARKED_EXTRAPOLATED",
-  model.investmentMxnPerKwp.some((tier) =>
-    tier.minKwp === 100 && tier.evidenceStatus === "EXTRAPOLATED_NO_MATCHING_HISTORY"
-  ),
-  "100 kWp tier",
+  "NO_AUTOMATIC_INDUSTRIAL_INVESTMENT_TIER",
+  model.investmentMxnPerKwp.every((tier) => tier.minKwp < 100)
+    && model.industrialInvestmentPolicy === "TECHNICAL_COMMERCIAL_REVIEW_REQUIRED",
+  model.industrialInvestmentPolicy,
+);
+
+check(
+  "PACO_TECHNICAL_RANGES_MATCH",
+  model.effectiveEnergyRateMxnPerKwh.min === 2.8
+    && model.effectiveEnergyRateMxnPerKwh.max === 3.35
+    && model.monthlyYieldKwhPerKwp.min === 120
+    && model.monthlyYieldKwhPerKwp.max === 165
+    && model.moduleWp.min === 620
+    && model.moduleWp.max === 650
+    && model.roofAreaM2PerKwp.min === 5.2
+    && model.roofAreaM2PerKwp.max === 7.3,
+  "rate/yield/module/area",
+);
+
+const underThirtyTier = model.investmentMxnPerKwp.find((tier) => tier.minKwp === 0);
+const fromThirtyTier = model.investmentMxnPerKwp.find((tier) => tier.minKwp === 30);
+check(
+  "PACO_INVESTMENT_BANDS_MATCH",
+  underThirtyTier?.min === 18000
+    && underThirtyTier?.max === 29000
+    && fromThirtyTier?.min === 17000
+    && fromThirtyTier?.max === 24000,
+  JSON.stringify({ underThirtyTier, fromThirtyTier }),
+);
+check(
+  "COMMERCIAL_REFERENCES_ARE_NON_AUTOMATIC",
+  model.commercialReferences.hiddenDefectsWarrantyMonths === 24
+    && model.commercialReferences.cashDiscountPct.min === 3
+    && model.commercialReferences.cashDiscountPct.max === 6
+    && model.commercialReferences.installedModuleStartingPriceMxn === 11000
+    && model.commercialReferences.contractualPriceRequiresCommercialValidation === true
+    && model.commercialReferences.installationDateDependsOnMaterialsAndWorkSchedule === true
+    && model.commercialReferences.automaticCommitmentsAllowed === false,
+  JSON.stringify(model.commercialReferences),
 );
 
 function selectTier(capacityMax) {
@@ -112,9 +165,10 @@ const backtests = calibrationCases.map((item) => {
   const target = item.coverage_pct_for_test / 100;
   const capacityMin = (spend / model.effectiveEnergyRateMxnPerKwh.max * target) / model.monthlyYieldKwhPerKwp.max;
   const capacityMax = (spend / model.effectiveEnergyRateMxnPerKwh.min * target) / model.monthlyYieldKwhPerKwp.min;
-  const tier = selectTier(capacityMax);
-  const investmentMin = capacityMin * tier.min;
-  const investmentMax = capacityMax * tier.max;
+  const minimumTier = selectTier(capacityMin);
+  const maximumTier = selectTier(capacityMax);
+  const investmentMin = capacityMin * minimumTier.min;
+  const investmentMax = capacityMax * maximumTier.max;
   const capacityPass = item.capacity_kwp >= capacityMin && item.capacity_kwp <= capacityMax;
   const investmentPass = item.installed_price_mxn_including_tax >= investmentMin
     && item.installed_price_mxn_including_tax <= investmentMax;
@@ -182,7 +236,9 @@ const report = {
   limitations: [
     "Four proposals are commercial proposals, not as-built evidence.",
     "No delivered historical project in the supplied workbook reaches 100 kWp.",
-    "An approved model and a technical receipt review remain mandatory before live use.",
+    "Paco approved the technical ranges and commercial references relayed on 2026-08-20.",
+    "Projects at or above 100 kWp have no automatic investment range.",
+    "Privacy approval, managed infrastructure, UAT and an explicit public release remain mandatory before live use.",
   ],
 };
 

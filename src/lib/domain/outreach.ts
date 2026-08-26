@@ -24,7 +24,7 @@ export function evaluateReleaseGate(gate: RuntimeReleaseGate): ReleaseGateResult
   if (!gate.manifestHashMatches) reasons.push("MANIFEST_HASH_MISMATCH");
   if (!gate.suppressionSnapshotCurrent) reasons.push("SUPPRESSION_NOT_CURRENT");
   if (!gate.mailboxHealthy) reasons.push("MAILBOX_NOT_HEALTHY");
-  if (gate.domainReadyDays < 35) reasons.push("DOMAIN_REPUTATION_UNDER_35_DAYS");
+  if (gate.domainReadyDays < 42) reasons.push("APOLLO_WARMUP_UNDER_42_DAYS");
   if (gate.shadowCanaryDecision !== "PASS") reasons.push("SHADOW_CANARY_NOT_PASS");
   return { decision: reasons.length === 0 ? "SEND_ALLOWED" : "HOLD", reasons };
 }

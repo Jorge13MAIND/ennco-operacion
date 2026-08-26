@@ -21,7 +21,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     target_organization_id: context.organizationId,
     target_task_id: taskId.data,
     target_owner_user_id: parsed.data.ownerUserId,
-    target_backup_user_id: parsed.data.backupUserId,
+    target_backup_user_id: parsed.data.backupUserId ?? null,
     target_idempotency_key: parsed.data.idempotencyKey,
   });
   if (error) return operationsRpcRejected("TASK_ASSIGNMENT_REJECTED");

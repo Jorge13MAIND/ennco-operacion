@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "baseline_id": "ENNCO-M31-APOLLO-DEDICATED-BASELINE-2026-08-25",
+  "evidence_class": "live",
+  "status": "HOLD",
+  "external_effects": 0,
+  "decision": {
+    "provider": "Apollo",
+    "plan": "Professional",
+    "billing_frequency": "MONTHLY",
+    "legal_owner": "TECKEL",
+    "custody_model": "TECKEL_MANAGED_FOR_ENNCO",
+    "workspace_mode": "ENNCO_DEDICATED",
+    "terms_risk": "ACCEPTED_BY_TECKEL",
+    "primary_user_role": "Francisco Cuellar",
+    "seat_count": 1,
+    "teckel_role": "AUTHORIZED_OPERATOR",
+    "shared_credentials_allowed": false,
+    "annual_review_after_days": 90,
+    "team_id_sha256_status": "FROZEN",
+    "legacy_contact_count": 192,
+    "legacy_sequence_count": 13,
+    "active_sequence_count": 1,
+    "teckel_mailbox_active_count": 2
+  },
+  "managed_service_exception": {
+    "baseline_budget_assumes_new_ennco_account": false,
+    "written_confirmation_status": "RISK_ACCEPTED_BY_TECKEL",
+    "response_deadline_business_days": 0,
+    "permitted_if_approved": [],
+    "real_send_engine_if_approved": null,
+    "profile_rename_allowed": true
+  },
+  "apollo_credit_policy": {
+    "available_credits": 4010,
+    "research_credit_cap": 300,
+    "infrastructure_credit_allocation": 3600,
+    "minimum_credit_buffer": 110,
+    "phone_enrichment_allowed": false,
+    "apollo_domain_credits_allowed": true,
+    "apollo_mailbox_credits_allowed": true
+  },
+  "domain_target": 2,
+  "selected_domains": [],
+  "domain_candidates": [
+    { "priority": 1, "domain": "enncoindustrial.com", "availability": "PENDING_APOLLO_CHECKOUT", "purchase_status": "NOT_PURCHASED" },
+    { "priority": 2, "domain": "enncoenergia.com", "availability": "PENDING_APOLLO_CHECKOUT", "purchase_status": "NOT_PURCHASED" },
+    { "priority": 3, "domain": "enncoindustrial.com.mx", "availability": "UNKNOWN", "purchase_status": "NOT_PURCHASED" },
+    { "priority": 4, "domain": "enncoenergia.com.mx", "availability": "UNKNOWN", "purchase_status": "NOT_PURCHASED" }
+  ],
+  "mailbox_target": 3,
+  "mailbox_local_parts": [
+    "francisco",
+    "fcuellar"
+  ],
+  "sender_identity": "Francisco Cuellar",
+  "workspace_plan": "APOLLO_EXISTING_TECKEL_WORKSPACE",
+  "warmup_required_days": 42,
+  "initial_daily_cap_per_mailbox": 2,
+  "maximum_daily_cap_per_mailbox": 10,
+  "tracking_opens_initially_enabled": false,
+  "budget_mxn_before_tax": {
+    "construction_min": 3146,
+    "construction_max": 3522,
+    "production_min": 4946,
+    "production_max": 5322,
+    "budget_fx_mxn_per_usd": 18
+  },
+  "tool_boundaries": {
+    "apollo": ["RESEARCH", "VERIFICATION", "WARMUP", "MAILBOX_HEALTH", "SEQUENCES", "CONTROLLED_EXECUTION"],
+    "ennco_platform": ["SOURCE_OF_TRUTH", "SUPPRESSION", "APPROVALS", "MANIFEST", "ATTRIBUTION", "LEADS", "PIPELINE", "ALERTS", "KILL_SWITCH"],
+    "gmail_api": ["REPLIES", "BOUNCES", "OUT_OF_OFFICE", "THREAD_IDENTITY"],
+    "resend": ["TRANSACTIONAL_ALERTS", "FOLIOS", "PDF_NOTIFICATIONS"],
+    "resend_cold_outreach_allowed": false
+  },
+  "external_actions": [
+    { "action": "RECONVERT_APOLLO", "status": "IN_PROGRESS", "owner": "TECKEL", "requires": "PAUSE_ARCHIVE_RENAME" },
+    { "action": "PURCHASE_DOMAINS", "status": "APPROVED_PENDING_CHECKOUT", "requires": "FINAL_APOLLO_CHECKOUT_CONFIRMATION" },
+    { "action": "CREATE_SHARED_SMTP_MAILBOXES", "status": "APPROVED_PENDING_CHECKOUT", "requires": "FINAL_APOLLO_CHECKOUT_CONFIRMATION" },
+    { "action": "CHANGE_DNS", "status": "BLOCKED_EXTERNAL", "requires": "DNS_AUTHORIZATION" },
+    { "action": "CONNECT_OAUTH", "status": "BLOCKED_EXTERNAL", "requires": "FRANCISCO_CONSENT" },
+    { "action": "SEND_PILOT", "status": "BLOCKED_EXTERNAL", "requires": "EXPLICIT_PILOT_APPROVAL" }
+  ],
+  "outreach_eligible_records": 0,
+  "real_recipients_enrolled": 0,
+  "real_messages_sent": 0
+}

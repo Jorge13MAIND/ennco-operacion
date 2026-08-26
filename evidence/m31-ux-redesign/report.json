@@ -1,0 +1,383 @@
+{
+  "schemaVersion": "1.0.0",
+  "evidenceClass": "LOCAL_WORKTREE_VISUAL_QA",
+  "baselineCommit": "f35c77a8140e954712432d0921ad76dabb1d8f06",
+  "sourceTreeClean": false,
+  "sourceFingerprint": "0a75fba6c4d3861160bd4f746193af4846257e17ea5dff98d46c66d47f5674e3",
+  "sourceHashes": {
+    "next.config.ts": "bfe695713fa8522c0e8794509afe33014bb87262639e0b7e8f278fe5f1aee770",
+    "public/brand/ennco-lockup.svg": "daef7c8c652d4c30efdd05b757600a6917c80031a1dcae37158b8d5f6346a322",
+    "public/brand/ennco-mark.svg": "e165d1d68b948c65a150c92b112e965d1d086d03438742e7d3718512c0255a79",
+    "public/media/ennco/industrial-rooftop-mobile.avif": "e58b9c2343a235df30942797491133aab65bc1e9e423a512b2794cdb4c8b422d",
+    "public/media/ennco/industrial-rooftop-mobile.webp": "4fe9cb1452bf50159dd92ad5c034800ae9fb30ea6b4e6f3d0ffa3f9432b818c1",
+    "public/media/ennco/industrial-rooftop.avif": "c56106e91dfae7d3e8abdff3dd28e2819261ed06fc53124c7028c8f31643d8a2",
+    "public/media/ennco/industrial-rooftop.webp": "7a8806a30793d22b3c43975cc56bfcba4bf454921dc65295d8491aeb087ab0db",
+    "public/media/ennco/installation-team-mobile.avif": "031ebb24c14831928418d58a2de25d0a1754155ac799abde71fb0907038d816d",
+    "public/media/ennco/installation-team-mobile.webp": "3664aaa9d314b1ced0ad89c85270c313664063e9cb4e67eb8b58667812d7fa31",
+    "public/media/ennco/installation-team.avif": "5e330315291d4791ca1cd98501b3a7220a53d771f0f1db8561cfbb058b11579c",
+    "public/media/ennco/installation-team.webp": "25af7e3770b9965ffa7cedc120690e371a8001f18f1a4e9388265ccd359cb435",
+    "public/media/ennco/solar-installation-mobile.avif": "1d3f6bf8dc162d2277936f2cb610a17f74daa70d43836805b011a54592ae1581",
+    "public/media/ennco/solar-installation-mobile.webp": "cb8dbde58f5eb29e7d2888cd7b8893fdcb9601c436c37600448ccd542327037a",
+    "public/media/ennco/solar-installation.avif": "932fabd48d2fd8928824d5df799bf96a16943ee88a564e7e8eb1b69df7c7517e",
+    "public/media/ennco/solar-installation.webp": "c2ade1c0de8b63db285819cbd38f0fff5dde3e87379849a7720090de6a01556b",
+    "public/media/ennco/thermography-mobile.avif": "59617fbae993bae19c360e70c3ee78ae8cfecb6560324342a60450cc6a6da74d",
+    "public/media/ennco/thermography-mobile.webp": "ec5da23d17448c7b5cf1558bcd9a2c8eaba811827d99c34c885b82ed2fe73396",
+    "public/media/ennco/thermography.avif": "c1febf319d8219b6fb6a23a51cbd6081d0320d6a72407321dd015909ca58c929",
+    "public/media/ennco/thermography.webp": "98d602c1b8e8f62f573d537d91ba126d792b7d9090be6f989bb31f8953803ab1",
+    "public/media/generated/engineering-texture.avif": "08cb3c1eb9ec8753b24b90f29dfbc901a2680d5f153342639db36e3e0e155cb9",
+    "public/media/generated/engineering-texture.webp": "91ad93ec1fd7382cbe4c8f71f3f973cbd32138fb1c25251b1025037a81ef534f",
+    "public/media/generated/thermal-field.avif": "419c6b88b4307d77892508413d4074da41f4ebd1dcc8b2b2beba523b21526e1a",
+    "public/media/generated/thermal-field.webp": "920d3fd69d90d01a030bf6ee8f02598f3718293de34996dc3fea34ad33bae5aa",
+    "public/media/manifest.json": "33e9d2bfe765856b52e23c9d5f61c46ee57e087db175b6a5ebf47dc08c06712d",
+    "scripts/m23-load-gate.k6.js": "0b23006bb8e35e25cffb4c35f4e61589435fa2c94b01e5417138b561052d9ffe",
+    "scripts/m31-ux-browser-gate.mjs": "fd85d2c545faea2f75c6e40d5454e462b7dec6ff73b423d63aef3fe267d569f0",
+    "src/app/diagnostico/page.tsx": "5f5054ccc76d474b3a45b775c29f4d23f71b39fa0cddf681e359570ed9b4a9d3",
+    "src/app/globals.css": "9a0716c155852c68624b819364933c264ede0ac1f017e1d9ea7551a541c41715",
+    "src/app/ingreso/page.tsx": "d9148cfef3d48769a1da68963b488ab23c1f5d57b6eb563c83c480c298364547",
+    "src/app/layout.tsx": "98ada2e46338e0064d31ffdbe6b207f2e45cc94f0448dbf80f5c34bb83c31729",
+    "src/app/operacion/layout.tsx": "df5b2d7521eab96d15a7a98e57392d991613f7c509d4f65243c38a5886df4b76",
+    "src/app/operacion/page.tsx": "7ee17429d6449b3b6316aeb126721ab57c5a79fb98b69b6b226fb3370b19db52",
+    "src/app/page.tsx": "730bfbc68c2852e22246a26086832b85538e6485627b8da82367eb26e782808d",
+    "src/components/OperationsNav.tsx": "b5a15f4a784ec0f0535432fff4ff0af3ba040a5816b7cf4e131f9036039873f9",
+    "src/components/PortalTable.tsx": "9434701c5353f7ee6c467ef6619cfbec258b07dc002d7b1fc29c7b1b961cf9a0",
+    "src/components/PortalTableFilter.tsx": "1ccb00fb7a96e888b3e0cc5e649cc50cc176f1daac095bc34b2e3a1ed48da8ff",
+    "src/components/PrequoteForm.tsx": "8da672ce4e1cf8103762a4b5a35638f1a1fd368af876fa3eddbbb3e5e4e50527",
+    "src/components/SiteHeader.tsx": "ec8095d8b46a28b926ffa91ca809057efae58babc4b1d4d9b5a76add83bae6d9",
+    "src/styles/base.css": "6af2ebb96d2bef1d6572bc24a293d32031794958daa56198e463573480310684",
+    "src/styles/operations.css": "711c72ad45facbd130d018b61344a084c9984013fd7d15705089931f2eeaf418",
+    "src/styles/public.css": "5965e709fc3b1550a8c3363a33e0962a7eeacf5f6df91fb6e76445bf597fb228",
+    "src/styles/tokens.css": "a1ad1d5a868ad989d75b6a08de17eee1e180ec18ce950f0d18bdd59703d9f1df"
+  },
+  "baselineHashes": {
+    "evidence/m31-ux-redesign/before/control-room-desktop.png": "97dc498410aff5916abdf098934382a92d4af123ada63ba0cc914fda7b349900",
+    "evidence/m31-ux-redesign/before/control-room-mobile.png": "ccd7e128137e325ba78001f1af9bf72da9be755892efe6a87e625ffe330e3760",
+    "evidence/m31-ux-redesign/before/diagnostic-desktop.png": "9be2ee8731e1a491fa6b346714f67b5362d6ee3297ade999b9f257fa2d9c662d",
+    "evidence/m31-ux-redesign/before/diagnostic-mobile.png": "f21c2c0265713c158ae47223117c9ac831351618d802fe825cd7870d05b73df6"
+  },
+  "captureHashes": {
+    "evidence/m31-ux-redesign/after/desktop-1280-control-room.png": "474759586a550b34cbc65fc2df10e2520dcd69dad2fe0276a2f05d8518115c43",
+    "evidence/m31-ux-redesign/after/desktop-1280-diagnostic.png": "f2099b53739b78647fbd8200c1736f68647954cf5c594d254a9ee9f95ed1015e",
+    "evidence/m31-ux-redesign/after/desktop-1280-home.png": "2ba92bdc9cad05ffd70a491a2ed6da5fe4c3949b0bb5d61cc319eacd6c915017",
+    "evidence/m31-ux-redesign/after/desktop-1280-identity.png": "1061e780bb0a914add8726867f6c59491eca3d8ce69e7474954ae85572f59e96",
+    "evidence/m31-ux-redesign/after/desktop-1280-responses.png": "d3d6dcf06a8eb411cd6f203580a9a3361bf3b958b3654e85c01557988d632e34",
+    "evidence/m31-ux-redesign/after/desktop-1440-control-room.png": "35fa7768eee760f909ba11a5389874194bec2d125c678c54ef6564e2b92439a1",
+    "evidence/m31-ux-redesign/after/desktop-1440-diagnostic.png": "aea54cc15bc71ef4ed6ac03f5e7da11d2688e58cb52329579b2c3c9a96e8b76b",
+    "evidence/m31-ux-redesign/after/desktop-1440-home.png": "085410d26123e5a9bff316c688e1f1281422a3b391b5e67595293db9432ab099",
+    "evidence/m31-ux-redesign/after/desktop-1440-identity.png": "dda69e59d3b4ce69c7cacd584c57a46f6a3273074180f99ac1b0e1dcf8844815",
+    "evidence/m31-ux-redesign/after/desktop-1440-responses.png": "ef9a26db7f0dc4bf9d6a172edd20593fc784cdc0d3e6b5aeaaf0fd57d18f9a8e",
+    "evidence/m31-ux-redesign/after/mobile-390-control-room.png": "3417ca3238b599a5a77ae47bad14f9d1a4ec75f7926a3f94d9c5e03302a0759b",
+    "evidence/m31-ux-redesign/after/mobile-390-diagnostic.png": "9a1b49ad30756dc427bd6a4c7695eda9aaf6314f44ac3db390ca4bd40d7489e4",
+    "evidence/m31-ux-redesign/after/mobile-390-home.png": "0a51bc24010f76143898cc1672384412e8595723ec717c7e5da471097c2ee665",
+    "evidence/m31-ux-redesign/after/mobile-390-identity.png": "6c92ed7b2ed746912b1869cca7e57eefe5ed63564cd03df54f54bddbfe6f7bff",
+    "evidence/m31-ux-redesign/after/mobile-390-responses.png": "fc15301f99321209c6d0f4565f93ae1a5c9ec66e9dde702e0323c28142bf9825",
+    "evidence/m31-ux-redesign/after/tablet-768-control-room.png": "6b8cf816eb999b6eac38c40039b42b452b7150df6fde96b580672335726bb63e",
+    "evidence/m31-ux-redesign/after/tablet-768-diagnostic.png": "4f0141efafa72f849a77c3ff39d5e269708dae99f51fe4377272df35afb89983",
+    "evidence/m31-ux-redesign/after/tablet-768-home.png": "34c8e844589ab6e68207d02a709c68cdb1005d741a36c7b4a7847a5bacf8bd42",
+    "evidence/m31-ux-redesign/after/tablet-768-identity.png": "005aedb8059139cbcc1a61204fd3410150ceda289a8f3836c178a1fc7bf902fe",
+    "evidence/m31-ux-redesign/after/tablet-768-responses.png": "30f6f5ff64d016af19360e726dfd6159669f5a9722585bb87e6537da9b4f102d"
+  },
+  "generatedAt": "2026-08-26T00:26:35.286Z",
+  "externalSideEffects": 0,
+  "matrix": {
+    "viewports": 4,
+    "surfaces": 5,
+    "captures": 20
+  },
+  "surfaceResults": [
+    {
+      "viewport": "desktop-1440",
+      "surface": "home",
+      "clientWidth": 1440,
+      "scrollWidth": 1440,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 268
+      }
+    },
+    {
+      "viewport": "desktop-1440",
+      "surface": "diagnostic",
+      "clientWidth": 1440,
+      "scrollWidth": 1440,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 80
+      }
+    },
+    {
+      "viewport": "desktop-1440",
+      "surface": "identity",
+      "clientWidth": 1440,
+      "scrollWidth": 1440,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0.00000797244727366255,
+        "lcp": 92
+      }
+    },
+    {
+      "viewport": "desktop-1440",
+      "surface": "control-room",
+      "clientWidth": 1440,
+      "scrollWidth": 1440,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 128
+      }
+    },
+    {
+      "viewport": "desktop-1440",
+      "surface": "responses",
+      "clientWidth": 1440,
+      "scrollWidth": 1440,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 64
+      }
+    },
+    {
+      "viewport": "desktop-1280",
+      "surface": "home",
+      "clientWidth": 1280,
+      "scrollWidth": 1280,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 88
+      }
+    },
+    {
+      "viewport": "desktop-1280",
+      "surface": "diagnostic",
+      "clientWidth": 1280,
+      "scrollWidth": 1280,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 64
+      }
+    },
+    {
+      "viewport": "desktop-1280",
+      "surface": "identity",
+      "clientWidth": 1280,
+      "scrollWidth": 1280,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0.000011351394653320313,
+        "lcp": 92
+      }
+    },
+    {
+      "viewport": "desktop-1280",
+      "surface": "control-room",
+      "clientWidth": 1280,
+      "scrollWidth": 1280,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 80
+      }
+    },
+    {
+      "viewport": "desktop-1280",
+      "surface": "responses",
+      "clientWidth": 1280,
+      "scrollWidth": 1280,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 64
+      }
+    },
+    {
+      "viewport": "tablet-768",
+      "surface": "home",
+      "clientWidth": 768,
+      "scrollWidth": 768,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0.000030344934202730656,
+        "lcp": 100
+      }
+    },
+    {
+      "viewport": "tablet-768",
+      "surface": "diagnostic",
+      "clientWidth": 768,
+      "scrollWidth": 768,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 64
+      }
+    },
+    {
+      "viewport": "tablet-768",
+      "surface": "identity",
+      "clientWidth": 768,
+      "scrollWidth": 768,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0.000018475577235221863,
+        "lcp": 88
+      }
+    },
+    {
+      "viewport": "tablet-768",
+      "surface": "control-room",
+      "clientWidth": 768,
+      "scrollWidth": 768,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 72
+      }
+    },
+    {
+      "viewport": "tablet-768",
+      "surface": "responses",
+      "clientWidth": 768,
+      "scrollWidth": 768,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 60
+      }
+    },
+    {
+      "viewport": "mobile-390",
+      "surface": "home",
+      "clientWidth": 390,
+      "scrollWidth": 390,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 56
+      }
+    },
+    {
+      "viewport": "mobile-390",
+      "surface": "diagnostic",
+      "clientWidth": 390,
+      "scrollWidth": 390,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 60
+      }
+    },
+    {
+      "viewport": "mobile-390",
+      "surface": "identity",
+      "clientWidth": 390,
+      "scrollWidth": 390,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 92
+      }
+    },
+    {
+      "viewport": "mobile-390",
+      "surface": "control-room",
+      "clientWidth": 390,
+      "scrollWidth": 390,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 76
+      }
+    },
+    {
+      "viewport": "mobile-390",
+      "surface": "responses",
+      "clientWidth": 390,
+      "scrollWidth": 390,
+      "cspViolations": [],
+      "vitals": {
+        "cls": 0,
+        "lcp": 56
+      }
+    }
+  ],
+  "mobileProfiles": [
+    {
+      "path": "/",
+      "samples": [
+        {
+          "run": 1,
+          "cls": 0,
+          "lcp": 620
+        },
+        {
+          "run": 2,
+          "cls": 0,
+          "lcp": 608
+        },
+        {
+          "run": 3,
+          "cls": 0,
+          "lcp": 628
+        },
+        {
+          "run": 4,
+          "cls": 0,
+          "lcp": 616
+        },
+        {
+          "run": 5,
+          "cls": 0,
+          "lcp": 620
+        }
+      ],
+      "lcpP75Ms": 620,
+      "sampleCount": 5
+    },
+    {
+      "path": "/operacion",
+      "samples": [
+        {
+          "run": 1,
+          "cls": 0,
+          "lcp": 648
+        },
+        {
+          "run": 2,
+          "cls": 0,
+          "lcp": 628
+        },
+        {
+          "run": 3,
+          "cls": 0,
+          "lcp": 652
+        },
+        {
+          "run": 4,
+          "cls": 0,
+          "lcp": 644
+        },
+        {
+          "run": 5,
+          "cls": 0,
+          "lcp": 624
+        }
+      ],
+      "lcpP75Ms": 648,
+      "sampleCount": 5
+    }
+  ],
+  "reducedMotionDurationMs": 0.01,
+  "status": "PASS_LOCAL",
+  "releaseEligible": false,
+  "failures": [],
+  "limitations": [
+    "La evidencia está ligada al fingerprint exacto del frontend del worktree, no a un commit limpio.",
+    "Chromium automatizado no sustituye auditoría humana con tecnología asistiva ni revisión en dispositivos físicos.",
+    "Las métricas se obtienen sobre build productivo local con red y CPU simuladas, no en staging ni producción."
+  ]
+}

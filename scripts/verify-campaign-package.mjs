@@ -2,6 +2,8 @@ import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
+import { annexASnapshotSha256 } from "./lib/anexo-a.mjs";
+
 const repoArgument = process.argv.indexOf("--repo");
 const repo = resolve(repoArgument >= 0 ? process.argv[repoArgument + 1] : ".");
 const writeEvidence = process.argv.includes("--write-evidence");
@@ -9,17 +11,21 @@ const sequencePath = resolve(repo, "data/campaigns/sequence-draft-v1.json");
 const manifestPath = resolve(repo, "data/campaigns/campaign-manifest-draft-v1.json");
 const playbookPath = resolve(repo, "data/campaigns/response-playbook-v1.json");
 const referenceCardsPath = resolve(repo, "data/content/anonymous-reference-cards-v1.json");
+const annexAPath = resolve(repo, "data/suppression/anexo-a-2026-08-13.json");
 
 const sequenceBuffer = await readFile(sequencePath);
 const manifestBuffer = await readFile(manifestPath);
 const playbookBuffer = await readFile(playbookPath);
 const referenceCardsBuffer = await readFile(referenceCardsPath);
+const annexABuffer = await readFile(annexAPath);
 const sequence = JSON.parse(sequenceBuffer.toString("utf8"));
 const manifest = JSON.parse(manifestBuffer.toString("utf8"));
 const playbook = JSON.parse(playbookBuffer.toString("utf8"));
 const referenceCards = JSON.parse(referenceCardsBuffer.toString("utf8"));
+const annexA = JSON.parse(annexABuffer.toString("utf8"));
 const sequenceSha256 = createHash("sha256").update(sequenceBuffer).digest("hex");
 const manifestSha256 = createHash("sha256").update(manifestBuffer).digest("hex");
+const annexASnapshot = annexASnapshotSha256(annexA);
 const checks = [];
 
 function check(id, condition, observed) {
@@ -54,9 +60,11 @@ check("SEQUENCE_HASH_MATCHES_MANIFEST", manifest.sequence.sha256 === sequenceSha
 check("MANIFEST_IS_HOLD", manifest.status === "HOLD" && manifest.external_send_authorized === false, { status: manifest.status, external_send_authorized: manifest.external_send_authorized });
 check("ZERO_RECIPIENTS", manifest.recipient_count === 0 && manifest.recipients.length === 0, manifest.recipient_count);
 check("FAIL_CLOSED_RUNTIME", manifest.runtime.global_kill_switch === true && manifest.runtime.mailbox_kill_switch === true && manifest.runtime.external_send_allowed === false && manifest.runtime.dry_run_only === true, manifest.runtime);
-check("ANNEX_A_BLOCKS_RELEASE", manifest.suppression.annex_a_present === false && manifest.release_blockers.includes("ANNEX_A_ABSENT"), manifest.suppression);
-check("ALL_APPROVALS_FALSE", Object.values(manifest.approvals).every((value) => value === false), manifest.approvals);
+check("ANNEX_A_SNAPSHOT_MATCHES", manifest.suppression.annex_a_present === true && manifest.suppression.snapshot_sha256 === annexASnapshot, { expected: annexASnapshot, observed: manifest.suppression.snapshot_sha256 });
+check("ANNEX_A_ACCOUNT_BINDING_BLOCKS_RELEASE", manifest.approvals.suppression_reconciled === false && manifest.release_blockers.includes("ANNEX_A_DATABASE_BINDING_PENDING"), { suppression_reconciled: manifest.approvals.suppression_reconciled, release_blockers: manifest.release_blockers });
+check("ONLY_TECHNICAL_APPROVAL_PRESENT", manifest.approvals.technical_paco === true && Object.entries(manifest.approvals).filter(([key]) => key !== "technical_paco").every(([, value]) => value === false), manifest.approvals);
 check("UNKNOWN_NEVER_PASS", manifest.canary.unknown_is_pass === false && manifest.canary.release_decision === "EXTEND", manifest.canary);
+check("APOLLO_WARMUP_MINIMUM_42_DAYS", manifest.canary.required_real_consecutive_days === 42, manifest.canary.required_real_consecutive_days);
 check("NO_OPEN_PIXEL", manifest.tracking.open_pixel === false, manifest.tracking);
 check("EXTERNAL_SIDE_EFFECT_BUDGET_ZERO", manifest.runtime.max_external_side_effects === 0, manifest.runtime.max_external_side_effects);
 check("RESPONSE_PLAYBOOK_DRAFT_ONLY", playbook.status === "DRAFT_REVIEW_REQUIRED" && playbook.responses.length === 8, { status: playbook.status, responses: playbook.responses.length });
@@ -79,7 +87,7 @@ const result = {
 };
 
 if (writeEvidence) {
-  await writeFile(resolve(repo, "docs/evidence/M5-campaign-verification.json"), `${JSON.stringify(result, null, 2)}\n`);
+  await writeFile(resolve(repo, "docs/evidence/M5-campaign-verification-current.json"), `${JSON.stringify(result, null, 2)}\n`);
 }
 
 process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);

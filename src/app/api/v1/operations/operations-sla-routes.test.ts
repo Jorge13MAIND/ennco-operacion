@@ -9,6 +9,7 @@ import { POST as decideApproval } from "@/app/api/v1/operations/approvals/[id]/d
 import { POST as transitionIncident } from "@/app/api/v1/operations/incidents/[id]/transition/route";
 import { POST as requestApproval } from "@/app/api/v1/operations/opportunities/[id]/approval/route";
 import { POST as scheduleMeeting } from "@/app/api/v1/operations/opportunities/[id]/meetings/route";
+import { POST as assignTask } from "@/app/api/v1/operations/tasks/[id]/assign/route";
 import { POST as completeTask } from "@/app/api/v1/operations/tasks/[id]/complete/route";
 
 const organizationId = "41000000-0000-4000-8000-000000000001";
@@ -52,6 +53,31 @@ describe("operations SLA routes", () => {
     expect(response.status).toBe(400);
     expect((await response.json()).error).toBe("OPERATIONS_IDEMPOTENCY_KEY_INVALID");
     expect(rpc).not.toHaveBeenCalled();
+  });
+
+  it("passes a missing backup as null for the single Teckel operator contract", async () => {
+    rpc.mockResolvedValueOnce({
+      data: {
+        status: "ASSIGNED",
+        task_id: recordId,
+        owner_user_id: recordId,
+        backup_user_id: null,
+        correlation_id: recordId,
+        replayed: false,
+      },
+      error: null,
+    });
+    const response = await assignTask(request("/task/assign", { ownerUserId: recordId, backupUserId: null }), {
+      params: Promise.resolve({ id: recordId }),
+    });
+    expect(response.status).toBe(200);
+    expect(rpc).toHaveBeenCalledWith("assign_operational_task", {
+      target_organization_id: organizationId,
+      target_task_id: recordId,
+      target_owner_user_id: recordId,
+      target_backup_user_id: null,
+      target_idempotency_key: idempotencyKey,
+    });
   });
 
   it("binds incident identity and command fields to the authenticated organization", async () => {

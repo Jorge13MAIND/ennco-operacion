@@ -11,7 +11,7 @@ const valid = {
   properties: {
     estimate_kind: "SOLAR_RANGE",
     verdict: "INDUSTRIAL_REVIEW",
-    model_version: "ENNCO-PREQ-2026-08-DRAFT-02",
+    model_version: "ENNCO-PREQ-2026-08-PACO-01",
   },
 };
 

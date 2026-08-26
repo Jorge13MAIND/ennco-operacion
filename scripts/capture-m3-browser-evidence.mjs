@@ -24,6 +24,11 @@ try {
     await page.goto(`${baseUrl}/diagnostico`, { waitUntil: "domcontentloaded" });
     await page.getByRole("button", { name: "Generar referencia" }).click();
     await page.getByText(/ENN-PRE-/).waitFor();
+    await page.evaluate(() => {
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      document.querySelector(".skip-link")?.remove();
+      window.scrollTo(0, 0);
+    });
     await page.screenshot({
       path: resolve(evidenceDir, `M3-diagnostic-${viewport.name}.png`),
       fullPage: true,

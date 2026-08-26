@@ -1,6 +1,6 @@
 # M3 Capture and Prequote Architecture
 
-Snapshot: 11 de agosto de 2026, America/Mexico_City.
+Snapshot actualizado: 20 de agosto de 2026, America/Mexico_City.
 
 ## Veredicto
 
@@ -31,7 +31,9 @@ Una precotización nunca crea automáticamente un lead contractual. El resultado
 
 ## Modelo
 
-Versión local: `ENNCO-PREQ-2026-08-DRAFT-02`.
+Versión local: `ENNCO-PREQ-2026-08-PACO-01`.
+
+Paco validó los parámetros técnicos y las referencias comerciales el 20 de agosto de 2026. El modelo queda `APPROVED`, pero esta aprobación no libera la superficie pública ni sustituye privacidad, infraestructura, UAT o autorización explícita.
 
 Fuentes congeladas:
 
@@ -46,9 +48,10 @@ Hallazgos:
 - No existe evidencia histórica entregada que calibre directamente un proyecto de 100 kWp o más.
 - Los cuatro casos comerciales quedan dentro de las bandas candidatas de capacidad e inversión.
 - Las inconsistencias de fuente se preservan como flags y no se corrigen en silencio.
-- La banda industrial se etiqueta como extrapolación.
+- Para 100 kWp o más no se genera un rango automático de inversión. El caso se escala a revisión técnica y comercial.
+- Las bandas aprobadas son 18,000 a 29,000 MXN/kWp debajo de 30 kWp y 17,000 a 24,000 MXN/kWp desde 30 hasta menos de 100 kWp.
 
-El modelo no usa precio final, garantía, descuento, fecha de instalación ni beneficio fiscal definitivo. Los demás servicios se enrutan a revisión técnica sin precio automático.
+El modelo muestra como referencias sujetas a contrato una garantía de 24 meses por vicios ocultos, descuento de contado de 3% a 6% y precio de arranque de 11,000 MXN por módulo. No aplica descuentos, garantías, precio contractual o fecha de instalación de forma automática. Los demás servicios se enrutan a revisión técnica sin precio automático.
 
 ## Persistencia pública
 
@@ -95,7 +98,8 @@ La estructura se basó en el artículo 15 del texto vigente de la Ley Federal de
 
 ## Archivos
 
-- `data/prequote/model-draft-v2.json`
+- `data/prequote/model-approved-v3.json`
+- `data/prequote/paco-approved-parameters-2026-08-20.json`
 - `data/prequote/source-manifest.json`
 - `data/prequote/calibration-cases.json`
 - `src/lib/domain/prequote.ts`
@@ -108,10 +112,9 @@ La estructura se basó en el artículo 15 del texto vigente de la Ley Federal de
 
 ## Limitaciones pendientes
 
-1. Paco debe aprobar supuestos, bandas, vigencia y versión.
-2. ENNCO debe validar legalmente el aviso.
-3. Supabase real debe ejecutar forward, rollback, reapply y canary aislado.
-4. El secreto HMAC debe existir tanto en vault como en configuración privada de base, con procedimiento de rotación.
-5. La carga de documentos requiere Storage real, magic bytes, antivirus y worker service-only.
-6. El sitio corporativo actual requiere sus correcciones y medición por separado antes de publicación.
-7. Ningún resultado local prueba disponibilidad, leads, pipeline o revenue.
+1. ENNCO debe validar legalmente el aviso.
+2. Supabase real debe ejecutar forward, rollback, reapply y canary aislado.
+3. El secreto HMAC debe existir tanto en vault como en configuración privada de base, con procedimiento de rotación.
+4. La carga de documentos requiere Storage real, magic bytes, antivirus y worker service-only.
+5. El sitio corporativo actual requiere sus correcciones y medición por separado antes de publicación.
+6. Ningún resultado local prueba disponibilidad, leads, pipeline o revenue.
