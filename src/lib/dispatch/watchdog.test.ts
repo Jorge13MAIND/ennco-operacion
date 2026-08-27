@@ -43,6 +43,28 @@ describe("dispatch watchdog", () => {
     expect(findings).toContainEqual(expect.objectContaining({ title: "outbox con eventos vencidos" }));
   });
 
+  it("grita cuando el calendario hábil se está agotando, y solo entonces", () => {
+    const conCalendario = (dias: number | undefined) => evaluateDispatchWatchdog({
+      health: { last_tick: { created_at: insideWindow.toISOString() }, business_calendar: { future_business_days: dias } },
+      now: insideWindow,
+      dispatchMode: "shadow",
+    });
+
+    expect(conCalendario(344)).toEqual([]);
+    expect(conCalendario(89)).toContainEqual(
+      expect.objectContaining({ level: "WARN", title: "calendario hábil por agotarse" }),
+    );
+    expect(conCalendario(19)).toContainEqual(
+      expect.objectContaining({ level: "CRITICAL", title: "calendario hábil agotado" }),
+    );
+    // Cero es el estado exacto que se encontró en produccion el 27-ago-2026.
+    expect(conCalendario(0)).toContainEqual(
+      expect.objectContaining({ level: "CRITICAL", title: "calendario hábil agotado" }),
+    );
+    // Si la salud no trae el dato no se inventa una alarma.
+    expect(conCalendario(undefined)).toEqual([]);
+  });
+
   it("formats the daily snapshot with release and outbox facts", () => {
     const lines = formatDailySnapshot({
       health: {

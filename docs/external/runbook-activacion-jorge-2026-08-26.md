@@ -52,18 +52,20 @@ resultado en vivo. Antes de entrar con la cuenta admin de ENNCO
 (`contacto@ennco.com.mx`): **cámbiale la contraseña** (la actual viajó por
 WhatsApp y el programa la considera comprometida; DEC-021).
 
-### 2b. Tu acceso de operador a la plataforma (~5 min) — desbloquea la carga de leads
+### 2b. Tu acceso de operador a la plataforma (~2 min) — desbloquea la carga de leads
 
-Descubierto 26-ago: toda la carga de datos al Research Workbench exige
-sesión de operador con MFA (AAL2) y **ningún usuario de producción ha
-completado su primer acceso**. Sin esto, las 1,831 empresas del sourcing
-(batches ya preparados y verificados en el repo) no pueden entrar.
+Toda la carga de datos al Research Workbench exige sesión de operador, y
+**ningún usuario de producción había entrado nunca**. Sin esto, las 1,831
+empresas del sourcing (batches ya preparados y verificados) no pueden entrar.
+
+Por decisión tuya del 27-ago (DEC-106) el acceso ya **no pide segundo
+factor**: usuario, contraseña y recuperación, nada más. Ya está desplegado
+y verificado en producción.
 
 1. `ennco-operacion.vercel.app/ingreso` → "¿Olvidaste tu contraseña?" con
    `george@teckel-ai.com` → te llega el enlace de recuperación al correo.
 2. Crea una contraseña SOLO para el Control Room (no reutilices ninguna).
-3. La plataforma te pide inscribir TOTP: escanea el QR con tu app de
-   autenticación (1Password o Google Authenticator) y confirma el código.
+3. Listo, entras directo. Ya no hay pantalla de código.
 4. Con tu sesión viva, yo ejecuto los 7 POST de ingest desde tu navegador
    (extensión) — tú solo miras. Cero contraseñas por chat, como siempre.
 

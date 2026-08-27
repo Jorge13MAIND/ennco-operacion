@@ -15,6 +15,7 @@ const healthSchema = z.object({
   operations_health: z.object({ last_watchdog_status: z.string().nullable() }).partial().optional(),
   cadence_health: z.unknown().optional(),
   outbox: z.object({ pending: z.number(), due: z.number(), processing: z.number() }).partial().optional(),
+  business_calendar: z.object({ future_business_days: z.number() }).partial().nullable().optional(),
 }).passthrough();
 
 export type DispatchHealthSnapshot = z.infer<typeof healthSchema>;
@@ -103,6 +104,27 @@ export function evaluateDispatchWatchdog(input: {
   const operationsStatus = health.operations_health?.last_watchdog_status;
   if (insideWindow && operationsStatus && operationsStatus !== "HEALTHY") {
     findings.push({ level: "CRITICAL", title: "salud de operaciones caída", detail: `watchdog ${operationsStatus}` });
+  }
+
+  // El calendario hábil es un dato de producción que se agota con el tiempo, y
+  // cuando se agota NO falla de forma visible: revientan la solicitud de
+  // aprobación y el ruteo de las respuestas positivas. El 27-ago-2026 se
+  // encontró vacío. Un gate local nunca puede ver esto; el vigilante sí.
+  const futureBusinessDays = health.business_calendar?.future_business_days;
+  if (typeof futureBusinessDays === "number") {
+    if (futureBusinessDays < 20) {
+      findings.push({
+        level: "CRITICAL",
+        title: "calendario hábil agotado",
+        detail: `solo ${futureBusinessDays} días hábiles por delante; sin calendario no se pueden pedir aprobaciones ni rutear respuestas positivas`,
+      });
+    } else if (futureBusinessDays < 90) {
+      findings.push({
+        level: "WARN",
+        title: "calendario hábil por agotarse",
+        detail: `${futureBusinessDays} días hábiles por delante; sembrar el siguiente horizonte`,
+      });
+    }
   }
 
   return findings;
