@@ -72,6 +72,11 @@ psql -X -v ON_ERROR_STOP=1 -h "$M032_GATE_DIR" -p "$M032_GATE_PORT" -d "$M032_GA
 
 psql -X -v ON_ERROR_STOP=1 -h "$M032_GATE_DIR" -p "$M032_GATE_PORT" -d "$M032_GATE_DB" \
   -f "$REPO_ROOT/supabase/migrations/202608260032_hybrid_dispatch_engine.sql" >/dev/null
+# M035 va despues de la 032 y parchea read_dispatch_health: re-aplicar la 032
+# revierte ese parche, asi que la 035 se re-aplica encima para que el diff de
+# esquema compare el estado real de produccion.
+psql -X -v ON_ERROR_STOP=1 -h "$M032_GATE_DIR" -p "$M032_GATE_PORT" -d "$M032_GATE_DB" \
+  -f "$REPO_ROOT/supabase/migrations/202608270035_dispatch_health_business_calendar.sql" >/dev/null
 psql -X -v ON_ERROR_STOP=1 -h "$M032_GATE_DIR" -p "$M032_GATE_PORT" -d "$M032_GATE_DB" <<'SQL'
 do $$ begin
   if to_regprocedure('public.run_dispatch_heartbeat(uuid,text,uuid,timestamptz,text)') is null

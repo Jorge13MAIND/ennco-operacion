@@ -14,7 +14,11 @@ insert into public.runtime_controls(organization_id,global_kill_switch,external_
 ('32000000-0000-4000-8000-000000000002',true,false);
 insert into public.reporting_calendar_days(organization_id,calendar_date,is_business_day,evidence_class,source_sha256,recorded_by)
 select '32000000-0000-4000-8000-000000000001',d::date,extract(isodow from d)<6,'live',repeat('1',64),'32010000-0000-4000-8000-000000000002'
-from generate_series(date '2026-08-10',date '2026-08-31',interval '1 day') d;
+-- El horizonte se extiende relativo a hoy: con el rango fijo original, la
+-- prueba se pudría sola en cuanto la fecha real pasaba del 31-ago-2026 y no
+-- quedaban 3 días hábiles por delante que buscar. El inicio se conserva fijo
+-- porque hay aserciones atadas al 2026-08-10.
+from generate_series(date '2026-08-10',greatest(date '2026-08-31',current_date + 120),interval '1 day') d;
 
 select set_config('app.operations_rpc_write','on',false);
 insert into public.operational_assignments(organization_id,primary_user_id,backup_user_id,status,source_reference,configured_by,configured_at)
