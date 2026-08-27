@@ -2,6 +2,12 @@
 
 Preparado por Teckel. Cuatro puntos, ~60 minutos en total.
 
+> **Versión presentable para la junta**: <https://claude.ai/code/artifact/39409bf5-fec3-4d3e-9f0a-4c3149db615e>
+> Los mismos 24 correos con las reglas del sistema, los ocho puntos de
+> privacidad, el Anexo A y la hoja de visto bueno, en una sola página que se
+> puede abrir en pantalla o imprimir. Este archivo queda como fuente de texto;
+> si el copy cambia, hay que actualizar los dos.
+
 ## Agenda
 
 1. **Visto bueno del copy de la secuencia** (este documento, 30 min). El
