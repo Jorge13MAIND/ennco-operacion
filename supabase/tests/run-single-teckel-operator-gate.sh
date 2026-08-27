@@ -68,6 +68,8 @@ psql -X -v ON_ERROR_STOP=1 -h "$M026_GATE_DIR" -p "$M026_GATE_PORT" -d "$M026_GA
 
 psql -X -v ON_ERROR_STOP=1 -h "$M026_GATE_DIR" -p "$M026_GATE_PORT" -d "$M026_GATE_DB" \
   -f "$REPO_ROOT/supabase/migrations/202608200026_single_teckel_operator.sql" >/dev/null
+psql -X -v ON_ERROR_STOP=1 -h "$OPERATOR_GATE_DIR" -p "$OPERATOR_GATE_PORT" -d "$OPERATOR_GATE_DB" \
+  -f "$REPO_ROOT/supabase/migrations/202608270033_operator_auth_policy.sql" >/dev/null
 psql -X -v ON_ERROR_STOP=1 -h "$M026_GATE_DIR" -p "$M026_GATE_PORT" -d "$M026_GATE_DB" <<'SQL'
 set request.jwt.claim.sub='26100000-0000-4000-8000-000000000001';
 set request.jwt.claim.aal='aal2';

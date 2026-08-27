@@ -69,7 +69,8 @@ for migration in \
   202608110009_controlled_scaling.sql \
   202608120010_contractual_monthly_reporting.sql \
   202608120011_handoff_acceptance.sql \
-  202608120012_security_consistency_hardening.sql
+  202608120012_security_consistency_hardening.sql \
+  202608270033_operator_auth_policy.sql
 do
   psql -X -v ON_ERROR_STOP=1 -h "$DB_GATE_DIR" -p "$DB_GATE_PORT" -d "$DB_GATE_NAME" \
     -f "$REPO_ROOT/supabase/migrations/$migration" >/dev/null

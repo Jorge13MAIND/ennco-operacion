@@ -1,3 +1,12 @@
+-- M033: estas aserciones prueban el rechazo de la sesión de un solo factor.
+-- Se fija la política en modo estricto para que sigan probando exactamente lo
+-- mismo que antes de DEC-106. Los dos modos se prueban en el gate 034.
+do $m033$ begin
+  if to_regclass('app.auth_policy') is not null then
+    update app.auth_policy set require_mfa = true;
+  end if;
+end $m033$;
+
 \set ON_ERROR_STOP on
 
 insert into public.organizations (id, slug, legal_name) values

@@ -1,3 +1,12 @@
+-- M033: estas aserciones prueban el rechazo de la sesión de un solo factor.
+-- Se fija la política en modo estricto para que sigan probando exactamente lo
+-- mismo que antes de DEC-106. Los dos modos se prueban en el gate 034.
+do $m033$ begin
+  if to_regclass('app.auth_policy') is not null then
+    update app.auth_policy set require_mfa = true;
+  end if;
+end $m033$;
+
 \set ON_ERROR_STOP on
 
 insert into public.organizations(id,slug,legal_name) values
@@ -89,8 +98,13 @@ select set_config('app.operations_rpc_write','on',false);
 insert into public.approval_requests(id,organization_id,subject_type,subject_id,subject_sha256,status,request_reason,requested_by,requested_at,due_at,decided_by,decided_at,rationale,idempotency_key) values
 ('32233000-0000-4000-8000-000000000001','32100000-0000-4000-8000-000000000001','opportunity_closed_won','32170000-0000-4000-8000-000000000001',repeat('a',64),'APPROVED','M021_GRAPH_SENTINEL','32110000-0000-4000-8000-000000000001','2026-08-01','2026-08-10','32110000-0000-4000-8000-000000000002','2026-08-02','M021_GRAPH_SENTINEL',repeat('b',64));
 set request.jwt.claim.sub='32110000-0000-4000-8000-000000000002';
+-- M033: antes esta sesión no declaraba nivel de aseguramiento y el disparador
+-- la dejaba pasar, porque app.has_role devolvía NULL y `if not NULL` no
+-- dispara. Cerrado ese fallo-abierto, el aprobador debe declarar su sesión.
+set request.jwt.claim.aal='aal2';
 insert into public.approvals(id,organization_id,subject_type,subject_id,subject_sha256,decision,decided_by,rationale,request_id) values
 ('32234000-0000-4000-8000-000000000001','32100000-0000-4000-8000-000000000001','opportunity_closed_won','32170000-0000-4000-8000-000000000001',repeat('a',64),'APPROVED','32110000-0000-4000-8000-000000000002','M021_GRAPH_SENTINEL','32233000-0000-4000-8000-000000000001');
+reset request.jwt.claim.aal;
 reset request.jwt.claim.sub;
 set session_replication_role=replica;
 update public.opportunities set stage='CLOSED_WON' where id='32170000-0000-4000-8000-000000000001';
@@ -224,11 +238,11 @@ do $$ begin
     raise exception 'EXPECTED_NULL_REVIEW_DUE_REJECTION'; exception when others then if sqlerrm<>'RETENTION_HOLD_REVIEW_DUE_INVALID' then raise; end if; end;
   begin perform public.create_retention_legal_hold('32100000-0000-4000-8000-000000000001','32130000-0000-4000-8000-000000000002','LEGAL',repeat('b',64),'2026-08-01',repeat('7',64));
     raise exception 'EXPECTED_PAST_REVIEW_DUE_REJECTION'; exception when others then if sqlerrm<>'RETENTION_HOLD_REVIEW_DUE_INVALID' then raise; end if; end;
-  begin perform public.create_retention_legal_hold('32100000-0000-4000-8000-000000000001','32130000-0000-4000-8000-000000000002','LEGAL',repeat('b',64),'2026-11-20',repeat('8',64));
+  begin perform public.create_retention_legal_hold('32100000-0000-4000-8000-000000000001','32130000-0000-4000-8000-000000000002','LEGAL',repeat('b',64),(current_date + 120)::timestamptz,repeat('8',64));
     raise exception 'EXPECTED_REVIEW_DUE_OVER_90_DAYS_REJECTION'; exception when others then if sqlerrm<>'RETENTION_HOLD_REVIEW_DUE_INVALID' then raise; end if; end;
 end $$;
 insert into m021_gate_values(key,value)
-select 'hold',public.create_retention_legal_hold('32100000-0000-4000-8000-000000000001','32130000-0000-4000-8000-000000000002','LEGAL',repeat('b',64),'2026-11-01',repeat('c',64));
+select 'hold',public.create_retention_legal_hold('32100000-0000-4000-8000-000000000001','32130000-0000-4000-8000-000000000002','LEGAL',repeat('b',64),(current_date + 60)::timestamptz,repeat('c',64));
 select public.approve_retention_batch('32100000-0000-4000-8000-000000000001',
   (select (value->>'batch_id')::uuid from m021_gate_values where key='reconciled'),
   (select value->>'manifest_sha256' from m021_gate_values where key='reconciled'),repeat('d',64));

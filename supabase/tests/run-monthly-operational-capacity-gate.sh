@@ -68,7 +68,8 @@ for migration in \
   202608120015_suppression_privacy.sql \
   202608120016_canonical_commercial_operations.sql \
   202608120017_strict_lead_suppression_gate.sql \
-  202608120018_monthly_operational_capacity.sql
+  202608120018_monthly_operational_capacity.sql \
+  202608270033_operator_auth_policy.sql
 do
   psql -X -v ON_ERROR_STOP=1 -h "$DB_GATE_DIR" -p "$DB_GATE_PORT" -d "$DB_GATE_NAME" \
     -f "$REPO_ROOT/supabase/migrations/$migration" >/dev/null

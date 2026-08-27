@@ -64,6 +64,7 @@
     "verify:scaling-db": "supabase/tests/run-controlled-scaling-gate.sh",
     "verify:monthly-reporting-db": "supabase/tests/run-contractual-monthly-reporting-gate.sh",
     "verify:handoff-db": "supabase/tests/run-handoff-acceptance-gate.sh",
+    "verify:operator-auth-policy-db": "bash supabase/tests/run-operator-auth-policy-gate.sh",
     "verify:security-consistency-db": "supabase/tests/run-security-consistency-gate.sh",
     "verify:unsubscribe-db": "supabase/tests/run-one-click-unsubscribe-gate.sh",
     "verify:commercial-integrity-db": "supabase/tests/run-commercial-integrity-gate.sh",

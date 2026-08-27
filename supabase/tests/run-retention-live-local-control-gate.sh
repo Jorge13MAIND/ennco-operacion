@@ -39,6 +39,7 @@ for migration in $(find "$REPO_ROOT/supabase/migrations" -maxdepth 1 -type f -na
   "${PSQL[@]}" -f "$migration" >/dev/null
   if [[ "$(basename "$migration")" == "202608120021_retention_live_local_control.sql" ]]; then break; fi
 done
+"${PSQL[@]}" -f "$REPO_ROOT/supabase/migrations/202608270033_operator_auth_policy.sql" >/dev/null
 "${PSQL[@]}" -f "$REPO_ROOT/supabase/tests/021_retention_live_local_control_gate.sql"
 
 "${PSQL[@]}" <<'SQL'
@@ -115,6 +116,9 @@ SQL
 "${PSQL[@]}" -f "$REPO_ROOT/supabase/migrations/202608110003_retention_deletion.sql" >/dev/null
 "${PSQL[@]}" -f "$REPO_ROOT/supabase/migrations/202608120012_security_consistency_hardening.sql" >/dev/null
 "${PSQL[@]}" -f "$REPO_ROOT/supabase/migrations/202608120021_retention_live_local_control.sql" >/dev/null
+# M033 va despues de la 012: re-aplicar la 012 revierte app.has_role a la
+# version con 'aal2' escrito a mano, asi que la politica se re-aplica encima.
+"${PSQL[@]}" -f "$REPO_ROOT/supabase/migrations/202608270033_operator_auth_policy.sql" >/dev/null
 "${PSQL[@]}" <<'SQL'
 do $$ begin
   if exists(select 1 from pg_trigger where tgrelid='public.deletion_tombstones'::regclass and tgname in ('deletion_tombstones_m003_rollback_fail_closed','deletion_tombstones_m021_rollback_fail_closed') and not tgisinternal)
