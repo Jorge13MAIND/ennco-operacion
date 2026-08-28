@@ -1,0 +1,1106 @@
+<title>Aprobaciones ENNCO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;450;500;600&display=swap">
+
+<style>
+  :root {
+    --paper: #F6F7F9;
+    --surface: #FFFFFF;
+    --surface-sunk: #EFF2F5;
+    --ink: #16212C;
+    --ink-soft: #5A6875;
+    --ink-faint: #8B97A3;
+    --copper: #A85B22;
+    --copper-wash: #F5EAE0;
+    --rule: #D6DCE3;
+    --rule-strong: #B8C2CC;
+    --now: #2C6A4C;
+    --now-wash: #E6F0EA;
+    --later: #78838F;
+    --alert: #8A3324;
+    --alert-wash: #F7E9E6;
+
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+    --measure: 64ch;
+    --rail: 148px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0F151B;
+      --surface: #161E26;
+      --surface-sunk: #121A21;
+      --ink: #E4EBF1;
+      --ink-soft: #9AA7B4;
+      --ink-faint: #6E7C89;
+      --copper: #D08A4C;
+      --copper-wash: #2A1F16;
+      --rule: #27323C;
+      --rule-strong: #3A4854;
+      --now: #62AC85;
+      --now-wash: #16261E;
+      --later: #7C8794;
+      --alert: #D98374;
+      --alert-wash: #2A1A17;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #0F151B;
+    --surface: #161E26;
+    --surface-sunk: #121A21;
+    --ink: #E4EBF1;
+    --ink-soft: #9AA7B4;
+    --ink-faint: #6E7C89;
+    --copper: #D08A4C;
+    --copper-wash: #2A1F16;
+    --rule: #27323C;
+    --rule-strong: #3A4854;
+    --now: #62AC85;
+    --now-wash: #16261E;
+    --later: #7C8794;
+    --alert: #D98374;
+    --alert-wash: #2A1A17;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0 24px 96px;
+  }
+
+  .doc { max-width: calc(var(--rail) + var(--measure) + 48px); margin: 0 auto; }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    padding: 64px 0 32px;
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .masthead .kicker {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--copper);
+  }
+
+  .masthead h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(34px, 6vw, 52px);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .masthead .standfirst {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 54ch;
+    margin: 0;
+  }
+
+  .colophon {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    padding-top: 4px;
+  }
+
+  .colophon b { color: var(--ink-soft); font-weight: 500; }
+
+  /* ---------- section scaffolding ---------- */
+
+  section { padding: 52px 0; border-bottom: 1px solid var(--rule); }
+  section:last-of-type { border-bottom: none; }
+
+  .band { display: grid; grid-template-columns: var(--rail) minmax(0, var(--measure)); gap: 48px; align-items: start; }
+
+  .rail {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    line-height: 1.5;
+    padding-top: 8px;
+    position: sticky;
+    top: 24px;
+  }
+
+  .rail .n { display: block; color: var(--copper); font-size: 22px; letter-spacing: 0; margin-bottom: 6px; }
+
+  .col { min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+
+  h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 31px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+    margin: 0;
+  }
+
+  p { margin: 0; max-width: var(--measure); }
+  .lede { font-family: var(--serif); font-size: 19px; line-height: 1.6; color: var(--ink-soft); }
+  strong { font-weight: 600; }
+
+  /* ---------- decision list ---------- */
+
+  .decisions { display: flex; flex-direction: column; gap: 0; margin: 4px 0 0; padding: 0; list-style: none; }
+
+  .decisions li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 20px;
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .decisions li:last-child { border-bottom: 1px solid var(--rule); }
+
+  .decisions .what { font-weight: 500; font-size: 17px; }
+  .decisions .mins { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); white-space: nowrap; }
+  .decisions .why { grid-column: 1 / -1; color: var(--ink-soft); font-size: 15px; line-height: 1.55; }
+
+  /* ---------- constraint block ---------- */
+
+  .constraints {
+    background: var(--surface-sunk);
+    border-left: 3px solid var(--copper);
+    padding: 24px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .constraints ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 7px; }
+  .constraints li { color: var(--ink); }
+  .constraints .note { font-size: 14.5px; color: var(--ink-soft); }
+
+  /* ---------- placeholder key ---------- */
+
+  .keys { display: flex; flex-direction: column; gap: 0; margin: 0; padding: 0; list-style: none; }
+  .keys li { display: grid; grid-template-columns: 190px 1fr; gap: 16px; padding: 11px 0; border-top: 1px solid var(--rule); font-size: 15px; align-items: baseline; }
+  .keys li:last-child { border-bottom: 1px solid var(--rule); }
+  .keys code { font-family: var(--mono); font-size: 13px; color: var(--copper); background: var(--copper-wash); padding: 2px 6px; border-radius: 2px; }
+  .keys span { color: var(--ink-soft); }
+
+  /* ---------- the letters ---------- */
+
+  .touch { display: flex; flex-direction: column; gap: 14px; padding-top: 12px; }
+
+  .touch-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  .touch-head .day {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .touch-head .title { font-family: var(--serif); font-size: 23px; font-weight: 500; margin: 0; }
+  .touch-head .purpose { font-size: 14.5px; color: var(--ink-soft); flex-basis: 100%; font-style: italic; font-family: var(--serif); }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .tag.now { color: var(--now); background: var(--now-wash); }
+  .tag.later { color: var(--later); background: var(--surface-sunk); }
+
+  .letters { display: flex; flex-direction: column; gap: 16px; }
+
+  .letter {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .letter .meta {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--surface-sunk);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .letter .to {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .letter .subject { font-size: 15px; font-weight: 600; letter-spacing: -0.005em; }
+  .letter .subject em { font-style: normal; font-family: var(--mono); font-size: 13px; font-weight: 400; color: var(--copper); }
+
+  .letter .body { padding: 20px; font-size: 15px; line-height: 1.62; display: flex; flex-direction: column; gap: 13px; }
+  .letter .body em { font-style: normal; font-family: var(--mono); font-size: 13.5px; color: var(--copper); }
+  .letter .sig { color: var(--ink-soft); font-size: 14.5px; line-height: 1.45; }
+
+  details.more { border-top: 1px solid var(--rule-strong); padding-top: 8px; }
+
+  details.more > summary {
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--copper);
+    padding: 12px 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  details.more > summary::-webkit-details-marker { display: none; }
+  details.more > summary::before { content: "+"; font-size: 16px; line-height: 1; }
+  details.more[open] > summary::before { content: "–"; }
+  details.more > summary:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+  details.more[open] > summary { border-bottom: 1px solid var(--rule); margin-bottom: 8px; }
+  details.more .inner { display: flex; flex-direction: column; gap: 34px; padding-bottom: 8px; }
+
+  /* ---------- numbered checklist ---------- */
+
+  .checks { counter-reset: c; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+  .checks li {
+    counter-increment: c;
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid var(--rule);
+    font-size: 15.5px;
+    line-height: 1.55;
+    align-items: baseline;
+  }
+  .checks li:last-child { border-bottom: 1px solid var(--rule); }
+  .checks li::before {
+    content: counter(c);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--copper);
+    padding-top: 2px;
+  }
+
+  /* ---------- table ---------- */
+
+  .tablewrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 3px; background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 400;
+    background: var(--surface-sunk);
+    white-space: nowrap;
+  }
+  td b { font-weight: 600; }
+
+  /* ---------- callout ---------- */
+
+  .callout {
+    background: var(--alert-wash);
+    border-left: 3px solid var(--alert);
+    padding: 22px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .callout .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--alert);
+  }
+
+  .clock {
+    background: var(--now-wash);
+    border-left: 3px solid var(--now);
+    padding: 22px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .clock .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--now);
+  }
+
+  /* ---------- signature ---------- */
+
+  .signblock {
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    border-radius: 3px;
+    padding: 30px 30px 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .signrow { display: flex; flex-direction: column; gap: 10px; }
+
+  .box { display: grid; grid-template-columns: 22px 1fr; gap: 13px; align-items: start; font-size: 15.5px; line-height: 1.5; }
+  .box::before {
+    content: "";
+    width: 17px; height: 17px;
+    border: 1.5px solid var(--rule-strong);
+    border-radius: 2px;
+    margin-top: 3px;
+  }
+
+  .rule-line { border-bottom: 1px solid var(--rule-strong); height: 34px; }
+  .rule-caption { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+  .sigcols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+
+  footer {
+    padding: 44px 0 0;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: var(--ink-faint);
+    border-top: 2px solid var(--ink);
+    margin-top: 52px;
+  }
+
+  /* ---------- responsive ---------- */
+
+  @media (max-width: 780px) {
+    body { padding: 0 20px 72px; }
+    .band { grid-template-columns: 1fr; gap: 16px; }
+    .rail { position: static; padding-top: 0; display: flex; align-items: baseline; gap: 10px; }
+    .rail .n { margin-bottom: 0; font-size: 16px; }
+    .keys li { grid-template-columns: 1fr; gap: 4px; }
+    .sigcols { grid-template-columns: 1fr; }
+    .masthead { padding-top: 44px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  @media print {
+    body { background: #fff; color: #000; padding: 0; font-size: 11pt; }
+    .rail { position: static; }
+    details.more { display: block; }
+    details.more > summary { display: none; }
+    details.more .inner { display: flex !important; }
+    section { break-inside: auto; }
+    .letter, .signblock, .callout, .clock, .constraints { break-inside: avoid; }
+  }
+</style>
+
+<div class="doc">
+
+  <header class="masthead">
+    <div class="kicker">Teckel AI · para revisión y visto bueno de ENNCO</div>
+    <h1>Lo que va a salir firmado por ti</h1>
+    <p class="standfirst">
+      Antes de que la máquina escriba un solo correo a nombre de ENNCO, aquí está
+      el texto exacto, las reglas que no puede romper y las cuatro decisiones que
+      dependen de ti.
+    </p>
+    <div class="colophon">
+      <span><b>Fecha</b> 28 de agosto de 2026</span>
+      <span><b>Duración</b> ~60 minutos</span>
+      <span><b>Contrato</b> cláusula 07, un solo visto bueno</span>
+      <span><b>Correos a revisar</b> 8 toques × 3 variantes</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="band">
+      <div class="rail"><span class="n">01</span>Decisiones</div>
+      <div class="col">
+        <h2>Las cuatro decisiones de hoy</h2>
+        <p class="lede">
+          Ninguna requiere conocimiento técnico. Todas están pre-resueltas: lo que
+          falta es tu confirmación o tu corrección.
+        </p>
+        <ul class="decisions">
+          <li>
+            <span class="what">Visto bueno del texto de los correos</span>
+            <span class="mins">30 min</span>
+            <span class="why">
+              El contrato pide este visto bueno una sola vez, con tres días hábiles
+              de plazo. Si sale hoy, el plazo arranca hoy.
+            </span>
+          </li>
+          <li>
+            <span class="what">Aviso de privacidad</span>
+            <span class="mins">20 min</span>
+            <span class="why">
+              Ocho puntos que sólo tú puedes confirmar. Sin esto no sale el primer
+              correo: es el único punto que puede frenar todo lo demás.
+            </span>
+          </li>
+          <li>
+            <span class="what">Firma del Anexo A</span>
+            <span class="mins">5 min</span>
+            <span class="why">
+              Las tres empresas que quedan fuera de comisión. Va por firma
+              electrónica; el acuerdo por WhatsApp no cumple la cláusula 05.2.
+            </span>
+          </li>
+          <li>
+            <span class="what">Dos permisos técnicos y una pregunta</span>
+            <span class="mins">5 min</span>
+            <span class="why">
+              Vincular la tarjeta al proyecto de Google Cloud, autorizar el buzón
+              <span style="font-family:var(--mono);font-size:13px">contacto@ennco.com.mx</span>,
+              y resolver el alcance de una exclusión.
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band">
+      <div class="rail"><span class="n">02</span>Garantías</div>
+      <div class="col">
+        <h2>Lo que el sistema no puede enviar, aunque alguien quisiera</h2>
+        <p>
+          Esto no es una política escrita en un manual. Está programado como un
+          freno: si un texto contiene cualquiera de estas cosas, el correo no sale.
+        </p>
+        <div class="constraints">
+          <ul>
+            <li>Garantías de resultado de cualquier tipo</li>
+            <li>Descuentos o promociones</li>
+            <li>Precios finales o cifras cerradas</li>
+            <li>Fechas de instalación comprometidas</li>
+            <li>Ahorros prometidos en pesos o porcentajes</li>
+            <li>Nombres o resultados de clientes sin tu autorización</li>
+          </ul>
+          <p class="note">
+            Los textos aprobados se congelan con una huella digital. Si alguien
+            cambia una coma después, el sistema bloquea el envío y pide una nueva
+            aprobación tuya. No hay forma de saltárselo.
+          </p>
+          <p class="note">
+            <strong>Sobre contar casos:</strong> los correos no citan lo que le
+            pasó a un cliente, porque una anécdota sin nombre no se puede
+            sostener si el que la lee pregunta cuál fue. Si ENNCO autoriza por
+            escrito un caso real, aunque sea anonimizado por giro y plaza, entra
+            de inmediato: es el argumento más fuerte que existe. Mientras tanto,
+            los correos se apoyan en datos públicos verificables y en la ley.
+          </p>
+        </div>
+        <h3 style="margin-top:8px">Y tres reglas de trato</h3>
+        <ul class="keys" style="margin-top:0">
+          <li><code>Si contesta</code><span>La secuencia se detiene para esa persona y la respuesta te llega a ti.</span></li>
+          <li><code>Si pide baja</code><span>Se registra de inmediato y no se le vuelve a escribir nunca.</span></li>
+          <li><code>Si no hay señal</code><span>Si no encontramos un dato público verificable de esa empresa, no entra al lote. Nadie recibe un correo genérico.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band">
+      <div class="rail"><span class="n">03</span>Correos</div>
+      <div class="col">
+        <h2>Los correos, tal como llegan</h2>
+        <p>
+          Todos salen de <strong>contacto@ennco.com.mx</strong> firmados por ti.
+          Voz personal, breves, de director a director, sin lenguaje de venta.
+          Cada persona recibe <strong>una sola variante</strong>, según su área.
+        </p>
+        <p>
+          Los tres primeros abren nombrando <strong>una consecuencia concreta</strong>,
+          no una lista de servicios: el requisito de operación de cinco años que
+          arrastra la deducción fiscal, el punto caliente que no da señales hasta
+          que dispara, y el cargo por demanda que se paga aunque la planta esté
+          detenida. Cada uno cierra con una sola pregunta fácil de contestar.
+        </p>
+        <p>
+          Los tres primeros toques son los que entran en el arranque, a un máximo
+          de cinco correos diarios que sube poco a poco con evidencia de que todo
+          va limpio. Los cinco restantes entran en octubre. Se aprueban todos hoy
+          para no pedirte el visto bueno dos veces.
+        </p>
+
+        <h3 style="margin-top:12px">Lo que va entre llaves se rellena solo</h3>
+        <ul class="keys">
+          <li><code>{{first_name}}</code><span>El nombre de pila de la persona</span></li>
+          <li><code>{{company}}</code><span>El nombre de la empresa</span></li>
+          <li><code>{{observed_signal}}</code><span>El dato público verificado, por ejemplo: que la planta mantiene vigente su certificado de industria limpia ante la PROFEPA</span></li>
+          <li><code>{{source_name}}</code><span>De dónde salió ese dato, con liga a la fuente oficial</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:24px">
+    <div class="band">
+      <div class="rail"><span class="n">Toque 1</span></div>
+      <div class="col">
+        <div class="touch">
+          <div class="touch-head">
+            <span class="day">Día 0</span>
+            <h3 class="title">La consecuencia, con nombre y artículo</h3>
+            <span class="tag now">Entra en el arranque</span>
+            <span class="purpose">Nombrar el costo concreto de no revisar, apoyado en un dato verificable, y pedir una sola cosa fácil de contestar.</span>
+          </div>
+          <div class="letters">
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para dirección general</span>
+                <span class="subject"><em>{{company}}</em>: el requisito de los cinco años</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Vi <em>{{observed_signal}}</em> en <em>{{source_name}}</em>.</p>
+                <p>Te escribo por algo que suele pasar desapercibido: la deducción del 100% de equipo de generación con fuentes renovables (LISR artículo 34, fracción XIII) está condicionada a mantenerlo en operación un mínimo de cinco años. Un sistema degradado no es sólo menos energía.</p>
+                <p>¿Ya tienen agendado el mantenimiento de este año?</p>
+                <p>En ENNCO hacemos termografía con dron, con la planta operando.</p>
+                <p class="sig">Francisco Cuellar<br>CEO, ENNCO</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para mantenimiento o planta</span>
+                <span class="subject"><em>{{company}}</em>: el punto caliente que no se ve</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Vi <em>{{observed_signal}}</em> en <em>{{source_name}}</em>.</p>
+                <p>Una conexión floja o un módulo degradado no da señales hasta que dispara la protección. Y el cargo por demanda se calcula sobre el pico que registra el medidor, así que un paro sale caro dos veces: lo que se dejó de producir y lo que llega en la factura.</p>
+                <p>¿Ya está agendada la revisión termográfica de este año?</p>
+                <p>La hacemos con dron, sin parar la planta.</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para compras</span>
+                <span class="subject"><em>{{company}}</em>: lo que no trae la póliza más barata</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Vi <em>{{observed_signal}}</em> en <em>{{source_name}}</em>.</p>
+                <p>Cuando las pólizas de mantenimiento se comparan sólo por precio, la diferencia real está en lo que no incluyen: termografía, revisión de conexiones y evidencia documentada. Justo lo que detecta la falla antes del paro.</p>
+                <p>¿Ya tienen agendado el mantenimiento de este año, y con qué alcance?</p>
+                <p>En ENNCO entregamos el expediente de lo observado, no sólo la visita.</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:24px">
+    <div class="band">
+      <div class="rail"><span class="n">Toque 2</span></div>
+      <div class="col">
+        <div class="touch">
+          <div class="touch-head">
+            <span class="day">Día 3</span>
+            <h3 class="title">Bajar el costo de contestar</h3>
+            <span class="tag now">Entra en el arranque</span>
+            <span class="purpose">Reducir la respuesta a cuatro datos, sin soltar la urgencia.</span>
+          </div>
+          <div class="letters">
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para dirección general</span>
+                <span class="subject">Re: <em>{{company}}</em>: el requisito de los cinco años</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Vuelvo al punto porque revisarlo cuesta casi nada y no revisarlo puede costar bastante.</p>
+                <p>Con su último recibo de CFE o la capacidad instalada te devuelvo en qué condición está el sistema y qué conviene atender. Sin visita y sin compromiso.</p>
+                <p>¿Te mando el formato? Son cuatro datos.</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para mantenimiento o planta</span>
+                <span class="subject">Re: <em>{{company}}</em>: el punto caliente que no se ve</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>El filtro inicial es sencillo: capacidad instalada si ya tienen sistema, o el recibo si están evaluando uno. Con eso ubico si hay algo que revisar antes de que se vuelva urgente, y qué debe ver ingeniería.</p>
+                <p>¿Te mando el formato? Son cuatro datos.</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para compras</span>
+                <span class="subject">Re: <em>{{company}}</em>: lo que no trae la póliza más barata</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Para comparar sin sorpresas hay que documentar primero capacidad, ubicación y condición. Sin eso se comparan cifras armadas con supuestos distintos, y la diferencia aparece después: en la factura o en el paro.</p>
+                <p>¿Te mando el formato de entrada?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:24px">
+    <div class="band">
+      <div class="rail"><span class="n">Toque 3</span></div>
+      <div class="col">
+        <div class="touch">
+          <div class="touch-head">
+            <span class="day">Día 7</span>
+            <h3 class="title">Quién elige la fecha</h3>
+            <span class="tag now">Entra en el arranque</span>
+            <span class="purpose">Poner la decisión en el calendario, sin afirmar que hay una falla.</span>
+          </div>
+          <div class="letters">
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para dirección general</span>
+                <span class="subject">El costo de esperar al siguiente ciclo</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>No asumo que hoy tengan un problema. La pregunta es quién elige la fecha: quien revisa a tiempo la elige, quien no, la elige el equipo el día que falla.</p>
+                <p>¿El mantenimiento está en el presupuesto de este trimestre o del siguiente?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para mantenimiento o planta</span>
+                <span class="subject">Preventivo hoy o correctivo después</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>No asumo que exista una falla en planta. Sí sé que la diferencia entre preventivo y correctivo la decide el calendario, no el equipo: quien revisa a tiempo elige la fecha y el alcance.</p>
+                <p>¿Ya está agendada la revisión de este año?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para compras</span>
+                <span class="subject">El alcance que evita la sorpresa</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Una póliza sin termografía ni evidencia documentada es más barata en el papel y más cara cuando aparece la falla. Esa diferencia no se ve comparando precios, se ve comparando alcances.</p>
+                <p>¿Te comparto el alcance mínimo que conviene exigir en cualquier propuesta, aunque no sea la nuestra?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:24px">
+    <div class="band">
+      <div class="rail"><span class="n">4 – 8</span>Octubre</div>
+      <div class="col">
+        <details class="more">
+          <summary>Ver los cinco toques que entran en octubre</summary>
+          <div class="inner">
+
+            <div class="touch">
+              <div class="touch-head">
+                <span class="day">Día 14</span>
+                <h3 class="title">Cómo documentamos una obra</h3>
+                <span class="tag later">Octubre</span>
+                <span class="purpose">Mostrar evidencia de proceso sin revelar clientes.</span>
+              </div>
+              <div class="letters">
+                <article class="letter">
+                  <div class="meta"><span class="to">Para dirección general</span><span class="subject">Cómo documentamos una obra industrial</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>En proyectos industriales entregamos el expediente técnico con planos, condiciones de instalación y procesos de revisión. Esa documentación ayuda a que dirección, mantenimiento y compras evalúen la misma versión. Los casos se mantienen anónimos hasta contar con autorización. ¿Quieres que te comparta un ejemplo anonimizado?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+                <article class="letter">
+                  <div class="meta"><span class="to">Para mantenimiento o planta</span><span class="subject">Expediente técnico para mantenimiento</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>Nuestro trabajo no termina en la instalación. El expediente reúne condiciones observadas, planos y el proceso técnico para que mantenimiento tenga una referencia común. Los ejemplos disponibles son anónimos por ahora. ¿Quieres que te comparta uno?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+                <article class="letter">
+                  <div class="meta"><span class="to">Para compras</span><span class="subject">Un alcance comparable para compras</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>Un expediente claro reduce diferencias entre lo solicitado, lo presupuestado y lo que ingeniería debe ejecutar. ENNCO documenta planos, condiciones y alcance técnico para que las áreas revisen la misma versión. Los ejemplos disponibles son anónimos. ¿Te comparto uno?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="touch">
+              <div class="touch-head">
+                <span class="day">Día 28</span>
+                <h3 class="title">No sólo solar</h3>
+                <span class="tag later">Octubre</span>
+                <span class="purpose">Ampliar la conversación más allá de los paneles.</span>
+              </div>
+              <div class="letters">
+                <article class="letter">
+                  <div class="meta"><span class="to">Para dirección general</span><span class="subject">No sólo solar</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>Te escribo por una razón puntual: ENNCO no es sólo instalación de paneles. Integramos sistemas eléctricos, transformadores, mantenimiento, termografía y solar industrial según la necesidad de planta. Si alguno de esos frentes está en revisión en <em>{{company}}</em>, puedo ayudarte a ordenar el diagnóstico inicial. ¿Hay uno que hoy sea prioritario?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+                <article class="letter">
+                  <div class="meta"><span class="to">Para mantenimiento o planta</span><span class="subject">Solar, termografía y sistema eléctrico</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>Además de solar industrial, trabajamos mantenimiento preventivo y correctivo, termografía e infraestructura eléctrica. La revisión inicial busca separar una necesidad operativa de una obra que requiera levantamiento. Si están evaluando alguno de esos frentes, puedo ayudarte a ordenar los datos. ¿Cuál tiene prioridad?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+                <article class="letter">
+                  <div class="meta"><span class="to">Para compras</span><span class="subject">Alcances que cubre ENNCO</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>Para ubicar bien a ENNCO: trabajamos solar industrial, mantenimiento, termografía, transformadores e instalaciones eléctricas. Cada frente se cotiza después de entender condiciones y alcance, no con un paquete genérico. Si compras está revisando alguno, puedo compartirte el proceso de evaluación. ¿Te sirve?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="touch">
+              <div class="touch-head">
+                <span class="day">Día 42</span>
+                <h3 class="title">Del diagnóstico a una decisión</h3>
+                <span class="tag later">Octubre</span>
+                <span class="purpose">Explicar el proceso sin comprometer tiempos.</span>
+              </div>
+              <div class="letters">
+                <article class="letter">
+                  <div class="meta"><span class="to">Para dirección general</span><span class="subject">Del diagnóstico a una decisión</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>El proceso normal es breve al inicio: contexto y datos, diagnóstico preliminar y, si hace sentido, visita técnica. Después se define el alcance que dirección puede evaluar con ingeniería y compras. El calendario depende de la planta y de la información disponible. ¿Te explico el primer paso?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+                <article class="letter">
+                  <div class="meta"><span class="to">Para mantenimiento o planta</span><span class="subject">Primer paso técnico en <em>{{company}}</em></span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>Primero revisamos datos y necesidad. Si existe base suficiente, sigue un levantamiento para documentar condiciones, observaciones y alcance. La propuesta técnica viene después de esa revisión. ¿Quieres que te comparta la lista inicial?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+                <article class="letter">
+                  <div class="meta"><span class="to">Para compras</span><span class="subject">Proceso previo a propuesta</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>Para que compras reciba un alcance defendible, primero reunimos datos, después validamos condiciones y finalmente armamos la propuesta técnica. El orden evita comparar cifras construidas con supuestos distintos. ¿Te comparto la lista de información inicial?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="touch">
+              <div class="touch-head">
+                <span class="day">Día 60</span>
+                <h3 class="title">Una base común entre áreas</h3>
+                <span class="tag later">Octubre</span>
+                <span class="purpose">Facilitar la alineación entre dirección, ingeniería y compras.</span>
+              </div>
+              <div class="letters">
+                <article class="letter">
+                  <div class="meta"><span class="to">Para dirección general</span><span class="subject">Una versión para dirección e ingeniería</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>Muchos proyectos se frenan cuando dirección, ingeniería y compras revisan información distinta. Podemos preparar un resumen preliminar compartible, con supuestos y pendientes visibles, para que la conversación empiece sobre la misma base. ¿Te serviría ese formato para <em>{{company}}</em>?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+                <article class="letter">
+                  <div class="meta"><span class="to">Para mantenimiento o planta</span><span class="subject">Alinear mantenimiento con dirección</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>La revisión técnica es más útil cuando dirección entiende qué se observó, qué falta validar y cuál es el siguiente paso. Podemos estructurar ese resumen sin convertirlo todavía en una propuesta final. ¿Te serviría para una conversación interna?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+                <article class="letter">
+                  <div class="meta"><span class="to">Para compras</span><span class="subject">Una base común para comparar</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>Antes de comparar propuestas, ayuda que compras, dirección e ingeniería compartan supuestos y pendientes. Podemos estructurar un diagnóstico preliminar que deje claro qué está verificado y qué requiere levantamiento. ¿Te sirve ese formato?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="touch">
+              <div class="touch-head">
+                <span class="day">Día 75</span>
+                <h3 class="title">Cierre con la puerta abierta</h3>
+                <span class="tag later">Octubre</span>
+                <span class="purpose">Cerrar el ciclo con respeto y dejar la baja siempre a la mano.</span>
+              </div>
+              <div class="letters">
+                <article class="letter">
+                  <div class="meta"><span class="to">Para dirección general</span><span class="subject">Cierro el tema por ahora</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>Cierro el seguimiento para no llenar tu correo. Si continuidad eléctrica, mantenimiento o energía entra en agenda más adelante, con gusto retomamos desde el diagnóstico inicial. Si prefieres no recibir más mensajes, responde baja y lo registro de inmediato. ¿Lo dejamos aquí por ahora?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+                <article class="letter">
+                  <div class="meta"><span class="to">Para mantenimiento o planta</span><span class="subject">Cierro el seguimiento técnico</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>Cierro el seguimiento para no insistir. Si mantenimiento, termografía o infraestructura eléctrica entra en agenda, podemos retomar con los datos técnicos básicos. Si prefieres no recibir más mensajes, responde baja y lo registro de inmediato. ¿Lo dejamos aquí por ahora?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+                <article class="letter">
+                  <div class="meta"><span class="to">Para compras</span><span class="subject">Cierro el seguimiento</span></div>
+                  <div class="body">
+                    <p>Hola <em>{{first_name}}</em>,</p>
+                    <p>Cierro el seguimiento por ahora. Si compras abre una revisión de solar, mantenimiento, transformadores o instalación eléctrica, puedo compartir el proceso y el alcance inicial. Si prefieres no recibir más mensajes, responde baja y lo registro de inmediato. ¿Lo dejamos aquí?</p>
+                    <p class="sig">Francisco</p>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band">
+      <div class="rail"><span class="n">04</span>Privacidad</div>
+      <div class="col">
+        <h2>El aviso de privacidad</h2>
+        <p class="lede">
+          Es el único punto que puede frenar todo lo demás. Sin tu confirmación no
+          sale el primer correo, por más listo que esté el resto.
+        </p>
+        <p>
+          El texto ya está redactado y publicado para revisión en
+          <strong>ennco-operacion.vercel.app/privacidad</strong>. Lo que se necesita
+          hoy es que confirmes ocho puntos, o que los devuelvas corregidos.
+        </p>
+        <ol class="checks">
+          <li>Que tú, ENNCO y el domicilio que aparece son la identidad responsable correcta.</li>
+          <li>Que las categorías de datos son las correctas y que en ningún momento se piden datos personales sensibles.</li>
+          <li>Que las finalidades están bien: la principal, y la secundaria de comunicación comercial.</li>
+          <li>Que los proveedores y las transferencias de datos que se listan son los que autorizas.</li>
+          <li>Que los plazos de conservación de 90 días, 12 meses y 24 meses te parecen correctos, o cuáles serían.</li>
+          <li>Que <strong>francisco.cuellar@ennco.com.mx</strong> es el canal donde una persona puede pedir acceso, corrección o eliminación de sus datos.</li>
+          <li>Cuál es la base legal con la que ENNCO contacta empresas, definida antes de escribirle a nadie.</li>
+          <li>Quién queda como responsable de privacidad y cómo se responde una solicitud.</li>
+        </ol>
+        <p style="font-size:14.5px;color:var(--ink-soft)">
+          La aprobación se registra contra la versión y la huella digital exactas
+          del texto. Si el texto cambia después, la aprobación deja de servir y hay
+          que emitir una nueva. Es a propósito: nadie puede cambiar el aviso sin que
+          quede rastro.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band">
+      <div class="rail"><span class="n">05</span>Anexo A</div>
+      <div class="col">
+        <h2>Las empresas que quedan fuera</h2>
+        <p>
+          Son tus clientes y prospectos vigentes al corte. Quedan excluidas del
+          cálculo de comisión aunque el sistema llegue a contactarlas, y entran a
+          la lista de supresión para que no reciban comunicación comercial.
+        </p>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr><th>Empresa</th><th>Razón social</th><th>Plaza</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><b>POSCO MPPC</b></td><td>POSCO MPPC, S.A. de C.V.</td><td>Celaya</td></tr>
+              <tr><td><b>MPE Plastic</b></td><td>Materias Plásticas y Elastómeros de México, S.A. de C.V.</td><td>León</td></tr>
+              <tr><td><b>Tejas El Águila</b></td><td>Laproba El Águila, S.A. de C.V.</td><td>León</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:14.5px;color:var(--ink-soft)">
+          Va por firma electrónica de ambas partes. El acuerdo por WhatsApp no
+          cumple la cláusula 05.2, y sin el anexo firmado la comisión del 2% queda
+          expuesta a disputa. Toma cinco minutos.
+        </p>
+        <div class="callout">
+          <span class="label">Pregunta abierta · un minuto</span>
+          <p>
+            Al cruzar los padrones públicos apareció <strong>POSCO MVWPC</strong>, en
+            Villagrán. Es una entidad distinta de POSCO MPPC, pero del mismo grupo.
+            El Anexo A nombra solamente a MPPC.
+          </p>
+          <p><strong>¿La exclusión alcanza a todo el grupo POSCO o sólo a MPPC?</strong>
+          De tu respuesta depende si esa planta entra o sale del universo de prospección.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band">
+      <div class="rail"><span class="n">06</span>Salidas</div>
+      <div class="col">
+        <h2>Lo que tiene que salir de esta junta</h2>
+        <p class="lede">
+          Seis cosas. Cinco destraban trabajo que ya está hecho y esperando. La
+          sexta es la que mueve el calendario de todo el programa.
+        </p>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr><th>Qué</th><th>Efecto</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><b>Visto bueno del copy</b></td><td>Arranca el plazo de tres días hábiles del contrato</td></tr>
+              <tr><td><b>Aviso de privacidad confirmado</b></td><td>Se destraba el primer envío real</td></tr>
+              <tr><td><b>Anexo A firmado</b></td><td>Queda blindada la comisión del 2%</td></tr>
+              <tr><td><b>Tarjeta vinculada en Google Cloud</b></td><td>Se activa el cifrado de credenciales. Cuesta centavos al mes</td></tr>
+              <tr><td><b>Autorización del buzón contacto@</b></td><td>Un clic en la pantalla de Google. Dos minutos</td></tr>
+              <tr><td><b>Envío de accesos a los tres buzones nuevos</b></td><td><b>Arranca el reloj de 42 días del calentamiento</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="clock">
+          <span class="label">Lo que decide el calendario</span>
+          <p>
+            Los tres buzones nuevos ya existen, con sus dominios comprados,
+            verificados y firmados criptográficamente. Lo único que les falta es que
+            reciban sus instrucciones de acceso para conectarse al calentamiento, y
+            ese proceso tarda <strong>42 días fijos</strong> que ninguna prisa acorta.
+          </p>
+          <p>
+            Si esos accesos salen <strong>hoy</strong>, el canal completo abre el
+            <strong>8 de octubre</strong>. Si se recorren al 1 de septiembre, abre el
+            13 de octubre. Cada día que se posponga se recorre noviembre uno a uno, y
+            noviembre es el primer mes con capacidad para el compromiso de leads.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band">
+      <div class="rail"><span class="n">07</span>Firma</div>
+      <div class="col">
+        <h2>Visto bueno</h2>
+        <div class="signblock">
+          <div class="signrow">
+            <div class="box">Apruebo los textos de la secuencia, los ocho toques con sus tres variantes, tal como aparecen en este documento.</div>
+            <div class="box">Apruebo con los cambios que anoto abajo.</div>
+            <div class="box">Confirmo los ocho puntos del aviso de privacidad.</div>
+          </div>
+          <div class="signrow">
+            <span class="rule-caption">Cambios solicitados</span>
+            <div class="rule-line"></div>
+            <div class="rule-line"></div>
+          </div>
+          <div class="sigcols">
+            <div class="signrow">
+              <div class="rule-line"></div>
+              <span class="rule-caption">Nombre</span>
+            </div>
+            <div class="signrow">
+              <div class="rule-line"></div>
+              <span class="rule-caption">Fecha</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Preparado por Teckel AI para ENNCO · 28 de agosto de 2026<br>
+    Los textos aprobados se congelan con huella digital. Cualquier cambio posterior
+    exige una nueva aprobación; el sistema lo bloquea por su cuenta.
+  </footer>
+
+</div>

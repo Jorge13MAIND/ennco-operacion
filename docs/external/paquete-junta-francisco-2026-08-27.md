@@ -48,16 +48,23 @@ persona.
 
 ## Toque 1 — día 0 · **(entra en el arranque)**
 
-*Propósito: abrir con una señal verificada y ofrecer diagnóstico preliminar.*
+*Propósito: nombrar la consecuencia concreta de no revisar, con un dato
+verificable, y pedir una sola cosa fácil de contestar.*
 
 ### Variante Dirección general
 
-**Asunto:** {{company}}: una observación eléctrica
+**Asunto:** {{company}}: el requisito de los cinco años
 
 ```
 Hola {{first_name}},
 
-Vi {{observed_signal}} en {{source_name}}. Puede ser un buen momento para revisar continuidad eléctrica, costo de energía y capacidad de la planta. En ENNCO integramos ingeniería eléctrica, solar industrial y mantenimiento especializado. Si te sirve, revisamos su recibo o capacidad instalada y te comparto un diagnóstico preliminar. ¿Te lo envío?
+Vi {{observed_signal}} en {{source_name}}.
+
+Te escribo por algo que suele pasar desapercibido: la deducción del 100% de equipo de generación con fuentes renovables (LISR artículo 34, fracción XIII) está condicionada a mantenerlo en operación un mínimo de cinco años. Un sistema degradado no es sólo menos energía.
+
+¿Ya tienen agendado el mantenimiento de este año?
+
+En ENNCO hacemos termografía con dron, con la planta operando.
 
 Francisco Cuellar
 CEO, ENNCO
@@ -65,106 +72,130 @@ CEO, ENNCO
 
 ### Variante Mantenimiento / planta
 
-**Asunto:** {{company}}: revisión de infraestructura eléctrica
+**Asunto:** {{company}}: el punto caliente que no se ve
 
 ```
 Hola {{first_name}},
 
-Vi {{observed_signal}} en {{source_name}}. Me hizo pensar en la continuidad de la instalación, el mantenimiento y la capacidad disponible de la planta. En ENNCO integramos diagnóstico, obra eléctrica, solar industrial y termografía. Si te sirve, revisamos el punto de partida sin compromiso comercial. ¿Te mando los datos que necesitamos?
+Vi {{observed_signal}} en {{source_name}}.
 
-Francisco Cuellar
-CEO, ENNCO
+Una conexión floja o un módulo degradado no da señales hasta que dispara la protección. Y el cargo por demanda se calcula sobre el pico que registra el medidor, así que un paro sale caro dos veces: lo que se dejó de producir y lo que llega en la factura.
+
+¿Ya está agendada la revisión termográfica de este año?
+
+La hacemos con dron, sin parar la planta.
+
+Francisco
 ```
 
 ### Variante Compras
 
-**Asunto:** {{company}}: diagnóstico antes de cotizar
+**Asunto:** {{company}}: lo que no trae la póliza más barata
 
 ```
 Hola {{first_name}},
 
-Vi {{observed_signal}} en {{source_name}}. Antes de cotizar una obra industrial, conviene separar el diagnóstico preliminar del alcance técnico final. En ENNCO cubrimos ingeniería eléctrica, solar, mantenimiento y transformadores. Podemos revisar el recibo o la capacidad instalada y devolverte un punto de partida documentado. ¿Te interesa verlo?
+Vi {{observed_signal}} en {{source_name}}.
 
-Francisco Cuellar
-CEO, ENNCO
+Cuando las pólizas de mantenimiento se comparan sólo por precio, la diferencia real está en lo que no incluyen: termografía, revisión de conexiones y evidencia documentada. Justo lo que detecta la falla antes del paro.
+
+¿Ya tienen agendado el mantenimiento de este año, y con qué alcance?
+
+En ENNCO entregamos el expediente de lo observado, no sólo la visita.
+
+Francisco
 ```
 
 ## Toque 2 — día 3 · **(entra en el arranque)**
 
-*Propósito: hacer concreto el insumo mínimo.*
+*Propósito: bajar el costo de contestar a cuatro datos, sin soltar la urgencia.*
 
 ### Variante Dirección general
 
-**Asunto:** Re: {{company}}: una observación eléctrica
+**Asunto:** Re: {{company}}: el requisito de los cinco años
 
 ```
 Hola {{first_name}},
 
-Voy al punto. Con un recibo de CFE o la capacidad instalada podemos preparar un rango preliminar y los supuestos para revisarlo internamente. No sustituye el levantamiento técnico, pero ayuda a decidir si vale la pena avanzar. ¿Te comparto el formato?
+Vuelvo al punto porque revisarlo cuesta casi nada y no revisarlo puede costar bastante.
+
+Con su último recibo de CFE o la capacidad instalada te devuelvo en qué condición está el sistema y qué conviene atender. Sin visita y sin compromiso.
+
+¿Te mando el formato? Son cuatro datos.
 
 Francisco
 ```
 
 ### Variante Mantenimiento / planta
 
-**Asunto:** Re: {{company}}: revisión de infraestructura eléctrica
+**Asunto:** Re: {{company}}: el punto caliente que no se ve
 
 ```
 Hola {{first_name}},
 
-El primer filtro es sencillo. Si ya tienen sistema fotovoltaico, partimos de la capacidad instalada; si evalúan uno nuevo, del recibo y las condiciones básicas de la planta. Con eso ubicamos qué debe revisar ingeniería antes de una visita. ¿Te comparto el formato?
+El filtro inicial es sencillo: capacidad instalada si ya tienen sistema, o el recibo si están evaluando uno. Con eso ubico si hay algo que revisar antes de que se vuelva urgente, y qué debe ver ingeniería.
+
+¿Te mando el formato? Son cuatro datos.
 
 Francisco
 ```
 
 ### Variante Compras
 
-**Asunto:** Re: {{company}}: diagnóstico antes de cotizar
+**Asunto:** Re: {{company}}: lo que no trae la póliza más barata
 
 ```
 Hola {{first_name}},
 
-Para evitar una cotización sin sustento, primero documentamos recibo o capacidad instalada, ubicación y necesidad. El resultado inicial muestra rango y supuestos; el alcance final se define después de revisión técnica. ¿Te mando el formato de entrada?
+Para comparar sin sorpresas hay que documentar primero capacidad, ubicación y condición. Sin eso se comparan cifras armadas con supuestos distintos, y la diferencia aparece después: en la factura o en el paro.
+
+¿Te mando el formato de entrada?
 
 Francisco
 ```
 
 ## Toque 3 — día 7 · **(entra en el arranque)**
 
-*Propósito: abrir el ángulo de continuidad operativa.*
+*Propósito: poner la decisión en el calendario, sin afirmar que hay una falla.*
 
 ### Variante Dirección general
 
-**Asunto:** Continuidad eléctrica en {{company}}
+**Asunto:** El costo de esperar al siguiente ciclo
 
 ```
 Hola {{first_name}},
 
-No asumo que hoy tengan una falla. La pregunta es si la infraestructura eléctrica, el mantenimiento y el crecimiento de la planta están alineados para evitar interrupciones y decisiones urgentes. Podemos revisar el contexto y decirte qué información falta antes de hablar de una obra. ¿Vale la pena una primera revisión?
+No asumo que hoy tengan un problema. La pregunta es quién elige la fecha: quien revisa a tiempo la elige, quien no, la elige el equipo el día que falla.
+
+¿El mantenimiento está en el presupuesto de este trimestre o del siguiente?
 
 Francisco
 ```
 
 ### Variante Mantenimiento / planta
 
-**Asunto:** Mantenimiento y continuidad en {{company}}
+**Asunto:** Preventivo hoy o correctivo después
 
 ```
 Hola {{first_name}},
 
-No asumo que exista un problema en planta. Sí vale la pena distinguir mantenimiento preventivo, correctivo y revisión termográfica antes de que una anomalía se vuelva urgente. Podemos revisar su situación actual y ordenar los siguientes datos técnicos. ¿Te sirve una primera revisión?
+No asumo que exista una falla en planta. Sí sé que la diferencia entre preventivo y correctivo la decide el calendario, no el equipo: quien revisa a tiempo elige la fecha y el alcance.
+
+¿Ya está agendada la revisión de este año?
 
 Francisco
 ```
 
 ### Variante Compras
 
-**Asunto:** Alcance eléctrico de {{company}}
+**Asunto:** El alcance que evita la sorpresa
 
 ```
 Hola {{first_name}},
 
-Una comparación útil empieza con alcances equivalentes. Instalación eléctrica, solar, mantenimiento y transformadores cambian mucho según la condición de planta y el levantamiento. Podemos ayudarte a ordenar el alcance preliminar antes de pedir propuestas comparables. ¿Te sirve esa revisión?
+Una póliza sin termografía ni evidencia documentada es más barata en el papel y más cara cuando aparece la falla. Esa diferencia no se ve comparando precios, se ve comparando alcances.
+
+¿Te comparto el alcance mínimo que conviene exigir en cualquier propuesta, aunque no sea la nuestra?
 
 Francisco
 ```
