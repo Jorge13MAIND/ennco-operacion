@@ -61,26 +61,13 @@ Sin esto no entra ni una de las 1,831 empresas. Ya no pide segundo factor.
 
 ---
 
-## C. Tuyo, sesión de 20 minutos conmigo
+## C. Tuyo, sesión corta conmigo — 10 minutos
 
-Traes abiertas dos consolas. Yo te dicto cada click y verifico en vivo.
+Sólo quedan dos, y las dos son de consolas de **Teckel**, no de ENNCO.
+El DKIM de `ennco.com.mx` y Postmaster de ese dominio SE ELIMINARON del plan:
+eran del buzón de Francisco.
 
-### C1. DKIM de `ennco.com.mx` (8 min)
-
-Hoy el buzón primario tiene `auth_dkim = false`. Sin DKIM, los correos de
-`contacto@ennco.com.mx` entran a spam.
-
-1. `admin.google.com` con el admin de ENNCO
-2. Apps → Google Workspace → Gmail → **Autenticar correo electrónico**
-3. Dominio `ennco.com.mx` → **Generar registro nuevo**, 2048 bits
-4. Copiar el TXT **del DOM, no de una captura** (el typo de un cero por una O
-   nos costó dos horas el 26-ago)
-5. Publicarlo en el DNS de `ennco.com.mx`
-6. Volver y pulsar **Iniciar autenticación**
-
-Propaga en 24-48 h. Yo la monitoreo.
-
-### C2. Rotar los 2 secretos OAuth comprometidos (5 min)
+### C1. Rotar los 2 secretos OAuth comprometidos (5 min)
 
 1. `console.cloud.google.com`, proyecto `august-beaker-478801-t3`
 2. APIs y servicios → Credenciales → cliente "ENNCO Operacion Production"
@@ -88,79 +75,55 @@ Propaga en 24-48 h. Yo la monitoreo.
 4. **Agregar secreto nuevo** → me lo dictas → lo cargo en Vercel y en ningún
    otro lado
 
-### C3. Facturación de Google Cloud (3 min, centavos al mes)
+### C2. Facturación de Google Cloud (3 min, centavos al mes)
 
 Mismo proyecto → Facturación → **Vincular cuenta de facturación**, tarjeta
-Teckel. Es sólo para el cifrado KMS de las credenciales.
+Teckel. Es sólo para el cifrado KMS de las credenciales de los buzones.
 
-**Destraba:** creo la llave KMS y hago el redeploy. Sin esto el buzón no puede
-guardar su credencial cifrada.
+**Destraba:** creo la llave KMS y hago el redeploy. Sin esto ningún buzón puede
+guardar su credencial cifrada, ni los nuestros.
 
-### C4. Postmaster Tools (2 min)
+## D. FRANCISCO ESTÁ FUERA — el canal es nuestro
 
-`postmaster.google.com` → Agregar dominio `ennco.com.mx` → TXT al mismo DNS del
-paso C1. Es el tablero de reputación que la rampa revisa a diario.
+**Decisión de Jorge, 29-ago: ya no contamos con Francisco.** Esta sección
+existe para que ninguna sesión futura vuelva a listar dependencias suyas.
 
----
+### Lo que se verificó contra el DNS real, no contra suposiciones
 
-## D. Con Francisco
+| | `enncoindustrial.com` · `enncoenergia.com` | `ennco.com.mx` |
+|---|---|---|
+| Nameservers | `ns1/ns2.vercel-dns.com` (**Teckel**) | `dns-parking.com` (Hostinger, ENNCO) |
+| Registrador | Vercel Registrar, equipo Teckel | ENNCO |
+| MX | Google | Google |
+| DKIM | **publicado y respondiendo** | **vacío** |
 
-### D1. Visto bueno del copy (30 min)
+La cuenta "admin" del Workspace nuevo es `francisco@enncoenergia.com`: **es un
+buzón en nuestro propio dominio**. Lleva su nombre por continuidad de marca,
+pero la cuenta la creamos nosotros y el control es de Teckel.
 
-Le muestras la pieza de aprobación. El contrato (cláusula 07) pide este visto
-bueno **una sola vez** y da 3 días hábiles. Aprobar en la junta arranca el reloj
-ese día.
+**Conclusión: el canal de 4 buzones no depende de Francisco en absoluto.**
 
-**Destraba:** congelo los textos con huella digital y armo el manifiesto del
-canary.
+### Lo que se cae del plan, definitivamente
 
-### D2. Aviso de privacidad (20 min) — EL CRITICAL PATH
+- DKIM de `ennco.com.mx` — era para SU buzón
+- Consentimiento OAuth de `contacto@ennco.com.mx` — su buzón
+- Enviar instrucciones de acceso — la cuenta es nuestra
+- Visto bueno del copy — Jorge asume el riesgo de la cláusula 07 (DEC-107)
+- Firma del Anexo A — queda como riesgo de comisión asumido por Jorge
+- Postmaster Tools de `ennco.com.mx` — su dominio; se hace de los nuestros
 
-Sin esto no sale ni un correo, por más que todo lo demás esté listo.
+### Lo que cuesta soltarlo
 
-- Texto en vivo: `ennco-operacion.vercel.app/privacidad`
-- Versión `2026-08-11-v1`, SHA256 `d4a24f2335…1fc718e`
+El carril rápido existía para no esperar el calentamiento. Sin él, el primer
+correo sale al terminar los 42 días de los buzones propios: **10 de octubre si
+se conectan el 29-ago**. No se puede comprar velocidad aquí.
 
-Son 8 confirmaciones, todas pre-resueltas en la pieza. La aprobación se registra
-contra esa versión y ese hash: si el texto cambia después, hay que re-aprobar.
+### El remitente cambia
 
-### D3. Anexo A firmado (5 min)
-
-Yo lo dejo como borrador en BoldSign (A4). Tú das Send, firman los dos.
-
-**Ojo:** hay 6 documentos viejos en InProgress con correos de prueba
-(`george+ennco@teckel-ai.com`, `pendiente@ennco.com.mx`). Si BoldSign manda
-recordatorio, le llega a Francisco y se ve mal. Hay que revocarlos.
-
-El contrato principal **ya está firmado por ambos** desde el 10-ago
-(`4c7ae099-8753-4443-a282-5641bb81ca33`). Ese no se toca.
-
-### D4. Instrucciones de acceso a los 3 buzones — MANDA EL CALENDARIO
-
-Los buzones existen, los dominios están verificados y el DKIM autentica. Lo
-único que falta es que Francisco reciba sus accesos y los conectemos al
-calentamiento.
-
-1. `admin.google.com` de la organización nueva (admin `francisco@enncoenergia.com`)
-2. Directorio → Usuarios
-3. Por cada uno de los tres, botón **Enviar instrucciones de acceso** a
-   `francisco.cuellar@ennco.com.mx`
-
-**Destraba: arranca el reloj de 42 días.** Si sale hoy, el canal completo abre
-el 10 de octubre. Cada día que se recorra, se recorre noviembre uno a uno, y
-noviembre es el primer mes con capacidad para el compromiso de leads.
-
-### D5. Consentimiento OAuth de `contacto@ennco.com.mx` (2 min)
-
-Un click de Francisco en la pantalla de Google, o ratifica que lo ejecute Teckel
-con la autorización escrita del 20-ago.
-
-### D6. Una pregunta de alcance (1 min)
-
-El Anexo A excluye a POSCO MPPC (Celaya). Existe POSCO MVWPC (Villagrán), del
-mismo grupo. ¿La exclusión alcanza a todo el grupo o sólo a MPPC?
-
----
+Los correos salen de `francisco@enncoindustrial.com` (dominio registrado a
+nombre de ENNCO, operado por Teckel) en lugar de `contacto@ennco.com.mx`.
+Requiere reescribir la ruta del motor: hoy el único buzón dado de alta en la
+base es el de Francisco, con `eligibility_route = EXISTING_PRIMARY_GMAIL_RAMP`.
 
 ## E. Pendiente chico con fecha
 
@@ -170,20 +133,21 @@ cuatro buzones y con ellos el calentamiento.
 
 ---
 
-## Los nueve marcadores del buzón primario
+## El buzón que importa ahora
 
-Estado verificado hoy de `contacto@ennco.com.mx`:
+`contacto@ennco.com.mx` **queda fuera del programa**. Sus nueve marcadores en
+rojo dejan de ser bloqueadores: no vamos a usar ese buzón.
 
-| Marcador | Hoy | Lo destraba |
-|---|---|---|
-| DKIM | falso | C1 |
-| Credencial | desconocida | C2 + C3 + D5 |
-| Semilla Gmail | falsa | yo, tras D5 |
-| Semilla Outlook | falsa | yo, tras D5 |
-| Semilla Yahoo | falsa | yo, tras D5 |
-| Reply sync | falso | yo, tras D5 |
-| Baja en un click | falso | yo, tras D5 |
-| Blocklist | desconocida | yo, tras C4 |
-| Límite diario | 0 | se abre solo al pasar los anteriores |
+Los cuatro buzones que sí importan viven en dominios de Teckel con DNS propio y
+DKIM ya autenticando. Lo que les falta es entrar a la base con la ruta correcta,
+recibir su credencial cifrada (depende de C2) y conectarse al calentamiento.
 
-SPF y DMARC ya están en verde.
+Estado real de los dominios propios, verificado por DNS el 29-ago:
+
+| Comprobación | Resultado |
+|---|---|
+| Nameservers | `vercel-dns.com`, control de Teckel |
+| MX | `smtp.google.com`, buzones activos |
+| DKIM | publicado y respondiendo en ambos dominios |
+| SPF | `include:_spf.google.com` |
+| DMARC | `p=none` con reporte |

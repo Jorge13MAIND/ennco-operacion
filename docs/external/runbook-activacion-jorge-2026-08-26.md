@@ -1,3 +1,13 @@
+> # ⚠️ DOCUMENTO OBSOLETO — NO EJECUTAR
+>
+> **29-ago-2026: Francisco quedó fuera del programa por decisión de Jorge.**
+> Todo lo que este archivo pide de él, de su buzón `contacto@ennco.com.mx` o de
+> su dominio `ennco.com.mx` **ya no aplica**. El canal corre en buzones de
+> dominios de Teckel con DNS propio.
+>
+> **Fuente vigente: `docs/external/bloqueadores-2026-08-29.md`.**
+> Si estás leyendo esto en una sesión nueva, abre ese archivo y ignora éste.
+
 # Runbook de activación — acciones humanas (Jorge)
 
 Fecha: 2026-08-26. Complemento del plan aprobado de la máquina de correos.
