@@ -458,10 +458,10 @@
       dependen de ti.
     </p>
     <div class="colophon">
-      <span><b>Fecha</b> 28 de agosto de 2026</span>
+      <span><b>Fecha</b> 29 de agosto de 2026</span>
       <span><b>Duración</b> ~60 minutos</span>
       <span><b>Contrato</b> cláusula 07, un solo visto bueno</span>
-      <span><b>Correos a revisar</b> 8 toques × 3 variantes</span>
+      <span><b>Correos a revisar</b> 8 toques × 4 variantes</span>
     </div>
   </header>
 
@@ -563,14 +563,15 @@
         <p>
           Todos salen de <strong>contacto@ennco.com.mx</strong> firmados por ti.
           Voz personal, breves, de director a director, sin lenguaje de venta.
-          Cada persona recibe <strong>una sola variante</strong>, según su área.
+          Cada persona recibe <strong>una sola variante</strong>, según su área:
+          dirección, mantenimiento, seguridad e higiene, o compras.
         </p>
         <p>
-          Los tres primeros abren nombrando <strong>una consecuencia concreta</strong>,
-          no una lista de servicios: el requisito de operación de cinco años que
-          arrastra la deducción fiscal, el punto caliente que no da señales hasta
-          que dispara, y el cargo por demanda que se paga aunque la planta esté
-          detenida. Cada uno cierra con una sola pregunta fácil de contestar.
+          Todos abren nombrando <strong>una consecuencia concreta</strong>, no una
+          lista de servicios. El ancla es un caso real: un cliente de ENNCO perdió
+          <strong>2 millones 180 mil pesos en un día</strong> por un apagón. Después
+          viene el mecanismo (por qué pasa y por qué no se ve venir), una sola
+          pregunta fácil de contestar, y el diferenciador en una línea.
         </p>
         <p>
           Los tres primeros toques son los que entran en el arranque, a un máximo
@@ -597,50 +598,64 @@
         <div class="touch">
           <div class="touch-head">
             <span class="day">Día 0</span>
-            <h3 class="title">La consecuencia, con nombre y artículo</h3>
+            <h3 class="title">El caso, con nombre y número</h3>
             <span class="tag now">Entra en el arranque</span>
-            <span class="purpose">Nombrar el costo concreto de no revisar, apoyado en un dato verificable, y pedir una sola cosa fácil de contestar.</span>
+            <span class="purpose">Abrir con la pérdida concreta de un caso real y pedir una sola cosa fácil de contestar.</span>
           </div>
           <div class="letters">
             <article class="letter">
               <div class="meta">
                 <span class="to">Para dirección general</span>
-                <span class="subject"><em>{{company}}</em>: el requisito de los cinco años</span>
+                <span class="subject">Lo que le costó un apagón a un cliente</span>
               </div>
               <div class="body">
                 <p>Hola <em>{{first_name}}</em>,</p>
-                <p>Vi <em>{{observed_signal}}</em> en <em>{{source_name}}</em>.</p>
-                <p>Te escribo por algo que suele pasar desapercibido: la deducción del 100% de equipo de generación con fuentes renovables (LISR artículo 34, fracción XIII) está condicionada a mantenerlo en operación un mínimo de cinco años. Un sistema degradado no es sólo menos energía.</p>
-                <p>¿Ya tienen agendado el mantenimiento de este año?</p>
-                <p>En ENNCO hacemos termografía con dron, con la planta operando.</p>
+                <p>Te escribo porque a un cliente nuestro le pasó algo que prefiero que a ustedes no.</p>
+                <p>Un apagón les tiró la planta un día. Perdieron 2 millones 180 mil pesos. En un día.</p>
+                <p>Lo que lo hubiera evitado costaba una fracción de eso.</p>
+                <p>¿Me puedes dirigir con quien lleva mantenimiento en <em>{{company}}</em>? Les hacemos un levantamiento de planta y salen con las observaciones por escrito, antes de hablar de números.</p>
+                <p>Gracias,</p>
                 <p class="sig">Francisco Cuellar<br>CEO, ENNCO</p>
               </div>
             </article>
             <article class="letter">
               <div class="meta">
-                <span class="to">Para mantenimiento o planta</span>
-                <span class="subject"><em>{{company}}</em>: el punto caliente que no se ve</span>
+                <span class="to">Para mantenimiento / planta</span>
+                <span class="subject">El tablero que nadie abre</span>
               </div>
               <div class="body">
                 <p>Hola <em>{{first_name}}</em>,</p>
-                <p>Vi <em>{{observed_signal}}</em> en <em>{{source_name}}</em>.</p>
-                <p>Una conexión floja o un módulo degradado no da señales hasta que dispara la protección. Y el cargo por demanda se calcula sobre el pico que registra el medidor, así que un paro sale caro dos veces: lo que se dejó de producir y lo que llega en la factura.</p>
-                <p>¿Ya está agendada la revisión termográfica de este año?</p>
-                <p>La hacemos con dron, sin parar la planta.</p>
+                <p>A un cliente nuestro un apagón le tiró la planta un día completo. Perdieron 2 millones 180 mil pesos.</p>
+                <p>Empezó como empiezan casi todos: una conexión floja calentándose semanas antes, en un tablero que nadie abrió. No hace ruido, no huele, no se ve.</p>
+                <p>Con cámara térmica se ve semanas antes, cuando todavía es barato.</p>
+                <p>¿Te late si agendamos una termografía este mes? La hacemos con dron, sin parar nada.</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para seguridad e higiene</span>
+                <span class="subject">Y ese fue el escenario bueno</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>A un cliente nuestro un apagón le costó 2 millones 180 mil pesos en un día. Y ese fue el escenario bueno: la misma conexión floja que tira una línea es la que produce un arco.</p>
+                <p>Si eso pasa, la primera pregunta en el acta es cuándo fue la última revisión.</p>
+                <p>¿Cuándo fue la última termografía en <em>{{company}}</em>? Si no hay fecha, te propongo que la agendemos y quede documentada.</p>
                 <p class="sig">Francisco</p>
               </div>
             </article>
             <article class="letter">
               <div class="meta">
                 <span class="to">Para compras</span>
-                <span class="subject"><em>{{company}}</em>: lo que no trae la póliza más barata</span>
+                <span class="subject">La póliza barata</span>
               </div>
               <div class="body">
                 <p>Hola <em>{{first_name}}</em>,</p>
-                <p>Vi <em>{{observed_signal}}</em> en <em>{{source_name}}</em>.</p>
-                <p>Cuando las pólizas de mantenimiento se comparan sólo por precio, la diferencia real está en lo que no incluyen: termografía, revisión de conexiones y evidencia documentada. Justo lo que detecta la falla antes del paro.</p>
-                <p>¿Ya tienen agendado el mantenimiento de este año, y con qué alcance?</p>
-                <p>En ENNCO entregamos el expediente de lo observado, no sólo la visita.</p>
+                <p>Pregunta rápida: ¿tu póliza de mantenimiento incluye termografía?</p>
+                <p>Te lo pregunto porque es lo primero que se recorta para bajar el precio. A un cliente nuestro un apagón le costó 2 millones 180 mil pesos en un día, y empezó en una conexión que una cámara habría visto semanas antes.</p>
+                <p>Nadie se acuerda de quién ahorró en la póliza. Sí de quién firmó la que no traía termografía.</p>
+                <p>¿Te mando el alcance mínimo que debería traer cualquier póliza?</p>
                 <p class="sig">Francisco</p>
               </div>
             </article>
@@ -659,43 +674,59 @@
             <span class="day">Día 3</span>
             <h3 class="title">Bajar el costo de contestar</h3>
             <span class="tag now">Entra en el arranque</span>
-            <span class="purpose">Reducir la respuesta a cuatro datos, sin soltar la urgencia.</span>
+            <span class="purpose">Reducir el sí a un solo dato, sin soltar la urgencia.</span>
           </div>
           <div class="letters">
             <article class="letter">
               <div class="meta">
                 <span class="to">Para dirección general</span>
-                <span class="subject">Re: <em>{{company}}</em>: el requisito de los cinco años</span>
+                <span class="subject">Re: Lo que le costó un apagón a un cliente</span>
               </div>
               <div class="body">
                 <p>Hola <em>{{first_name}}</em>,</p>
-                <p>Vuelvo al punto porque revisarlo cuesta casi nada y no revisarlo puede costar bastante.</p>
-                <p>Con su último recibo de CFE o la capacidad instalada te devuelvo en qué condición está el sistema y qué conviene atender. Sin visita y sin compromiso.</p>
-                <p>¿Te mando el formato? Son cuatro datos.</p>
+                <p>Vuelvo al punto rápido.</p>
+                <p>No te estoy pidiendo que contrates nada. Te estoy pidiendo que alguien de tu equipo nos deje ver los tableros una mañana y te digamos qué encontramos.</p>
+                <p>Si está todo bien, te queda por escrito. Si no, lo sabes antes y no después.</p>
+                <p>¿Con quién me dirijo?</p>
                 <p class="sig">Francisco</p>
               </div>
             </article>
             <article class="letter">
               <div class="meta">
-                <span class="to">Para mantenimiento o planta</span>
-                <span class="subject">Re: <em>{{company}}</em>: el punto caliente que no se ve</span>
+                <span class="to">Para mantenimiento / planta</span>
+                <span class="subject">Re: El tablero que nadie abre</span>
               </div>
               <div class="body">
                 <p>Hola <em>{{first_name}}</em>,</p>
-                <p>El filtro inicial es sencillo: capacidad instalada si ya tienen sistema, o el recibo si están evaluando uno. Con eso ubico si hay algo que revisar antes de que se vuelva urgente, y qué debe ver ingeniería.</p>
-                <p>¿Te mando el formato? Son cuatro datos.</p>
+                <p>El primer filtro es sencillo: dime si ya tienen termografía en el plan de este año y de cuándo es la última que se hizo.</p>
+                <p>Con esos dos datos te digo si van bien o si conviene adelantarla, sin que tengas que meter a nadie más todavía.</p>
+                <p>¿Cuándo fue la última?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para seguridad e higiene</span>
+                <span class="subject">Re: Y ese fue el escenario bueno</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Insisto con una sola pregunta: ¿existe registro de la última termografía en <em>{{company}}</em>?</p>
+                <p>Lo pregunto porque el día que hay un incidente, ese documento es lo primero que se busca. Y si no existe, la conversación se pone difícil para el área.</p>
+                <p>Si no lo tienes, te ayudo a generarlo.</p>
                 <p class="sig">Francisco</p>
               </div>
             </article>
             <article class="letter">
               <div class="meta">
                 <span class="to">Para compras</span>
-                <span class="subject">Re: <em>{{company}}</em>: lo que no trae la póliza más barata</span>
+                <span class="subject">Re: La póliza barata</span>
               </div>
               <div class="body">
                 <p>Hola <em>{{first_name}}</em>,</p>
-                <p>Para comparar sin sorpresas hay que documentar primero capacidad, ubicación y condición. Sin eso se comparan cifras armadas con supuestos distintos, y la diferencia aparece después: en la factura o en el paro.</p>
-                <p>¿Te mando el formato de entrada?</p>
+                <p>Te lo dejo concreto: el alcance mínimo que debería traer cualquier póliza de mantenimiento eléctrico es termografía en tableros, revisión de conexiones y expediente con lo observado.</p>
+                <p>Con eso comparas parejo, aunque nos dejes fuera.</p>
+                <p>¿Te lo mando?</p>
                 <p class="sig">Francisco</p>
               </div>
             </article>
@@ -720,36 +751,53 @@
             <article class="letter">
               <div class="meta">
                 <span class="to">Para dirección general</span>
-                <span class="subject">El costo de esperar al siguiente ciclo</span>
+                <span class="subject">Contra qué compite el mantenimiento</span>
               </div>
               <div class="body">
                 <p>Hola <em>{{first_name}}</em>,</p>
-                <p>No asumo que hoy tengan un problema. La pregunta es quién elige la fecha: quien revisa a tiempo la elige, quien no, la elige el equipo el día que falla.</p>
-                <p>¿El mantenimiento está en el presupuesto de este trimestre o del siguiente?</p>
+                <p>Lo pongo simple: el mantenimiento no compite contra su propio costo. Compite contra un día de planta parada.</p>
+                <p>Ese cliente lo aprendió con 2 millones 180 mil pesos en una sola jornada.</p>
+                <p>¿Está en el presupuesto de este trimestre o del que entra? Con saber eso me ajusto.</p>
                 <p class="sig">Francisco</p>
               </div>
             </article>
             <article class="letter">
               <div class="meta">
-                <span class="to">Para mantenimiento o planta</span>
+                <span class="to">Para mantenimiento / planta</span>
                 <span class="subject">Preventivo hoy o correctivo después</span>
               </div>
               <div class="body">
                 <p>Hola <em>{{first_name}}</em>,</p>
-                <p>No asumo que exista una falla en planta. Sí sé que la diferencia entre preventivo y correctivo la decide el calendario, no el equipo: quien revisa a tiempo elige la fecha y el alcance.</p>
-                <p>¿Ya está agendada la revisión de este año?</p>
+                <p>La diferencia entre preventivo y correctivo no la decide el equipo. La decide el calendario.</p>
+                <p>Quien revisa a tiempo escoge la fecha, el alcance y el proveedor. Quien no, lo escoge todo el día que truena, a las prisas y al precio que salga.</p>
+                <p>¿Escogemos fecha?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para seguridad e higiene</span>
+                <span class="subject">Mientras lees esto</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Una condición térmica en un tablero no se queda quieta. Empeora sola, semanas, hasta que falla.</p>
+                <p>Eso significa que ahorita mismo, mientras lees esto, o está bien o va en camino. Y solo hay una forma de saber cuál de las dos.</p>
+                <p>¿Agendamos la revisión?</p>
                 <p class="sig">Francisco</p>
               </div>
             </article>
             <article class="letter">
               <div class="meta">
                 <span class="to">Para compras</span>
-                <span class="subject">El alcance que evita la sorpresa</span>
+                <span class="subject">La comparación en una hoja</span>
               </div>
               <div class="body">
                 <p>Hola <em>{{first_name}}</em>,</p>
-                <p>Una póliza sin termografía ni evidencia documentada es más barata en el papel y más cara cuando aparece la falla. Esa diferencia no se ve comparando precios, se ve comparando alcances.</p>
-                <p>¿Te comparto el alcance mínimo que conviene exigir en cualquier propuesta, aunque no sea la nuestra?</p>
+                <p>Cierro con el número que importa: la termografía anual cuesta una fracción de un día de planta parada.</p>
+                <p>A un cliente nuestro ese día le costó 2 millones 180 mil pesos.</p>
+                <p>Si tienes que justificar la partida con alguien, te paso la comparación en una hoja.</p>
+                <p>¿Te sirve?</p>
                 <p class="sig">Francisco</p>
               </div>
             </article>
@@ -766,181 +814,355 @@
         <details class="more">
           <summary>Ver los cinco toques que entran en octubre</summary>
           <div class="inner">
+  <section style="padding-top:24px">
+    <div class="band">
+      <div class="rail"><span class="n">Toque 4</span></div>
+      <div class="col">
+        <div class="touch">
+          <div class="touch-head">
+            <span class="day">Día 14</span>
+            <h3 class="title">Qué recibes exactamente</h3>
+            <span class="tag later">Octubre</span>
+            <span class="purpose">Quitar el miedo a que sea una visita comercial: se entrega evidencia, no cotización.</span>
+          </div>
+          <div class="letters">
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para dirección general</span>
+                <span class="subject">Qué te entregamos, y qué no</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Para que sepas qué estás aceptando si me dices que sí.</p>
+                <p>El levantamiento no es una visita de venta. Es abrir tableros, medir y entregarte un documento con lo observado, dónde está y qué tan urgente es. Los números vienen después, y solo si tú los pides.</p>
+                <p>¿Te mando el formato del reporte para que veas qué recibirías?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para mantenimiento / planta</span>
+                <span class="subject">El mapa térmico de tu instalación</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Lo que sale del levantamiento es el mapa térmico de tu instalación: qué punto está caliente, cuánto, y qué tan rápido hay que atenderlo.</p>
+                <p>Lo que salga, salga. Si está todo bien, también queda por escrito y te sirve igual.</p>
+                <p>¿Te mando el formato para que veas qué recibirías?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para seguridad e higiene</span>
+                <span class="subject">Un documento con fecha</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Lo que entregamos es un documento fechado con lo que se observó y dónde.</p>
+                <p>Eso es exactamente lo que sirve el día que alguien pregunta si la instalación estaba revisada. Sin ese papel, la respuesta es la memoria de alguien.</p>
+                <p>¿Te mando el formato?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para compras</span>
+                <span class="subject">Para que compares parejo</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>El expediente trae lo observado, la ubicación y la prioridad de cada hallazgo.</p>
+                <p>Con ese documento en la mano, todas las propuestas que pidas se cotizan contra el mismo alcance. Es la única forma de comparar sin sorpresas después.</p>
+                <p>¿Te lo mando?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            <div class="touch">
-              <div class="touch-head">
-                <span class="day">Día 14</span>
-                <h3 class="title">Cómo documentamos una obra</h3>
-                <span class="tag later">Octubre</span>
-                <span class="purpose">Mostrar evidencia de proceso sin revelar clientes.</span>
+  <section style="padding-top:24px">
+    <div class="band">
+      <div class="rail"><span class="n">Toque 5</span></div>
+      <div class="col">
+        <div class="touch">
+          <div class="touch-head">
+            <span class="day">Día 28</span>
+            <h3 class="title">No somos paneleros</h3>
+            <span class="tag later">Octubre</span>
+            <span class="purpose">Corregir el encasillamiento en solar y abrir los otros frentes eléctricos.</span>
+          </div>
+          <div class="letters">
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para dirección general</span>
+                <span class="subject">Por si nos tienes como paneleros</span>
               </div>
-              <div class="letters">
-                <article class="letter">
-                  <div class="meta"><span class="to">Para dirección general</span><span class="subject">Cómo documentamos una obra industrial</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>En proyectos industriales entregamos el expediente técnico con planos, condiciones de instalación y procesos de revisión. Esa documentación ayuda a que dirección, mantenimiento y compras evalúen la misma versión. Los casos se mantienen anónimos hasta contar con autorización. ¿Quieres que te comparta un ejemplo anonimizado?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
-                <article class="letter">
-                  <div class="meta"><span class="to">Para mantenimiento o planta</span><span class="subject">Expediente técnico para mantenimiento</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>Nuestro trabajo no termina en la instalación. El expediente reúne condiciones observadas, planos y el proceso técnico para que mantenimiento tenga una referencia común. Los ejemplos disponibles son anónimos por ahora. ¿Quieres que te comparta uno?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
-                <article class="letter">
-                  <div class="meta"><span class="to">Para compras</span><span class="subject">Un alcance comparable para compras</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>Un expediente claro reduce diferencias entre lo solicitado, lo presupuestado y lo que ingeniería debe ejecutar. ENNCO documenta planos, condiciones y alcance técnico para que las áreas revisen la misma versión. Los ejemplos disponibles son anónimos. ¿Te comparto uno?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Una aclaración, por si nos tienes catalogados como una empresa de paneles.</p>
+                <p>ENNCO hace obra eléctrica industrial, subestaciones, transformadores y mantenimiento. Lo solar es una línea, no el negocio.</p>
+                <p>Si alguno de esos frentes está en revisión en <em>{{company}}</em>, dime cuál y te digo de frente si podemos o no.</p>
+                <p class="sig">Francisco</p>
               </div>
-            </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para mantenimiento / planta</span>
+                <span class="subject">Subestación, transformadores, tableros</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Por si nos ubicas solo como solar: hacemos subestación, transformadores, tableros, obra eléctrica y termografía.</p>
+                <p>El mantenimiento eléctrico industrial es una parte grande de lo que facturamos, no un extra.</p>
+                <p>¿Cuál de esos frentes te preocupa más hoy?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para seguridad e higiene</span>
+                <span class="subject">Dónde solemos encontrar lo feo</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Donde más hallazgos encontramos no es en los paneles. Es en subestación, transformadores y tableros de distribución, que es justo lo que menos se abre.</p>
+                <p>Si tienes un frente eléctrico que lleva tiempo sin revisarse, dime cuál y empezamos por ahí.</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para compras</span>
+                <span class="subject">Alcances que sí cubrimos</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Por si estamos catalogados solo como solar: cubrimos obra eléctrica, subestaciones, transformadores, tableros y mantenimiento industrial.</p>
+                <p>Si tienes alguno de esos en revisión o en concurso, dime y te digo de una si aplicamos o no. No te hago perder el tiempo.</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            <div class="touch">
-              <div class="touch-head">
-                <span class="day">Día 28</span>
-                <h3 class="title">No sólo solar</h3>
-                <span class="tag later">Octubre</span>
-                <span class="purpose">Ampliar la conversación más allá de los paneles.</span>
+  <section style="padding-top:24px">
+    <div class="band">
+      <div class="rail"><span class="n">Toque 6</span></div>
+      <div class="col">
+        <div class="touch">
+          <div class="touch-head">
+            <span class="day">Día 42</span>
+            <h3 class="title">La pregunta incómoda</h3>
+            <span class="tag later">Octubre</span>
+            <span class="purpose">Hacer evidente el hueco de información, que es el verdadero riesgo.</span>
+          </div>
+          <div class="letters">
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para dirección general</span>
+                <span class="subject">Una pregunta incómoda</span>
               </div>
-              <div class="letters">
-                <article class="letter">
-                  <div class="meta"><span class="to">Para dirección general</span><span class="subject">No sólo solar</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>Te escribo por una razón puntual: ENNCO no es sólo instalación de paneles. Integramos sistemas eléctricos, transformadores, mantenimiento, termografía y solar industrial según la necesidad de planta. Si alguno de esos frentes está en revisión en <em>{{company}}</em>, puedo ayudarte a ordenar el diagnóstico inicial. ¿Hay uno que hoy sea prioritario?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
-                <article class="letter">
-                  <div class="meta"><span class="to">Para mantenimiento o planta</span><span class="subject">Solar, termografía y sistema eléctrico</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>Además de solar industrial, trabajamos mantenimiento preventivo y correctivo, termografía e infraestructura eléctrica. La revisión inicial busca separar una necesidad operativa de una obra que requiera levantamiento. Si están evaluando alguno de esos frentes, puedo ayudarte a ordenar los datos. ¿Cuál tiene prioridad?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
-                <article class="letter">
-                  <div class="meta"><span class="to">Para compras</span><span class="subject">Alcances que cubre ENNCO</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>Para ubicar bien a ENNCO: trabajamos solar industrial, mantenimiento, termografía, transformadores e instalaciones eléctricas. Cada frente se cotiza después de entender condiciones y alcance, no con un paquete genérico. Si compras está revisando alguno, puedo compartirte el proceso de evaluación. ¿Te sirve?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Te hago una pregunta incómoda.</p>
+                <p>Si hoy te preguntaran en qué condición está la instalación eléctrica de <em>{{company}}</em>, ¿tendrías el dato, o tendrías que preguntarle a alguien?</p>
+                <p>Casi nadie lo tiene. Y ese hueco es el que sale caro. Por eso el levantamiento va primero.</p>
+                <p>¿Te lo agendo?</p>
+                <p class="sig">Francisco</p>
               </div>
-            </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para mantenimiento / planta</span>
+                <span class="subject">¿Vas por mapa o por reporte de fallas?</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Pregunta directa: ¿tienes el mapa térmico de tu instalación, o vas atendiendo por reporte de fallas?</p>
+                <p>La diferencia entre las dos es saber antes o enterarte después. Y la segunda siempre cuesta más, en dinero y en fin de semana.</p>
+                <p>¿Te lo levantamos?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para seguridad e higiene</span>
+                <span class="subject">Si mañana te lo piden</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Si mañana te piden el estado de la instalación eléctrica, ¿lo tienes documentado?</p>
+                <p>Si la respuesta es &quot;habría que revisar&quot;, eso ya es el hallazgo. Y es mejor encontrarlo hoy que el día que alguien lo pregunte por una razón fea.</p>
+                <p>¿Lo levantamos?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para compras</span>
+                <span class="subject">Antes de comparar precios</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Antes de comparar precios: ¿sabes en qué condición está la instalación que vas a mantener?</p>
+                <p>Sin ese dato, cada proveedor cotiza sobre supuestos distintos y las propuestas no son comparables, aunque lo parezcan en la tabla.</p>
+                <p>Te lo levantamos y después comparas.</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            <div class="touch">
-              <div class="touch-head">
-                <span class="day">Día 42</span>
-                <h3 class="title">Del diagnóstico a una decisión</h3>
-                <span class="tag later">Octubre</span>
-                <span class="purpose">Explicar el proceso sin comprometer tiempos.</span>
+  <section style="padding-top:24px">
+    <div class="band">
+      <div class="rail"><span class="n">Toque 7</span></div>
+      <div class="col">
+        <div class="touch">
+          <div class="touch-head">
+            <span class="day">Día 60</span>
+            <h3 class="title">Las dos mitades</h3>
+            <span class="tag later">Octubre</span>
+            <span class="purpose">Poner en una hoja lo que mantenimiento ve y lo que dirección decide.</span>
+          </div>
+          <div class="letters">
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para dirección general</span>
+                <span class="subject">Las dos mitades del problema</span>
               </div>
-              <div class="letters">
-                <article class="letter">
-                  <div class="meta"><span class="to">Para dirección general</span><span class="subject">Del diagnóstico a una decisión</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>El proceso normal es breve al inicio: contexto y datos, diagnóstico preliminar y, si hace sentido, visita técnica. Después se define el alcance que dirección puede evaluar con ingeniería y compras. El calendario depende de la planta y de la información disponible. ¿Te explico el primer paso?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
-                <article class="letter">
-                  <div class="meta"><span class="to">Para mantenimiento o planta</span><span class="subject">Primer paso técnico en <em>{{company}}</em></span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>Primero revisamos datos y necesidad. Si existe base suficiente, sigue un levantamiento para documentar condiciones, observaciones y alcance. La propuesta técnica viene después de esa revisión. ¿Quieres que te comparta la lista inicial?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
-                <article class="letter">
-                  <div class="meta"><span class="to">Para compras</span><span class="subject">Proceso previo a propuesta</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>Para que compras reciba un alcance defendible, primero reunimos datos, después validamos condiciones y finalmente armamos la propuesta técnica. El orden evita comparar cifras construidas con supuestos distintos. ¿Te comparto la lista de información inicial?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Algo que veo seguido: mantenimiento sabe qué está mal, dirección sabe qué cuesta, y nadie tiene las dos mitades en la misma hoja.</p>
+                <p>Ahí es donde se atoran los proyectos, y donde se caen las plantas.</p>
+                <p>El levantamiento junta las dos. ¿Te la generamos?</p>
+                <p class="sig">Francisco</p>
               </div>
-            </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para mantenimiento / planta</span>
+                <span class="subject">Que deje de ser tu opinión</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Muchas veces el problema no es técnico. Es que dirección no ve lo que tú ves, y lo que pides suena a exageración.</p>
+                <p>Un reporte fechado con mediciones convierte tu criterio en un documento. Deja de ser tu opinión.</p>
+                <p>¿Te lo generamos?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para seguridad e higiene</span>
+                <span class="subject">De opinión a registro</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Un hallazgo dicho en una junta se olvida. Un hallazgo documentado, con fecha y medición, ya no.</p>
+                <p>Eso cambia por completo la conversación con dirección, y te cubre a ti.</p>
+                <p>¿Te ayudamos a generarlo?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para compras</span>
+                <span class="subject">Quien queda en medio</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Cuando mantenimiento pide y dirección pregunta por qué, la que queda en medio es compras.</p>
+                <p>Un levantamiento con evidencia y prioridades resuelve esa discusión antes de que empiece, y te deja con qué defender la partida.</p>
+                <p>¿Te lo mando?</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            <div class="touch">
-              <div class="touch-head">
-                <span class="day">Día 60</span>
-                <h3 class="title">Una base común entre áreas</h3>
-                <span class="tag later">Octubre</span>
-                <span class="purpose">Facilitar la alineación entre dirección, ingeniería y compras.</span>
+  <section style="padding-top:24px">
+    <div class="band">
+      <div class="rail"><span class="n">Toque 8</span></div>
+      <div class="col">
+        <div class="touch">
+          <div class="touch-head">
+            <span class="day">Día 75</span>
+            <h3 class="title">Cierre con la puerta abierta</h3>
+            <span class="tag later">Octubre</span>
+            <span class="purpose">Cerrar el ciclo con respeto y dejar la baja siempre a la mano.</span>
+          </div>
+          <div class="letters">
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para dirección general</span>
+                <span class="subject">Cierro el tema por ahora</span>
               </div>
-              <div class="letters">
-                <article class="letter">
-                  <div class="meta"><span class="to">Para dirección general</span><span class="subject">Una versión para dirección e ingeniería</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>Muchos proyectos se frenan cuando dirección, ingeniería y compras revisan información distinta. Podemos preparar un resumen preliminar compartible, con supuestos y pendientes visibles, para que la conversación empiece sobre la misma base. ¿Te serviría ese formato para <em>{{company}}</em>?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
-                <article class="letter">
-                  <div class="meta"><span class="to">Para mantenimiento o planta</span><span class="subject">Alinear mantenimiento con dirección</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>La revisión técnica es más útil cuando dirección entiende qué se observó, qué falta validar y cuál es el siguiente paso. Podemos estructurar ese resumen sin convertirlo todavía en una propuesta final. ¿Te serviría para una conversación interna?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
-                <article class="letter">
-                  <div class="meta"><span class="to">Para compras</span><span class="subject">Una base común para comparar</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>Antes de comparar propuestas, ayuda que compras, dirección e ingeniería compartan supuestos y pendientes. Podemos estructurar un diagnóstico preliminar que deje claro qué está verificado y qué requiere levantamiento. ¿Te sirve ese formato?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Cierro el tema para no llenarte el correo.</p>
+                <p>Si en algún momento la instalación eléctrica de <em>{{company}}</em> entra en agenda, aquí estoy y retomamos desde el levantamiento.</p>
+                <p>Si prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo. Gracias por el tiempo.</p>
+                <p class="sig">Francisco</p>
               </div>
-            </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para mantenimiento / planta</span>
+                <span class="subject">Cierro el seguimiento técnico</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Cierro el seguimiento para no insistir.</p>
+                <p>Si en algún momento quieres el mapa térmico de la instalación, me escribes y lo agendamos sin más trámite.</p>
+                <p>Si prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo.</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para seguridad e higiene</span>
+                <span class="subject">Cierro por ahora</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Cierro por ahora para no insistir.</p>
+                <p>Si algún día necesitas el registro documentado de la instalación, aquí estoy y lo levantamos.</p>
+                <p>Si prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo.</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+            <article class="letter">
+              <div class="meta">
+                <span class="to">Para compras</span>
+                <span class="subject">Cierro el seguimiento</span>
+              </div>
+              <div class="body">
+                <p>Hola <em>{{first_name}}</em>,</p>
+                <p>Cierro el seguimiento.</p>
+                <p>Si abren revisión de mantenimiento eléctrico con gusto participamos, y si no, el alcance mínimo que te mandé te sirve igual con cualquier proveedor.</p>
+                <p>Si prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo.</p>
+                <p class="sig">Francisco</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            <div class="touch">
-              <div class="touch-head">
-                <span class="day">Día 75</span>
-                <h3 class="title">Cierre con la puerta abierta</h3>
-                <span class="tag later">Octubre</span>
-                <span class="purpose">Cerrar el ciclo con respeto y dejar la baja siempre a la mano.</span>
-              </div>
-              <div class="letters">
-                <article class="letter">
-                  <div class="meta"><span class="to">Para dirección general</span><span class="subject">Cierro el tema por ahora</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>Cierro el seguimiento para no llenar tu correo. Si continuidad eléctrica, mantenimiento o energía entra en agenda más adelante, con gusto retomamos desde el diagnóstico inicial. Si prefieres no recibir más mensajes, responde baja y lo registro de inmediato. ¿Lo dejamos aquí por ahora?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
-                <article class="letter">
-                  <div class="meta"><span class="to">Para mantenimiento o planta</span><span class="subject">Cierro el seguimiento técnico</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>Cierro el seguimiento para no insistir. Si mantenimiento, termografía o infraestructura eléctrica entra en agenda, podemos retomar con los datos técnicos básicos. Si prefieres no recibir más mensajes, responde baja y lo registro de inmediato. ¿Lo dejamos aquí por ahora?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
-                <article class="letter">
-                  <div class="meta"><span class="to">Para compras</span><span class="subject">Cierro el seguimiento</span></div>
-                  <div class="body">
-                    <p>Hola <em>{{first_name}}</em>,</p>
-                    <p>Cierro el seguimiento por ahora. Si compras abre una revisión de solar, mantenimiento, transformadores o instalación eléctrica, puedo compartir el proceso y el alcance inicial. Si prefieres no recibir más mensajes, responde baja y lo registro de inmediato. ¿Lo dejamos aquí?</p>
-                    <p class="sig">Francisco</p>
-                  </div>
-                </article>
-              </div>
-            </div>
 
           </div>
         </details>
@@ -1098,7 +1320,7 @@
   </section>
 
   <footer>
-    Preparado por Teckel AI para ENNCO · 28 de agosto de 2026<br>
+    Preparado por Teckel AI para ENNCO · 29 de agosto de 2026<br>
     Los textos aprobados se congelan con huella digital. Cualquier cambio posterior
     exige una nueva aprobación; el sistema lo bloquea por su cuenta.
   </footer>
