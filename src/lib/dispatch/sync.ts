@@ -13,13 +13,25 @@ import { classifyGmailMessage, collectGmailHistory, extractGmailEventContext, Gm
 import { createGoogleKmsEnvelopeClient } from "@/lib/gmail/oauth-server";
 import type { RuntimeConfig } from "@/lib/runtime/config";
 
+/**
+ * Identidad mínima que TODO evento del outbox trae. Se valida aparte del
+ * payload de Gmail a propósito: antes un solo esquema exigía las dos cosas, y
+ * cualquier evento ajeno (incident.opened, control_cadence.*) fallaba el parseo
+ * y se abandonaba con `continue` SIN marcarse. Quedaba PENDING para siempre, el
+ * watchdog lo veía detenido y abría un incidente, que generaba otro evento: el
+ * bucle exponencial de 2,522 incidentes del 26-27 de agosto (M036). Y como
+ * isControlCadenceReleaseAllowed exige open_p1 = 0, ningún envío podía salir.
+ *
+ * INVARIANTE: todo evento reclamado sale del limbo, completado o fallado.
+ */
 const outboxEventSchema = z.object({
   id: z.uuid(),
   event_type: z.string(),
-  payload_json: z.object({
-    mailbox_id: z.uuid(),
-    history_id: z.string().regex(/^[0-9]+$/u),
-  }).passthrough(),
+}).passthrough();
+
+const gmailSyncPayloadSchema = z.object({
+  mailbox_id: z.uuid(),
+  history_id: z.string().regex(/^[0-9]+$/u),
 }).passthrough();
 
 const outboxClaimSchema = z.object({
@@ -68,13 +80,25 @@ export async function runGmailSync(config: RuntimeConfig, batchSize = 5): Promis
 
   for (const rawEvent of claim.events) {
     const parsedEvent = outboxEventSchema.safeParse(rawEvent);
-    if (!parsedEvent.success) continue;
+    if (!parsedEvent.success) {
+      // Sin id no hay forma de marcarlo; se cuenta para que el resumen lo delate.
+      summary.failedEvents += 1;
+      continue;
+    }
     const event = parsedEvent.data;
     if (event.event_type !== "gmail.history_sync_requested") {
       await completeDispatchOutboxEvent(config, event.id).catch(() => undefined);
       continue;
     }
-    const mailboxId = event.payload_json.mailbox_id;
+    const parsedPayload = gmailSyncPayloadSchema.safeParse(
+      (rawEvent as { payload_json?: unknown }).payload_json,
+    );
+    if (!parsedPayload.success) {
+      summary.failedEvents += 1;
+      await failDispatchOutboxEvent(config, event.id, "GMAIL_SYNC_PAYLOAD_INVALID").catch(() => undefined);
+      continue;
+    }
+    const mailboxId = parsedPayload.data.mailbox_id;
     try {
       let accessToken = tokenByMailbox.get(mailboxId);
       if (!accessToken) {
@@ -90,7 +114,7 @@ export async function runGmailSync(config: RuntimeConfig, batchSize = 5): Promis
       }
       const collected = await collectGmailHistory({
         transport: gmailTransport(accessToken),
-        startHistoryId: event.payload_json.history_id,
+        startHistoryId: parsedPayload.data.history_id,
       });
       for (const message of collected.messages) {
         const kind = classifyGmailMessage(message);
