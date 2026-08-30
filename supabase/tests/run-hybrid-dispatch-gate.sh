@@ -77,6 +77,11 @@ psql -X -v ON_ERROR_STOP=1 -h "$M032_GATE_DIR" -p "$M032_GATE_PORT" -d "$M032_GA
 # esquema compare el estado real de produccion.
 psql -X -v ON_ERROR_STOP=1 -h "$M032_GATE_DIR" -p "$M032_GATE_PORT" -d "$M032_GATE_DB" \
   -f "$REPO_ROOT/supabase/migrations/202608270035_dispatch_health_business_calendar.sql" >/dev/null
+# M038 tambien va despues de la 032 y le quita el filtro de ruta: re-aplicar la
+# 032 lo reintroduce, asi que se re-aplica encima para que el diff compare
+# contra el estado real de produccion.
+psql -X -v ON_ERROR_STOP=1 -h "$M032_GATE_DIR" -p "$M032_GATE_PORT" -d "$M032_GATE_DB" \
+  -f "$REPO_ROOT/supabase/migrations/202608300038_dispatch_route_agnostic.sql" >/dev/null
 psql -X -v ON_ERROR_STOP=1 -h "$M032_GATE_DIR" -p "$M032_GATE_PORT" -d "$M032_GATE_DB" <<'SQL'
 do $$ begin
   if to_regprocedure('public.run_dispatch_heartbeat(uuid,text,uuid,timestamptz,text)') is null
