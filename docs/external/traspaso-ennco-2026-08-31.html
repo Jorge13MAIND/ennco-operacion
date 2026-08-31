@@ -1,0 +1,624 @@
+<title>Traspaso ENNCO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper: #F5F4F0;
+    --surface: #FFFFFF;
+    --sunk: #EDECE6;
+    --ink: #1B1D1C;
+    --ink-soft: #575C58;
+    --ink-faint: #8A908B;
+    --accent: #1D3F76;
+    --accent-wash: #E6EBF3;
+    --rule: #DCD9D2;
+    --rule-strong: #BEBAB1;
+    --ok: #2E6B47;
+    --ok-wash: #E4EEE8;
+    --warn: #8A6009;
+    --warn-wash: #F6EEDC;
+    --stop: #9B2E21;
+    --stop-wash: #F6E5E2;
+
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --prose: "Source Serif 4", Georgia, serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+    --measure: 66ch;
+    --rail: 132px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #16181A;
+      --surface: #1D2023;
+      --sunk: #202427;
+      --ink: #E8E9E6;
+      --ink-soft: #A2A8A3;
+      --ink-faint: #767C78;
+      --accent: #86A9DE;
+      --accent-wash: #1B2431;
+      --rule: #2C3134;
+      --rule-strong: #414749;
+      --ok: #6BB88C;
+      --ok-wash: #17241D;
+      --warn: #D2A343;
+      --warn-wash: #262013;
+      --stop: #DE8478;
+      --stop-wash: #2A1A18;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #16181A;
+    --surface: #1D2023;
+    --sunk: #202427;
+    --ink: #E8E9E6;
+    --ink-soft: #A2A8A3;
+    --ink-faint: #767C78;
+    --accent: #86A9DE;
+    --accent-wash: #1B2431;
+    --rule: #2C3134;
+    --rule-strong: #414749;
+    --ok: #6BB88C;
+    --ok-wash: #17241D;
+    --warn: #D2A343;
+    --warn-wash: #262013;
+    --stop: #DE8478;
+    --stop-wash: #2A1A18;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--prose);
+    font-size: 16.5px;
+    line-height: 1.62;
+    margin: 0;
+    padding: 0 24px 96px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .doc { max-width: calc(var(--rail) + var(--measure) + 44px); margin: 0 auto; }
+
+  /* masthead */
+  .masthead { padding: 56px 0 28px; border-bottom: 3px double var(--rule-strong); display: flex; flex-direction: column; gap: 16px; }
+  .stamp {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .masthead h1 {
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(32px, 5.5vw, 46px); line-height: 1.05;
+    letter-spacing: -0.02em; margin: 0; text-wrap: balance;
+  }
+  .masthead .sub { font-size: 18.5px; color: var(--ink-soft); max-width: 56ch; margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 26px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); }
+  .meta b { color: var(--ink-soft); font-weight: 500; }
+
+  /* secciones */
+  section { padding: 46px 0; border-bottom: 1px solid var(--rule); }
+  section:last-of-type { border-bottom: none; }
+  .band { display: grid; grid-template-columns: var(--rail) minmax(0, var(--measure)); gap: 44px; align-items: start; }
+  .rail {
+    position: sticky; top: 22px; padding-top: 6px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-faint); line-height: 1.5;
+  }
+  .col { min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+
+  h2 {
+    font-family: var(--display); font-weight: 600; font-size: 27px;
+    line-height: 1.18; letter-spacing: -0.012em; margin: 0; text-wrap: balance;
+  }
+  h3 { font-family: var(--display); font-weight: 600; font-size: 16px; margin: 0; letter-spacing: 0; }
+  p { margin: 0; }
+  .lede { font-size: 18.5px; color: var(--ink-soft); }
+  strong { font-weight: 600; }
+  code { font-family: var(--mono); font-size: 0.86em; background: var(--sunk); padding: 1px 5px; border-radius: 2px; }
+  a { color: var(--accent); }
+
+  /* tablero */
+  .board { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .cell { background: var(--surface); padding: 14px 16px; display: flex; flex-direction: column; gap: 3px; }
+  .cell .n { font-family: var(--mono); font-size: 25px; font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .cell .k { font-family: var(--display); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-faint); }
+  .cell.ok .n { color: var(--ok); }
+  .cell.stop .n { color: var(--stop); }
+  .cell.warn .n { color: var(--warn); }
+
+  /* bloques de estado */
+  .note { padding: 18px 22px; display: flex; flex-direction: column; gap: 9px; border-left: 3px solid var(--accent); background: var(--accent-wash); }
+  .note.stop { border-color: var(--stop); background: var(--stop-wash); }
+  .note.warn { border-color: var(--warn); background: var(--warn-wash); }
+  .note.ok { border-color: var(--ok); background: var(--ok-wash); }
+  .note .tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .note.stop .tag { color: var(--stop); }
+  .note.warn .tag { color: var(--warn); }
+  .note.ok .tag { color: var(--ok); }
+  .note .tag { color: var(--accent); }
+  .note p { font-size: 15.5px; }
+
+  /* tablas */
+  .tw { overflow-x: auto; border: 1px solid var(--rule); background: var(--surface); }
+  table { width: 100%; border-collapse: collapse; font-size: 14.5px; font-family: var(--display); font-weight: 500; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  th { font-family: var(--mono); font-weight: 400; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-faint); background: var(--sunk); white-space: nowrap; }
+  td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pill { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.05em; padding: 2px 7px; border-radius: 2px; white-space: nowrap; }
+  .pill.ok { color: var(--ok); background: var(--ok-wash); }
+  .pill.stop { color: var(--stop); background: var(--stop-wash); }
+  .pill.warn { color: var(--warn); background: var(--warn-wash); }
+
+  /* listas */
+  ul.clean { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 7px; }
+  ul.clean li { padding-left: 2px; }
+
+  ol.steps { counter-reset: s; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  ol.steps li {
+    counter-increment: s; display: grid; grid-template-columns: 26px 1fr; gap: 13px;
+    padding: 13px 0; border-top: 1px solid var(--rule); align-items: baseline;
+  }
+  ol.steps li:last-child { border-bottom: 1px solid var(--rule); }
+  ol.steps li::before { content: counter(s); font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* minas */
+  .mine { border: 1px solid var(--rule); background: var(--surface); padding: 20px 22px; display: flex; flex-direction: column; gap: 9px; }
+  .mine .what { font-family: var(--display); font-weight: 600; font-size: 16.5px; }
+  .mine .why { font-size: 15.5px; color: var(--ink-soft); }
+  .mine .rule-line { font-family: var(--mono); font-size: 13px; color: var(--accent); border-top: 1px dashed var(--rule-strong); padding-top: 9px; }
+
+  footer {
+    margin-top: 44px; padding-top: 22px; border-top: 3px double var(--rule-strong);
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.7; color: var(--ink-faint);
+  }
+
+  @media (max-width: 760px) {
+    body { padding: 0 18px 72px; }
+    .band { grid-template-columns: 1fr; gap: 14px; }
+    .rail { position: static; display: flex; gap: 9px; align-items: baseline; padding-top: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+  @media print {
+    body { background: #fff; color: #000; font-size: 10.5pt; padding: 0; }
+    .rail { position: static; }
+    section, .mine, .note, .tw { break-inside: avoid; }
+  }
+</style>
+
+<div class="doc">
+
+  <header class="masthead">
+    <div class="stamp">Teckel AI · traspaso de proyecto · para Grant</div>
+    <h1>ENNCO, tal como está</h1>
+    <p class="sub">
+      Qué se firmó, qué está construido, qué falta y dónde están las minas.
+      Todo lo de aquí se verificó contra producción, DNS y las APIs el 31 de
+      agosto. Lo que no pude verificar lo digo.
+    </p>
+    <div class="meta">
+      <span><b>Repo</b> ~/dev/ennco-revenue-platform</span>
+      <span><b>Prod</b> ennco-operacion.vercel.app</span>
+      <span><b>Base</b> isnzaoifdjtwnugupidj</span>
+      <span><b>HEAD</b> d9321b8</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="band">
+      <div class="rail">Tablero</div>
+      <div class="col">
+        <h2>Dónde está el proyecto hoy</h2>
+        <div class="board">
+          <div class="cell stop"><span class="n">0</span><span class="k">Correos enviados</span></div>
+          <div class="cell stop"><span class="n">0</span><span class="k">Empresas en base</span></div>
+          <div class="cell warn"><span class="n">1,831</span><span class="k">Listas sin cargar</span></div>
+          <div class="cell ok"><span class="n">32</span><span class="k">Correos redactados</span></div>
+          <div class="cell ok"><span class="n">4</span><span class="k">Buzones dados de alta</span></div>
+          <div class="cell stop"><span class="n">0</span><span class="k">Días de calentamiento</span></div>
+          <div class="cell ok"><span class="n">38</span><span class="k">Migraciones</span></div>
+          <div class="cell ok"><span class="n">72</span><span class="k">Compuertas</span></div>
+        </div>
+        <p class="lede">
+          La plataforma está construida y el motor corre solo en modo sombra.
+          Lo que no existe todavía es un solo correo enviado, ni un solo
+          contacto en la base.
+        </p>
+        <div class="note stop">
+          <span class="tag">Lo primero que tienes que entender</span>
+          <p>
+            <strong>El compromiso contractual son 10 leads calificados al mes</strong>, y el
+            conteo arranca en el primer mes calendario completo con campañas
+            operando. Hoy no hay campañas operando, así que el reloj contractual
+            no ha empezado.
+          </p>
+          <p>
+            Pero los pagos sí corren: la segunda exhibición vence el
+            <strong>14 de septiembre</strong> y la tercera el <strong>14 de octubre</strong>.
+            Con el calentamiento sin arrancar, el primer correo real no sale
+            antes del <strong>12 de octubre</strong>. O sea que el cliente va a
+            pagar las tres exhibiciones antes de ver un correo salir.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band">
+      <div class="rail">Contrato</div>
+      <div class="col">
+        <h2>Lo que se firmó</h2>
+        <p>
+          Contrato firmado por ambas partes el <strong>10 de agosto</strong> en BoldSign
+          (<code>4c7ae099-8753-4443-a282-5641bb81ca33</code>). $100,000 MXN más IVA en
+          tres exhibiciones decrecientes, más 2% de comisión sobre contratos
+          cerrados con ventana de atribución de 12 meses.
+        </p>
+        <p>
+          Un lead calificado exige cinco condiciones simultáneas: perfil industrial
+          de más de 100 kWp en los estados objetivo, no estar en el Anexo A,
+          contacto con nombre y cargo del área que decide, manifestación expresa
+          de interés, y evidencia documentada. En duda razonable no se cuenta.
+        </p>
+        <p>
+          El único remedio si se falla dos meses seguidos es que el cliente
+          termina sin penalización y sin cubrir exhibiciones pendientes. No hay
+          multas ni reembolsos.
+        </p>
+        <div class="note warn">
+          <span class="tag">Contexto de relación</span>
+          <p>
+            <strong>El cliente dejó de responder.</strong> Jorge decidió el 29 de agosto
+            que el proyecto sigue sin depender de él. Todo lo que requería su
+            firma, su buzón o su dominio salió del plan. Si en algún documento
+            del repo encuentras "junta con Francisco" o "que Francisco apruebe",
+            ese documento está marcado obsoleto: la fuente vigente es
+            <code>docs/external/bloqueadores-2026-08-29.md</code>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band">
+      <div class="rail">Construido</div>
+      <div class="col">
+        <h2>Lo que ya funciona</h2>
+
+        <h3>El motor de despacho</h3>
+        <p>
+          Vercel Cron llama rutas internas que hablan con la base por RPC públicas
+          con prueba HMAC, sin service-role en Vercel. Corre de lunes a viernes en
+          ventana 09:30 a 13:30 CDMX, un correo por tick de cinco minutos, lo que
+          da dispersión natural. Está en <strong>modo sombra</strong>: hace todo el
+          trabajo menos enviar.
+        </p>
+
+        <h3>El copy</h3>
+        <p>
+          32 correos: 8 toques por 4 perfiles (dirección, mantenimiento,
+          seguridad e higiene, compras). Anclados en un caso real que el cliente
+          confirmó: <strong>una planta perdió 2,180,000 pesos en un día por un
+          apagón</strong>. Entre 37 y 81 palabras cada uno, sin ligas en el primer
+          toque, con baja explícita en el octavo. Fuente en
+          <code>docs/external/secuencia-ennco-copy.md</code>.
+        </p>
+
+        <h3>La infraestructura de envío</h3>
+        <p>
+          Dos dominios comprados por Teckel en Vercel Registrar, con DNS bajo
+          nuestros nameservers. Verificado con <code>dig</code>: MX en Google, DKIM
+          publicado y respondiendo en ambos. Tres buzones dados de alta en la
+          base con la ruta del carril aislado.
+        </p>
+
+        <h3>Los datos</h3>
+        <p>
+          1,831 empresas de fuentes públicas oficiales (PROFEPA, DENUE, directorios
+          de parques industriales), en seis lotes listos para cargar, cada uno con
+          URL de origen y checksum. Más una prueba de Apollo sobre las 10 cuentas
+          Tier 1 que resolvió las 10 y devolvió 32 candidatos, 21 con correo.
+        </p>
+
+        <div class="note ok">
+          <span class="tag">Dato útil para dimensionar</span>
+          <p>
+            Esa prueba da <strong>2.1 contactos con correo por cuenta</strong>. Para el
+            gate de 150 contactos hacen falta unas 71 cuentas, y hay 1,831 de
+            dónde sacarlas. Pero ojo con la distribución de cargos: salieron
+            mantenimiento e ingeniería casi todos, tres de dirección y
+            <strong>cero de compras</strong>. La variante de compras casi no se va a
+            usar tal como está buscando Apollo hoy.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band">
+      <div class="rail">Pendiente</div>
+      <div class="col">
+        <h2>Lo que falta, en orden de dependencia</h2>
+
+        <div class="tw">
+          <table>
+            <thead>
+              <tr><th>Qué</th><th>Quién</th><th>Estado</th><th>Destraba</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Herramienta de calentamiento</b></td>
+                <td>Decisión de Jorge</td>
+                <td><span class="pill stop">Sin resolver</span></td>
+                <td>El reloj de 42 días</td>
+              </tr>
+              <tr>
+                <td><b>Tarjeta del trial de Workspace</b></td>
+                <td>Jorge</td>
+                <td><span class="pill stop">Vence 9-sep</span></td>
+                <td>Que no se caigan los buzones</td>
+              </tr>
+              <tr>
+                <td><b>Primer acceso de operador</b></td>
+                <td>Jorge, 2 min</td>
+                <td><span class="pill stop">Nadie ha entrado</span></td>
+                <td>Cargar las 1,831 empresas</td>
+              </tr>
+              <tr>
+                <td><b>Facturación de Google Cloud</b></td>
+                <td>Jorge, 3 min</td>
+                <td><span class="pill warn">Pendiente</span></td>
+                <td>Cifrado KMS de credenciales</td>
+              </tr>
+              <tr>
+                <td><b>Rotar 2 secretos OAuth</b></td>
+                <td>Jorge, 5 min</td>
+                <td><span class="pill warn">Comprometidos</span></td>
+                <td>Conexión de buzones</td>
+              </tr>
+              <tr>
+                <td><b>Verificación de contactos</b></td>
+                <td>Teckel</td>
+                <td><span class="pill warn">Bloqueado por acceso</span></td>
+                <td>Gate de 75 cuentas / 150 contactos</td>
+              </tr>
+              <tr>
+                <td><b>Entregables que el copy promete</b></td>
+                <td>Teckel</td>
+                <td><span class="pill stop">No existen</span></td>
+                <td>Que la respuesta convierta</td>
+              </tr>
+              <tr>
+                <td><b>Proceso de respuesta</b></td>
+                <td>Teckel</td>
+                <td><span class="pill stop">Sin definir</span></td>
+                <td>Que un "sí" no se caiga</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note stop">
+          <span class="tag">Los dos huecos que más me preocupan</span>
+          <p>
+            <strong>Los correos ofrecen cosas que no existen.</strong> El toque 4 promete
+            "el formato del reporte" y el de compras promete "el alcance mínimo
+            que debería traer cualquier póliza". Si alguien contesta "sí,
+            mándamelo", no hay qué mandar. Se cae la conversión en el momento más
+            valioso.
+          </p>
+          <p>
+            <strong>Nadie definió qué pasa cuando responden.</strong> El CTA principal
+            pide que te dirijan con el área de mantenimiento. Cuando contesten
+            "habla con Juan", hay que escribirle a Juan, y ese correo no está
+            escrito. Tampoco hay SLA de respuesta ni segundo responsable.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band">
+      <div class="rail">Minas</div>
+      <div class="col">
+        <h2>Los errores que ya se cometieron</h2>
+        <p class="lede">
+          Esta sección vale más que todas las demás. Son cosas que costaron
+          tiempo real y que están puestas aquí para que no las repitas.
+        </p>
+
+        <div class="mine">
+          <div class="what">Se listaron seis bloqueadores del cliente; cinco eran nuestros</div>
+          <p class="why">
+            Se asumió que el cliente controlaba dominios, DNS y cuentas. Cuando
+            por fin se corrió <code>dig</code>, resultó que los dominios estaban en el
+            registrador de Teckel, el DNS bajo nuestros nameservers, el DKIM ya
+            publicado, y la cuenta "admin" con el nombre del cliente era un buzón
+            en nuestro propio dominio.
+          </p>
+          <div class="rule-line">
+            Antes de decir "esto lo bloquea X", correr dig NS, dig MX y dig TXT.
+            Diez segundos.
+          </div>
+        </div>
+
+        <div class="mine">
+          <div class="what">Se dio por hecho que Apollo hace calentamiento de buzones</div>
+          <p class="why">
+            El plan aprobado decía "conectar los buzones a Apollo para warmup".
+            Apollo <strong>discontinuó esa función en 2024</strong> por incumplir
+            políticas de Gmail. De haber seguido ese camino, se habría descubierto
+            en octubre que el reloj nunca arrancó. Apollo sí acepta buzones
+            externos por OAuth y reconoce el calentamiento previo hecho en otra
+            herramienta.
+          </p>
+          <div class="rule-line">
+            Verificar que una capacidad existe antes de construir un plan encima.
+          </div>
+        </div>
+
+        <div class="mine">
+          <div class="what">Un bucle exponencial de incidentes impedía todo envío</div>
+          <p class="why">
+            El consumidor del outbox reclamaba eventos y los que no entendía los
+            abandonaba sin marcarlos. Quedaban pendientes para siempre, el
+            vigilante los veía detenidos y abría un incidente, que generaba otro
+            evento. Llegó a 2,522 incidentes creciendo en cada corrida. Y como el
+            código exige cero incidentes P1 para permitir envíos externos,
+            <strong>el primer correo habría fallado sin explicación</strong>. Ya está
+            arreglado y verificado.
+          </p>
+          <div class="rule-line">
+            Todo evento reclamado de una cola sale del limbo: completado o fallado.
+          </div>
+        </div>
+
+        <div class="mine">
+          <div class="what">La tabla de días hábiles estaba vacía en producción</div>
+          <p class="why">
+            La función que calcula plazos revienta sin calendario, y de ella
+            dependen solicitar cualquier aprobación operativa y rutear una
+            respuesta positiva. O sea que el sistema habría lanzado un error justo
+            cuando un prospecto contestara que sí. Ya se sembró 2026-2027 y el
+            vigilante ahora avisa cuando queden menos de 90 días hábiles.
+          </p>
+          <div class="rule-line">
+            Un dato operativo con horizonte necesita vigilancia en producción, no
+            una prueba local.
+          </div>
+        </div>
+
+        <div class="mine">
+          <div class="what">Cuatro versiones del copy rechazadas antes de dar en el clavo</div>
+          <p class="why">
+            Se rechazaron: lista de capacidades, carta de despacho, advertencia
+            abstracta, y una sin llamada a la acción. Lo que funcionó fue el molde
+            que dictó Jorge: golpe con consecuencia y cifra real, el mecanismo por
+            el que pasa, una sola pregunta fácil, y el diferenciador en una línea.
+          </p>
+          <div class="rule-line">
+            Cuando el cliente da un ejemplo de lo que quiere, ese ejemplo es la
+            especificación. Copiar su estructura antes de "mejorarla".
+          </div>
+        </div>
+
+        <div class="mine">
+          <div class="what">Trampas de operación que muerden a diario</div>
+          <p class="why">
+            El candado de despliegue mata el comando entero si contiene
+            <code>vercel --prod</code> o <code>git push main</code>, aunque venga después de
+            un <code>&amp;&amp;</code>: hay que correr pruebas solas y luego desplegar solo.
+            Los gates de base necesitan <code>LC_ALL=C</code> para arrancar su Postgres
+            efímero en esta Mac. Con la máquina cargada,
+            <code>playwright test --workers=2</code> evita 17 fallos que son
+            contención, no regresiones. Y los valores de DNS y tokens se sacan
+            siempre del DOM, nunca de una captura: confundir un cero con una O
+            costó dos horas.
+          </p>
+          <div class="rule-line">
+            Todo esto está también en la memoria del proyecto y en lessons.md.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band">
+      <div class="rail">Accesos</div>
+      <div class="col">
+        <h2>Dónde vive cada cosa</h2>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Pieza</th><th>Dónde</th><th>Quién controla</th></tr></thead>
+            <tbody>
+              <tr><td>Código</td><td><code>~/dev/ennco-revenue-platform</code>, remoto privado en GitHub</td><td>Teckel</td></tr>
+              <tr><td>Base de datos</td><td>Supabase <code>isnzaoifdjtwnugupidj</code></td><td>Teckel</td></tr>
+              <tr><td>Aplicación</td><td>Vercel, proyecto <code>ennco-operacion</code></td><td>Teckel</td></tr>
+              <tr><td>Dominios de envío</td><td>Vercel Registrar, DNS en <code>vercel-dns.com</code></td><td>Teckel</td></tr>
+              <tr><td>Buzones</td><td>Google Workspace nuevo, admin <code>francisco@enncoenergia.com</code></td><td>Teckel</td></tr>
+              <tr><td>Datos y verificación</td><td>Apollo, cuenta de Teckel, 4,000 créditos</td><td>Teckel</td></tr>
+              <tr><td>Cifrado de credenciales</td><td>Google Cloud <code>august-beaker-478801-t3</code></td><td>Teckel, sin facturación</td></tr>
+              <tr><td>Buzón del cliente</td><td><code>contacto@ennco.com.mx</code>, DNS en Hostinger</td><td>ENNCO, fuera del plan</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Los secretos viven en el ambiente de Vercel y en una tabla privada de la
+          base. Nunca en el repo ni en chats. El escáner de secretos corre como
+          compuerta: <code>npm run verify:secrets</code>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="band">
+      <div class="rail">Arranque</div>
+      <div class="col">
+        <h2>Qué haría yo el primer día</h2>
+        <ol class="steps">
+          <li>
+            Leer <code>docs/external/bloqueadores-2026-08-29.md</code> y la memoria del
+            proyecto. Ignorar el runbook y el paquete de junta: están marcados
+            obsoletos por una razón.
+          </li>
+          <li>
+            Correr la batería completa: <code>npm run test</code>, los gates de base con
+            <code>LC_ALL=C</code>, y <code>npx playwright test --workers=2</code>. Salvo el
+            gate de cadencia, que sólo corre los días 1 a 28 del mes y está
+            documentado, todo debe pasar.
+          </li>
+          <li>
+            Resolver la herramienta de calentamiento y arrancarla el mismo día.
+            Es lo único que no se puede acelerar después, y cada día que pasa
+            recorre la fecha de apertura del canal un día.
+          </li>
+          <li>
+            Empujar los tres pendientes de Jorge que son de minutos: su primer
+            acceso, la facturación de Google Cloud y la tarjeta del trial antes
+            del 9 de septiembre.
+          </li>
+          <li>
+            Con su sesión viva, cargar las 1,831 empresas y arrancar la
+            verificación de contactos hacia el gate de 75 y 150.
+          </li>
+          <li>
+            Escribir los dos entregables que el copy promete y el correo de
+            segunda vuelta. Sin eso, las respuestas buenas se caen.
+          </li>
+        </ol>
+        <div class="note">
+          <span class="tag">Lo que decide el calendario</span>
+          <p>
+            Todo lo demás se puede paralelizar. El calentamiento no. Son 42 días
+            fijos por buzón y no arrancan hasta que se conecten a una herramienta
+            que los caliente. Si arrancan hoy, el canal abre el
+            <strong>12 de octubre</strong>. Si se van a mediados de septiembre, abre
+            en noviembre, y noviembre era el primer mes con capacidad para
+            cumplir el compromiso de leads.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Traspaso preparado el 31 de agosto de 2026 · estado verificado contra
+    producción, DNS y APIs, no contra memoria<br>
+    Fuente vigente de bloqueadores: docs/external/bloqueadores-2026-08-29.md ·
+    HEAD d9321b8
+  </footer>
+
+</div>
