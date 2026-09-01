@@ -25,17 +25,21 @@ no habría salido**, aunque todo lo demás estuviera aprobado.
 Corto la retroalimentación en su origen, cierro los 2,522 y dejo un gate que
 falle si el bucle se reabre.
 
-### A2. Los dos entregables que el copy promete
+### A2. Los dos entregables que el copy promete — HECHO 31-ago
 
 Los correos ofrecen "el formato del reporte" (toque 4) y "el alcance mínimo que
-debería traer cualquier póliza" (toques 2 y 3 de compras). **No existen.** Si un
-prospecto contesta "sí, mándamelo", no hay qué mandar y se cae la conversión en
-el momento más valioso. Los escribo.
+debería traer cualquier póliza" (toques 2 y 3 de compras). Ya existen:
+`Formato-Reporte-Levantamiento-ENNCO.pdf` y `Alcance-Minimo-Poliza-ENNCO.pdf`
+en `docs/external/materiales-prospectos/`, con su fuente HTML editable al lado.
+Marca ENNCO, sin precios, verificados contra las promesas literales del copy.
 
-### A3. El correo de segunda vuelta
+### A3. El correo de segunda vuelta — HECHO 31-ago
 
 El CTA principal es "¿me puedes dirigir con quien lleva mantenimiento?". Cuando
-contesten "habla con Juan", hay que escribirle a Juan. Ese correo no existe.
+contesten "habla con Juan", ya hay qué mandarle a Juan: sección "Segunda vuelta"
+al final de `secuencia-ennco-copy.md` (correo al referido de 78 palabras, acuse
+al referidor y variante de presentación) e intent `REFERRAL` en
+`data/campaigns/response-playbook-v1.json`, cubierto por `npm run verify:campaign`.
 
 ### A4. Anexo A cargado en BoldSign como borrador
 

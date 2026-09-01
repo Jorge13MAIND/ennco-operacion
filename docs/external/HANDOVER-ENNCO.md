@@ -107,20 +107,21 @@ devolvió 32 candidatos, 21 con correo.
 | Facturación de Google Cloud | Jorge, 3 min | Pendiente | Cifrado KMS de credenciales |
 | Rotar 2 secretos OAuth | Jorge, 5 min | Comprometidos | Conexión de buzones |
 | Verificación de contactos | Teckel | Bloqueado por acceso | Gate de 75 cuentas / 150 contactos |
-| Entregables que el copy promete | Teckel | **No existen** | Que la respuesta convierta |
-| Proceso de respuesta | Teckel | Sin definir | Que un "sí" no se caiga |
+| Entregables que el copy promete | Teckel | **HECHO 31-ago** | PDFs en `docs/external/materiales-prospectos/` |
+| Proceso de respuesta | Teckel | **Segunda vuelta escrita 31-ago** | Falta solo SLA y responsable de respaldo |
 
 ### Los dos huecos que más preocupan
 
-**Los correos ofrecen cosas que no existen.** El toque 4 promete "el formato del
-reporte" y el de compras "el alcance mínimo que debería traer cualquier póliza".
-Si alguien contesta "sí, mándamelo", no hay qué mandar. Se cae la conversión en
-el momento más valioso.
+**Los entregables prometidos ya existen (31-ago).** `Formato-Reporte-Levantamiento-ENNCO.pdf`
+y `Alcance-Minimo-Poliza-ENNCO.pdf` en `docs/external/materiales-prospectos/`
+(fuente HTML editable al lado, marca ENNCO, sin precios). Cuando alguien conteste
+"sí, mándamelo", eso es lo que se adjunta.
 
-**Nadie definió qué pasa cuando responden.** El CTA principal pide que te dirijan
-con mantenimiento. Cuando contesten "habla con Juan", hay que escribirle a Juan,
-y ese correo no está escrito. Tampoco hay SLA de respuesta ni segundo
-responsable.
+**La segunda vuelta ya está escrita (31-ago).** Correo al referido, acuse al
+referidor y variante de presentación, al final de `secuencia-ennco-copy.md` y en
+el intent `REFERRAL` de `data/campaigns/response-playbook-v1.json` (gate
+`verify:campaign` lo cubre, 35/35). Sigue faltando el SLA de respuesta y el
+segundo responsable: hoy solo Jorge responde y no hay respaldo.
 
 ---
 
@@ -223,8 +224,9 @@ Nunca en el repo ni en chats. Compuerta: `npm run verify:secrets`.
    facturación de GCloud, y la tarjeta del trial antes del 9-sep.
 5. Con su sesión viva, cargar las 1,831 empresas y arrancar la verificación de
    contactos hacia el gate de 75/150.
-6. Escribir los dos entregables que el copy promete y el correo de segunda
-   vuelta. Sin eso, las respuestas buenas se caen.
+6. ~~Escribir los dos entregables que el copy promete y el correo de segunda
+   vuelta.~~ HECHO 31-ago: `docs/external/materiales-prospectos/` y la sección
+   "Segunda vuelta" de `secuencia-ennco-copy.md`.
 
 ### Lo que decide el calendario
 
