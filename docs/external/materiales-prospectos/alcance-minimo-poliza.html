@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Alcance mínimo de una póliza de mantenimiento eléctrico · ENNCO</title>
+<meta name="description" content="Lo que debería traer cualquier póliza de mantenimiento eléctrico industrial para poder comparar propuestas parejo. Herramienta neutral, sin precios.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#00254D; --navy-2:#013D7A; --gold:#EEB313; --gold-soft:#FDDF8B;
+  --ink:#0B1B2E; --body:#3E5268; --mut:#78899E;
+  --paper:#FFFFFF; --grey:#F4F6F9; --line:rgba(0,37,77,.14); --hair:rgba(0,37,77,.08);
+  --ok:#0F7B4F; --warn:#B4761A; --stop:#A32C3C;
+  --sans:'Montserrat',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--body);font-family:var(--sans);font-size:16px;line-height:1.68;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+h1,h2,h3,h4{color:var(--ink);font-weight:700;letter-spacing:-.021em;line-height:1.16;margin:0}
+p{margin:0 0 1.05em}
+.c{max-width:900px;margin:0 auto;padding:0 26px}
+section{padding:50px 0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--navy-2);font-weight:600;margin-bottom:14px;display:block}
+
+.top{background:var(--navy);color:#fff;padding:15px 0}
+.top-in{max-width:900px;margin:0 auto;padding:0 26px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.top img{height:22px;width:auto}
+.top .by{margin-left:auto;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.6);letter-spacing:.05em}
+
+.head{padding:52px 0 42px;border-bottom:1px solid var(--line)}
+.head h1{font-size:clamp(28px,4vw,40px);max-width:24ch}
+.head .sub{font-size:17.5px;margin-top:18px;max-width:70ch}
+
+.mins{border:1px solid var(--line);border-radius:5px;overflow:hidden;margin:22px 0}
+.mn{display:flex;gap:18px;padding:22px;border-bottom:1px solid var(--hair);align-items:flex-start}
+.mn:last-child{border-bottom:none}
+.mn .num{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--gold);line-height:1;min-width:34px;letter-spacing:-.03em}
+.mn h3{font-size:17px;margin-bottom:7px}
+.mn p{font-size:14.5px;margin:0 0 .8em;line-height:1.6}
+.mn p:last-child{margin-bottom:0}
+.mn .how{font-size:13.5px;background:var(--grey);border-radius:4px;padding:12px 14px;margin-top:10px}
+.mn .how b{color:var(--ink);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:5px}
+
+table{width:100%;border-collapse:collapse;font-size:14px;margin:22px 0}
+th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--mut);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:12px;border-bottom:1px solid var(--hair);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.chk{width:92px;border-left:1px solid var(--hair);text-align:center}
+th.chk{width:92px;border-left:1px solid var(--hair);text-align:center;white-space:normal}
+.box{display:inline-block;width:17px;height:17px;border:1.5px solid var(--mut);border-radius:3px;vertical-align:middle}
+td .cond{font-family:var(--mono);font-size:10.5px;color:var(--mut);white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.flags{margin:22px 0;border:1px solid var(--line);border-left:3px solid var(--stop);border-radius:0 5px 5px 0;padding:20px 22px}
+.flags h3{font-size:16px;margin-bottom:10px}
+.flags ul{margin:0;padding-left:20px;font-size:14.5px}
+.flags li{margin-bottom:9px;line-height:1.55}
+.flags li:last-child{margin-bottom:0}
+.flags b{color:var(--ink)}
+
+.fiscal{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:22px 0}
+.fs{border:1px solid var(--line);border-radius:5px;padding:22px}
+.fs .big{font-family:var(--mono);font-size:34px;font-weight:600;color:var(--navy);letter-spacing:-.03em;line-height:1;margin-bottom:10px}
+.fs h3{font-size:16px;margin-bottom:8px}
+.fs p{font-size:14px;margin-bottom:.8em;line-height:1.6}
+.fs p:last-child{margin-bottom:0}
+.fs .cite{font-family:var(--mono);font-size:11px;color:var(--mut);margin-top:12px;padding-top:10px;border-top:1px solid var(--hair)}
+@media(max-width:660px){.fiscal{grid-template-columns:1fr}}
+
+.note{background:var(--grey);border-left:3px solid var(--navy-2);padding:17px 19px;border-radius:0 4px 4px 0;margin:22px 0;font-size:14.5px}
+.note b{color:var(--ink)}
+.note p:last-child{margin-bottom:0}
+
+.foot{border-top:1px solid var(--line);padding:30px 0 44px;font-size:12.5px;color:var(--mut)}
+.foot b{color:var(--body)}
+
+@media print{
+  .top{background:#fff;color:#000;border-bottom:2px solid #000}
+  .top img{filter:invert(1)}
+  body{font-size:11.5px}
+  section{padding:16px 0}
+  .head{padding:22px 0 16px}
+  tr,.mn,.fs,.note,.flags{break-inside:avoid-page}
+  h2{break-after:avoid-page}
+  .foot{padding:14px 0 0}
+  .box{border-color:#000}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="top-in">
+  <img src="assets/logo-blanco.png" alt="ENNCO" width="600" height="103">
+  <span class="by">Herramienta de comparación</span>
+</div></div>
+
+<div class="c head">
+  <span class="eyebrow">Para comparar propuestas de mantenimiento eléctrico</span>
+  <h1>El alcance mínimo que debería traer cualquier póliza.</h1>
+  <p class="sub">Una página para poner todas las propuestas en la misma mesa, incluida la de tu proveedor actual y la nuestra si algún día la pides. No trae precios ni marcas: trae lo que hay que exigir para que la comparación sea pareja. Te sirve igual con cualquier proveedor.</p>
+</div>
+
+<section style="padding-top:44px">
+  <div class="c">
+    <h2 style="font-size:24px;margin-bottom:8px">01 · Los tres mínimos</h2>
+    <p>Cuando una póliza se abarata, casi siempre es porque recortó uno de estos tres renglones. Son justamente los que detectan la falla antes del paro.</p>
+    <div class="mins">
+      <div class="mn"><div class="num">1</div>
+        <div>
+          <h3>Termografía en tableros, programada</h3>
+          <p>Es lo primero que se recorta para bajar el precio, y es lo único que ve una conexión calentándose semanas antes de que falle. A simple vista esa conexión no hace ruido, no huele y no se ve.</p>
+          <p>"Programada" es la palabra que importa: en calendario, no "si se requiere" ni "a solicitud del cliente". Una termografía que depende de que alguien la pida es una termografía que no se hace.</p>
+          <div class="how"><b>Cómo verificarlo</b>Que la propuesta diga cuántas termografías al año, sobre qué tableros y con qué equipo, y que las lecturas se entreguen con su imagen térmica. La cifra impresa en la propia imagen es auditable; una temperatura escrita a mano en un reporte, no.</div>
+        </div>
+      </div>
+      <div class="mn"><div class="num">2</div>
+        <div>
+          <h3>Revisión y reapriete de conexiones</h3>
+          <p>Las fallas eléctricas graves rara vez empiezan en un equipo caro. Empiezan en una conexión floja dentro de un tablero que nadie abrió. Abrir, inspeccionar y reapretar es trabajo poco vistoso, y por eso es el segundo renglón que desaparece de las pólizas recortadas.</p>
+          <div class="how"><b>Cómo verificarlo</b>Que la propuesta liste qué tableros abre en cada intervención. "Mantenimiento preventivo general" sin esa lista significa que la decisión de qué se abre queda para después, y después casi siempre es ninguno.</div>
+        </div>
+      </div>
+      <div class="mn"><div class="num">3</div>
+        <div>
+          <h3>Expediente fechado con lo observado</h3>
+          <p>Cada visita debe dejar un documento con fecha: qué se observó, dónde está y qué tan urgente es. Ese papel es el que responde cuando alguien pregunta si la instalación estaba revisada, y es el que permite comparar la condición de la planta entre una visita y la siguiente.</p>
+          <p>Si está todo bien, también queda por escrito. Un reporte que solo aparece cuando hay que vender una reparación no es un expediente: es una cotización disfrazada.</p>
+          <div class="how"><b>Cómo verificarlo</b>Pide el formato del reporte antes de firmar. Cualquier proveedor serio lo tiene y no le incomoda enseñarlo. Debe traer ubicación, observación, lectura y prioridad por hallazgo, no solo fotos.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="c">
+    <h2 style="font-size:24px;margin-bottom:8px">02 · La comparación, en una hoja</h2>
+    <p>Imprime esta tabla y marca casilla por casilla con cada propuesta enfrente. Lo que una propuesta no diga por escrito, cuenta como que no lo trae.</p>
+    <div class="tw" tabindex="0" role="region" aria-label="Tabla de comparación de pólizas de mantenimiento eléctrico"><table>
+      <thead><tr><th>Requisito</th><th class="chk">Póliza actual</th><th class="chk">Propuesta A</th><th class="chk">Propuesta B</th></tr></thead>
+      <tbody>
+        <tr><td>Termografía de tableros <b>programada</b>, con número de eventos al año por escrito</td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td></tr>
+        <tr><td>Lecturas de temperatura entregadas <b>con su imagen térmica</b>, no solo la cifra</td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td></tr>
+        <tr><td>Lista explícita de <b>qué tableros se abren</b> en cada intervención</td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td></tr>
+        <tr><td>Revisión y <b>reapriete de conexiones</b> incluido, no como extra</td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td></tr>
+        <tr><td>Subestación y transformadores dentro del alcance</td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td></tr>
+        <tr><td><b>Expediente fechado</b> por visita: observación, ubicación y prioridad por hallazgo</td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td></tr>
+        <tr><td>Registro también de <b>lo que está bien</b>, no solo de las fallas</td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td></tr>
+        <tr><td>Calendario de intervenciones definido <b>desde la firma</b></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td></tr>
+        <tr><td>Informe ejecutivo que dirección pueda leer sin traductor técnico</td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td></tr>
+        <tr><td>Termografía <b>aérea con dron</b> del arreglo completo, sin parar la planta <span class="cond">· si hay sistema solar</span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td></tr>
+        <tr><td>Medición de strings y <b>curva IV</b> <span class="cond">· si hay sistema solar</span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td></tr>
+        <tr><td>Reporte de <b>producción contra lo proyectado</b> <span class="cond">· si hay sistema solar</span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td><td class="chk"><span class="box"></span></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="flags">
+      <h3>Señales de una póliza recortada</h3>
+      <ul>
+        <li><b>"Mantenimiento preventivo"</b> sin decir qué se mide, qué se abre ni qué se entrega. El alcance que no está escrito no existe.</li>
+        <li><b>Termografía "si se requiere"</b>, "a solicitud" o cotizada aparte. Es el renglón que detecta la falla antes del paro; si es opcional, la póliza protege al proveedor, no a la planta.</li>
+        <li><b>El "reporte" es la factura con fotos.</b> Sin lecturas, sin ubicaciones y sin prioridades no hay expediente: hay evidencia de que alguien vino.</li>
+        <li><b>Temperaturas sin imagen.</b> Si la cifra no viene impresa en la termografía, no hay forma de auditarla después.</li>
+        <li><b>Visitas a ciegas.</b> Ir a "revisar en general", sin instrumento y sin registro, encuentra lo que ya truena, no lo que va a tronar.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="c">
+    <h2 style="font-size:24px;margin-bottom:8px">03 · Si tu planta tiene sistema solar, hay un renglón fiscal</h2>
+    <p>No aplica a todas las plantas, pero donde aplica cambia la conversación con dirección y con el contador.</p>
+    <div class="fiscal">
+      <div class="fs">
+        <div class="big">100%</div>
+        <h3>Deducible en el ejercicio de la inversión</h3>
+        <p>La maquinaria y equipo para generación con fuentes renovables se deduce al cien por ciento en un solo ejercicio, no a lo largo de la vida del activo.</p>
+        <div class="cite">Fuente neutral · Ley del Impuesto Sobre la Renta, artículo 34, fracción XIII</div>
+      </div>
+      <div class="fs">
+        <div class="big">5 años</div>
+        <h3>De operación mínima para conservarlo</h3>
+        <p>La misma fracción condiciona el beneficio a que el equipo se mantenga en operación durante un mínimo de cinco años posteriores al ejercicio de la deducción. Un sistema parado o produciendo de menos no es solo energía perdida: pone en riesgo un beneficio fiscal que ya se tomó.</p>
+        <p><b style="color:var(--ink)">Por eso el mantenimiento no es un extra.</b> Es lo que sostiene la deducción durante los cinco años que la ley exige.</p>
+        <div class="cite">Fuente neutral · misma fracción, requisito de permanencia en operación</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:8px;padding-bottom:24px">
+  <div class="c">
+    <div class="note">
+      <p><b>Para qué te sirve esta hoja.</b> Con el mismo alcance enfrente, las propuestas se comparan por lo que incluyen y no por el número final de la última página. Nadie se acuerda de quién ahorró en la póliza; sí de quién firmó la que no traía termografía.</p>
+      <p>Úsala con quien quieras. Si un día quieres que el punto de partida sea un levantamiento de tu planta con las observaciones por escrito, también lo hacemos, y los números van al final, solo si los pides.</p>
+    </div>
+  </div>
+</section>
+
+<div class="c foot">
+  <p><b>Sobre este documento.</b> Es una guía de comparación, no una cotización ni una oferta. No incluye precios y no compromete alcances específicos: el alcance de una póliza concreta se define sobre la instalación real, después de conocerla.</p>
+  <p style="margin-bottom:0">ENNCO · Energy &amp; Innovation Consulting · León, Guanajuato · ennco.com.mx</p>
+</div>
+
+</body>
+</html>

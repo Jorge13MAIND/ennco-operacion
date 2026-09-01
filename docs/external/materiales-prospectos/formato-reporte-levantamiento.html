@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Reporte de levantamiento eléctrico · Formato de muestra · ENNCO</title>
+<meta name="description" content="Formato de muestra del reporte que entrega ENNCO tras un levantamiento eléctrico en sitio: lo observado, dónde está y qué tan urgente es. Sin cotización.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#00254D; --navy-2:#013D7A; --gold:#EEB313; --gold-soft:#FDDF8B;
+  --ink:#0B1B2E; --body:#3E5268; --mut:#78899E;
+  --paper:#FFFFFF; --grey:#F4F6F9; --line:rgba(0,37,77,.14); --hair:rgba(0,37,77,.08);
+  --ok:#0F7B4F; --warn:#B4761A; --stop:#A32C3C;
+  --sans:'Montserrat',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--body);font-family:var(--sans);font-size:16px;line-height:1.68;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+h1,h2,h3,h4{color:var(--ink);font-weight:700;letter-spacing:-.021em;line-height:1.16;margin:0}
+p{margin:0 0 1.05em}
+.c{max-width:900px;margin:0 auto;padding:0 26px}
+section{padding:54px 0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--navy-2);font-weight:600;margin-bottom:14px;display:block}
+
+.top{background:var(--navy);color:#fff;padding:15px 0}
+.top-in{max-width:900px;margin:0 auto;padding:0 26px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.top img{height:22px;width:auto}
+.top .by{margin-left:auto;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.6);letter-spacing:.05em}
+
+.sample{background:var(--gold-soft);border-bottom:1px solid var(--line);padding:11px 0}
+.sample .c{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.sample b{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.sample span{font-size:13px;color:var(--ink)}
+
+.head{padding:52px 0 42px;border-bottom:1px solid var(--line)}
+.head h1{font-size:clamp(28px,4vw,40px);max-width:24ch}
+.head .sub{font-size:17.5px;margin-top:18px;max-width:70ch}
+.meta{display:flex;flex-wrap:wrap;gap:0;margin-top:30px;border-top:1px solid var(--hair);padding-top:20px}
+.mi{padding-right:26px;margin-right:26px;border-right:1px solid var(--line)}
+.mi:last-child{border-right:none}
+.mi b{display:block;font-family:var(--mono);font-size:12.5px;color:var(--ink);font-weight:600}
+.mi span{font-size:11.5px;color:var(--mut);letter-spacing:.03em}
+
+.root{background:var(--navy);color:rgba(255,255,255,.86);border-radius:5px;padding:32px 30px;margin:0 0 20px}
+.root .tag{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:12px;display:block}
+.root h2{color:#fff;font-size:clamp(21px,2.7vw,27px);margin-bottom:14px}
+.root p{margin-bottom:.9em}
+.root p:last-child{margin-bottom:0}
+.root b{color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.chip{border:1px solid rgba(255,255,255,.22);border-radius:4px;padding:10px 16px;min-width:118px}
+.chip b{display:block;font-family:var(--mono);font-size:22px;line-height:1.1;color:#fff}
+.chip span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.62)}
+.chip.k-stop b{color:#FF9CA8}
+.chip.k-warn b{color:var(--gold-soft)}
+.chip.k-ok b{color:#8FE0BC}
+
+table{width:100%;border-collapse:collapse;font-size:14px;margin:22px 0}
+th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--mut);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:12px;border-bottom:1px solid var(--hair);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.n{font-family:var(--mono);font-size:12.5px;color:var(--mut);white-space:nowrap;width:34px}
+td.t{font-family:var(--mono);font-size:13px;white-space:nowrap}
+.st{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.06em;padding:3px 8px;border-radius:2px;white-space:nowrap;display:inline-block}
+.s-ok{background:rgba(15,123,79,.1);color:var(--ok)}
+.s-warn{background:rgba(180,118,26,.11);color:var(--warn)}
+.s-stop{background:rgba(163,44,60,.09);color:var(--stop)}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.leg{display:flex;flex-wrap:wrap;gap:14px 26px;margin:6px 0 0;font-size:13px}
+.leg span{display:flex;gap:8px;align-items:baseline}
+
+.figs{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:24px 0 6px}
+.fg{margin:0;border:1px solid var(--line);border-radius:5px;overflow:hidden;background:var(--grey)}
+.fg figcaption{padding:12px 15px;font-size:13px;line-height:1.5}
+.fg figcaption b{color:var(--ink)}
+.fg .tl{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:4px}
+@media(max-width:660px){.figs{grid-template-columns:1fr}}
+
+.fix{border:1px solid var(--line);border-radius:5px;overflow:hidden;margin:20px 0}
+.fx{display:flex;gap:18px;padding:19px 20px;border-bottom:1px solid var(--hair);align-items:flex-start}
+.fx:last-child{border-bottom:none}
+.fx .num{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--gold);line-height:1;min-width:34px;letter-spacing:-.03em}
+.fx h4{font-size:15.5px;margin-bottom:5px}
+.fx p{font-size:14px;margin:0;color:var(--body);line-height:1.58}
+.fx .eff{margin-left:auto;text-align:right;min-width:130px}
+.fx .eff b{display:block;font-family:var(--mono);font-size:12px;color:var(--ink);font-weight:600}
+.fx .eff span{font-size:10.5px;color:var(--mut);letter-spacing:.04em}
+@media(max-width:660px){.fx{flex-wrap:wrap}.fx .eff{margin-left:0;text-align:left;width:100%;padding-left:52px}}
+
+.note{background:var(--grey);border-left:3px solid var(--navy-2);padding:17px 19px;border-radius:0 4px 4px 0;margin:22px 0;font-size:14.5px}
+.note b{color:var(--ink)}
+.note p:last-child{margin-bottom:0}
+
+.foot{border-top:1px solid var(--line);padding:30px 0 44px;font-size:12.5px;color:var(--mut)}
+.foot b{color:var(--body)}
+
+@media print{
+  .top{background:#fff;color:#000;border-bottom:2px solid #000}
+  .top img{filter:invert(1)}
+  .sample{background:#f2f2f2;border:1px solid #999}
+  .root{background:#f2f2f2;color:#000;border:1px solid #999}
+  .root h2,.root b{color:#000}
+  .root .tag{color:#666}
+  .chip{border-color:#999}
+  .chip b,.chip.k-stop b,.chip.k-warn b,.chip.k-ok b{color:#000}
+  .chip span{color:#444}
+  body{font-size:11.5px}
+  section{padding:18px 0}
+  .head{padding:24px 0 18px}
+  tr,.fx,.mi,.chip,.fg,.note{break-inside:avoid-page}
+  h2{break-after:avoid-page}
+  .figs{gap:10px;margin:14px 0 4px}
+  .figs .fg img{max-height:250px;width:auto;max-width:100%;margin:0 auto}
+  .fg-air img{max-height:430px;width:auto;max-width:100%;margin:0 auto}
+  .fg figcaption{padding:8px 12px;font-size:10.5px}
+  .leg{font-size:10.5px;margin-top:2px}
+  .foot{padding:14px 0 0}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="top-in">
+  <img src="assets/logo-blanco.png" alt="ENNCO" width="600" height="103">
+  <span class="by">Reporte de levantamiento eléctrico</span>
+</div></div>
+
+<div class="sample"><div class="c">
+  <b>Formato de muestra</b>
+  <span>Así se ve el documento que recibes tras el levantamiento. Los hallazgos de este ejemplar son ilustrativos: el tuyo se llena con lo que se observe y se mida en tu planta.</span>
+</div></div>
+
+<div class="c head">
+  <span class="eyebrow">Levantamiento eléctrico en sitio</span>
+  <h1>Lo que se observó, dónde está y qué tan urgente es.</h1>
+  <p class="sub">El levantamiento no es una visita de venta. Se abren tableros, se mide y queda este documento: cada observación con su ubicación, su lectura y su prioridad. No incluye precios. Los números vienen después, y solo si tú los pides.</p>
+  <div class="meta">
+    <div class="mi"><b>Planta de muestra</b><span>Instalación</span></div>
+    <div class="mi"><b>Día de la visita</b><span>Fecha del levantamiento</span></div>
+    <div class="mi"><b>LV-MUESTRA</b><span>Folio</span></div>
+    <div class="mi"><b>Ingeniería ENNCO</b><span>Responsable técnico</span></div>
+  </div>
+</div>
+
+<section style="padding-top:44px">
+  <div class="c">
+    <h2 style="font-size:24px;margin-bottom:8px">01 · Qué se revisa en la visita</h2>
+    <p>Una sola visita, con la planta operando. La termografía aérea se hace con dron, así que no hay que parar ninguna línea; la de contacto se toma sobre los equipos que la inspección aérea o la revisión física señalen.</p>
+    <div class="tw" tabindex="0" role="region" aria-label="Alcance de la revisión"><table>
+      <thead><tr><th>Frente</th><th>Qué se hace</th></tr></thead>
+      <tbody>
+        <tr><td><b>Tableros de distribución</b></td><td>Apertura, inspección física y termografía de contacto de barras, conexiones e interruptores</td></tr>
+        <tr><td><b>Subestación y transformadores</b></td><td>Inspección visual y térmica de conexiones, terminales y puntos de acceso disponibles</td></tr>
+        <tr><td><b>Conexiones y canalizaciones</b></td><td>Revisión de apriete, señales de calentamiento y condiciones visibles de la instalación</td></tr>
+        <tr><td><b>Techo y arreglo fotovoltaico</b>&nbsp;<span class="mono" style="font-size:11px;color:var(--mut)">si existe</span></td><td>Pasada térmica aérea con dron sobre el arreglo completo, sin parar la operación</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><p><b>Lo que este documento no es:</b> no es una cotización, no trae precios y no compromete fechas de obra. Es el registro fechado de la condición en que se encontró la instalación el día de la visita, para que la decisión que siga se tome con el dato y no con la memoria de alguien.</p></div>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="c">
+    <div class="root">
+      <span class="tag">Resumen ejecutivo · ejemplo ilustrativo</span>
+      <h2>La instalación opera, pero dos puntos concentran el riesgo y uno exige atención inmediata.</h2>
+      <p>Aquí va el veredicto en una frase: qué se encontró, dónde se concentra y qué conviene atender primero. Debajo, el conteo de observaciones por prioridad, para que dirección lea el estado de la planta sin abrir la tabla.</p>
+      <div class="chips">
+        <div class="chip k-stop"><b>1</b><span>Crítico</span></div>
+        <div class="chip k-warn"><b>2</b><span>Atender</span></div>
+        <div class="chip"><b>2</b><span>Vigilar</span></div>
+        <div class="chip k-ok"><b>2</b><span>Normal</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="c">
+    <h2 style="font-size:24px;margin-bottom:8px">02 · Los hallazgos, uno por uno</h2>
+    <p>Es el mapa térmico de tu instalación: qué punto está caliente, cuánto, y qué tan rápido hay que atenderlo. Cada renglón trae la ubicación exacta para que cualquier proveedor, sea quien sea, cotice contra el mismo alcance.</p>
+    <div class="tw" tabindex="0" role="region" aria-label="Hallazgos del levantamiento con ubicación, lectura y prioridad"><table>
+      <thead><tr><th>#</th><th>Ubicación</th><th>Lo observado</th><th>Lectura</th><th>Prioridad</th></tr></thead>
+      <tbody>
+        <tr><td class="n">01</td><td><b>Tablero general · barra fase B</b></td><td>Conexión con temperatura muy por encima de sus vecinas. Es el patrón típico de una conexión floja: no hace ruido, no huele y desde el piso no se ve</td><td class="t">70.5 °C</td><td><span class="st s-stop">Crítico</span></td></tr>
+        <tr><td class="n">02</td><td>Techo nave A · string 7</td><td>Tramo del arreglo fotovoltaico trabajando fuera de rango térmico frente al resto, visible en la pasada aérea</td><td class="t">Térmica aérea</td><td><span class="st s-warn">Atender</span></td></tr>
+        <tr><td class="n">03</td><td>CCM línea 2 · terminal de salida</td><td>Calentamiento incipiente en terminal. Aún lejos del punto de falla, pero con gradiente que no corresponde a la carga</td><td class="t">52.3 °C</td><td><span class="st s-warn">Atender</span></td></tr>
+        <tr><td class="n">04</td><td>Tablero de alumbrado nave B</td><td>Apriete pendiente detectado en inspección física, sin firma térmica todavía</td><td class="t">Inspección</td><td><span class="st s-warn" style="background:rgba(0,37,77,.07);color:var(--navy-2)">Vigilar</span></td></tr>
+        <tr><td class="n">05</td><td>Acometida · interruptor principal</td><td>Desbalance de carga entre fases dentro de tolerancia, en el límite superior</td><td class="t">Medición</td><td><span class="st s-warn" style="background:rgba(0,37,77,.07);color:var(--navy-2)">Vigilar</span></td></tr>
+        <tr><td class="n">06</td><td>Inversor 3</td><td>Operación en rango. Se incluye como contraste: así se ve un equipo sano en la misma cámara</td><td class="t">40.6 °C</td><td><span class="st s-ok">Normal</span></td></tr>
+        <tr><td class="n">07</td><td>Transformador principal</td><td>Conexiones y terminales sin gradiente anómalo el día de la visita</td><td class="t">En rango</td><td><span class="st s-ok">Normal</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="leg">
+      <span><span class="st s-stop">Crítico</span> Atención inmediata: riesgo de falla, paro o incendio</span>
+      <span><span class="st s-warn">Atender</span> Programar su corrección, no esperar a que avance</span>
+      <span><span class="st s-warn" style="background:rgba(0,37,77,.07);color:var(--navy-2)">Vigilar</span> Seguimiento en la próxima revisión</span>
+      <span><span class="st s-ok">Normal</span> Sin acción; queda documentado</span>
+    </div>
+
+    <div class="figs">
+      <figure class="fg">
+        <img src="assets/flir-tablero.webp" alt="Termografía de contacto de un tablero eléctrico con lectura máxima de 70.5 grados centígrados marcada por el propio equipo." width="820" height="615">
+        <figcaption><span class="tl">Hallazgo 01 · Tablero general</span><b>70.5 °C en una conexión.</b> La cámara imprime la lectura máxima en la propia imagen, así que la cifra se verifica en la evidencia, no en el texto.</figcaption>
+      </figure>
+      <figure class="fg">
+        <img src="assets/flir-inversor.webp" alt="Termografía de contacto de un inversor operando en rango normal con lectura máxima de 40.6 grados centígrados." width="820" height="615">
+        <figcaption><span class="tl">Hallazgo 06 · Inversor 3</span><b>40.6 °C, operación en rango.</b> El contraste importa: el reporte también documenta lo que está sano.</figcaption>
+      </figure>
+    </div>
+    <figure class="fg fg-air" style="margin:18px 0 0">
+      <img src="assets/nave-termica.webp" alt="Vista térmica aérea de una nave industrial donde varios strings del arreglo fotovoltaico aparecen a temperatura elevada frente al resto." width="1100" height="880">
+      <figcaption><span class="tl">Hallazgo 02 · Pasada aérea con dron</span><b>La nave completa en una sola pasada, sin parar la planta.</b> Los tramos claros son strings trabajando fuera de rango: desde el piso se ven perfectos.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="c">
+    <h2 style="font-size:24px;margin-bottom:8px">03 · Lo que está bien</h2>
+    <p>El levantamiento no es una lista de sustos. Lo que se encontró en orden también queda por escrito, con fecha, porque ese registro es el que responde cuando alguien pregunta si la instalación estaba revisada.</p>
+    <div class="note"><p><b>En este ejemplar de muestra:</b> el transformador principal y los equipos de conversión operan en rango, y la instalación general está en condición razonable para su edad. Si en tu planta está todo bien, el documento lo dice con la misma claridad, y te sirve igual: queda constancia fechada de la condición de la instalación.</p></div>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="c">
+    <h2 style="font-size:24px;margin-bottom:8px">04 · Orden de atención sugerido</h2>
+    <p>Ordenado por riesgo, no por costo. Qué va primero y por qué, para que la decisión no dependa de quién grite más fuerte en la junta.</p>
+    <div class="fix">
+      <div class="fx"><div class="num">1</div>
+        <div><h4>Corregir la conexión del tablero general</h4>
+          <p>Es el punto que puede tirar la planta o iniciar un incendio. Una conexión en esa condición no se queda quieta: empeora sola hasta que falla.</p></div>
+        <div class="eff"><b>Inmediato</b><span>Ventana sugerida</span></div></div>
+      <div class="fx"><div class="num">2</div>
+        <div><h4>Atender el string fuera de rango y la terminal del CCM</h4>
+          <p>Ninguno de los dos es una emergencia hoy. Los dos lo serán si se dejan: uno cuesta producción todos los días y el otro va camino a ser el hallazgo 01 de la siguiente visita.</p></div>
+        <div class="eff"><b>Próximo ciclo</b><span>Ventana sugerida</span></div></div>
+      <div class="fx"><div class="num">3</div>
+        <div><h4>Documentar y dar seguimiento a los puntos en vigilancia</h4>
+          <p>Quedan registrados con fecha y lectura. En la siguiente revisión se comparan contra este reporte y la tendencia dice si suben de prioridad o se cierran.</p></div>
+        <div class="eff"><b>Siguiente revisión</b><span>Ventana sugerida</span></div></div>
+    </div>
+    <div class="note"><p><b>Sobre los números:</b> este documento entrega la condición y la prioridad, no la cotización. Si decides atender algo, con este mismo reporte cualquier propuesta, nuestra o de quien tú elijas, se cotiza contra el mismo alcance, y las comparaciones son parejas.</p></div>
+  </div>
+</section>
+
+<div class="c foot">
+  <p><b>Sobre este documento.</b> Este ejemplar es un formato de muestra con hallazgos ilustrativos; el reporte de tu planta se llena con lo observado y medido el día de la visita, y queda fechado y firmado por el responsable técnico. Las lecturas de temperatura se entregan con su imagen termográfica, de modo que cada cifra es verificable en la propia evidencia.</p>
+  <p style="margin-bottom:0">ENNCO · Energy &amp; Innovation Consulting · León, Guanajuato · ennco.com.mx</p>
+</div>
+
+</body>
+</html>
