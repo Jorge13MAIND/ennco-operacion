@@ -374,7 +374,7 @@ Ninguno viaja por escrito; todos los concede Jorge.
 | **GitHub** `Jorge13MAIND/ennco-revenue-platform` | Invitación de colaborador | **Sí.** Lo primero |
 | **Control Room** | §4.1 | **Sí.** Es donde trabajas |
 | **Supabase** `isnzaoifdjtwnugupidj` | Invitación a la org — **lee la advertencia de abajo antes** | **Sí**, para el SQL del §8 y diagnosticar |
-| **Vercel** `ennco-operacion` (`prj_La0jTQsknyvaZFNKZXNdZZkVwTA2`, team `team_JoaghS7icWqY4idA8dg961Bg`) | Invitación al equipo | Sí, para envs y logs. **El deploy sigue necesitando el go de Jorge** |
+| **Vercel** `ennco-operacion` (`prj_La0jTQsknyvaZFNKZXNdZZkVwTA2`, team `team_JoaghS7icWqY4idA8dg961Bg`) | **YA LO TIENES** — `grantkeegan-teckel-ai`, rol `DEVELOPER` en `jorge13mainds-projects` (verificado 1-sep) | Sí, para envs, logs y **los dominios**. **El deploy sigue necesitando el go de Jorge** |
 | **Google Workspace** de ENNCO | Cuenta propia de admin | Sólo si operas buzones |
 | **Google Cloud** `august-beaker-478801-t3` | IAM del proyecto | No para el SLA. Sí para OAuth/KMS |
 | **Telegram** bot de alertas | §10 | Sí: es como te enteras |
@@ -383,6 +383,21 @@ Ninguno viaja por escrito; todos los concede Jorge.
 **Nunca se comparte:** contraseñas, client secrets, llaves privadas, cookies de
 sesión, códigos MFA. Un valor nuevo se genera, se dicta en sesión, se carga en
 Vercel, y no queda escrito en ningún otro lado.
+
+> ### El mismo problema existe en Vercel, y ahí ya está materializado
+>
+> Verificado el 1-sep: Grant ya es `DEVELOPER` del equipo `jorge13mainds-projects`,
+> que tiene **más de 20 proyectos** de clientes distintos (Grupo ILT, Travel
+> Curious, Maia, GADV, Epicure, Kova, STUC, el sitio de Teckel…). Un rol de equipo
+> aplica a **todos** los proyectos; acotar por proyecto exige el rol `Contributor`,
+> y la documentación de Vercel lo introduce explícitamente *"for Enterprise
+> customers"*.
+>
+> Lo que el rol `DEVELOPER` **sí** permite: desplegar, administrar dominios y
+> variables de preview/desarrollo. Lo que **no**: tocar variables de producción
+> (donde viven los secretos de ENNCO), invitar miembros ni cambiar ajustes del
+> equipo. Es un rol razonable para lo que Grant necesita; lo que hay que tener
+> consciente es el alcance, no el nivel.
 
 > ### ⚠️ El acceso a Supabase no se puede acotar a ENNCO en el plan actual
 >
@@ -443,6 +458,24 @@ pero **las cuentas son de Teckel**, en dominios de Teckel.
 | `enncoindustrial.com` | Vercel Registrar, **Teckel** | Publicado 2048 | Cumple 30 días el **25-sep** |
 | `enncoenergia.com` | Vercel Registrar, **Teckel** | Publicado 2048 | Igual |
 | `ennco.com.mx` | Hostinger, **ENNCO** | Vacío | Del cliente, fuera del plan |
+
+### Cómo se accede a los dominios (verificado el 1-sep)
+
+**Los dominios no tienen contraseña propia. No existe tal cosa.** Se compraron
+desde Vercel el 26-ago (creación `2026-08-26T18:15:4xZ`, expiran el 26-ago-2027,
+auto-renovación activa) y **el control es la cuenta de Vercel**: quien entra al
+equipo `jorge13mainds-projects` administra DNS, renovación y transferencia desde
+`vercel.com/domains`. **Tú ya entras** (rol `DEVELOPER`, que incluye administrar
+dominios de proyecto).
+
+Dato que conviene saber: el registrador ICANN de ambos es **Name.com** (Vercel
+Registrar revende a través de ellos). No hay ni hace falta cuenta en Name.com; si
+alguna vez WHOIS te confunde, ese es el motivo.
+
+Ambos están con `clientTransferProhibited`, que es el candado normal de un dominio
+recién registrado. Para moverlos a otro registrador habría que quitar el candado y
+generar el código de autorización desde el panel de Vercel, y de todos modos ICANN
+prohíbe transferir durante los primeros 60 días (o sea, no antes del ~25-oct).
 
 ---
 
