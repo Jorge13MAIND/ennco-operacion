@@ -223,7 +223,7 @@ con Cmd+P.
 
 **No hay auto-registro.** El alta es manual y en este orden:
 
-1. **Jorge** crea tu usuario en Supabase Auth.
+1. **Jorge** crea tu usuario en Supabase Auth (consola del proyecto).
 2. **Jorge** te da de alta en `organization_users` con rol `teckel_operator` (o
    `teckel_admin`) y `active = true`, en la organización
    `e0000000-0000-4000-8000-000000000001`.
@@ -231,6 +231,17 @@ con Cmd+P.
    un enlace de un solo uso, y **ahí creas tu contraseña** (mínimo 12 caracteres,
    exclusiva — no reuses la de Google Workspace).
 4. Entras a `/operacion`.
+
+> **Los pasos 1 y 2 sólo se hacen desde la consola de Supabase, nunca desde la
+> app.** Verificado el 1-sep: no existe ninguna pantalla ni endpoint de gestión de
+> usuarios, y `organization_users` tiene RLS activo con **cero políticas de
+> escritura** — así que ni un `teckel_admin` autenticado puede insertar una fila.
+> Escribir ahí exige el SQL Editor de la consola (corre como superusuario) o una
+> llave service-role, que la app deliberadamente no tiene.
+>
+> **Tu contraseña no la crea nadie más que tú**, por diseño: el paso 3 es
+> intransferible. Un administrador de Supabase puede forzar un cambio desde la
+> consola de Auth, pero eso no es parte del flujo y no debería usarse.
 
 > **Trampa que te va a pasar si el paso 1 no se hizo:** la pantalla de recuperación
 > dice *"Revisa tu correo. Si la cuenta está autorizada, recibirás un enlace…"*
@@ -362,7 +373,7 @@ Ninguno viaja por escrito; todos los concede Jorge.
 |---|---|---|
 | **GitHub** `Jorge13MAIND/ennco-revenue-platform` | Invitación de colaborador | **Sí.** Lo primero |
 | **Control Room** | §4.1 | **Sí.** Es donde trabajas |
-| **Supabase** `isnzaoifdjtwnugupidj` | Invitación a la org | **Sí**, para el SQL del §8 y diagnosticar |
+| **Supabase** `isnzaoifdjtwnugupidj` | Invitación a la org — **lee la advertencia de abajo antes** | **Sí**, para el SQL del §8 y diagnosticar |
 | **Vercel** `ennco-operacion` (`prj_La0jTQsknyvaZFNKZXNdZZkVwTA2`, team `team_JoaghS7icWqY4idA8dg961Bg`) | Invitación al equipo | Sí, para envs y logs. **El deploy sigue necesitando el go de Jorge** |
 | **Google Workspace** de ENNCO | Cuenta propia de admin | Sólo si operas buzones |
 | **Google Cloud** `august-beaker-478801-t3` | IAM del proyecto | No para el SLA. Sí para OAuth/KMS |
@@ -372,6 +383,28 @@ Ninguno viaja por escrito; todos los concede Jorge.
 **Nunca se comparte:** contraseñas, client secrets, llaves privadas, cookies de
 sesión, códigos MFA. Un valor nuevo se genera, se dicta en sesión, se carga en
 Vercel, y no queda escrito en ningún otro lado.
+
+> ### ⚠️ El acceso a Supabase no se puede acotar a ENNCO en el plan actual
+>
+> Verificado el 1-sep contra la documentación de Supabase: *"Project scoped roles
+> are only available on the Team and Enterprise plans"*. La organización está en
+> **plan Pro**, así que **cualquier miembro invitado ve los 15 proyectos**, no
+> sólo ENNCO. Entre ellos hay producción de otros clientes de Teckel y proyectos
+> personales de Jorge.
+>
+> Tres caminos, en orden de lo que yo recomendaría:
+>
+> 1. **No dar acceso a la consola todavía.** Para el SLA no hace falta: Jorge crea
+>    el usuario una vez (son minutos y no es tarea recurrente) y el trabajo diario
+>    ocurre en el Control Room y el repo. Cuesta cero.
+> 2. **Mover ENNCO a su propia organización** de Supabase y meter ahí a Grant. Es
+>    una transferencia self-serve, aísla al cliente como pide `AGENTS.md` y cuesta
+>    una suscripción Pro adicional.
+> 3. **Subir la organización a plan Team** para tener roles por proyecto. Es la
+>    opción cara y la única que resuelve el problema sin mover nada.
+>
+> Lo que **no** conviene es invitar a alguien a la organización tal como está y
+> asumir que sólo verá ENNCO. No es así.
 
 ---
 
@@ -441,7 +474,10 @@ ausencia** en vez de dejar positivas venciendo.
 
 Dos caminos, y eliges tú:
 
-**(a) SQL directo**, respetando lo que exige `app.operations_assignment_is_active`:
+**(a) SQL directo desde el SQL Editor de la consola de Supabase** — no desde la
+app ni con una sesión de operador: `operational_assignments` también tiene RLS
+activo con cero políticas de escritura, así que un `authenticated` no puede
+tocarla. Respeta lo que exige `app.operations_assignment_is_active`:
 `status='ACTIVE'`, `coverage_mode='PRIMARY_BACKUP'`, `backup_user_id` no nulo y
 distinto del primario, y **ambos** miembros activos con rol en (`ennco_admin`,
 `ennco_operator`, `teckel_admin`, `teckel_operator`).
