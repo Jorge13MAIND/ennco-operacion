@@ -114,7 +114,7 @@ devolvió 32 candidatos, 21 con correo.
 | Rotar 2 secretos OAuth | Jorge, 5 min | Comprometidos | Conexión de buzones |
 | Verificación de contactos | Teckel | Bloqueado por acceso | Gate de 75 cuentas / 150 contactos |
 | Entregables que el copy promete | Teckel | **HECHO 31-ago** | PDFs en `docs/external/materiales-prospectos/` |
-| Proceso de respuesta | Teckel | **Segunda vuelta escrita 31-ago** | Falta solo SLA y responsable de respaldo |
+| Proceso de respuesta | Teckel | **SLA escrito y cableado 1-sep** | `docs/external/sla-de-respuesta.md`; respaldo vacante (Grant, 3 pasos en el doc) |
 
 ### Los dos huecos que más preocupan
 
@@ -126,8 +126,14 @@ y `Alcance-Minimo-Poliza-ENNCO.pdf` en `docs/external/materiales-prospectos/`
 **La segunda vuelta ya está escrita (31-ago).** Correo al referido, acuse al
 referidor y variante de presentación, al final de `secuencia-ennco-copy.md` y en
 el intent `REFERRAL` de `data/campaigns/response-playbook-v1.json` (gate
-`verify:campaign` lo cubre, 35/35). Sigue faltando el SLA de respuesta y el
-segundo responsable: hoy solo Jorge responde y no hay respaldo.
+`verify:campaign` lo cubre, 35/35).
+
+**El SLA de respuesta ya existe (1-sep):** `docs/external/sla-de-respuesta.md`
+— plazos por clasificación, dueño (Jorge, ACTIVE en la base desde el 20-ago),
+respaldo designado (Grant, 3 pasos para activarlo), alerta de Telegram al
+ingresar respuestas (cron gmail-sync) y watchdog a las 2 horas (M040 aplicada).
+Quedan dos cosas: los 2 env de Telegram (Jorge, 2 min, sin ellos las alertas
+salen mudas) y activar a Grant como respaldo cuando acepte.
 
 ---
 
