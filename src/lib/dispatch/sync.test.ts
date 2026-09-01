@@ -85,7 +85,7 @@ describe("drenado del outbox (M036)", () => {
     // antes de reclamar el outbox. No se drenaba nada, el watchdog veía los
     // eventos detenidos y abría ~60 incidentes al día. Con incidentes P1
     // abiertos ningún envío externo puede salir.
-    const sinCredenciales = { organizationId: config.organizationId } as never;
+    const sinCredenciales = { organizationId: "e0000000-0000-4000-8000-000000000001" } as never;
     eventos = [
       { id: "88888888-8888-4888-8888-888888888888", event_type: "control_cadence.unknown", payload_json: {} },
       { id: "99999999-9999-4999-8999-999999999999", event_type: "incident.opened", payload_json: {} },
@@ -97,7 +97,7 @@ describe("drenado del outbox (M036)", () => {
   });
 
   it("devuelve a la cola el evento de gmail cuando faltan credenciales, con razón", async () => {
-    const sinCredenciales = { organizationId: config.organizationId } as never;
+    const sinCredenciales = { organizationId: "e0000000-0000-4000-8000-000000000001" } as never;
     eventos = [
       { id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", event_type: "gmail.history_sync_requested", payload_json: { mailbox_id: "11111111-1111-4111-8111-111111111111", history_id: "123" } },
     ];
