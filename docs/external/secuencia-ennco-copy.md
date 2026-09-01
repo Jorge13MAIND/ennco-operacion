@@ -4,7 +4,7 @@ Fecha de corte: 29 de agosto de 2026. **Teckel es dueño de este copy.** Se
 redacta, se ajusta y se optimiza sin consulta previa; lo único que espera visto
 bueno del cliente es el PRIMER ENVÍO, por la cláusula 07 del contrato.
 
-8 toques · 4 variantes cada uno · 32 correos.
+8 toques · 4 variantes cada uno · 32 correos · más la segunda vuelta (referidos), al final.
 
 ## El marco
 
@@ -622,6 +622,67 @@ Cierro el seguimiento.
 Si abren revisión de mantenimiento eléctrico con gusto participamos, y si no, el alcance mínimo que te mandé te sirve igual con cualquier proveedor.
 
 Si prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo.
+
+Francisco
+```
+
+---
+
+## Segunda vuelta — cuando contestan «habla con Juan»
+
+El CTA de dirección general pide exactamente esto, así que esta respuesta es el
+resultado BUENO de la secuencia, no una excepción. Escrito 31-ago-2026 (cerraba
+el bloqueador A3 de `bloqueadores-2026-08-29.md`).
+
+**Reglas de uso:**
+
+1. El correo al referido va en **hilo nuevo, con su propio asunto**. El referido
+   no vio el hilo anterior; contestarle dentro del hilo viejo le esconde el contexto
+   en un quoted-reply que nadie lee.
+2. El acuse al referidor va como **reply en el hilo original, el mismo día**. Cierra
+   el loop y le avisa que ya no le vas a escribir por ese canal.
+3. La secuencia del referidor se **detiene** al registrar su respuesta (se clasifica
+   POSITIVE en el Control Room). El referido **NO entra a la secuencia automática**:
+   se maneja manual, uno a uno, y su primera pieza es este correo.
+4. Si dan cargo sin nombre ("habla con mantenimiento"), usar la variante de
+   presentación para conseguir nombre y correo antes de escribir a nadie.
+5. Registrar siguiente acción y fecha (regla del playbook de respuestas).
+
+El correo al referido sigue el molde de la secuencia (golpe → mecanismo → una
+pregunta → USP) y respeta el tope: 78 palabras. El referido típico lleva
+mantenimiento; si el cargo es otro, se ajusta solo la línea del levantamiento,
+no el resto.
+
+### Correo al referido
+
+**Asunto:** {{referidor}} me dirigió contigo
+
+```
+Hola {{first_name}},
+
+{{referidor}} me pidió verlo contigo directamente.
+
+Le escribí por algo que le pasó a un cliente nuestro: un apagón le tiró la planta un día completo y perdió 2 millones 180 mil pesos. Empezó como casi todas: una conexión floja calentándose semanas, en un tablero que nadie abrió.
+
+Hacemos un levantamiento con termografía, sin parar la planta, y te entregamos lo observado por escrito. Los números después, solo si los pides.
+
+¿Qué semana te acomoda?
+
+Francisco
+```
+
+### Acuse al referidor (reply en su hilo, mismo día)
+
+```
+Gracias, {{first_name}}. Hoy mismo le escribo a {{referido}} mencionando que tú me dirigiste, y con eso dejo de llenarte el correo: lo que siga, lo sigo con él.
+
+Francisco
+```
+
+### Variante: dan el cargo pero no el nombre o el correo
+
+```
+Gracias, {{first_name}}. ¿Me compartes su correo, o prefieres presentarnos con un mensaje corto? Como te acomode: con cualquiera de las dos le escribo hoy mismo.
 
 Francisco
 ```

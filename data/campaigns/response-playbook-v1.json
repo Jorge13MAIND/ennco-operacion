@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "status": "DRAFT_REVIEW_REQUIRED",
   "evidence_class": "synthetic_demo",
-  "sender": "Francisco Cuellar, CEO",
+  "sender": "Francisco Cuellar · francisco@enncoindustrial.com",
   "rules": [
     "responder breve y personal",
     "una pregunta de calificación por mensaje",
@@ -15,6 +15,10 @@
     {
       "intent": "POSITIVE",
       "body": "Gracias, {{first_name}}. Te mando el formato para revisar recibo o capacidad instalada y dejar claros los supuestos. Para ubicar el frente correcto, ¿hoy están evaluando solar, mantenimiento o infraestructura eléctrica?\n\nFrancisco"
+    },
+    {
+      "intent": "REFERRAL",
+      "body": "Gracias, {{first_name}}. Hoy mismo le escribo a {{referido}} mencionando que tú me dirigiste, y con eso dejo de llenarte el correo: lo que siga, lo sigo con él.\n\nFrancisco"
     },
     {
       "intent": "NOT_NOW",
@@ -44,6 +48,17 @@
       "intent": "UNSUBSCRIBE",
       "body": "Listo, {{first_name}}. Ya registré la baja y no recibirás más mensajes de esta secuencia.\n\nFrancisco"
     }
-  ]
+  ],
+  "referral_outbound": {
+    "canonical_source": "docs/external/secuencia-ennco-copy.md#segunda-vuelta--cuando-contestan-habla-con-juan",
+    "rules": [
+      "hilo nuevo con asunto propio; nunca reply del hilo del referidor",
+      "el acuse al referidor va como reply en su hilo el mismo día",
+      "el referido NO entra a la secuencia automática: manejo manual uno a uno",
+      "si dan cargo sin nombre o correo, usar la variante de presentación antes de escribir a nadie"
+    ],
+    "subject": "{{referidor}} me dirigió contigo",
+    "body": "Hola {{first_name}},\n\n{{referidor}} me pidió verlo contigo directamente.\n\nLe escribí por algo que le pasó a un cliente nuestro: un apagón le tiró la planta un día completo y perdió 2 millones 180 mil pesos. Empezó como casi todas: una conexión floja calentándose semanas, en un tablero que nadie abrió.\n\nHacemos un levantamiento con termografía, sin parar la planta, y te entregamos lo observado por escrito. Los números después, solo si los pides.\n\n¿Qué semana te acomoda?\n\nFrancisco",
+    "incomplete_referral_body": "Gracias, {{first_name}}. ¿Me compartes su correo, o prefieres presentarnos con un mensaje corto? Como te acomode: con cualquiera de las dos le escribo hoy mismo.\n\nFrancisco"
+  }
 }
-

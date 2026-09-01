@@ -67,9 +67,13 @@ check("UNKNOWN_NEVER_PASS", manifest.canary.unknown_is_pass === false && manifes
 check("APOLLO_WARMUP_MINIMUM_42_DAYS", manifest.canary.required_real_consecutive_days === 42, manifest.canary.required_real_consecutive_days);
 check("NO_OPEN_PIXEL", manifest.tracking.open_pixel === false, manifest.tracking);
 check("EXTERNAL_SIDE_EFFECT_BUDGET_ZERO", manifest.runtime.max_external_side_effects === 0, manifest.runtime.max_external_side_effects);
-check("RESPONSE_PLAYBOOK_DRAFT_ONLY", playbook.status === "DRAFT_REVIEW_REQUIRED" && playbook.responses.length === 8, { status: playbook.status, responses: playbook.responses.length });
+check("RESPONSE_PLAYBOOK_DRAFT_ONLY", playbook.status === "DRAFT_REVIEW_REQUIRED" && playbook.responses.length === 9, { status: playbook.status, responses: playbook.responses.length });
 check("RESPONSE_PLAYBOOK_ONE_CTA_MAX", playbook.responses.every((response) => (response.body.match(/\?/g) ?? []).length <= 1), true);
 check("RESPONSE_PLAYBOOK_NO_COMMITMENTS", playbook.responses.every((response) => !/(te garantizo|descuento de|precio final es|queda instalado el|ahorro de \d)/i.test(response.body)), true);
+check("RESPONSE_PLAYBOOK_HAS_REFERRAL", playbook.responses.some((response) => response.intent === "REFERRAL") && typeof playbook.referral_outbound?.body === "string", playbook.responses.map((response) => response.intent));
+check("REFERRAL_OUTBOUND_UNDER_100_WORDS", (playbook.referral_outbound?.body ?? "").trim().split(/\s+/).length <= 100, (playbook.referral_outbound?.body ?? "").trim().split(/\s+/).length);
+check("REFERRAL_OUTBOUND_ONE_CTA", ((playbook.referral_outbound?.body ?? "").match(/\?/g) ?? []).length === 1, true);
+check("REFERRAL_OUTBOUND_NO_COMMITMENTS", !/(te garantizo|garantizamos|descuento de|precio final|queda instalado el|ahorro de \d|[—–])/i.test(`${playbook.referral_outbound?.subject ?? ""}${playbook.referral_outbound?.body ?? ""}${playbook.referral_outbound?.incomplete_referral_body ?? ""}`), true);
 check("ANONYMOUS_REFERENCES_NOT_CASE_STUDIES", referenceCards.status === "INTERNAL_REFERENCE_NOT_CASE_STUDY" && referenceCards.publish_authorized === false && referenceCards.cards.every((card) => card.outcome_verified === false), { status: referenceCards.status, publish_authorized: referenceCards.publish_authorized });
 check("REFERENCE_SOURCE_IDS_EXIST", referenceCards.cards.every((card) => typeof card.source_record_id === "string" && card.source_record_id.length > 8), referenceCards.cards.map((card) => card.source_record_id));
 
