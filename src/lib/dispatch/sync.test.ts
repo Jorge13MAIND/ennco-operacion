@@ -79,4 +79,32 @@ describe("drenado del outbox (M036)", () => {
     const marcados = new Set([...completado, ...fallado]);
     expect(marcados.size).toBe(eventos.length);
   });
+
+  it("drena lo ajeno a Gmail aunque NO haya credenciales configuradas", async () => {
+    // El caso real del 31-ago-2026: sin client secret, runGmailSync se rendía
+    // antes de reclamar el outbox. No se drenaba nada, el watchdog veía los
+    // eventos detenidos y abría ~60 incidentes al día. Con incidentes P1
+    // abiertos ningún envío externo puede salir.
+    const sinCredenciales = { organizationId: config.organizationId } as never;
+    eventos = [
+      { id: "88888888-8888-4888-8888-888888888888", event_type: "control_cadence.unknown", payload_json: {} },
+      { id: "99999999-9999-4999-8999-999999999999", event_type: "incident.opened", payload_json: {} },
+    ];
+
+    await runGmailSync(sinCredenciales);
+
+    expect(completado).toHaveLength(2);
+  });
+
+  it("devuelve a la cola el evento de gmail cuando faltan credenciales, con razón", async () => {
+    const sinCredenciales = { organizationId: config.organizationId } as never;
+    eventos = [
+      { id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", event_type: "gmail.history_sync_requested", payload_json: { mailbox_id: "11111111-1111-4111-8111-111111111111", history_id: "123" } },
+    ];
+
+    const resumen = await runGmailSync(sinCredenciales);
+
+    expect(fallado).toEqual(["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"]);
+    expect(resumen.failedEvents).toBe(1);
+  });
 });

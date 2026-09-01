@@ -72,10 +72,25 @@ export type GmailSyncSummary = {
  */
 export async function runGmailSync(config: RuntimeConfig, batchSize = 5): Promise<GmailSyncSummary> {
   const summary: GmailSyncSummary = { processedEvents: 0, appliedProviderEvents: 0, failedEvents: 0, fullResyncRequested: false };
-  if (!config.googleKmsKeyName || !config.googleOauthClientId || !config.googleOauthClientSecret) return summary;
 
+  // Antes esta función se rendía aquí si faltaban credenciales de Gmail, ANTES
+  // de reclamar el outbox. Consecuencia medida el 31-ago-2026: sin el client
+  // secret configurado no se drenaba NADA, ni siquiera los eventos que no
+  // necesitan Gmail (control_cadence.*, suppression.*). Se acumulaban, el
+  // watchdog los veía detenidos y abría un incidente por cada uno: ~60 al día.
+  // Y con incidentes P1 abiertos ningún envío externo puede salir.
+  //
+  // Ahora el drenado de lo ajeno a Gmail ocurre siempre; sólo la sincronización
+  // en sí exige credenciales.
+  const gmailCredentials = config.googleKmsKeyName && config.googleOauthClientId && config.googleOauthClientSecret
+    ? {
+      kmsKeyName: config.googleKmsKeyName,
+      clientId: config.googleOauthClientId,
+      clientSecret: config.googleOauthClientSecret,
+    }
+    : null;
   const claim = outboxClaimSchema.parse(await claimDispatchOutbox(config, batchSize));
-  const kms = createGoogleKmsEnvelopeClient(config.googleKmsKeyName);
+  const kms = gmailCredentials ? createGoogleKmsEnvelopeClient(gmailCredentials.kmsKeyName) : null;
   const tokenByMailbox = new Map<string, string>();
 
   for (const rawEvent of claim.events) {
@@ -88,6 +103,13 @@ export async function runGmailSync(config: RuntimeConfig, batchSize = 5): Promis
     const event = parsedEvent.data;
     if (event.event_type !== "gmail.history_sync_requested") {
       await completeDispatchOutboxEvent(config, event.id).catch(() => undefined);
+      continue;
+    }
+    if (!gmailCredentials || !kms) {
+      // Sí es un problema real y debe verse: se devuelve a la cola con razón
+      // explícita para que se reintente cuando haya credenciales.
+      summary.failedEvents += 1;
+      await failDispatchOutboxEvent(config, event.id, "GMAIL_CREDENTIALS_NOT_CONFIGURED").catch(() => undefined);
       continue;
     }
     const parsedPayload = gmailSyncPayloadSchema.safeParse(
@@ -107,8 +129,8 @@ export async function runGmailSync(config: RuntimeConfig, batchSize = 5): Promis
         accessToken = await getGmailAccessToken({
           refreshToken,
           credentialSha256: credential.credential_sha256,
-          clientId: config.googleOauthClientId,
-          clientSecret: config.googleOauthClientSecret,
+          clientId: gmailCredentials.clientId,
+          clientSecret: gmailCredentials.clientSecret,
         });
         tokenByMailbox.set(mailboxId, accessToken);
       }
