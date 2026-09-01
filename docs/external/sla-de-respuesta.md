@@ -46,11 +46,22 @@ congela el canal por P1.
 
 ### Activar al respaldo (cuando Grant acepte)
 
-1. Crear su usuario del Control Room con rol `teckel_operator` (invitación
-   desde Supabase Auth del proyecto dedicado).
+1. Crear su usuario del Control Room y darlo de alta en `organization_users` con
+   rol `teckel_operator` y `active = true`.
 2. Darle acceso al buzón del programa (delegación en Google Workspace).
-3. Con una sesión de operador, ejecutar:
-   `select public.configure_single_teckel_operator('<uuid_jorge>', '<uuid_grant>', 'PRIMARY_BACKUP', 'sla-de-respuesta.md v1');`
+3. Pasar la asignación a modo `PRIMARY_BACKUP`.
+
+**Corrección 1-sep:** una versión anterior de esta hoja daba aquí un comando
+`configure_single_teckel_operator(...)` con cuatro argumentos incluyendo el
+respaldo. **Ese comando no existe.** La firma real es
+`(organization_id, primary_user_id, source_reference, idempotency_key)` y su
+cuerpo fuerza `backup_user_id = null` y `coverage_mode = 'SINGLE_TECKEL_OPERATOR'`:
+sirve para declarar operador único, es decir lo contrario de nombrar respaldo.
+**No hay ninguna RPC que configure el modo `PRIMARY_BACKUP`** (verificado contra
+producción el 1-sep). El paso 3 se hace por SQL directo, respetando los
+invariantes que `app.operations_assignment_is_active` exige, o construyendo antes
+la RPC que falta (recomendado si el respaldo va a rotar). Detalle del SQL y de
+los invariantes: `docs/external/HANDOVER-GRANT-SLA-2026-09-01.md` §5.
 
 ## Cómo se entera el operador (sin vivir en el Control Room)
 
