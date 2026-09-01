@@ -91,9 +91,15 @@ checksum. Prueba de Apollo sobre las 10 cuentas Tier 1: resolvió 10/10 y
 devolvió 32 candidatos, 21 con correo.
 
 > **Dato para dimensionar:** 2.1 contactos con correo por cuenta. Para el gate
-> de 150 contactos hacen falta ~71 cuentas y hay 1,831. Pero ojo con los cargos
-> que devolvió: casi todo mantenimiento e ingeniería, 3 de dirección y **cero de
-> compras**. La variante de compras casi no se va a usar como está buscando hoy.
+> de 150 contactos hacen falta ~71 cuentas y hay 1,831.
+>
+> **Corrección 1-sep sobre compras:** el "cero de compras" era del método, no
+> del mercado — la corrida del 26-ago nunca buscó títulos de compras. Con la
+> búsqueda correcta (2 requests de personas, 0 créditos) aparecieron 49 personas
+> de compras; 11 pasan el criterio MRO/indirectos/seniority, 8 con correo, en 6
+> de las 10 cuentas. **La variante de compras se queda**; se asigna por contacto
+> y donde no haya candidato la cuenta no la usa. Detalle en
+> `data/imports/research/apollo-compras-2026-09-01/compras-tier1-top10.json`.
 
 ---
 

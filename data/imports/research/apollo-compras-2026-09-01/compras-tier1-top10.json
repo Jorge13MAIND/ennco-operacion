@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-09-01T00:00:00Z",
+  "purpose": "Cerrar el pendiente 5 del HANDOFF 2026-08-31: 'Apollo devolvió cero contactos de compras: ajustar búsqueda o retirar esa variante'.",
+  "root_cause_finding": "El claim 'Apollo devolvió cero de compras' era un artefacto del método, no del mercado: la corrida del 26-ago (candidates-tier1-top10.json) NUNCA incluyó títulos de compras en el title-search (cero menciones de compras/procurement/purchasing/buyer/sourcing en todo el artefacto). Sus títulos objetivo eran mantenimiento/planta/ingeniería/dirección, así que contar cargos de compras en ese resultado siempre iba a dar cero. Con la búsqueda correcta, 6 de 10 cuentas Tier 1 SÍ tienen personal de compras indexado.",
+  "verdict": "LA VARIANTE DE COMPRAS SE MANTIENE. Cobertura real: fuerte en los 4 corporativos globales (45 personas), delgada en las entidades MX chicas (4 personas, 1 con correo). Regla de uso: la variante compras se asigna por CONTACTO, no por cuenta; donde no haya candidato de compras esa cuenta simplemente no usa la variante y el ángulo de póliza lo carga la variante de dirección (en empresas chicas dirección firma las pólizas).",
+  "method": {
+    "tools_used": ["apollo_mixed_people_api_search (2 requests, gratis)", "apollo_usage_stats_credit_usage_stats (2 snapshots)"],
+    "search_1_mx_entities": {
+      "organization_ids": ["67270ee10b702b0001501e37", "6732e4989696e7000161d231", "6729a99f2bce890001d3c567", "55fa1ed1f3e5bb717e002421", "62a9fe1b849cc9008bda51c3", "54a121c469702d94a4d3d502"],
+      "person_titles": ["compras", "comprador", "purchasing", "procurement", "buyer", "sourcing", "supply chain", "abastecimiento", "adquisiciones", "materials"],
+      "total_entries": 4
+    },
+    "search_2_global_parents": {
+      "q_organization_domains_list": ["pg.com", "lear.com", "kirchhoff-automotive.com", "eaton.com"],
+      "person_locations": ["Querétaro, Mexico", "Queretaro, Mexico", "Guanajuato, Mexico"],
+      "person_titles": "idénticos a search_1",
+      "total_entries": 45
+    },
+    "credits": {
+      "lead_credit_before": "10 consumed / 4000 left (cycle resets 2026-09-24)",
+      "lead_credit_after": "10 consumed / 4000 left — IDÉNTICO, 0 créditos gastados",
+      "note": "Solo búsqueda de personas (gratis, verificado de nuevo). Cero companies_search, cero enrichment, cero mutaciones."
+    }
+  },
+  "selection_criteria": "El comprador de una PÓLIZA de mantenimiento es compras indirectas/servicios/MRO o un generalista de compras con seniority supervisor+, no un buyer de materiales directos de producción. Incluidos: purchasing manager/supervisor, procurement director/supervisor/expert, buyer indirecto, capital/project buyer (capex de equipos = pertinente para obra eléctrica). Descartados: materials managers/planners/coordinators (materiales directos y planeación), sourcing engineers de componentes, product supply (cadena operativa), becarios y auxiliares (seniority), y perfiles customer-facing.",
+  "included_candidates": [
+    {"apollo_person_id": "61153e6a3dcc040001043420", "account": "Industria Envasadora de Queretaro", "external_record_id": "tier1-20260826:010", "title": "Purchasing Manager", "has_email": true, "fit": "PRIMARIO. Generalista con seniority en la cuenta MX con mejor cobertura del lote."},
+    {"apollo_person_id": "61ebdd350fbd13000191848f", "account": "Autoliv Steering Wheels Mexico", "external_record_id": "tier1-20260826:005", "title": "Project Buyer", "has_email": false, "fit": "SECUNDARIO con flag: capex de proyecto es pertinente; hoy sin correo (enrichment lo resolvería o no)."},
+    {"apollo_person_id": "67e58615824e210001bee5b9", "account": "KIRCHHOFF Automotive", "external_record_id": "tier1-20260826:007", "title": "Director of Procurement", "has_email": false, "fit": "PRIMARIO por cargo (máximo seniority de compras del lote); sin correo hoy, tiene teléfono directo."},
+    {"apollo_person_id": "5cdaf7dd80f93e0f1c860b88", "account": "KIRCHHOFF Automotive", "external_record_id": "tier1-20260826:007", "title": "Procurement Supervisor", "has_email": true, "fit": "PRIMARIO. Supervisor de procurement con correo."},
+    {"apollo_person_id": "5e69c266a490a80001cc4a52", "account": "KIRCHHOFF Automotive", "external_record_id": "tier1-20260826:007", "title": "Procurement Expert - IPO Latin America & SSC", "has_email": true, "fit": "SECUNDARIO: rol regional, puede no llevar MRO de la planta QRO."},
+    {"apollo_person_id": "57e0683aa6da981bf9c1b1c0", "account": "Lear Corporation", "external_record_id": "tier1-20260826:006", "title": "Lead Buyer", "has_email": true, "fit": "SECUNDARIO con flag: lead buyer puede ser de directos; con correo."},
+    {"apollo_person_id": "683ac71f1b8136000122809c", "account": "Lear Corporation", "external_record_id": "tier1-20260826:006", "title": "Buyer Indirect", "has_email": false, "fit": "PRIMARIO por función (indirectos = exactamente el perfil de póliza); sin correo hoy."},
+    {"apollo_person_id": "67ecc72ea91290000121a098", "account": "Eaton", "external_record_id": "tier1-20260826:009", "title": "Purchasing Supervisor", "has_email": true, "fit": "PRIMARIO. Con correo. CAVEAT Eaton QRO multi-planta: no confirmable que sea Bussmann sin enrichment."},
+    {"apollo_person_id": "57e179c3a6da987d7c342e76", "account": "Eaton", "external_record_id": "tier1-20260826:009", "title": "Purchasing Supervisor", "has_email": true, "fit": "PRIMARIO. Mismo caveat multi-planta."},
+    {"apollo_person_id": "55713722736964534d210200", "account": "Eaton", "external_record_id": "tier1-20260826:009", "title": "Supply Chain Manager", "has_email": true, "fit": "ALTERNO: supply chain puede abarcar MRO; mismo caveat."},
+    {"apollo_person_id": "5f516b001fc407000105d4c2", "account": "Procter & Gamble", "external_record_id": "tier1-20260826:004", "title": "Capital Import Buyer", "has_email": true, "fit": "PRIMARIO: compras de capital (equipos) es el mejor ángulo para obra eléctrica en P&G."}
+  ],
+  "excluded_examples": [
+    {"title": "Comprador Auxiliar", "account": "Troqueladora Batesville", "reason": "seniority"},
+    {"title": "Jefe de Almacén de Compras", "account": "VENTRAMEX", "reason": "almacén, no compras de servicios"},
+    {"title": "Becario de Compras", "account": "KIRCHHOFF", "reason": "seniority"},
+    {"title": "Materials Manager / Materials Planning Manager / Materials Coordinator", "account": "Lear/Kirchhoff/Eaton", "reason": "materiales directos y planeación, no MRO"},
+    {"title": "Sourcing Engineer (x2)", "account": "Eaton", "reason": "sourcing de componentes directos"},
+    {"title": "Product Supply Manager (x2) / Customer Supply Chain Director", "account": "P&G", "reason": "cadena operativa / customer-facing, no compras"},
+    {"title": "Sr Buyer / Senior Buyer / Lead Buyer sin correo (varios)", "account": "Eaton", "reason": "probables directos y sin correo; no suman hoy"}
+  ],
+  "accounts_with_zero_procurement": [
+    {"account": "Steeringmex", "external_record_id": "tier1-20260826:001", "note": "0 hits; consistente con la cobertura delgada que ya mostró el 26-ago"},
+    {"account": "Consorcio Industrial Mexicano de Autopartes", "external_record_id": "tier1-20260826:003", "note": "0 hits; Apollo casi no indexa esta razón social"},
+    {"account": "Procter & Gamble (récord MX)", "note": "no existe; hits vía corporativo global"},
+    {"account": "Troqueladora Batesville / VENTRAMEX", "note": "solo perfiles descartados por criterio"}
+  ],
+  "next_step_note": "Los correos se revelan en la fase de verificación de contactos ya aprobada (cap 300 créditos), junto con los 32 candidatos del 26-ago. Nada se enriqueció ni se contactó en esta corrida."
+}
