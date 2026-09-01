@@ -65,6 +65,36 @@ describe("dispatch watchdog", () => {
     expect(conCalendario(undefined)).toEqual([]);
   });
 
+  it("grita en live si no hay responsable de respuestas, y calla en sombra", () => {
+    const health = {
+      last_tick: { created_at: insideWindow.toISOString() },
+      reply_operations: { unreviewed_replies: 0, oldest_unreviewed_minutes: null, open_reply_cases: 0, assignment_active: false },
+    };
+    expect(evaluateDispatchWatchdog({ health, now: insideWindow, dispatchMode: "live" }))
+      .toContainEqual(expect.objectContaining({ level: "CRITICAL", title: "sin responsable de respuestas" }));
+    // En sombra no hay respuestas posibles; el candado real pre-live es el runbook.
+    expect(evaluateDispatchWatchdog({ health, now: insideWindow, dispatchMode: "shadow" })
+      .filter((finding) => finding.title === "sin responsable de respuestas")).toEqual([]);
+  });
+
+  it("grita cuando hay respuestas sin clasificar más viejas que 2 horas", () => {
+    const conRespuestas = (unreviewed: number, oldestMinutes: number | null) => evaluateDispatchWatchdog({
+      health: {
+        last_tick: { created_at: insideWindow.toISOString() },
+        reply_operations: { unreviewed_replies: unreviewed, oldest_unreviewed_minutes: oldestMinutes, open_reply_cases: 0, assignment_active: true },
+      },
+      now: insideWindow,
+      dispatchMode: "live",
+    });
+
+    expect(conRespuestas(2, 180)).toContainEqual(
+      expect.objectContaining({ level: "CRITICAL", title: "respuestas sin clasificar" }),
+    );
+    // Recién llegada: la alerta inmediata la da el cron de gmail-sync, no el watchdog.
+    expect(conRespuestas(1, 30).filter((finding) => finding.title === "respuestas sin clasificar")).toEqual([]);
+    expect(conRespuestas(0, null).filter((finding) => finding.title === "respuestas sin clasificar")).toEqual([]);
+  });
+
   it("formats the daily snapshot with release and outbox facts", () => {
     const lines = formatDailySnapshot({
       health: {

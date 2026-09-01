@@ -13,18 +13,39 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const completado: string[] = [];
 const fallado: string[] = [];
 let eventos: unknown[] = [];
+// Por default la credencial revienta (las pruebas del bucle nunca deben llegar
+// a Gmail); la prueba del conteo de respuestas la habilita explícitamente.
+let leerCredencial: () => Promise<unknown> = async () => { throw new Error("no debe llamarse en estas pruebas"); };
+let mensajesHistoria: Array<{ id: string; kind: string }> = [];
 
 vi.mock("@/lib/dispatch/client", () => ({
   claimDispatchOutbox: async () => ({ events: eventos }),
   completeDispatchOutboxEvent: async (_c: unknown, id: string) => { completado.push(id); },
   failDispatchOutboxEvent: async (_c: unknown, id: string) => { fallado.push(id); },
-  readHybridDispatchCredential: async () => { throw new Error("no debe llamarse en estas pruebas"); },
+  readHybridDispatchCredential: async () => leerCredencial(),
   updateDispatchSyncCursor: async () => undefined,
   applyDispatchProviderEvent: async () => undefined,
 }));
 
 vi.mock("@/lib/gmail/oauth-server", () => ({
   createGoogleKmsEnvelopeClient: () => ({ decryptText: async () => "refresh" }),
+}));
+
+vi.mock("@/lib/dispatch/gmail-token", () => ({
+  getGmailAccessToken: async () => "token-de-prueba",
+}));
+
+vi.mock("@/lib/gmail/history", () => ({
+  GmailHistoryResetRequiredError: class GmailHistoryResetRequiredError extends Error {},
+  collectGmailHistory: async () => ({ historyId: "200", messages: mensajesHistoria }),
+  classifyGmailMessage: (message: { kind: string }) => message.kind,
+  extractGmailEventContext: () => ({
+    relatedOutboundMessageId: null,
+    normalizedFrom: "prospecto@planta.mx",
+    subject: "Re: Lo que le costó un apagón a un cliente",
+    internalDateEpoch: 1_756_700_000,
+    failedRecipient: null,
+  }),
 }));
 
 const { runGmailSync } = await import("@/lib/dispatch/sync");
@@ -40,6 +61,8 @@ describe("drenado del outbox (M036)", () => {
   beforeEach(() => {
     completado.length = 0;
     fallado.length = 0;
+    leerCredencial = async () => { throw new Error("no debe llamarse en estas pruebas"); };
+    mensajesHistoria = [];
   });
 
   it("completa los eventos que no le tocan, en vez de abandonarlos", async () => {
@@ -94,6 +117,27 @@ describe("drenado del outbox (M036)", () => {
     await runGmailSync(sinCredenciales);
 
     expect(completado).toHaveLength(2);
+  });
+
+  it("cuenta solo los REPLY humanos para la alerta de SLA de respuesta", async () => {
+    // docs/external/sla-de-respuesta.md: la alerta de Telegram del cron dispara
+    // con appliedReplyEvents > 0. Un auto-reply (out of office) no arranca SLA.
+    leerCredencial = async () => ({ ciphertext: "c", kms_key_name: "k", credential_sha256: "s" });
+    mensajesHistoria = [
+      { id: "m1", kind: "REPLY" },
+      { id: "m2", kind: "AUTO_REPLY" },
+      { id: "m3", kind: "UNKNOWN" },
+    ];
+    eventos = [
+      { id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", event_type: "gmail.history_sync_requested", payload_json: { mailbox_id: "11111111-1111-4111-8111-111111111111", history_id: "123" } },
+    ];
+
+    const resumen = await runGmailSync(config);
+
+    // UNKNOWN se descarta antes de aplicar; REPLY y AUTO_REPLY sí se aplican.
+    expect(resumen.appliedProviderEvents).toBe(2);
+    expect(resumen.appliedReplyEvents).toBe(1);
+    expect(resumen.failedEvents).toBe(0);
   });
 
   it("devuelve a la cola el evento de gmail cuando faltan credenciales, con razón", async () => {

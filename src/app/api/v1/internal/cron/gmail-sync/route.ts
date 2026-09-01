@@ -24,6 +24,17 @@ export async function GET(request: Request): Promise<NextResponse> {
     if (summary.fullResyncRequested) {
       await sendDispatchAlert({ config, level: "WARN", title: "Gmail pide resync completo", lines: ["history 404: revisar cursor y watch"] });
     }
+    if (summary.appliedReplyEvents > 0) {
+      await sendDispatchAlert({
+        config,
+        level: "WARN",
+        title: `${summary.appliedReplyEvents} respuesta(s) de prospecto sin clasificar`,
+        lines: [
+          "SLA: clasificar hoy; si es positiva, responder antes de las 18:00 CDMX",
+          "Control Room: ennco-operacion.vercel.app/operacion",
+        ],
+      });
+    }
     return NextResponse.json({ state: "OK", ...summary }, { status: 200, headers: privateHeaders });
   } catch {
     await sendDispatchAlert({ config, level: "CRITICAL", title: "gmail-sync falló", lines: ["runGmailSync lanzó error"] });

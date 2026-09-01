@@ -16,6 +16,12 @@ const healthSchema = z.object({
   cadence_health: z.unknown().optional(),
   outbox: z.object({ pending: z.number(), due: z.number(), processing: z.number() }).partial().optional(),
   business_calendar: z.object({ future_business_days: z.number() }).partial().nullable().optional(),
+  reply_operations: z.object({
+    unreviewed_replies: z.number(),
+    oldest_unreviewed_minutes: z.number().nullable(),
+    open_reply_cases: z.number(),
+    assignment_active: z.boolean(),
+  }).partial().nullable().optional(),
 }).passthrough();
 
 export type DispatchHealthSnapshot = z.infer<typeof healthSchema>;
@@ -123,6 +129,32 @@ export function evaluateDispatchWatchdog(input: {
         level: "WARN",
         title: "calendario hábil por agotarse",
         detail: `${futureBusinessDays} días hábiles por delante; sembrar el siguiente horizonte`,
+      });
+    }
+  }
+
+  // SLA de respuesta (docs/external/sla-de-respuesta.md). Dos modos de falla
+  // que un gate local no puede ver: (1) en live, sin operational_assignment
+  // ACTIVE cada positiva abre un caso P1 SIN dueño que nadie puede cerrar
+  // (TASK_OWNER_REQUIRED) y el vencimiento congela el outbound; (2) una
+  // respuesta sin clasificar no dispara nada por sí misma y el plazo de las
+  // 18:00 corre aunque nadie la haya visto.
+  const replyOps = health.reply_operations;
+  if (replyOps) {
+    if (input.dispatchMode === "live" && replyOps.assignment_active === false) {
+      findings.push({
+        level: "CRITICAL",
+        title: "sin responsable de respuestas",
+        detail: "no hay operational_assignment ACTIVE; una respuesta positiva abriría un caso P1 sin dueño. Sembrar con configure_single_teckel_operator",
+      });
+    }
+    const unreviewed = replyOps.unreviewed_replies ?? 0;
+    const oldestMinutes = replyOps.oldest_unreviewed_minutes ?? 0;
+    if (unreviewed > 0 && oldestMinutes > 120) {
+      findings.push({
+        level: "CRITICAL",
+        title: "respuestas sin clasificar",
+        detail: `${unreviewed} respuesta(s) esperando, la más vieja hace ${(oldestMinutes / 60).toFixed(1)} h; el plazo de las 18:00 corre aunque nadie las abra`,
       });
     }
   }

@@ -60,6 +60,9 @@ function gmailTransport(accessToken: string): GmailHistoryTransport {
 export type GmailSyncSummary = {
   processedEvents: number;
   appliedProviderEvents: number;
+  // Solo REPLY humano. El SLA de respuesta corre desde que esto es > 0 y el
+  // operador no vive en el Control Room: la ruta del cron alerta por Telegram.
+  appliedReplyEvents: number;
   failedEvents: number;
   fullResyncRequested: boolean;
 };
@@ -71,7 +74,7 @@ export type GmailSyncSummary = {
  * watchdog es la red para huecos. Un 404 de historia marca resync completo.
  */
 export async function runGmailSync(config: RuntimeConfig, batchSize = 5): Promise<GmailSyncSummary> {
-  const summary: GmailSyncSummary = { processedEvents: 0, appliedProviderEvents: 0, failedEvents: 0, fullResyncRequested: false };
+  const summary: GmailSyncSummary = { processedEvents: 0, appliedProviderEvents: 0, appliedReplyEvents: 0, failedEvents: 0, fullResyncRequested: false };
 
   // Antes esta función se rendía aquí si faltaban credenciales de Gmail, ANTES
   // de reclamar el outbox. Consecuencia medida el 31-ago-2026: sin el client
@@ -154,6 +157,7 @@ export async function runGmailSync(config: RuntimeConfig, batchSize = 5): Promis
           observedAtEpoch: context.internalDateEpoch,
         });
         summary.appliedProviderEvents += 1;
+        if (kind === "REPLY") summary.appliedReplyEvents += 1;
       }
       await updateDispatchSyncCursor(config, { mailboxId, historyId: collected.historyId, watchExpiresAtEpoch: null });
       await completeDispatchOutboxEvent(config, event.id);
