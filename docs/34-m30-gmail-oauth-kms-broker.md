@@ -64,11 +64,29 @@ El gate DB prueba AAL1, tenant cruzado, DML directo, service role, legacy token,
 
 ## Pendientes externos exactos
 
-1. Entrar a Google Admin con un superadministrador del Workspace de ENNCO.
-2. Generar DKIM de 2048 bits y publicar el TXT del selector generado.
-3. Crear proyecto Google Cloud, pantalla de consentimiento interna, cliente OAuth web y callback exacto.
-4. Crear key ring y CryptoKey KMS, luego conceder sólo `cloudkms.cryptoKeyEncrypterDecrypter` al runtime autorizado.
-5. Configurar variables en Vercel y mantener `ENNCO_GMAIL_OAUTH_RELEASED=false` hasta una revisión final.
-6. Ejecutar consentimiento de `contacto@ennco.com.mx`, seed tests y reply sync.
+> **CORRECCIÓN 31-ago-2026.** Esta lista se escribió cuando el canal iba a
+> salir del buzón del cliente. Desde el 29-ago **el cliente y su dominio están
+> fuera del programa**: los envíos salen de los tres buzones aislados en
+> dominios de Teckel. Los pasos 1, 2 y 6 ya no aplican tal como estaban.
 
-Los pasos 1 a 4 cambian cuentas y seguridad externas. Requieren la sesión correcta y confirmación en el momento de ejecutarlos.
+1. ~~Entrar a Google Admin del Workspace de ENNCO~~ → **Ya no aplica.** El
+   Workspace relevante es el nuevo, en dominios de Teckel, admin
+   `francisco@enncoenergia.com`.
+2. ~~Generar DKIM de `ennco.com.mx`~~ → **Ya hecho donde importa.** DKIM 2048
+   publicado y respondiendo en `enncoindustrial.com` y `enncoenergia.com`,
+   verificado por DNS. El DKIM del dominio del cliente salió del alcance.
+3. Crear proyecto Google Cloud, pantalla de consentimiento interna, cliente
+   OAuth web y callback exacto. **Parcialmente hecho:** el proyecto
+   `august-beaker-478801-t3` existe y `GOOGLE_OAUTH_CLIENT_ID` está en Vercel;
+   falta el client secret, que **no existe hoy en el ambiente** (verificado).
+4. Crear key ring y CryptoKey KMS, luego conceder sólo
+   `cloudkms.cryptoKeyEncrypterDecrypter` al runtime autorizado. **Bloqueado
+   por facturación:** el proyecto no tiene cuenta de facturación vinculada.
+5. Configurar variables en Vercel y mantener `ENNCO_GMAIL_OAUTH_RELEASED=false`
+   hasta una revisión final.
+6. ~~Consentimiento de `contacto@ennco.com.mx`~~ → **Ya no aplica.** El
+   consentimiento va sobre los tres buzones aislados, y ocurre después del
+   calentamiento, no antes.
+
+Los pasos 3 y 4 cambian cuentas y seguridad externas. Requieren la sesión
+correcta y confirmación en el momento de ejecutarlos.

@@ -57,6 +57,22 @@ Los tres buzones aprobados son:
 
 `fcuellar@enncoenergia.com` queda diferido hasta revisar 100 entregas válidas. Ningún buzón aislado puede enviar prospectos antes de completar 42 días de warmup y todos sus gates live.
 
+> **CORRECCIÓN 31-ago-2026 — quién ejecuta el calentamiento.** Los 42 días
+> siguen siendo el requisito, pero **Apollo ya no calienta buzones**: retiró esa
+> función en 2024 por incumplir las políticas de Gmail. El calentamiento se
+> contrata con una herramienta dedicada y el reloj arranca el día que los
+> buzones se conectan a ella, no antes. Apollo queda para investigación y
+> verificación de contactos, y acepta los buzones por OAuth después, reconociendo
+> el historial previo. Detalle y comparativa de herramientas en el handover del
+> 31-ago (`docs/external/HANDOVER-ENNCO.md`).
+>
+> **Nota sobre los topes.** `max_account_count = 50` y `max_email_touches = 3`
+> son campos declarativos de `public.mailboxes`: **no se leen en ninguna función
+> ni en la aplicación**, sólo existen en la restricción que los fija. Los límites
+> que sí muerden son `recipient_count between 1 and 20` por release y
+> `daily_cap_snapshot in (5,10,15,20)`. Al activar las palancas de capacidad, el
+> cambio va ahí y en el ritmo por tick del despachador, no en esos dos campos.
+
 ## Inventario
 
 El mínimo de lanzamiento permanece en 75 empresas y 150 contactos verificados. La meta operativa es 150 empresas y 300 contactos, con 50 Tier 1 y 250 Tier 2. El inventario no se cuenta como lead ni como pipeline.

@@ -1,5 +1,13 @@
 # Activacion de proveedores para operacion comercial
 
+> **⚠ CORRECCIÓN 31-ago-2026 (DEC-107).** Donde este documento diga que Apollo
+> hace el **calentamiento de buzones**, está equivocado: Apollo discontinuó esa
+> función en 2024 por incumplir las políticas de Gmail, y en 2025 la relanzó
+> revendida por un tercero. Los 42 días siguen siendo el requisito, pero se
+> ejecutan con una herramienta dedicada y el reloj arranca el día que los buzones
+> se conectan a ella. Apollo queda para investigación, verificación y secuencias.
+> Todo lo demás de este documento sigue vigente.
+
 Fecha de decision: 2026-08-13.
 
 Actualizacion 20-ago-2026: el baseline final es Apollo Professional mensual, un asiento, propiedad de ENNCO. Los dominios y cuatro buzones se compran fuera de Apollo. La arquitectura vigente esta en `docs/32-m24-provider-infrastructure.md`. Este documento no autoriza compra.
@@ -25,7 +33,7 @@ No se reinicia el proyecto. La plataforma propia de ENNCO permanece como sistema
 
 ## Por que Apollo no es el sistema canonico
 
-Apollo ejecutara las secuencias y el warmup, pero la plataforma ENNCO conserva el estado comercial y los gates. Antes de inscribir un contacto, ENNCO debe validar Anexo A, cliente actual, baja, rebote, campaign manifest, aprobacion y kill switch. Despues del envio, ENNCO reconcilia provider ID, reply, bounce, baja y siguiente accion.
+**CORRECCIÓN 31-ago-2026 (DEC-107): Apollo NO ejecuta el warmup** — discontinuó esa función en 2024. El calentamiento se contrata aparte y, por decisión de arquitectura, **quien envía es el motor propio, no la herramienta**: el rastro de evidencia que sostiene la comisión del 2% vive en nuestra base con auditoría, y cada correo pasa por supresión, manifiesto con hash, rampa y kill switch antes de salir. Apollo queda para investigación y verificación. La plataforma ENNCO conserva el estado comercial y los gates. Antes de inscribir un contacto, ENNCO debe validar Anexo A, cliente actual, baja, rebote, campaign manifest, aprobacion y kill switch. Despues del envio, ENNCO reconcilia provider ID, reply, bounce, baja y siguiente accion.
 
 Esto evita que un cambio manual en Apollo cree destinatarios, reactive un contacto suprimido o convierta una metrica de actividad en resultado comercial. Ningun contacto de Apollo queda automaticamente elegible para outreach.
 
@@ -99,7 +107,7 @@ Jorge o ENNCO deben autorizar o entregar:
 ### Frente D. Reputacion y primer lote
 
 - SPF, DKIM, DMARC y TLS.
-- Minimo seis semanas de warmup Apollo por buzon, mas seeds y trafico real controlado.
+- Mínimo seis semanas de warmup por buzón **con herramienta dedicada, no con Apollo** (DEC-107), más seeds y tráfico real controlado.
 - Treinta gates live.
 - Cinco cuentas exactas.
 - Aprobacion explicita de Jorge.

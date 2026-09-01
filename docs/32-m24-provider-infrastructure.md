@@ -21,7 +21,19 @@ La decisión no autoriza compra, checkout, DNS, OAuth, conexión de buzones ni e
 - Los términos de Apollo, actualizados el 10 de agosto de 2026, autorizan usuarios empleados o proveedores expresamente autorizados, pero la licencia estándar es para los fines comerciales internos del titular y restringe el acceso en nombre de otra entidad. Esto favorece que ENNCO sea el titular y Teckel su proveedor autorizado. Fuente: [Apollo Terms](https://www.apollo.io/terms).
 - Apollo usa el nombre del perfil como nombre visible en todos los buzones y no admite una identidad distinta por buzón. Fuente: [Profile Settings](https://knowledge.apollo.io/hc/en-us/articles/34010120281613-Configure-Your-Profile-Settings-in-Apollo).
 - Basic admite un buzón por usuario. Professional admite buzones Google Workspace y Microsoft 365 ilimitados por usuario. Fuente: [Mailbox Limits](https://knowledge.apollo.io/hc/en-us/articles/4409127806093-Link-Your-Mailbox-to-Apollo).
-- Apollo recomienda al menos seis semanas de warmup, equivalentes a 42 días. Fuente: [Domain and Mailbox Warmup](https://knowledge.apollo.io/hc/en-us/articles/33476090833549-Generate-a-Domain-and-Mailbox-to-Reach-Prospects).
+- **CORRECCIÓN 31-ago-2026: Apollo NO calienta buzones.** Discontinuó su
+  función de warmup en 2024 por incumplir las políticas de Gmail sobre cómo se
+  genera el tráfico de calentamiento; en 2025 la relanzó revendida por un
+  tercero, sin responsabilidad propia. El plan original de esta plataforma decía
+  "conectar los buzones a Apollo para warmup" y **eso no existe**: de haberlo
+  seguido, el reloj de 42 días nunca habría arrancado y se habría descubierto en
+  octubre. El calentamiento se contrata aparte (ver el handover del 31-ago) y
+  Apollo queda sólo para investigación y verificación de contactos. Apollo sí
+  acepta buzones externos por OAuth y reconoce el historial de calentamiento
+  hecho en otra herramienta, así que el orden correcto es calentar fuera y
+  conectar después.
+- El requisito de seis semanas (42 días) de calentamiento **sigue siendo válido**
+  como estándar de la industria; lo que cambió es quién lo ejecuta.
 - Los activos comprados dentro de Apollo consumen créditos y pueden quedar inactivos si cambian el plan o los créditos. Por eso los dominios y Google Workspace se comprarán por separado.
 
 El precio mensual exacto no se declara verificado hasta observarlo en el checkout de la cuenta ENNCO. El presupuesto conserva MXN 1,782 como supuesto a tipo de cambio de MXN 18 por USD.

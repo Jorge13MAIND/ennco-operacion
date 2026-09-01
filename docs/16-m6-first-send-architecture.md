@@ -88,7 +88,7 @@ El sistema exige SPF, DKIM, DMARC, TLS, DNS directo e inverso, seeds y Postmaste
 - Base legal y aviso de privacidad aprobados.
 - Compra y propiedad de dominios.
 - DNS y cuatro buzones.
-- 42 días completos de warmup Apollo por buzón.
+- 42 días completos de warmup por buzón, **con herramienta dedicada, no con Apollo** (DEC-107).
 - 14 días reales de canary live.
 - Cinco cuentas elegibles y cinco contactos verificados.
 - Copy aprobado por Francisco.

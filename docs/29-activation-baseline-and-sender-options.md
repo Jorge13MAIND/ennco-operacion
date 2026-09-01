@@ -1,5 +1,13 @@
 # Baseline de activacion y opciones de envio
 
+> **⚠ CORRECCIÓN 31-ago-2026 (DEC-107).** Donde este documento diga que Apollo
+> hace el **calentamiento de buzones**, está equivocado: Apollo discontinuó esa
+> función en 2024 por incumplir las políticas de Gmail, y en 2025 la relanzó
+> revendida por un tercero. Los 42 días siguen siendo el requisito, pero se
+> ejecutan con una herramienta dedicada y el reloj arranca el día que los buzones
+> se conectan a ella. Apollo queda para investigación, verificación y secuencias.
+> Todo lo demás de este documento sigue vigente.
+
 Fecha de corte: 20 de agosto de 2026.
 
 Estado: `SUPERSEDED_BY_M24`. Este documento conserva la comparación histórica. La decisión vigente está en `docs/32-m24-provider-infrastructure.md`. No autoriza compra, alta, DNS, credenciales, publicación o envío.

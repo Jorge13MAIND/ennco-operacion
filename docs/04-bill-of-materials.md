@@ -26,8 +26,8 @@ Antes de presentar una orden se completa, por fila: precio y fecha, moneda e imp
 
 ## Restricciones de canal
 
-- Apollo es el proveedor baseline para datos, secuencias, calentamiento y entregabilidad. Instantly y Smartlead quedan fuera salvo falla documentada de Apollo en un control obligatorio.
+- Apollo es el proveedor baseline para datos, verificación y secuencias. **CORRECCIÓN 31-ago-2026: ya NO para calentamiento** — Apollo discontinuó esa función en 2024 por incumplir políticas de Gmail (ver DEC-107). El calentamiento se contrata con herramienta dedicada.
 - La plataforma ENNCO conserva la supresion, aprobacion, campaign manifest, atribucion, lead estricto, alertas y kill switch como contratos canonicos.
 - Resend sólo puede entregar notificaciones transaccionales a usuarios conocidos. Su política prohíbe cold outreach.
-- No se compra otro secuenciador ni otra herramienta de warmup mientras Apollo cubra la operacion aprobada.
+- No se compra otro secuenciador mientras Apollo cubra la operación aprobada. **Sí se contrata herramienta de warmup**, porque Apollo dejó de cubrir esa función (DEC-107).
 - No se compran dominios ni buzones dentro de Apollo. Se usa registrador independiente y Google Workspace bajo ENNCO.
