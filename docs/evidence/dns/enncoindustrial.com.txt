@@ -1,0 +1,7 @@
+# evidencia DNS de enncoindustrial.com
+# capturada 2026-09-01T02:20:57.315Z con dig +short
+NS: ns1.vercel-dns.com. ns2.vercel-dns.com.
+MX: 1 smtp.google.com.
+SPF: "v=spf1 include:_spf.google.com ~all"
+DKIM(google): "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApMWaJ9RDrzT8YAoNIaiOjA6KXAIXT9q6VOrHCkTYFt9grjhyVCu2Rfr7nEydi0SR4mwQ27gmT+xkZw7ppNArPoSB6k5yw2s4h0ltnaybY/wbCJkw2wj0uKOz3lZZ3LqprRgYutGz1m1NEGci5J0Tz0rR5HWlLbcVunpxFfxNJSNGqdFl313aKx03GV1AAFSY7" "cFtlVQhzNJYixMMwaDmCPgmn5++hKanFooxn+pxfYcRCxKf7uCpluQJW0N5XKGixHTCLL824KNcgOWWC702pCvT9Bs6sueUyonFk5UgB1P0NOngEn1R2upNXR+oDTTLb/w+cfy/GXoV1nb/nZggLQIDAQAB"
+DMARC: "v=DMARC1; p=none; rua=mailto:francisco@enncoindustrial.com"

@@ -1,0 +1,7 @@
+# evidencia DNS de enncoenergia.com
+# capturada 2026-09-01T02:20:57.315Z con dig +short
+NS: ns1.vercel-dns.com. ns2.vercel-dns.com.
+MX: 1 smtp.google.com.
+SPF: "v=spf1 include:_spf.google.com ~all"
+DKIM(google): "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4wxyRh/qIgprR37hr/YkX18NT5HMLrrgWCT9YsNPfZVAfh79MhVfAK/mFUmOYRfPZFh7Ln7kJUhz1IVND+lBgHewlrjhkLa2rmHICnyLvD8AtRp24KzmMwx86mPrdyJHidEcHrrdiUngn/via+jE89k80n8s+z1Tiq6auQKFuLkoBwrUJYoHVNWDWvcs6lF26" "4KM35Wh+6iQUFAtFZma6ZkH5p6Y5vqE9RXPzVkvg9++10ihvXW7dyewKc7WSvvxsy1OMSPSBlOFGA5fI21x4PV93jtDs32bbyz54AHKvvH0y1AsYNA5Ac7r0+0YALj/dZYZHhSf24Le5/FW6UOyRwIDAQAB"
+DMARC: "v=DMARC1; p=none; rua=mailto:francisco@enncoenergia.com"

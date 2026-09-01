@@ -1,43 +1,61 @@
 {
   "schema_version": "1.0.0",
-  "status": "BLOCKED_EXTERNAL",
-  "observed_at": "2026-08-11T23:20:00-06:00",
-  "availability_checked": false,
-  "purchase_authorized": false,
+  "status": "PARTIAL_DNS_VERIFIED_WARMUP_PENDING",
+  "observed_at": "2026-09-01T02:20:57.315Z",
+  "availability_checked": true,
+  "purchase_authorized": true,
   "domains": [
     {
       "candidate": "enncoindustrial.com",
       "priority": 1,
       "fallback": false,
-      "ownership": "UNKNOWN_NOT_PURCHASED",
-      "dns_access": "UNKNOWN",
-      "mailboxes_provisioned": false,
+      "ownership": "PURCHASED_TECKEL_CUSTODY_ENNCO_REGISTRANT",
+      "dns_access": "TECKEL_CONTROLLED",
+      "mailboxes_provisioned": true,
       "domain_ready_at": null,
       "authenticated_days": 0,
-      "spf": "UNKNOWN",
-      "dkim": "UNKNOWN",
-      "dmarc": "UNKNOWN",
+      "spf": "PASS",
+      "dkim": "PASS",
+      "dmarc": "PASS",
       "tls": "UNKNOWN",
       "forward_reverse_dns": "UNKNOWN",
       "postmaster": "UNKNOWN",
-      "seed_tests": "NOT_RUN"
+      "seed_tests": "NOT_RUN",
+      "registrar": "VERCEL_REGISTRAR_TEAM_TECKEL",
+      "domain_registered_at": "2026-08-26",
+      "domain_age_days": 6,
+      "domain_age_satisfied": false,
+      "warmup_started_at": null,
+      "warmup_days": 0,
+      "evidence_path": "docs/evidence/dns/enncoindustrial.com.txt",
+      "evidence_sha256": "df7db23c5f4ad6a7bc64bbfd2c681ea3ebd4ec52747110520de7c497052eafc4",
+      "observed_at": "2026-09-01T02:20:57.315Z"
     },
     {
       "candidate": "enncoenergia.com",
       "priority": 2,
       "fallback": false,
-      "ownership": "UNKNOWN_NOT_PURCHASED",
-      "dns_access": "UNKNOWN",
-      "mailboxes_provisioned": false,
+      "ownership": "PURCHASED_TECKEL_CUSTODY_ENNCO_REGISTRANT",
+      "dns_access": "TECKEL_CONTROLLED",
+      "mailboxes_provisioned": true,
       "domain_ready_at": null,
       "authenticated_days": 0,
-      "spf": "UNKNOWN",
-      "dkim": "UNKNOWN",
-      "dmarc": "UNKNOWN",
+      "spf": "PASS",
+      "dkim": "PASS",
+      "dmarc": "PASS",
       "tls": "UNKNOWN",
       "forward_reverse_dns": "UNKNOWN",
       "postmaster": "UNKNOWN",
-      "seed_tests": "NOT_RUN"
+      "seed_tests": "NOT_RUN",
+      "registrar": "VERCEL_REGISTRAR_TEAM_TECKEL",
+      "domain_registered_at": "2026-08-26",
+      "domain_age_days": 6,
+      "domain_age_satisfied": false,
+      "warmup_started_at": null,
+      "warmup_days": 0,
+      "evidence_path": "docs/evidence/dns/enncoenergia.com.txt",
+      "evidence_sha256": "c59ddc1067b856bcf19aa3d007e042c8de94417521bffda5d3e2ae2916a47cb4",
+      "observed_at": "2026-09-01T02:20:57.315Z"
     },
     {
       "candidate": "enncoindustrial.com.mx",
@@ -74,8 +92,12 @@
       "seed_tests": "NOT_RUN"
     }
   ],
-  "mailbox_pattern": ["francisco@", "fcuellar@"],
+  "mailbox_pattern": [
+    "francisco@",
+    "fcuellar@"
+  ],
   "minimum_authenticated_days": 35,
-  "next_action": "Verificar disponibilidad y marca en tiempo real, presentar costo y pedir aprobación antes de comprar"
+  "next_action": "Conectar los buzones propios a la herramienta de calentamiento: es lo único que arranca el reloj de 42 días.",
+  "minimum_domain_age_days": 30,
+  "minimum_warmup_days": 42
 }
-

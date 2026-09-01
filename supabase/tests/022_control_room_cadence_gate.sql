@@ -1,7 +1,13 @@
--- LIMITACION CONOCIDA (documentada 30-ago-2026): esta prueba solo corre los
--- dias 1 a 28 del mes. Usa `extract(day from current_date)` como day_of_month
--- de EXECUTIVE_MONTHLY_REVIEW, y la tabla restringe ese campo a 1..28 para que
--- la fecha exista en todos los meses. Los dias 29, 30 y 31 falla en el insert.
+-- LIMITACION CONOCIDA (documentada 30-ago, precisada 31-ago-2026): esta prueba
+-- solo corre los dias 1 a 28 del mes. Usa `extract(day from current_date)` como
+-- day_of_month de EXECUTIVE_MONTHLY_REVIEW, y la tabla restringe ese campo a
+-- 1..28 para que la fecha exista en todos los meses. Los dias 29, 30 y 31 falla
+-- en el insert.
+--
+-- OJO con la zona horaria: `current_date` usa la del sistema donde corre el
+-- Postgres efimero, no UTC. En una Mac en CDMX el gate puede fallar aunque en
+-- UTC ya sea dia 1, porque localmente sigue siendo 31. Verificado el 31-ago a
+-- las 20:29 CDMX / 02:29 UTC del 1-sep.
 -- Acotar con least(...,28) NO sirve: el reconciliador necesita que la
 -- ocurrencia mensual caiga en el dia de hoy para generarla, asi que el gate
 -- pasa a fallar mas adelante con OCCURRENCE_COVERAGE_INCOMPLETE.

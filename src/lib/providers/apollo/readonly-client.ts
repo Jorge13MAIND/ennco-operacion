@@ -472,12 +472,12 @@ export function evaluateApolloReadonlyPreflight(rawInput: ApolloReadonlyPrefligh
   if (creditState === "UNKNOWN") blockers.push("APOLLO_CREDIT_USAGE_UNAVAILABLE");
   if (creditState === "OVER_CAP") blockers.push("APOLLO_RESEARCH_CREDIT_CAP_EXCEEDED");
   blockers.push("APOLLO_SENDER_DISPLAY_REQUIRES_SEED_EVIDENCE");
-  blockers.push("APOLLO_WARMUP_42_DAYS_REQUIRES_PLATFORM_EVIDENCE");
+  blockers.push("WARMUP_42_DAYS_REQUIRES_PLATFORM_EVIDENCE");
   blockers.push("APOLLO_LIVE_ACTIVATION_GATES_NOT_EVALUATED");
 
   const coreBlockers = blockers.filter((blocker) => ![
     "APOLLO_SENDER_DISPLAY_REQUIRES_SEED_EVIDENCE",
-    "APOLLO_WARMUP_42_DAYS_REQUIRES_PLATFORM_EVIDENCE",
+    "WARMUP_42_DAYS_REQUIRES_PLATFORM_EVIDENCE",
     "APOLLO_LIVE_ACTIVATION_GATES_NOT_EVALUATED",
   ].includes(blocker));
   const readVerified = coreBlockers.length === 0;

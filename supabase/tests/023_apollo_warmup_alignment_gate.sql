@@ -8,7 +8,7 @@ begin
   into gate_codes
   from unnest(enum_range(null::public.first_send_gate_code)) as values(value);
 
-  if not ('APOLLO_WARMUP_42_DAYS' = any(gate_codes)) then
+  if not ('WARMUP_42_DAYS_COMPLETE' = any(gate_codes)) then
     raise exception 'M023_APOLLO_GATE_MISSING';
   end if;
   if 'DOMAIN_AGE_35_DAYS' = any(gate_codes) then

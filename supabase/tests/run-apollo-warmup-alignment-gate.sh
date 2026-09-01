@@ -76,9 +76,16 @@ psql -X -v ON_ERROR_STOP=1 -h "$DB_GATE_DIR" -p "$DB_GATE_PORT" -d "$DB_GATE_NAM
 
 psql -X -v ON_ERROR_STOP=1 -h "$DB_GATE_DIR" -p "$DB_GATE_PORT" -d "$DB_GATE_NAME" \
   -f "$REPO_ROOT/supabase/migrations/202608140023_apollo_warmup_alignment.sql" >/dev/null
+# M039 renombra el codigo a WARMUP_42_DAYS_COMPLETE. Se aplica aqui para que el
+# test valide el nombre VIGENTE, que es el que existe en produccion.
+psql -X -v ON_ERROR_STOP=1 -h "$DB_GATE_DIR" -p "$DB_GATE_PORT" -d "$DB_GATE_NAME" \
+  -f "$REPO_ROOT/supabase/migrations/202609010039_gate_codes_client_independent.sql" >/dev/null
 psql -X -v ON_ERROR_STOP=1 -h "$DB_GATE_DIR" -p "$DB_GATE_PORT" -d "$DB_GATE_NAME" \
   -f "$REPO_ROOT/supabase/tests/023_apollo_warmup_alignment_gate.sql"
 
+# Orden inverso: primero se revierte la 039, despues la 023.
+psql -X -v ON_ERROR_STOP=1 -h "$DB_GATE_DIR" -p "$DB_GATE_PORT" -d "$DB_GATE_NAME" \
+  -f "$REPO_ROOT/supabase/rollbacks/202609010039_gate_codes_client_independent.down.sql" >/dev/null
 psql -X -v ON_ERROR_STOP=1 -h "$DB_GATE_DIR" -p "$DB_GATE_PORT" -d "$DB_GATE_NAME" \
   -f "$REPO_ROOT/supabase/rollbacks/202608140023_apollo_warmup_alignment.down.sql" >/dev/null
 psql -X -v ON_ERROR_STOP=1 -h "$DB_GATE_DIR" -p "$DB_GATE_PORT" -d "$DB_GATE_NAME" \
@@ -86,6 +93,8 @@ psql -X -v ON_ERROR_STOP=1 -h "$DB_GATE_DIR" -p "$DB_GATE_PORT" -d "$DB_GATE_NAM
 
 psql -X -v ON_ERROR_STOP=1 -h "$DB_GATE_DIR" -p "$DB_GATE_PORT" -d "$DB_GATE_NAME" \
   -f "$REPO_ROOT/supabase/migrations/202608140023_apollo_warmup_alignment.sql" >/dev/null
+psql -X -v ON_ERROR_STOP=1 -h "$DB_GATE_DIR" -p "$DB_GATE_PORT" -d "$DB_GATE_NAME" \
+  -f "$REPO_ROOT/supabase/migrations/202609010039_gate_codes_client_independent.sql" >/dev/null
 printf 'APOLLO_WARMUP_ALIGNMENT_REAPPLY_PASS\n'
 
 git -C "$REPO_ROOT" diff --check -- \
