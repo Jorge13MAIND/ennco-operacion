@@ -3,7 +3,13 @@ import {
   isTargetRoleCategory,
   type AccountRoleCoverage,
   type ResearchRoleCategory,
+  type TargetResearchRoleCategory,
 } from "@/lib/research/roles";
+
+/** Categorías cuya ausencia detiene el lanzamiento. Ver nota en el gate. */
+export const GATE_REQUIRED_ROLE_CATEGORIES = [
+  "CEO", "PLANT_DIRECTOR", "MAINTENANCE", "PROCUREMENT",
+] as const satisfies readonly TargetResearchRoleCategory[];
 
 export const RESEARCH_ACCOUNT_TARGET = 75;
 export const RESEARCH_CONTACT_TARGET = 150;
@@ -43,7 +49,7 @@ export type ResearchReadinessResult = {
   verifiedContacts: number;
   targets: { accounts: 75; contacts: 150 };
   geography: { guanajuato: number; queretaro: number; other: number; unknown: number };
-  roleCategoryCounts: { CEO: number; PLANT_DIRECTOR: number; MAINTENANCE: number; PROCUREMENT: number };
+  roleCategoryCounts: Record<TargetResearchRoleCategory, number>;
   roleCoverage: AccountRoleCoverage[];
   accountCoverageGaps: string[];
   reasons: string[];
@@ -116,9 +122,14 @@ export function evaluateResearchReadiness(input: ResearchReadinessInput): Resear
   const roleCategoryCounts = verifiedContacts.reduce((totals, contact) => {
     if (contact.roleCategory !== "OTHER") totals[contact.roleCategory] += 1;
     return totals;
-  }, { CEO: 0, PLANT_DIRECTOR: 0, MAINTENANCE: 0, PROCUREMENT: 0 });
-  for (const [category, count] of Object.entries(roleCategoryCounts)) {
-    if (count === 0) extendReasons.push(`TARGET_ROLE_CATEGORY_MISSING:${category}`);
+  }, { CEO: 0, PLANT_DIRECTOR: 0, MAINTENANCE: 0, PROCUREMENT: 0, SAFETY: 0 });
+  // SAFETY cuenta hacia el mínimo de 150 y puede ser el contacto de un lead
+  // calificado, pero NO se suma a las categorías que el gate exige tener
+  // cubiertas. El hueco que M043 vino a cerrar era que los cargos de seguridad
+  // e higiene cayeran en OTHER y no contaran para nada; convertirlos además en
+  // requisito de lanzamiento subiría la barra sin que nadie lo haya decidido.
+  for (const category of GATE_REQUIRED_ROLE_CATEGORIES) {
+    if (roleCategoryCounts[category] === 0) extendReasons.push(`TARGET_ROLE_CATEGORY_MISSING:${category}`);
   }
   if (input.accounts.some((account) => account.dedupeStatus === "UNRESOLVED")) {
     extendReasons.push("UNRESOLVED_ACCOUNT_DEDUPE");

@@ -162,6 +162,25 @@ export default async function InteligenciaPage() {
         )}
       </section>
 
+      {/* Apollo: buscar es gratis, revelar el correo cuesta créditos. */}
+      <section className="panel">
+        <div className="panel-head portal-panel-head">
+          <div>
+            <h2>Contactos desde Apollo</h2>
+            <p>
+              Busca a la persona correcta en las cuentas mejor puntuadas y la deja como candidato por revisar.
+              Buscar no cuesta créditos; revelar el correo sí, por eso cada corrida tiene tope.
+            </p>
+          </div>
+          {screen.canOperate && isLive ? <RecalcularAction kind="apollo" /> : null}
+        </div>
+        <p className="notice">
+          Trabaja sobre la cola de arriba: primero las cuentas de mayor puntuación, saltando las suprimidas
+          y las que están fuera de contrato. Cada contacto entra como candidato con su evidencia de origen
+          y sube a contacto real sólo pasando la revisión de dos personas.
+        </p>
+      </section>
+
       {/* Clasificación asistida: patrón del agente 03, pero sin decidir nunca. */}
       <section className="panel">
         <div className="panel-head portal-panel-head">

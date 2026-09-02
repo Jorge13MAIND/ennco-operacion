@@ -3,6 +3,7 @@ export const RESEARCH_ROLE_CATEGORIES = [
   "PLANT_DIRECTOR",
   "MAINTENANCE",
   "PROCUREMENT",
+  "SAFETY",
   "OTHER",
 ] as const;
 
@@ -64,6 +65,25 @@ const ROLE_PATTERNS: ReadonlyArray<{
       /\bbuyer\b/u,
       /\bcomprador(?:a)?\b/u,
       /\bsupply chain (?:director|manager|head)\b/u,
+    ],
+  },
+  {
+    category: "SAFETY",
+    patterns: [
+      /\behs\b/u,
+      /\bhse\b/u,
+      /\bsso\b/u,
+      /\bhseq\b/u,
+      /\bsafety\b/u,
+      /\bseguridad e higiene\b/u,
+      /\bseguridad industrial\b/u,
+      /\bhigiene y seguridad\b/u,
+      /\bsalud y seguridad\b/u,
+      /\bseguridad y salud\b/u,
+      /\bhealth and safety\b/u,
+      /\benvironment health and safety\b/u,
+      /\bproteccion civil\b/u,
+      /\b(?:coordinador|coordinadora|jef(?:e|a)|gerente|supervisor|supervisora) de seguridad\b/u,
     ],
   },
 ];

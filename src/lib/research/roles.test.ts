@@ -35,7 +35,9 @@ describe("research buyer role taxonomy", () => {
     expect(coverage[0]).toMatchObject({
       verifiedTargetContacts: 2,
       presentCategories: ["CEO", "MAINTENANCE"],
-      missingCategories: ["PLANT_DIRECTOR", "PROCUREMENT"],
+      // SAFETY entra como categoría objetivo desde M043: una cuenta sin
+      // contacto de seguridad e higiene ahora la reporta como faltante.
+      missingCategories: ["PLANT_DIRECTOR", "PROCUREMENT", "SAFETY"],
     });
     expect(coverage[1]?.verifiedTargetContacts).toBe(0);
   });

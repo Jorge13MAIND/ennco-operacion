@@ -10,6 +10,9 @@ const errorLabels: Record<string, string> = {
   ACCOUNTS_READ_FAILED: "No se pudieron leer las cuentas.",
   EVENTS_READ_FAILED: "No se pudieron leer las respuestas.",
   ICP_WRITE_REJECTED: "La base rechazó la escritura de puntuaciones.",
+  APOLLO_API_KEY_MISSING: "Falta cargar APOLLO_API_KEY en el ambiente.",
+  ICP_QUEUE_UNAVAILABLE: "No se pudo leer la cola de prioridad ICP.",
+  APOLLO_INGEST_FAILED: "Apollo falló a media corrida; se guardó lo que alcanzó.",
   SUGGESTIONS_WRITE_REJECTED: "La base rechazó la escritura de sugerencias.",
   INTELLIGENCE_OPERATOR_REQUIRED: "Tu cuenta no tiene rol de operador.",
 };
@@ -23,14 +26,16 @@ function label(code: string): string {
  * puntuación se reescribe por (cuenta, rúbrica) y la sugerencia por (evento,
  * clasificador), así que repetirlas no duplica nada ni cambia el resultado.
  */
-export function RecalcularAction({ kind, disabled }: { kind: "icp" | "sugerencias"; disabled?: boolean }) {
+export function RecalcularAction({ kind, disabled }: { kind: "icp" | "sugerencias" | "apollo"; disabled?: boolean }) {
   const router = useRouter();
   const [status, setStatus] = useState<MutationStatus>("idle");
   const [message, setMessage] = useState<string>("");
 
   const copy = kind === "icp"
     ? { button: "Recalcular puntuación", pending: "Puntuando…" }
-    : { button: "Generar sugerencias", pending: "Analizando…" };
+    : kind === "apollo"
+      ? { button: "Buscar contactos en Apollo", pending: "Buscando en Apollo…" }
+      : { button: "Generar sugerencias", pending: "Analizando…" };
 
   async function run() {
     setStatus("pending");
@@ -43,9 +48,18 @@ export function RecalcularAction({ kind, disabled }: { kind: "icp" | "sugerencia
       const written = Number(payload?.written ?? 0);
       const reason = typeof payload?.reason === "string" ? payload.reason : null;
       setStatus("done");
-      setMessage(reason === "SIN_CUENTAS_CARGADAS" ? "No hay empresas cargadas todavía."
-        : reason === "SIN_RESPUESTAS_PENDIENTES" ? "No hay respuestas sin clasificar."
-        : `${written} registro${written === 1 ? "" : "s"} actualizado${written === 1 ? "" : "s"}.`);
+      if (kind === "apollo") {
+        const escritos = Number(payload?.candidatesWritten ?? 0);
+        const creditos = Number(payload?.enrichBudgetSpent ?? 0);
+        const sinDominio = Number(payload?.accountsWithoutDomain ?? 0);
+        setMessage(reason === "SIN_CUENTAS_PUNTUADAS"
+          ? "Primero puntúa las cuentas: Apollo trabaja sobre la cola de prioridad."
+          : `${escritos} contacto${escritos === 1 ? "" : "s"} nuevo${escritos === 1 ? "" : "s"}, ${creditos} crédito${creditos === 1 ? "" : "s"} usado${creditos === 1 ? "" : "s"}${sinDominio > 0 ? `, ${sinDominio} cuenta(s) sin dominio` : ""}.`);
+      } else {
+        setMessage(reason === "SIN_CUENTAS_CARGADAS" ? "No hay empresas cargadas todavía."
+          : reason === "SIN_RESPUESTAS_PENDIENTES" ? "No hay respuestas sin clasificar."
+          : `${written} registro${written === 1 ? "" : "s"} actualizado${written === 1 ? "" : "s"}.`);
+      }
       router.refresh();
     } catch (error) {
       setStatus("error");
