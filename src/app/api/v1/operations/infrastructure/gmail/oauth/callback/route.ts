@@ -2,6 +2,8 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { requireOperationsAccess } from "@/lib/auth/authorization";
+import { handleDirectLaneOAuthCallback } from "@/lib/correos/callback";
+import { DIRECT_LANE_OAUTH_COOKIE } from "@/lib/correos/oauth";
 import {
   createCredentialSha256,
   createGmailOAuthCompletionProof,
@@ -24,8 +26,15 @@ function resultRedirect(appUrl: string, result: "connected" | "rejected"): NextR
 }
 
 export async function GET(request: Request): Promise<NextResponse> {
-  const access = await requireOperationsAccess();
+  // Carril directo (M041): la invitación no exige sesión del Control Room.
+  // Comparte esta URI porque es la registrada en el cliente OAuth de Google.
   const runtime = getRuntimeConfig();
+  if (runtime.directLaneReleased) {
+    const directLaneCookie = (await cookies()).get(DIRECT_LANE_OAUTH_COOKIE)?.value;
+    if (directLaneCookie) return handleDirectLaneOAuthCallback(request, runtime, directLaneCookie);
+  }
+
+  const access = await requireOperationsAccess();
   if (access.evidenceClass !== "live" || !access.organizationId || !access.userId) {
     return resultRedirect(runtime.appUrl, "rejected");
   }

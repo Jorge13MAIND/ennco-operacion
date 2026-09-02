@@ -18,6 +18,7 @@ Sistema comercial E2E de ENNCO. Este repositorio contiene la experiencia públic
 - Capacidad operativa: política versionada de dos proyectos industriales por mes, reserva exclusiva de CLOSED_WON, alertas y estado UNKNOWN ante cierres sin fecha pasan forward, concurrencia, rollback y reapply en PostgreSQL desechable.
 - Research Workbench: contratos, nueve endpoints, portal y base M019 pasan localmente. M019 revoca DML directo, exige AAL2, evidencia ligada al sujeto, revisión de dos personas, deduplicación, supresión e inventario 75/150 siempre en `RESEARCH_ONLY_HOLD`. El lote determinista concilia 27 semillas, 21 investigables y 6 en cuarentena, pero no se ha ejecutado contra una base externa. Hay cero contactos, cero elegibles y cero outreach.
 - Indexación pública: sólo diagnóstico y privacidad pueden abrirse mediante release explícito. Raíz, portal, auth, APIs y PDFs permanecen privados. La aprobación legal exige versión y SHA256 exactos del contenido canónico, y el mismo artefacto puede volver inmediatamente a HOLD.
+- M41 (carril directo): el motor envía desde los buzones propios con OAuth por buzón y llave de aplicación, consentimiento por invitación, campaña de 32 correos aprobada una vez, respuestas en hilo con copia al cliente, módulo Correos y gates locales en `PASS`. Producción exige aplicar M041, cuatro variables en Vercel y rotar el client secret de Google (`docs/runbooks/m41-carril-directo.md`).
 - Producción, DNS, compras y contacto externo: bloqueados hasta aprobación explícita.
 
 ## Desarrollo local

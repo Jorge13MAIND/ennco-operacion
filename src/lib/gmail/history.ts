@@ -75,7 +75,9 @@ function headerMap(message: GmailMessageMetadata): Map<string, string> {
 
 const bounceSenderPattern = /^(?:mailer-daemon|postmaster)@/iu;
 const deliveryReportPattern = /multipart\/report.*report-type=delivery-status/iu;
-const platformMessageIdPattern = /<msg-([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})@ennco\.com\.mx>/iu;
+// El carril directo (M041) firma con el dominio del buzón que envía
+// (<msg-<uuid>@enncoindustrial.com>), no sólo con el del cliente.
+const platformMessageIdPattern = /<msg-([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})@[a-z0-9.-]+>/iu;
 
 export function classifyGmailMessage(message: GmailMessageMetadata): GmailProviderEventKind {
   const headers = headerMap(message);

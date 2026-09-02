@@ -105,6 +105,11 @@ end $$;
 select 'HYBRID_ACCELERATED_OUTBOUND_REAPPLY_PASS' as result;
 SQL
 
+# M041 parchea enforce_hybrid_outbound_release y enforce_scaled_outbound_release
+# sobre la definición viva: re-aplicar la 029 los recrea sin el bypass, así que
+# se re-aplica encima (idempotente) antes de comparar el esquema.
+psql -X -v ON_ERROR_STOP=1 -h "$M029_GATE_DIR" -p "$M029_GATE_PORT" -d "$M029_GATE_DB" \
+  -f "$REPO_ROOT/supabase/migrations/202609020041_direct_lane.sql" >/dev/null
 pg_dump -h "$M029_GATE_DIR" -p "$M029_GATE_PORT" -d "$M029_GATE_DB" --schema-only --no-owner --no-privileges \
   | sed '/^--/d;/^$/d;/^\\restrict /d;/^\\unrestrict /d' >"$M029_GATE_DIR/schema-after.sql"
 if ! diff -u "$M029_GATE_DIR/schema-before.sql" "$M029_GATE_DIR/schema-after.sql" >"$M029_GATE_DIR/schema.diff"; then

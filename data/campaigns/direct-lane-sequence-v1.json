@@ -1,0 +1,236 @@
+{
+  "schema_version": "1.0.0",
+  "source": "docs/external/secuencia-ennco-copy.md",
+  "source_sha256": "a2d978e45fe05a44af355ab6f322e53479836a609d93f6ac91221d8a43f9a4c1",
+  "generated_at": "2026-09-02T20:58:38.738Z",
+  "sender_name": "Francisco Cuellar",
+  "sender_title": "CEO, ENNCO",
+  "day_offsets": [
+    0,
+    3,
+    7,
+    14,
+    28,
+    42,
+    60,
+    75
+  ],
+  "variants": [
+    {
+      "key": "DIRECCION",
+      "label": "Dirección general",
+      "touches": [
+        {
+          "touch_number": 1,
+          "day_offset": 0,
+          "subject": "Lo que le costó un apagón a un cliente",
+          "body": "Hola {{first_name}},\n\nTe escribo porque a un cliente nuestro le pasó algo que prefiero que a ustedes no.\n\nUn apagón les tiró la planta un día. Perdieron 2 millones 180 mil pesos. En un día.\n\nLo que lo hubiera evitado costaba una fracción de eso.\n\n¿Me puedes dirigir con quien lleva mantenimiento en {{company}}? Les hacemos un levantamiento de planta y salen con las observaciones por escrito, antes de hablar de números.\n\nGracias,\nFrancisco Cuellar\nCEO, ENNCO"
+        },
+        {
+          "touch_number": 2,
+          "day_offset": 3,
+          "subject": "Re: Lo que le costó un apagón a un cliente",
+          "body": "Hola {{first_name}},\n\nVuelvo al punto rápido.\n\nNo te estoy pidiendo que contrates nada. Te estoy pidiendo que alguien de tu equipo nos deje ver los tableros una mañana y te digamos qué encontramos.\n\nSi está todo bien, te queda por escrito. Si no, lo sabes antes y no después.\n\n¿Con quién me dirijo?\n\nFrancisco"
+        },
+        {
+          "touch_number": 3,
+          "day_offset": 7,
+          "subject": "Contra qué compite el mantenimiento",
+          "body": "Hola {{first_name}},\n\nLo pongo simple: el mantenimiento no compite contra su propio costo. Compite contra un día de planta parada.\n\nEse cliente lo aprendió con 2 millones 180 mil pesos en una sola jornada.\n\n¿Está en el presupuesto de este trimestre o del que entra? Con saber eso me ajusto.\n\nFrancisco"
+        },
+        {
+          "touch_number": 4,
+          "day_offset": 14,
+          "subject": "Qué te entregamos, y qué no",
+          "body": "Hola {{first_name}},\n\nPara que sepas qué estás aceptando si me dices que sí.\n\nEl levantamiento no es una visita de venta. Es abrir tableros, medir y entregarte un documento con lo observado, dónde está y qué tan urgente es. Los números vienen después, y solo si tú los pides.\n\n¿Te mando el formato del reporte para que veas qué recibirías?\n\nFrancisco"
+        },
+        {
+          "touch_number": 5,
+          "day_offset": 28,
+          "subject": "Por si nos tienes como paneleros",
+          "body": "Hola {{first_name}},\n\nUna aclaración, por si nos tienes catalogados como una empresa de paneles.\n\nENNCO hace obra eléctrica industrial, subestaciones, transformadores y mantenimiento. Lo solar es una línea, no el negocio.\n\nSi alguno de esos frentes está en revisión en {{company}}, dime cuál y te digo de frente si podemos o no.\n\nFrancisco"
+        },
+        {
+          "touch_number": 6,
+          "day_offset": 42,
+          "subject": "Una pregunta incómoda",
+          "body": "Hola {{first_name}},\n\nTe hago una pregunta incómoda.\n\nSi hoy te preguntaran en qué condición está la instalación eléctrica de {{company}}, ¿tendrías el dato, o tendrías que preguntarle a alguien?\n\nCasi nadie lo tiene. Y ese hueco es el que sale caro. Por eso el levantamiento va primero.\n\n¿Te lo agendo?\n\nFrancisco"
+        },
+        {
+          "touch_number": 7,
+          "day_offset": 60,
+          "subject": "Las dos mitades del problema",
+          "body": "Hola {{first_name}},\n\nAlgo que veo seguido: mantenimiento sabe qué está mal, dirección sabe qué cuesta, y nadie tiene las dos mitades en la misma hoja.\n\nAhí es donde se atoran los proyectos, y donde se caen las plantas.\n\nEl levantamiento junta las dos. ¿Te la generamos?\n\nFrancisco"
+        },
+        {
+          "touch_number": 8,
+          "day_offset": 75,
+          "subject": "Cierro el tema por ahora",
+          "body": "Hola {{first_name}},\n\nCierro el tema para no llenarte el correo.\n\nSi en algún momento la instalación eléctrica de {{company}} entra en agenda, aquí estoy y retomamos desde el levantamiento.\n\nSi prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo. Gracias por el tiempo.\n\nFrancisco"
+        }
+      ]
+    },
+    {
+      "key": "MANTENIMIENTO",
+      "label": "Mantenimiento / planta",
+      "touches": [
+        {
+          "touch_number": 1,
+          "day_offset": 0,
+          "subject": "El tablero que nadie abre",
+          "body": "Hola {{first_name}},\n\nA un cliente nuestro un apagón le tiró la planta un día completo. Perdieron 2 millones 180 mil pesos.\n\nEmpezó como empiezan casi todos: una conexión floja calentándose semanas antes, en un tablero que nadie abrió. No hace ruido, no huele, no se ve.\n\nCon cámara térmica se ve semanas antes, cuando todavía es barato.\n\n¿Te late si agendamos una termografía este mes? La hacemos con dron, sin parar nada.\n\nFrancisco"
+        },
+        {
+          "touch_number": 2,
+          "day_offset": 3,
+          "subject": "Re: El tablero que nadie abre",
+          "body": "Hola {{first_name}},\n\nEl primer filtro es sencillo: dime si ya tienen termografía en el plan de este año y de cuándo es la última que se hizo.\n\nCon esos dos datos te digo si van bien o si conviene adelantarla, sin que tengas que meter a nadie más todavía.\n\n¿Cuándo fue la última?\n\nFrancisco"
+        },
+        {
+          "touch_number": 3,
+          "day_offset": 7,
+          "subject": "Preventivo hoy o correctivo después",
+          "body": "Hola {{first_name}},\n\nLa diferencia entre preventivo y correctivo no la decide el equipo. La decide el calendario.\n\nQuien revisa a tiempo escoge la fecha, el alcance y el proveedor. Quien no, lo escoge todo el día que truena, a las prisas y al precio que salga.\n\n¿Escogemos fecha?\n\nFrancisco"
+        },
+        {
+          "touch_number": 4,
+          "day_offset": 14,
+          "subject": "El mapa térmico de tu instalación",
+          "body": "Hola {{first_name}},\n\nLo que sale del levantamiento es el mapa térmico de tu instalación: qué punto está caliente, cuánto, y qué tan rápido hay que atenderlo.\n\nLo que salga, salga. Si está todo bien, también queda por escrito y te sirve igual.\n\n¿Te mando el formato para que veas qué recibirías?\n\nFrancisco"
+        },
+        {
+          "touch_number": 5,
+          "day_offset": 28,
+          "subject": "Subestación, transformadores, tableros",
+          "body": "Hola {{first_name}},\n\nPor si nos ubicas solo como solar: hacemos subestación, transformadores, tableros, obra eléctrica y termografía.\n\nEl mantenimiento eléctrico industrial es una parte grande de lo que facturamos, no un extra.\n\n¿Cuál de esos frentes te preocupa más hoy?\n\nFrancisco"
+        },
+        {
+          "touch_number": 6,
+          "day_offset": 42,
+          "subject": "¿Vas por mapa o por reporte de fallas?",
+          "body": "Hola {{first_name}},\n\nPregunta directa: ¿tienes el mapa térmico de tu instalación, o vas atendiendo por reporte de fallas?\n\nLa diferencia entre las dos es saber antes o enterarte después. Y la segunda siempre cuesta más, en dinero y en fin de semana.\n\n¿Te lo levantamos?\n\nFrancisco"
+        },
+        {
+          "touch_number": 7,
+          "day_offset": 60,
+          "subject": "Que deje de ser tu opinión",
+          "body": "Hola {{first_name}},\n\nMuchas veces el problema no es técnico. Es que dirección no ve lo que tú ves, y lo que pides suena a exageración.\n\nUn reporte fechado con mediciones convierte tu criterio en un documento. Deja de ser tu opinión.\n\n¿Te lo generamos?\n\nFrancisco"
+        },
+        {
+          "touch_number": 8,
+          "day_offset": 75,
+          "subject": "Cierro el seguimiento técnico",
+          "body": "Hola {{first_name}},\n\nCierro el seguimiento para no insistir.\n\nSi en algún momento quieres el mapa térmico de la instalación, me escribes y lo agendamos sin más trámite.\n\nSi prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo.\n\nFrancisco"
+        }
+      ]
+    },
+    {
+      "key": "SEGURIDAD",
+      "label": "Seguridad e higiene",
+      "touches": [
+        {
+          "touch_number": 1,
+          "day_offset": 0,
+          "subject": "Y ese fue el escenario bueno",
+          "body": "Hola {{first_name}},\n\nA un cliente nuestro un apagón le costó 2 millones 180 mil pesos en un día. Y ese fue el escenario bueno: la misma conexión floja que tira una línea es la que produce un arco.\n\nSi eso pasa, la primera pregunta en el acta es cuándo fue la última revisión.\n\n¿Cuándo fue la última termografía en {{company}}? Si no hay fecha, te propongo que la agendemos y quede documentada.\n\nFrancisco"
+        },
+        {
+          "touch_number": 2,
+          "day_offset": 3,
+          "subject": "Re: Y ese fue el escenario bueno",
+          "body": "Hola {{first_name}},\n\nInsisto con una sola pregunta: ¿existe registro de la última termografía en {{company}}?\n\nLo pregunto porque el día que hay un incidente, ese documento es lo primero que se busca. Y si no existe, la conversación se pone difícil para el área.\n\nSi no lo tienes, te ayudo a generarlo.\n\nFrancisco"
+        },
+        {
+          "touch_number": 3,
+          "day_offset": 7,
+          "subject": "Mientras lees esto",
+          "body": "Hola {{first_name}},\n\nUna condición térmica en un tablero no se queda quieta. Empeora sola, semanas, hasta que falla.\n\nEso significa que ahorita mismo, mientras lees esto, o está bien o va en camino. Y solo hay una forma de saber cuál de las dos.\n\n¿Agendamos la revisión?\n\nFrancisco"
+        },
+        {
+          "touch_number": 4,
+          "day_offset": 14,
+          "subject": "Un documento con fecha",
+          "body": "Hola {{first_name}},\n\nLo que entregamos es un documento fechado con lo que se observó y dónde.\n\nEso es exactamente lo que sirve el día que alguien pregunta si la instalación estaba revisada. Sin ese papel, la respuesta es la memoria de alguien.\n\n¿Te mando el formato?\n\nFrancisco"
+        },
+        {
+          "touch_number": 5,
+          "day_offset": 28,
+          "subject": "Dónde solemos encontrar lo feo",
+          "body": "Hola {{first_name}},\n\nDonde más hallazgos encontramos no es en los paneles. Es en subestación, transformadores y tableros de distribución, que es justo lo que menos se abre.\n\nSi tienes un frente eléctrico que lleva tiempo sin revisarse, dime cuál y empezamos por ahí.\n\nFrancisco"
+        },
+        {
+          "touch_number": 6,
+          "day_offset": 42,
+          "subject": "Si mañana te lo piden",
+          "body": "Hola {{first_name}},\n\nSi mañana te piden el estado de la instalación eléctrica, ¿lo tienes documentado?\n\nSi la respuesta es \"habría que revisar\", eso ya es el hallazgo. Y es mejor encontrarlo hoy que el día que alguien lo pregunte por una razón fea.\n\n¿Lo levantamos?\n\nFrancisco"
+        },
+        {
+          "touch_number": 7,
+          "day_offset": 60,
+          "subject": "De opinión a registro",
+          "body": "Hola {{first_name}},\n\nUn hallazgo dicho en una junta se olvida. Un hallazgo documentado, con fecha y medición, ya no.\n\nEso cambia por completo la conversación con dirección, y te cubre a ti.\n\n¿Te ayudamos a generarlo?\n\nFrancisco"
+        },
+        {
+          "touch_number": 8,
+          "day_offset": 75,
+          "subject": "Cierro por ahora",
+          "body": "Hola {{first_name}},\n\nCierro por ahora para no insistir.\n\nSi algún día necesitas el registro documentado de la instalación, aquí estoy y lo levantamos.\n\nSi prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo.\n\nFrancisco"
+        }
+      ]
+    },
+    {
+      "key": "COMPRAS",
+      "label": "Compras",
+      "touches": [
+        {
+          "touch_number": 1,
+          "day_offset": 0,
+          "subject": "La póliza barata",
+          "body": "Hola {{first_name}},\n\nPregunta rápida: ¿tu póliza de mantenimiento incluye termografía?\n\nTe lo pregunto porque es lo primero que se recorta para bajar el precio. A un cliente nuestro un apagón le costó 2 millones 180 mil pesos en un día, y empezó en una conexión que una cámara habría visto semanas antes.\n\nNadie se acuerda de quién ahorró en la póliza. Sí de quién firmó la que no traía termografía.\n\n¿Te mando el alcance mínimo que debería traer cualquier póliza?\n\nFrancisco"
+        },
+        {
+          "touch_number": 2,
+          "day_offset": 3,
+          "subject": "Re: La póliza barata",
+          "body": "Hola {{first_name}},\n\nTe lo dejo concreto: el alcance mínimo que debería traer cualquier póliza de mantenimiento eléctrico es termografía en tableros, revisión de conexiones y expediente con lo observado.\n\nCon eso comparas parejo, aunque nos dejes fuera.\n\n¿Te lo mando?\n\nFrancisco"
+        },
+        {
+          "touch_number": 3,
+          "day_offset": 7,
+          "subject": "La comparación en una hoja",
+          "body": "Hola {{first_name}},\n\nCierro con el número que importa: la termografía anual cuesta una fracción de un día de planta parada.\n\nA un cliente nuestro ese día le costó 2 millones 180 mil pesos.\n\nSi tienes que justificar la partida con alguien, te paso la comparación en una hoja.\n\n¿Te sirve?\n\nFrancisco"
+        },
+        {
+          "touch_number": 4,
+          "day_offset": 14,
+          "subject": "Para que compares parejo",
+          "body": "Hola {{first_name}},\n\nEl expediente trae lo observado, la ubicación y la prioridad de cada hallazgo.\n\nCon ese documento en la mano, todas las propuestas que pidas se cotizan contra el mismo alcance. Es la única forma de comparar sin sorpresas después.\n\n¿Te lo mando?\n\nFrancisco"
+        },
+        {
+          "touch_number": 5,
+          "day_offset": 28,
+          "subject": "Alcances que sí cubrimos",
+          "body": "Hola {{first_name}},\n\nPor si estamos catalogados solo como solar: cubrimos obra eléctrica, subestaciones, transformadores, tableros y mantenimiento industrial.\n\nSi tienes alguno de esos en revisión o en concurso, dime y te digo de una si aplicamos o no. No te hago perder el tiempo.\n\nFrancisco"
+        },
+        {
+          "touch_number": 6,
+          "day_offset": 42,
+          "subject": "Antes de comparar precios",
+          "body": "Hola {{first_name}},\n\nAntes de comparar precios: ¿sabes en qué condición está la instalación que vas a mantener?\n\nSin ese dato, cada proveedor cotiza sobre supuestos distintos y las propuestas no son comparables, aunque lo parezcan en la tabla.\n\nTe lo levantamos y después comparas.\n\nFrancisco"
+        },
+        {
+          "touch_number": 7,
+          "day_offset": 60,
+          "subject": "Quien queda en medio",
+          "body": "Hola {{first_name}},\n\nCuando mantenimiento pide y dirección pregunta por qué, la que queda en medio es compras.\n\nUn levantamiento con evidencia y prioridades resuelve esa discusión antes de que empiece, y te deja con qué defender la partida.\n\n¿Te lo mando?\n\nFrancisco"
+        },
+        {
+          "touch_number": 8,
+          "day_offset": 75,
+          "subject": "Cierro el seguimiento",
+          "body": "Hola {{first_name}},\n\nCierro el seguimiento.\n\nSi abren revisión de mantenimiento eléctrico con gusto participamos, y si no, el alcance mínimo que te mandé te sirve igual con cualquier proveedor.\n\nSi prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo.\n\nFrancisco"
+        }
+      ]
+    }
+  ]
+}

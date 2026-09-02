@@ -23,7 +23,9 @@ const moduleLabels: Record<OperationModuleKey, string> = {
   entrega: "Entrega",
 };
 
-const groups: Array<{ label: string; items: Array<{ key: "home" | OperationModuleKey; href: string }> }> = [
+type NavKey = "home" | "correos" | OperationModuleKey;
+
+const groups: Array<{ label: string; items: Array<{ key: NavKey; href: string }> }> = [
   {
     label: "Control",
     items: [
@@ -36,6 +38,7 @@ const groups: Array<{ label: string; items: Array<{ key: "home" | OperationModul
   {
     label: "Comercial",
     items: [
+      { key: "correos", href: "/operacion/correos" },
       { key: "respuestas", href: "/operacion/respuestas" },
       { key: "leads", href: "/operacion/leads" },
       { key: "empresas", href: "/operacion/empresas" },
@@ -56,8 +59,10 @@ const groups: Array<{ label: string; items: Array<{ key: "home" | OperationModul
   },
 ];
 
-function itemLabel(key: "home" | OperationModuleKey): string {
-  return key === "home" ? "Hoy" : moduleLabels[key];
+function itemLabel(key: NavKey): string {
+  if (key === "home") return "Hoy";
+  if (key === "correos") return "Correos";
+  return moduleLabels[key];
 }
 
 export function OperationsNav({ variant }: { variant: "desktop" | "mobile" }) {

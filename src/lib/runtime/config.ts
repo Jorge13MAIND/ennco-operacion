@@ -44,6 +44,9 @@ const runtimeSchema = z.object({
   cronSecret: z.string().min(32).optional(),
   telegramBotToken: z.string().min(20).optional(),
   telegramChatId: z.string().min(3).optional(),
+  directLaneReleased: z.boolean(),
+  directLaneMode: z.enum(["shadow", "live"]),
+  directLaneVaultKey: z.string().regex(/^[A-Za-z0-9+/]{43}=$/u).optional(),
 });
 
 export type RuntimeConfig = z.infer<typeof runtimeSchema>;
@@ -122,6 +125,9 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     cronSecret: environment.CRON_SECRET || undefined,
     telegramBotToken: environment.TELEGRAM_BOT_TOKEN || undefined,
     telegramChatId: environment.TELEGRAM_CHAT_ID || undefined,
+    directLaneReleased: envBoolean(environment.ENNCO_DIRECT_LANE_RELEASED, false),
+    directLaneMode: environment.ENNCO_DIRECT_LANE_MODE === "live" ? "live" : "shadow",
+    directLaneVaultKey: environment.ENNCO_DIRECT_LANE_VAULT_KEY || undefined,
   });
 
   const configuredValues = [config.supabaseUrl, config.supabasePublishableKey, config.organizationId];
@@ -232,6 +238,24 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     && (!config.gmailOauthReleased || !config.gmailWebhookReleased || !config.unsubscribeReleased)
   ) {
     throw new Error("DISPATCH_LIVE_REQUIRES_GMAIL_AND_UNSUBSCRIBE_RELEASES");
+  }
+
+  // Carril directo (M041). Liberarlo exige Supabase dedicado y los mismos
+  // secretos del motor (dispatch + cron). Ponerlo en live exige además la llave
+  // de la bóveda y el cliente OAuth de Google; sin ellos el cron responde HOLD
+  // y ningún buzón puede conectarse.
+  if (
+    config.directLaneReleased
+    && (config.demoMode || configuredCount !== configuredValues.length || !config.dispatchSecret || !config.cronSecret)
+  ) {
+    throw new Error("DIRECT_LANE_RELEASE_GATES_INCOMPLETE");
+  }
+  if (
+    config.directLaneReleased
+    && config.directLaneMode === "live"
+    && (!config.directLaneVaultKey || !config.googleOauthClientId || !config.googleOauthClientSecret || !config.googleOauthRedirectUri)
+  ) {
+    throw new Error("DIRECT_LANE_LIVE_REQUIRES_VAULT_AND_OAUTH_CLIENT");
   }
 
   return config;
