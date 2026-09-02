@@ -105,7 +105,7 @@ export default async function CorreosPage() {
           <h1>Motor de <span className="cr-accent-text">correos</span>.</h1>
           <p>Carril directo: los buzones que ya tenemos, el copy aprobado y las respuestas en un solo lugar. Verdad operativa {stamp.format(new Date(screen.generatedAt))}.</p>
         </div>
-        <span className="badge">{operationalLabel(screen.evidenceClass)}</span>
+        {screen.evidenceClass === "live" ? null : <span className="badge">{operationalLabel(screen.evidenceClass)}</span>}
       </header>
 
       <section aria-label="Estado del carril directo" className={`command-status ${engineOpen ? "ready" : "blocked"}`}>

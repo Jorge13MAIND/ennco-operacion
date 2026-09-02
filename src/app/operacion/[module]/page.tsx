@@ -23,7 +23,7 @@ export default async function OperationModulePage({ params }: { params: Promise<
           <p className="eyebrow">Control Room · {OPERATION_MODULE_LABELS[module]}</p>
           <h1>{selected.title}</h1>
         </div>
-        <span className="badge">{operationalLabel(snapshot.evidenceClass)}</span>
+        {snapshot.evidenceClass === "live" ? null : <span className="badge">{operationalLabel(snapshot.evidenceClass)}</span>}
       </div>
       {snapshot.evidenceClass === "synthetic_demo" && module !== "roadmap" && module !== "aprobaciones" ? (
         <div className="notice operations-disclosure">

@@ -37,7 +37,7 @@ export default async function OperationsPage() {
           <h1>{greetingParts()[0]} <span className="cr-accent-text">{greetingParts()[1]}</span>.</h1>
           <p>{longDate()} · Decide qué atender primero. Verdad operativa actualizada {new Intl.DateTimeFormat("es-MX", { timeStyle: "short", timeZone: "America/Mexico_City" }).format(new Date(snapshot.generatedAt))}.</p>
         </div>
-        <span className="badge">{operationalLabel(snapshot.evidenceClass)}</span>
+        {snapshot.evidenceClass === "live" ? null : <span className="badge">{operationalLabel(snapshot.evidenceClass)}</span>}
       </header>
 
       <section aria-label="Autorización efectiva" className={`command-status ${snapshot.health.externalSendAllowed ? "ready" : "blocked"}`}>
