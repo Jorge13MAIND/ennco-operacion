@@ -12,7 +12,7 @@ const base: BriefInput = {
   openReplyCases: 0,
   assignmentActive: true,
   externalSendAllowed: true,
-  killSwitch: false,
+  botonDeApagado: false,
   mailboxes: [
     { email: "francisco@enncoindustrial.com", status: "CONNECTED", sentToday: 3, capToday: 5 },
   ],
@@ -57,12 +57,12 @@ describe("brief de operación", () => {
     expect(buildBrief({ ...base, moment: "CLOSE" }).headline).toBe("El día cierra limpio");
   });
 
-  it("el kill switch se reporta como control, no como falla", () => {
-    const brief = buildBrief({ ...base, killSwitch: true });
-    const item = brief.items.find((i) => i.title === "Kill switch activo");
+  it("el botón de apagado se reporta como control, no como falla", () => {
+    const brief = buildBrief({ ...base, botonDeApagado: true });
+    const item = brief.items.find((i) => i.title === "Botón de apagado activo");
 
     expect(item?.severity).toBe("INFO");
-    expect(item?.detail).toContain("control");
+    expect(item?.detail).toContain("control deliberado");
   });
 
   it("sin buzones conectados avisa en la apertura y sólo informa en el cierre", () => {

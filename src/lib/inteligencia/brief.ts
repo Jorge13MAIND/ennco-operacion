@@ -3,8 +3,8 @@
  * EOD analysis, adaptados a una sola función con dos momentos).
  *
  * El programa depende de que alguien conteste a tiempo: una respuesta positiva
- * vencida abre un P1 y un P1 abierto congela todo el outbound. El brief existe
- * para que ese riesgo se vea antes de que ocurra, no después.
+ * vencida abre un incidente P1, y un P1 abierto detiene todos los envíos. El
+ * brief existe para que ese riesgo se vea antes de que ocurra, no después.
  *
  * Sin LLM: los datos ya viven en el informe de salud y en el resumen del
  * carril. Lo que faltaba era ordenarlos por consecuencia en vez de por tabla.
@@ -36,7 +36,8 @@ export interface BriefInput {
   /** Falso cuando no hay responsable activo: el ruteo asigna dueño NULL. */
   readonly assignmentActive: boolean;
   readonly externalSendAllowed: boolean;
-  readonly killSwitch: boolean;
+  /** Botón de apagado global encendido: ningún envío sale mientras lo esté. */
+  readonly botonDeApagado: boolean;
   readonly mailboxes: readonly {
     readonly email: string;
     readonly status: string;
@@ -68,7 +69,7 @@ export function buildBrief(input: BriefInput): Brief {
     items.push({
       severity: "CRITICAL",
       title: `${input.openP0} P0 y ${input.openP1} P1 abiertos`,
-      detail: "Con un P1 abierto el motor no libera ningún envío externo: isControlCadenceReleaseAllowed exige cero.",
+      detail: "Mientras haya un incidente P1 abierto el motor no libera ningún envío.",
       action: "Recorrer el ciclo del incidente en Alertas hasta RESOLVED.",
     });
   }
@@ -77,7 +78,7 @@ export function buildBrief(input: BriefInput): Brief {
     items.push({
       severity: "CRITICAL",
       title: "Sin responsable activo",
-      detail: "El ruteo de respuestas asigna dueño NULL y abre casos P1 que después nadie puede cerrar.",
+      detail: "Las respuestas que entren no tendrán a quién asignarse y abrirán incidentes que nadie puede cerrar.",
       action: "Activar la asignación operativa antes de que entre la siguiente respuesta.",
     });
   }
@@ -117,18 +118,18 @@ export function buildBrief(input: BriefInput): Brief {
   }
 
   // 3. Estado del canal.
-  const connected = input.mailboxes.filter((m) => m.status === "CONNECTED");
-  const sentToday = input.mailboxes.reduce((total, m) => total + m.sentToday, 0);
-  const capToday = input.mailboxes.reduce((total, m) => total + m.capToday, 0);
-
-  if (input.killSwitch) {
+  if (input.botonDeApagado) {
     items.push({
       severity: "INFO",
-      title: "Kill switch activo",
-      detail: "Ningún envío sale mientras siga encendido. Es un control, no una falla.",
+      title: "Botón de apagado activo",
+      detail: "Ningún envío sale mientras siga encendido. Es un control deliberado, no una falla.",
       action: "",
     });
   }
+
+  const connected = input.mailboxes.filter((m) => m.status === "CONNECTED");
+  const sentToday = input.mailboxes.reduce((total, m) => total + m.sentToday, 0);
+  const capToday = input.mailboxes.reduce((total, m) => total + m.capToday, 0);
 
   if (connected.length === 0) {
     items.push({

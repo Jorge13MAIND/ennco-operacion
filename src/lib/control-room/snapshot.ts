@@ -30,7 +30,7 @@ export const INITIAL_MILESTONES: Milestone[] = [
     status: "EVIDENCE_READY",
     gate: "PASS",
     dueDate: "2026-08-12",
-    acceptance: "Transacción sintética E2E trazable, idempotencia y kill switch probados.",
+    acceptance: "Transacción sintética E2E trazable, idempotencia y botón de apagado probados.",
     evidence: [
       "supabase/tests/001_core_gate.sql",
       "tests/e2e/surfaces.spec.ts",

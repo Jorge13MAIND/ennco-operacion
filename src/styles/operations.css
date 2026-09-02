@@ -503,16 +503,31 @@ tbody tr:hover { background: #f3f7fb; }
 
 .action-inline { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
-.brief-list { display: grid; gap: 12px; margin: 0; padding: 18px 20px; list-style: none; }
+.brief-list { display: grid; gap: 10px; margin: 0; padding: 16px 20px; list-style: none; }
 .brief-item { display: grid; grid-template-columns: minmax(84px, auto) minmax(0, 1fr); gap: 14px; align-items: start; }
-.brief-item strong { display: block; color: var(--ink); }
-.brief-item p { margin: 4px 0 0; color: var(--muted); line-height: 1.5; }
+.brief-item strong { display: block; color: var(--ink); font-size: 0.95rem; }
+.brief-item p { margin: 3px 0 0; color: var(--muted); font-size: 0.84rem; line-height: 1.45; }
 .brief-item .brief-action { color: var(--ink); font-weight: 600; }
 
-.factor-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
-.factor-list li { line-height: 1.4; }
+.factor-list { margin: 8px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.factor-list li { line-height: 1.35; font-size: 0.8rem; }
 .factor-hit { color: var(--success); font-family: var(--font-data); font-weight: 700; }
 .factor-miss { color: var(--muted); font-family: var(--font-data); font-weight: 700; }
+
+/* Los factores se colapsan: una tabla de 100 cuentas con 5 renglones cada una
+   no se puede escanear. Abierto sigue estando completo para auditar. */
+.factor-details summary { cursor: pointer; font-size: 0.8rem; color: var(--muted); }
+.factor-details summary:hover { color: var(--ink); }
+.factor-details[open] summary { margin-bottom: 2px; color: var(--ink); font-weight: 600; }
+
+/* Barra de puntuación: compara de un vistazo entre filas. */
+.score-value { font-family: var(--font-data); font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+.score-bar { display: block; width: 100%; max-width: 120px; height: 5px; margin-top: 5px; border-radius: 999px; background: var(--line); overflow: hidden; }
+.score-fill { display: block; height: 100%; border-radius: 999px; background: var(--muted); }
+.score-fill.band-A { background: var(--success); }
+.score-fill.band-B { background: var(--warning); }
+.score-fill.band-C, .score-fill.band-D { background: var(--muted); }
+.score-fill.band-FUERA_DE_CONTRATO { background: var(--danger); }
 
 @media (max-width: 720px) {
   .brief-item { grid-template-columns: minmax(0, 1fr); }

@@ -49,7 +49,7 @@ export default async function OperationsPage() {
             : "Ningún proveedor activo sustituye los gates, el manifiesto y la evidencia requerida."}</p>
         </div>
         <div className="command-status-facts">
-          <div><span>Kill switch</span><strong>{snapshot.health.killSwitch ? "ACTIVO" : "INACTIVO"}</strong></div>
+          <div><span>Botón de apagado</span><strong>{snapshot.health.killSwitch ? "ACTIVO" : "INACTIVO"}</strong></div>
           <div><span>Reply sync</span><strong>{snapshot.health.replySync}</strong></div>
           <div><span>Riesgo abierto</span><strong>{snapshot.health.openP0} P0 · {snapshot.health.openP1} P1</strong></div>
         </div>

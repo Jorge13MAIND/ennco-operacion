@@ -35,7 +35,7 @@ const errorLabels: Record<string, string> = {
   DIRECT_LANE_NO_CONNECTED_MAILBOX: "No hay ningún buzón conectado.",
   DIRECT_LANE_CLIENT_MAILBOX_CAP_LIMIT: "El buzón del cliente no puede pasar de 20 al día.",
   DIRECT_LANE_CAMPAIGN_DUPLICATE: "Ya existe una campaña con este mismo copy.",
-  DIRECT_LANE_RUNTIME_HOLD: "Kill switch activo o envío externo no autorizado.",
+  DIRECT_LANE_RUNTIME_HOLD: "Botón de apagado activo o envío externo no autorizado.",
   DIRECT_LANE_MAILBOX_NOT_CONNECTED: "El buzón no está conectado.",
   DIRECT_LANE_RECIPIENT_NOT_ELIGIBLE: "El destinatario está suprimido o no verificado.",
   DIRECT_LANE_DAILY_CAP_EXCEEDED: "Ese buzón ya alcanzó su tope de hoy.",

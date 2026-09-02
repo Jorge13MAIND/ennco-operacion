@@ -121,7 +121,7 @@ export default async function CorreosPage() {
                 : "Algún candado global está cerrado. Revisa las banderas de la derecha antes de esperar envíos."}</p>
         </div>
         <div className="command-status-facts">
-          <Flag badText="ACTIVO" label="Kill switch" ok={!overview.flags.global_kill_switch} okText="INACTIVO" />
+          <Flag badText="ACTIVO" label="Botón de apagado" ok={!overview.flags.global_kill_switch} okText="INACTIVO" />
           <Flag badText="NO" label="Envío externo" ok={overview.flags.external_send_allowed} okText="AUTORIZADO" />
           <Flag badText="SIN APLICAR" label="Anexo A" ok={overview.flags.annex_a_ready} okText="APLICADO" />
           <Flag badText="CERRADA" label="Ventana" ok={overview.flags.send_window_open} okText="ABIERTA" />

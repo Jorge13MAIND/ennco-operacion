@@ -50,7 +50,7 @@ export default async function InteligenciaPage() {
       </section>
 
       <section className="panel">
-        <div className="panel-heading">
+        <div className="panel-head portal-panel-head">
           <div>
             <h2>Pendientes por consecuencia</h2>
             <p>Lo que puede congelar el canal va primero. Un P1 abierto bloquea todo envío externo.</p>
@@ -76,7 +76,7 @@ export default async function InteligenciaPage() {
 
       {/* ICP: patrón del agente 05. Determinista y auditable factor por factor. */}
       <section className="panel">
-        <div className="panel-heading">
+        <div className="panel-head portal-panel-head">
           <div>
             <h2>Cola de prioridad ICP</h2>
             <p>
@@ -123,22 +123,31 @@ export default async function InteligenciaPage() {
                       {[account.city, account.state].filter(Boolean).join(", ") || "Sin ubicación"}
                       {account.contract_only_state ? <><br /><span className="status warning">Sólo contrato</span></> : null}
                     </td>
-                    <td data-label="Puntuación"><strong>{account.score}</strong> / 100</td>
+                    <td data-label="Puntuación">
+                      <span className="score-value">{account.score}</span>
+                      <span className="score-bar"><span className={`score-fill band-${account.band}`} style={{ width: `${account.score}%` }} /></span>
+                    </td>
                     <td data-label="Banda">
                       <span className={`status ${account.band === "A" ? "ready" : account.band === "FUERA_DE_CONTRATO" ? "blocked" : "warning"}`}>
                         {ICP_BAND_LABELS[account.band as IcpBand]}
                       </span>
                     </td>
                     <td data-label="Factores">
-                      <ul className="factor-list">
-                        {account.factors.map((factor) => (
-                          <li key={factor.key}>
-                            <span className={factor.points > 0 ? "factor-hit" : "factor-miss"}>{factor.points}/{factor.max}</span> {factor.label}
-                            <br /><span className="muted">{factor.evidence}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      {account.missing.length > 0 ? <p className="muted">Sin evidencia: {account.missing.join(", ")}</p> : null}
+                      <details className="factor-details">
+                        <summary>
+                          {account.factors.filter((f) => f.points > 0).length} de {account.factors.length} factores
+                          {account.missing.length > 0 ? <span className="muted"> · falta {account.missing.join(", ")}</span> : null}
+                        </summary>
+                        <ul className="factor-list">
+                          {account.factors.map((factor) => (
+                            <li key={factor.key}>
+                              <span className={factor.points > 0 ? "factor-hit" : "factor-miss"}>{factor.points}/{factor.max}</span>
+                              {" "}{factor.label}
+                              <br /><span className="muted">{factor.evidence}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
                     </td>
                     <td data-label="Estado">
                       {account.suppressed ? <span className="status blocked">Suprimida</span>
@@ -155,7 +164,7 @@ export default async function InteligenciaPage() {
 
       {/* Clasificación asistida: patrón del agente 03, pero sin decidir nunca. */}
       <section className="panel">
-        <div className="panel-heading">
+        <div className="panel-head portal-panel-head">
           <div>
             <h2>Lectura sugerida de respuestas</h2>
             <p>
@@ -195,9 +204,12 @@ export default async function InteligenciaPage() {
                       {row.confidence < 0.5 ? <><br /><span className="muted">lee completo</span></> : null}
                     </td>
                     <td data-label="Por qué">
-                      <ul className="factor-list">
-                        {row.signals.map((signal, index) => <li key={index}><span className="muted">{signal}</span></li>)}
-                      </ul>
+                      <details className="factor-details">
+                        <summary>{row.signals.length} señal{row.signals.length === 1 ? "" : "es"}</summary>
+                        <ul className="factor-list">
+                          {row.signals.map((signal, index) => <li key={index}><span className="muted">{signal}</span></li>)}
+                        </ul>
+                      </details>
                     </td>
                   </tr>
                 ))}

@@ -168,7 +168,7 @@ function syntheticScreen(now: Date): IntelligenceScreen {
       moment, generatedAt: iso,
       unreviewedReplies: 1, oldestUnreviewedMinutes: 35,
       openP0: 0, openP1: 0, openReplyCases: 0,
-      assignmentActive: true, externalSendAllowed: false, killSwitch: true,
+      assignmentActive: true, externalSendAllowed: false, botonDeApagado: true,
       mailboxes: [{ email: "francisco@enncoindustrial.com", status: "DISCONNECTED", sentToday: 0, capToday: 0 }],
       suggestionsNeedingHuman: 1,
       priorityAccountsReady: 1,
@@ -220,7 +220,7 @@ export async function loadIntelligenceScreen(access: OperationsAccessContext): P
     openReplyCases: numberOf(replyOps.open_reply_cases),
     assignmentActive: replyOps.assignment_active === true,
     externalSendAllowed: laneFlags.external_send_allowed === true,
-    killSwitch: laneFlags.global_kill_switch !== false,
+    botonDeApagado: laneFlags.global_kill_switch !== false,
     mailboxes: mailboxRows.map((row) => ({
       email: String(row.normalized_email ?? ""),
       status: String(row.status ?? "DISCONNECTED"),
