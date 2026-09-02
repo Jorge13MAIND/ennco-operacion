@@ -21,8 +21,10 @@ describe("governance validators", () => {
   });
 
   it("rejects EVIDENCE_READY backed by a non-local locator", () => {
+    // El RTM ya guarda rutas relativas al repositorio, así que el caso
+    // negativo se construye sacando una fuera de él.
     const changed = rtm.replace(
-      "/Users/Jorge/dev/ennco-revenue-platform/supabase/tests/005_conversion_analytics_gate.sql",
+      "supabase/tests/005_conversion_analytics_gate.sql",
       "/tmp/ennco-non-local-evidence.sql",
     );
     const result = validateRtm({ text: changed, repo });
