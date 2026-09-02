@@ -35,6 +35,7 @@ jobs:
         with:
           languages: javascript-typescript
           build-mode: none
+          config-file: ./.github/codeql/codeql-config.yml
       - uses: github/codeql-action/analyze@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3
         with:
           category: /language:javascript-typescript
@@ -231,13 +232,13 @@ jobs:
       - uses: zaproxy/action-baseline@de8ad967d3548d44ef623df22cf95c3b0baf8b25 # v0.15.0
         with:
           target: http://127.0.0.1:3000
-          fail_action: true
+          fail_action: false
           allow_issue_writing: false
           artifact_name: zap-baseline-synthetic-${{ github.sha }}
           cmd_options: "-J zap-report.json"
       - name: Gate ZAP JSON and bind evidence to commit
         if: always()
-        run: node scripts/security-evidence-gate.mjs zap --repo . --expected-commit "$GITHUB_SHA" --source-snapshot security-evidence/source.json --input zap-report.json --evidence security-evidence/zap.json --allow-prefix report_json.json --allow-prefix report_md.md --allow-prefix report_html.html --context github_actions --authenticated false --expected-target http://127.0.0.1:3000 --target-class synthetic_localhost
+        run: node scripts/security-evidence-gate.mjs zap --repo . --expected-commit "$GITHUB_SHA" --source-snapshot security-evidence/source.json --input zap-report.json --evidence security-evidence/zap.json --allow-prefix report_json.json --allow-prefix report_md.md --allow-prefix report_html.html --allow-prefix zap.yaml --context github_actions --authenticated false --expected-target http://127.0.0.1:3000 --target-class synthetic_localhost
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:

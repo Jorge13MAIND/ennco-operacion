@@ -1,0 +1,34 @@
+name: ENNCO CodeQL
+
+# Exclusión razonada de js/insufficient-password-hash.
+#
+# CodeQL levanta esta regla en seis puntos donde el repositorio aplica SHA-256
+# sobre material criptográfico. Revisados uno por uno, ninguno almacena ni
+# verifica contraseñas:
+#
+#   src/lib/correos/vault.ts  · directLaneKeyId: huella corta de la llave de la
+#     bóveda, para poder atar un texto cifrado a la llave que lo selló. Práctica
+#     estándar de identificación de llave; no es almacenamiento de secretos.
+#   src/lib/correos/vault.ts  · suma de integridad sobre ciphertext, keyId,
+#     sujeto, buzón y alcances. Es un checksum de contenido.
+#   src/lib/dispatch/proof.ts y src/lib/research/integrity.ts · huellas de
+#     evidencia y llaves de idempotencia, ligadas a un commit y a un sujeto.
+#
+# Ninguna contraseña de usuario pasa por ahí: las de acceso al Control Room las
+# guarda Supabase Auth con su propio derivador, fuera de este código.
+#
+# Usar un derivador lento (bcrypt, scrypt, argon2) en estos puntos sería
+# incorrecto además de inútil: se necesita una huella determinista y barata que
+# se pueda recalcular en cada verificación de integridad.
+#
+# Si en el futuro este repositorio llega a manejar contraseñas directamente,
+# esta exclusión debe retirarse antes de escribir ese código.
+
+query-filters:
+  - exclude:
+      id: js/insufficient-password-hash
+
+paths-ignore:
+  - node_modules
+  - .next
+  - evidence
