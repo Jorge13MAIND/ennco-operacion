@@ -10,7 +10,12 @@ import {
 import { z } from "zod";
 
 export const GMAIL_OAUTH_SCOPES = [
-  "email",
+  // Forma CANONICA, no el alias "email": Google acepta el alias al pedirlo
+  // pero lo devuelve normalizado como userinfo.email en la respuesta del
+  // token. La validacion compara contra esta lista, asi que con el alias
+  // rechazaba SIEMPRE con SCOPE_INCOMPLETE:email aunque todo estuviera bien
+  // concedido. (openid si regresa literal, ese no cambia.)
+  "https://www.googleapis.com/auth/userinfo.email",
   "https://www.googleapis.com/auth/gmail.readonly",
   "https://www.googleapis.com/auth/gmail.send",
   "openid",
