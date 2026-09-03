@@ -8,10 +8,14 @@ import type { RuntimeConfig } from "@/lib/runtime/config";
 
 const privateHeaders = { "Cache-Control": "private, no-store" } as const;
 
-function finish(appUrl: string, estado: string, email?: string): NextResponse {
+function finish(appUrl: string, estado: string, email?: string, motivo?: string): NextResponse {
   const url = new URL("/correos/conectar", appUrl);
   url.searchParams.set("estado", estado);
   if (email) url.searchParams.set("buzon", email);
+  // Codigo tecnico corto para poder diagnosticar sin adivinar. Nunca lleva
+  // secretos: son nombres de etapa y, cuando existe, el codigo de error que
+  // devuelve Google (access_denied, invalid_client...), que es publico.
+  if (motivo) url.searchParams.set("motivo", motivo.slice(0, 60));
   const response = NextResponse.redirect(url, { status: 303, headers: privateHeaders });
   response.cookies.set(DIRECT_LANE_OAUTH_COOKIE, "", { httpOnly: true, secure: true, sameSite: "lax", path: DIRECT_LANE_OAUTH_COOKIE_PATH, maxAge: 0 });
   return response;
@@ -34,11 +38,18 @@ export async function handleDirectLaneOAuthCallback(request: Request, config: Ru
   const url = new URL(request.url);
   const state = url.searchParams.get("state") ?? "";
   const code = url.searchParams.get("code") ?? "";
-  if (!state || !code || url.searchParams.has("error")) return finish(config.appUrl, "rechazada");
+  const googleError = url.searchParams.get("error");
+  if (googleError) return finish(config.appUrl, "rechazada", undefined, `google:${googleError}`);
+  if (!state || !code) return finish(config.appUrl, "rechazada", undefined, "sin-codigo");
   try {
-    const cookie = unsealGmailOAuthCookie(sealedCookie, oauth.stateSecret);
+    let cookie;
+    try {
+      cookie = unsealGmailOAuthCookie(sealedCookie, oauth.stateSecret);
+    } catch {
+      return finish(config.appUrl, "rechazada", undefined, "cookie");
+    }
     if (cookie.organizationId !== config.organizationId || !stateMatches(state, cookie.stateSha256)) {
-      throw new Error("DIRECT_LANE_STATE_MISMATCH");
+      return finish(config.appUrl, "rechazada", undefined, "estado");
     }
     const exchanged = await exchangeGmailAuthorizationCode({
       config: { clientId: oauth.clientId, clientSecret: oauth.clientSecret, redirectUri: oauth.redirectUri },
@@ -66,7 +77,10 @@ export async function handleDirectLaneOAuthCallback(request: Request, config: Ru
     });
     return finish(config.appUrl, result.status === "CONNECTED" ? "conectado" : "duplicado", exchanged.normalizedEmail);
   } catch (error) {
-    const code = error instanceof Error && error.message === "GMAIL_OAUTH_IDENTITY_MISMATCH" ? "identidad" : "rechazada";
-    return finish(config.appUrl, code);
+    if (error instanceof Error && error.message === "GMAIL_OAUTH_IDENTITY_MISMATCH") {
+      return finish(config.appUrl, "identidad");
+    }
+    const motivo = error instanceof Error ? error.message : "desconocido";
+    return finish(config.appUrl, "rechazada", undefined, motivo);
   }
 }

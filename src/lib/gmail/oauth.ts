@@ -207,11 +207,24 @@ export async function exchangeGmailAuthorizationCode(input: {
   });
   const tokenJson: unknown = await tokenResponse.json().catch(() => null);
   const tokens = tokenResponse.ok ? tokenResponseSchema.safeParse(tokenJson) : null;
-  if (!tokens || !tokens.success) throw new Error("GMAIL_OAUTH_TOKEN_EXCHANGE_FAILED");
+  if (!tokens || !tokens.success) {
+    // Google devuelve el porque en el campo "error" (invalid_client,
+    // invalid_grant, redirect_uri_mismatch...). Tragarselo dejaba el fallo
+    // indistinguible de una cancelacion del usuario. El valor es publico y no
+    // lleva secretos.
+    const detalle = tokenJson && typeof tokenJson === "object" && "error" in tokenJson
+      ? String((tokenJson as { error?: unknown }).error).slice(0, 40)
+      : `http-${tokenResponse.status}`;
+    throw new Error(`GMAIL_OAUTH_TOKEN_EXCHANGE_FAILED:${detalle}`);
+  }
 
   const grantedScopes = canonicalizeScopes(tokens.data.scope.split(/\s+/u));
-  if (GMAIL_OAUTH_SCOPES.some((required) => !grantedScopes.includes(required))) {
-    throw new Error("GMAIL_OAUTH_SCOPE_INCOMPLETE");
+  const faltantes = GMAIL_OAUTH_SCOPES.filter((required) => !grantedScopes.includes(required));
+  if (faltantes.length > 0) {
+    // Pasa cuando el usuario deja sin marcar alguna casilla de permisos de
+    // Gmail en la pantalla de Google: el flujo "termina bien" pero sin los
+    // alcances necesarios para enviar o leer.
+    throw new Error(`GMAIL_OAUTH_SCOPE_INCOMPLETE:${faltantes.map((s) => s.split("/").pop()).join(",")}`);
   }
   const identityResponse = await fetchImpl("https://openidconnect.googleapis.com/v1/userinfo", {
     method: "GET",

@@ -7,7 +7,7 @@ import { getRuntimeConfig, hasDedicatedSupabase } from "@/lib/runtime/config";
 
 export const dynamic = "force-dynamic";
 
-type SearchParams = Promise<{ t?: string; estado?: string; buzon?: string }>;
+type SearchParams = Promise<{ t?: string; estado?: string; buzon?: string; motivo?: string }>;
 
 const estados: Record<string, { title: string; body: string; tone: "ok" | "warn" }> = {
   conectado: { title: "Buzón conectado.", body: "El sistema ya puede enviar y leer respuestas desde este buzón. Puedes cerrar esta ventana.", tone: "ok" },
@@ -56,6 +56,9 @@ export default async function ConectarBuzonPage({ searchParams }: { searchParams
           <section className="notice">
             <strong>{shown.title}</strong>
             <p>{shown.body}{params.buzon ? ` (${params.buzon})` : ""}</p>
+            {params.motivo ? (
+              <p className="fine">Código técnico: <code>{params.motivo}</code></p>
+            ) : null}
           </section>
         ) : invitation ? (
           <section className="panel connect-card">
