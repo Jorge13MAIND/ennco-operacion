@@ -123,6 +123,11 @@
 .operations-nav a[aria-current="page"] .nav-indicator { background: var(--gold-500); }
 
 .operations-main { padding-top: 38px; }
+/* Ritmo vertical entre bloques: las tarjetas (Buzones, Campaña, Respuestas...)
+   se apilaban pegadas. El mismo respiro que ya tenia la zona de metricas. */
+.operations-main > section + section,
+.operations-main > section + details,
+.operations-main > details + section { margin-top: 28px; }
 .operations-page-heading {
   display: flex;
   align-items: flex-end;

@@ -130,6 +130,30 @@ export function getSyntheticDirectLaneOverview(now = new Date()): DirectLaneOver
   });
 }
 
+
+/** Orden operativo de los buzones en pantalla (Grant, 3-sep-2026). */
+const MAILBOX_DISPLAY_ORDER = [
+  "contacto@ennco.com.mx",
+  "francisco@enncoenergia.com",
+  "francisco@enncoindustrial.com",
+  "fcuellar@enncoindustrial.com",
+  "fcuellar@enncoenergia.com",
+];
+
+function mailboxDisplayRank(email: string): number {
+  const index = MAILBOX_DISPLAY_ORDER.indexOf(email);
+  return index === -1 ? MAILBOX_DISPLAY_ORDER.length : index;
+}
+
+function sortOverviewMailboxes(overview: DirectLaneOverview): DirectLaneOverview {
+  return {
+    ...overview,
+    mailboxes: [...overview.mailboxes].sort((a, b) =>
+      mailboxDisplayRank(a.normalized_email) - mailboxDisplayRank(b.normalized_email)
+      || a.normalized_email.localeCompare(b.normalized_email)),
+  };
+}
+
 export async function loadDirectLaneScreen(access: OperationsAccessContext): Promise<DirectLaneScreen> {
   const config = getRuntimeConfig();
   const base = { generatedAt: new Date().toISOString(), mode: config.directLaneMode, released: config.directLaneReleased };
@@ -142,7 +166,7 @@ export async function loadDirectLaneScreen(access: OperationsAccessContext): Pro
   return {
     ...base,
     evidenceClass: "live",
-    overview: directLaneOverviewSchema.parse(data),
+    overview: sortOverviewMailboxes(directLaneOverviewSchema.parse(data)),
     canApprove: access.role === "teckel_admin",
   };
 }
