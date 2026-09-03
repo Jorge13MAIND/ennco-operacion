@@ -1,690 +1,800 @@
-# Secuencia ENNCO — copy aprobado por Teckel
+# Secuencia ENNCO — copy en la voz aprobada por Francisco
 
-Fecha de corte: 29 de agosto de 2026. **Teckel es dueño de este copy.** Se
-redacta, se ajusta y se optimiza sin consulta previa; lo único que espera visto
-bueno del cliente es el PRIMER ENVÍO, por la cláusula 07 del contrato.
+Versión 2026-09-03. **El toque 1 de dirección general es el correo que Francisco
+Cuellar aprobó**, palabra por palabra; sólo se corrigieron ambigüedades de
+puntuación y acentos, y se sustituyó `(name)` por el campo real del sistema.
+Los otros 31 correos se derivaron de ése: misma voz, misma estructura, mismo CTA.
 
-8 toques · 4 variantes cada uno · 32 correos · más la segunda vuelta (referidos), al final.
+La v1 (molde de "golpe con la cifra") queda archivada en
+`secuencia-ennco-copy-v1-ARCHIVADA-2026-08-29.md` y **no se usa para enviar**.
 
-## El marco
+8 toques · 4 perfiles · 32 correos · más la segunda vuelta, al final.
 
-Cada correo abre nombrando **una consecuencia concreta**, no una lista de
-servicios. El ancla es un caso real de ENNCO: un cliente perdió **$2,180,000
-MXN en un día por un apagón**. Dato confirmado por Francisco Cuellar el
-28-ago-2026. Se usa sin nombre de la empresa afectada.
+## La voz, tal como Francisco la escribe
 
-Respaldo público si alguna vez se necesita sustituir el caso: Strategyc midió
-que 30 segundos de apagón en una armadora cuestan entre 800 mil y un millón de
-pesos, y una hora de paro automotriz 2.3 millones de dólares (Neuron Automotive
-Forum, ago-2026).
+Se respeta como ley. Quien edite este archivo la conserva:
 
-Estructura fija de cada correo:
-
-1. Golpe con la consecuencia y su cifra
-2. El mecanismo (por qué pasa y por qué no se ve venir)
-3. **Una** pregunta fácil de contestar
-4. USP en una línea
-
-## Las cuatro variantes, y por qué
-
-| Variante | Su miedo | Su CTA |
-|---|---|---|
-| Dirección general | El número y no tener el dato | Que te dirija con su gente |
-| Mantenimiento / planta | Que truene en su turno | Fecha concreta |
-| **Seguridad e higiene** | El arco y el acta | Que quede documentado |
-| Compras | Que le echen la culpa por el barato | Una herramienta antes de pedirle nada |
-
-Seguridad e higiene se agregó el 29-ago: en el transcript del 5-ago Francisco
-dice que en industria formal la junta pasa por *"seguridad, higiene, con
-mantenimiento"*. Es el perfil que más responde al miedo porque evitar el
-incidente es su responsabilidad formal.
+1. **Habla él, en primera persona y en singular.** "Recibirme", "darte",
+   "mostrarte", "espero saber de ti". Es el dueño que va a ir en persona, no una
+   empresa ni un equipo.
+2. **Registro de negocio, no técnico.** Reducción de costos, resultados
+   financieros, resultados visibles, análisis real, estrategia de primer nivel.
+   **Nunca** termografía, dron, kWp, curva IV ni normas.
+3. **Prueba social cálida y sin nombres.** "Tenemos clientes muy similares a
+   ustedes."
+4. **Optimista, no de miedo.** Habla de oportunidad y de resultados, no de
+   catástrofes. Cuando aparece una pérdida real, se cuenta sobrio y una sola vez.
+5. **Cortesía explícita.** "Por favor", "Gracias", "Saludos y espero saber de ti
+   pronto". Tuteo siempre.
+6. **El CTA es una cita presencial** en las oficinas del prospecto, para
+   presentar un análisis. No pide llamadas, no manda ligas, no pide formularios.
+7. **Y siempre deja la puerta del referido:** si el destinatario no lleva el
+   tema, le pide con cortesía que lo dirija con quien sí.
+8. Párrafos cortos, una idea cada uno. Cero signos de exclamación, cero emojis.
 
 ## Reglas duras del sistema
 
-No puede salir, aunque alguien lo escriba: garantías, descuentos, precios
-finales, fechas de instalación comprometidas, ahorros prometidos en pesos o
-porcentaje, resultados de clientes sin autorización. El toque 1 no lleva ligas.
-Tope de 100 palabras por correo. Todos los textos de aquí van entre 37 y 81.
+No puede salir, aunque alguien lo escriba: garantías, descuentos, precios,
+cotizaciones, ahorros prometidos en pesos o porcentaje, fechas de instalación
+comprometidas, clientes nombrados, resultados de clientes identificables.
+Sin ligas en ningún toque. Sin HTML. Sin guiones largos.
 
-El toque 8 lleva baja explícita en las 4 variantes, por LFPDPPP.
+**Tope de 120 palabras por cuerpo** (migración M042). Antes eran 100, y el correo
+aprobado tiene 104: se movió el número nuestro, no la voz del cliente. Cada
+correo de este archivo va entre 85 y 115 palabras.
 
-## El CTA sigue el proceso real de Francisco
+**Dos preguntas por correo como máximo**, que es justo lo que hace el correo
+aprobado: el CTA principal y el rescate del referido.
 
-Del transcript del 5-ago: la segunda visita es *"un levantamiento general de la
-planta donde se muestran las observaciones que se vieron, los problemas que
-pueden tener o que tienen"*, y **después** viene el presupuesto. Por eso el CTA
-es el levantamiento, no una "auditoría", y por eso los correos dicen que los
-números vienen al final. Baja la fricción del sí.
+El toque 8 lleva **baja explícita** en las cuatro variantes, por LFPDPPP.
+
+Campos del sistema: `{{first_name}}` y `{{company}}`. No hay otros.
 
 ---
 
-## Toque 1 — día 0 · El caso, con nombre y número · **(entra en el arranque)**
+# Perfil A · Dirección general
 
-*Abrir con la pérdida concreta de un caso real y pedir una sola cosa fácil de contestar.*
+## Toque 1 — día 0 · **EL CORREO APROBADO POR FRANCISCO**
 
-### Dirección general
-
-**Asunto:** Lo que le costó un apagón a un cliente
+**Asunto:** Reducción de costos en servicios eléctricos
 
 ```
 Hola {{first_name}},
 
-Te escribo porque a un cliente nuestro le pasó algo que prefiero que a ustedes no.
+Soy Francisco Cuellar, Director General de ENNCO.
 
-Un apagón les tiró la planta un día. Perdieron 2 millones 180 mil pesos. En un día.
+Te escribo porque tenemos clientes muy similares a ustedes que han obtenido increíbles resultados en la reducción de costos y en servicios eléctricos.
 
-Lo que lo hubiera evitado costaba una fracción de eso.
+Ya va a terminar el año y sé que probablemente quieran lograr sus resultados financieros. Nuestros proyectos aportan resultados visibles desde el momento de la entrega.
 
-¿Me puedes dirigir con quien lleva mantenimiento en {{company}}? Les hacemos un levantamiento de planta y salen con las observaciones por escrito, antes de hablar de números.
+¿Cuándo podrías recibirme en tus oficinas para darte un análisis real de esto y mostrarte una estrategia de primer nivel para lograr esto?
 
-Gracias,
+Si tú no te encargas de llevar esto, ¿podrías dirigirme con la persona encargada por favor?
+
+Saludos y espero saber de ti pronto.
+
 Francisco Cuellar
-CEO, ENNCO
+Director General, ENNCO
 ```
 
-### Mantenimiento / planta
+> Lo único que se tocó del original: `(name)` pasó a `{{first_name}}`, coma
+> después de "Cuellar", acentos en "sé" y "tú", "aportar" corregido a "aportan",
+> y el signo de apertura de la segunda pregunta. Ni una palabra más.
 
-**Asunto:** El tablero que nadie abre
+## Toque 2 — día 3 · Bajar el costo de contestar
 
-```
-Hola {{first_name}},
-
-A un cliente nuestro un apagón le tiró la planta un día completo. Perdieron 2 millones 180 mil pesos.
-
-Empezó como empiezan casi todos: una conexión floja calentándose semanas antes, en un tablero que nadie abrió. No hace ruido, no huele, no se ve.
-
-Con cámara térmica se ve semanas antes, cuando todavía es barato.
-
-¿Te late si agendamos una termografía este mes? La hacemos con dron, sin parar nada.
-
-Francisco
-```
-
-### Seguridad e higiene
-
-**Asunto:** Y ese fue el escenario bueno
+**Asunto:** Media hora, sin compromiso
 
 ```
 Hola {{first_name}},
 
-A un cliente nuestro un apagón le costó 2 millones 180 mil pesos en un día. Y ese fue el escenario bueno: la misma conexión floja que tira una línea es la que produce un arco.
+Vuelvo al tema con algo más sencillo.
 
-Si eso pasa, la primera pregunta en el acta es cuándo fue la última revisión.
+No te estoy pidiendo que decidas nada todavía. Te estoy pidiendo media hora en tus oficinas para mostrarte qué hemos hecho con empresas parecidas a {{company}} y qué se podría hacer aquí.
 
-¿Cuándo fue la última termografía en {{company}}? Si no hay fecha, te propongo que la agendemos y quede documentada.
+Si al terminar no te parece útil, ahí lo dejamos y te agradezco el tiempo.
+
+¿Te acomoda alguna mañana de esta semana o de la próxima?
+
+Y si el tema no lo llevas tú, ¿me dices con quién sí, por favor?
+
+Saludos y espero saber de ti pronto.
 
 Francisco
 ```
 
-### Compras
+## Toque 3 — día 7 · El presupuesto y el calendario
 
-**Asunto:** La póliza barata
+**Asunto:** ¿Este trimestre o el que entra?
 
 ```
 Hola {{first_name}},
 
-Pregunta rápida: ¿tu póliza de mantenimiento incluye termografía?
+Te hago una pregunta práctica para no insistir a destiempo.
 
-Te lo pregunto porque es lo primero que se recorta para bajar el precio. A un cliente nuestro un apagón le costó 2 millones 180 mil pesos en un día, y empezó en una conexión que una cámara habría visto semanas antes.
+Lo que hacemos en costos de energía y en servicios eléctricos suele entrar en el presupuesto del año que arranca. Si ese es su caso, lo mejor es que veamos los números ahora, cuando todavía se puede planear con calma.
 
-Nadie se acuerda de quién ahorró en la póliza. Sí de quién firmó la que no traía termografía.
+¿Esto entra en el presupuesto de este trimestre o del que entra? Con saber eso me ajusto a tus tiempos.
 
-¿Te mando el alcance mínimo que debería traer cualquier póliza?
+Si prefieres que lo vea con alguien de tu equipo, dime con quién y yo lo busco.
 
-Francisco
-```
-
----
-
-## Toque 2 — día 3 · Bajar el costo de contestar · **(entra en el arranque)**
-
-*Reducir el sí a un solo dato, sin soltar la urgencia.*
-
-### Dirección general
-
-**Asunto:** Re: Lo que le costó un apagón a un cliente
-
-```
-Hola {{first_name}},
-
-Vuelvo al punto rápido.
-
-No te estoy pidiendo que contrates nada. Te estoy pidiendo que alguien de tu equipo nos deje ver los tableros una mañana y te digamos qué encontramos.
-
-Si está todo bien, te queda por escrito. Si no, lo sabes antes y no después.
-
-¿Con quién me dirijo?
+Saludos y espero saber de ti pronto.
 
 Francisco
 ```
-
-### Mantenimiento / planta
-
-**Asunto:** Re: El tablero que nadie abre
-
-```
-Hola {{first_name}},
-
-El primer filtro es sencillo: dime si ya tienen termografía en el plan de este año y de cuándo es la última que se hizo.
-
-Con esos dos datos te digo si van bien o si conviene adelantarla, sin que tengas que meter a nadie más todavía.
-
-¿Cuándo fue la última?
-
-Francisco
-```
-
-### Seguridad e higiene
-
-**Asunto:** Re: Y ese fue el escenario bueno
-
-```
-Hola {{first_name}},
-
-Insisto con una sola pregunta: ¿existe registro de la última termografía en {{company}}?
-
-Lo pregunto porque el día que hay un incidente, ese documento es lo primero que se busca. Y si no existe, la conversación se pone difícil para el área.
-
-Si no lo tienes, te ayudo a generarlo.
-
-Francisco
-```
-
-### Compras
-
-**Asunto:** Re: La póliza barata
-
-```
-Hola {{first_name}},
-
-Te lo dejo concreto: el alcance mínimo que debería traer cualquier póliza de mantenimiento eléctrico es termografía en tableros, revisión de conexiones y expediente con lo observado.
-
-Con eso comparas parejo, aunque nos dejes fuera.
-
-¿Te lo mando?
-
-Francisco
-```
-
----
-
-## Toque 3 — día 7 · Quién elige la fecha · **(entra en el arranque)**
-
-*Poner la decisión en el calendario, sin afirmar que hay una falla.*
-
-### Dirección general
-
-**Asunto:** Contra qué compite el mantenimiento
-
-```
-Hola {{first_name}},
-
-Lo pongo simple: el mantenimiento no compite contra su propio costo. Compite contra un día de planta parada.
-
-Ese cliente lo aprendió con 2 millones 180 mil pesos en una sola jornada.
-
-¿Está en el presupuesto de este trimestre o del que entra? Con saber eso me ajusto.
-
-Francisco
-```
-
-### Mantenimiento / planta
-
-**Asunto:** Preventivo hoy o correctivo después
-
-```
-Hola {{first_name}},
-
-La diferencia entre preventivo y correctivo no la decide el equipo. La decide el calendario.
-
-Quien revisa a tiempo escoge la fecha, el alcance y el proveedor. Quien no, lo escoge todo el día que truena, a las prisas y al precio que salga.
-
-¿Escogemos fecha?
-
-Francisco
-```
-
-### Seguridad e higiene
-
-**Asunto:** Mientras lees esto
-
-```
-Hola {{first_name}},
-
-Una condición térmica en un tablero no se queda quieta. Empeora sola, semanas, hasta que falla.
-
-Eso significa que ahorita mismo, mientras lees esto, o está bien o va en camino. Y solo hay una forma de saber cuál de las dos.
-
-¿Agendamos la revisión?
-
-Francisco
-```
-
-### Compras
-
-**Asunto:** La comparación en una hoja
-
-```
-Hola {{first_name}},
-
-Cierro con el número que importa: la termografía anual cuesta una fracción de un día de planta parada.
-
-A un cliente nuestro ese día le costó 2 millones 180 mil pesos.
-
-Si tienes que justificar la partida con alguien, te paso la comparación en una hoja.
-
-¿Te sirve?
-
-Francisco
-```
-
----
 
 ## Toque 4 — día 14 · Qué recibes exactamente
 
-*Quitar el miedo a que sea una visita comercial: se entrega evidencia, no cotización.*
-
-### Dirección general
-
-**Asunto:** Qué te entregamos, y qué no
+**Asunto:** Qué te llevo a la reunión
 
 ```
 Hola {{first_name}},
 
-Para que sepas qué estás aceptando si me dices que sí.
+Para que sepas exactamente qué estás aceptando si me recibes.
 
-El levantamiento no es una visita de venta. Es abrir tableros, medir y entregarte un documento con lo observado, dónde está y qué tan urgente es. Los números vienen después, y solo si tú los pides.
+Llego a tus oficinas, revisamos juntos cómo está la instalación eléctrica de {{company}} y te dejo un análisis por escrito con lo que encontramos y qué conviene atender primero. Sin costo y sin compromiso de contratar nada.
 
-¿Te mando el formato del reporte para que veas qué recibirías?
+Los números vienen después, y sólo si tú los pides.
+
+¿Te parece si agendamos esa visita?
+
+Si esto lo revisa alguien más de tu equipo, con gusto lo veo con él.
+
+Saludos y espero saber de ti pronto.
 
 Francisco
 ```
 
-### Mantenimiento / planta
+## Toque 5 — día 28 · No somos sólo paneles
 
-**Asunto:** El mapa térmico de tu instalación
+**Asunto:** Por si nos ubicas como solares
 
 ```
 Hola {{first_name}},
 
-Lo que sale del levantamiento es el mapa térmico de tu instalación: qué punto está caliente, cuánto, y qué tan rápido hay que atenderlo.
+Una aclaración, por si nos tienes catalogados como una empresa de paneles solares.
 
-Lo que salga, salga. Si está todo bien, también queda por escrito y te sirve igual.
+En ENNCO hacemos obra eléctrica industrial completa: subestaciones, transformadores, tableros, mantenimiento y almacenamiento de energía. Lo solar es una de nuestras líneas, no el negocio entero.
 
-¿Te mando el formato para que veas qué recibirías?
+Lo digo porque a veces el tema que más le conviene a una planta no es el que uno imagina.
+
+¿Cuál de esos frentes te interesaría revisar en {{company}}?
+
+Y si el tema lo lleva otra persona, te agradezco que me la presentes.
+
+Saludos y espero saber de ti pronto.
 
 Francisco
 ```
 
-### Seguridad e higiene
+## Toque 6 — día 42 · El dato que casi nadie tiene
 
-**Asunto:** Un documento con fecha
-
-```
-Hola {{first_name}},
-
-Lo que entregamos es un documento fechado con lo que se observó y dónde.
-
-Eso es exactamente lo que sirve el día que alguien pregunta si la instalación estaba revisada. Sin ese papel, la respuesta es la memoria de alguien.
-
-¿Te mando el formato?
-
-Francisco
-```
-
-### Compras
-
-**Asunto:** Para que compares parejo
+**Asunto:** Una pregunta que suelo hacer
 
 ```
 Hola {{first_name}},
 
-El expediente trae lo observado, la ubicación y la prioridad de cada hallazgo.
+Te hago la pregunta que le hago a todos los directores que visito.
 
-Con ese documento en la mano, todas las propuestas que pidas se cotizan contra el mismo alcance. Es la única forma de comparar sin sorpresas después.
+Si hoy te preguntaran en qué condición está la instalación eléctrica de {{company}}, ¿tendrías el dato a la mano, o tendrías que preguntárselo a alguien?
 
-¿Te lo mando?
-
-Francisco
-```
-
----
-
-## Toque 5 — día 28 · No somos paneleros
-
-*Corregir el encasillamiento en solar y abrir los otros frentes eléctricos.*
-
-### Dirección general
-
-**Asunto:** Por si nos tienes como paneleros
-
-```
-Hola {{first_name}},
-
-Una aclaración, por si nos tienes catalogados como una empresa de paneles.
-
-ENNCO hace obra eléctrica industrial, subestaciones, transformadores y mantenimiento. Lo solar es una línea, no el negocio.
-
-Si alguno de esos frentes está en revisión en {{company}}, dime cuál y te digo de frente si podemos o no.
-
-Francisco
-```
-
-### Mantenimiento / planta
-
-**Asunto:** Subestación, transformadores, tableros
-
-```
-Hola {{first_name}},
-
-Por si nos ubicas solo como solar: hacemos subestación, transformadores, tableros, obra eléctrica y termografía.
-
-El mantenimiento eléctrico industrial es una parte grande de lo que facturamos, no un extra.
-
-¿Cuál de esos frentes te preocupa más hoy?
-
-Francisco
-```
-
-### Seguridad e higiene
-
-**Asunto:** Dónde solemos encontrar lo feo
-
-```
-Hola {{first_name}},
-
-Donde más hallazgos encontramos no es en los paneles. Es en subestación, transformadores y tableros de distribución, que es justo lo que menos se abre.
-
-Si tienes un frente eléctrico que lleva tiempo sin revisarse, dime cuál y empezamos por ahí.
-
-Francisco
-```
-
-### Compras
-
-**Asunto:** Alcances que sí cubrimos
-
-```
-Hola {{first_name}},
-
-Por si estamos catalogados solo como solar: cubrimos obra eléctrica, subestaciones, transformadores, tableros y mantenimiento industrial.
-
-Si tienes alguno de esos en revisión o en concurso, dime y te digo de una si aplicamos o no. No te hago perder el tiempo.
-
-Francisco
-```
-
----
-
-## Toque 6 — día 42 · La pregunta incómoda
-
-*Hacer evidente el hueco de información, que es el verdadero riesgo.*
-
-### Dirección general
-
-**Asunto:** Una pregunta incómoda
-
-```
-Hola {{first_name}},
-
-Te hago una pregunta incómoda.
-
-Si hoy te preguntaran en qué condición está la instalación eléctrica de {{company}}, ¿tendrías el dato, o tendrías que preguntarle a alguien?
-
-Casi nadie lo tiene. Y ese hueco es el que sale caro. Por eso el levantamiento va primero.
+Casi nadie lo tiene, y ese hueco a veces sale caro. Hace poco un cliente nuestro perdió dos millones ciento ochenta mil pesos en un solo día por un apagón. Por eso el análisis va primero.
 
 ¿Te lo agendo?
 
-Francisco
-```
-
-### Mantenimiento / planta
-
-**Asunto:** ¿Vas por mapa o por reporte de fallas?
-
-```
-Hola {{first_name}},
-
-Pregunta directa: ¿tienes el mapa térmico de tu instalación, o vas atendiendo por reporte de fallas?
-
-La diferencia entre las dos es saber antes o enterarte después. Y la segunda siempre cuesta más, en dinero y en fin de semana.
-
-¿Te lo levantamos?
+Saludos y espero saber de ti pronto.
 
 Francisco
 ```
-
-### Seguridad e higiene
-
-**Asunto:** Si mañana te lo piden
-
-```
-Hola {{first_name}},
-
-Si mañana te piden el estado de la instalación eléctrica, ¿lo tienes documentado?
-
-Si la respuesta es "habría que revisar", eso ya es el hallazgo. Y es mejor encontrarlo hoy que el día que alguien lo pregunte por una razón fea.
-
-¿Lo levantamos?
-
-Francisco
-```
-
-### Compras
-
-**Asunto:** Antes de comparar precios
-
-```
-Hola {{first_name}},
-
-Antes de comparar precios: ¿sabes en qué condición está la instalación que vas a mantener?
-
-Sin ese dato, cada proveedor cotiza sobre supuestos distintos y las propuestas no son comparables, aunque lo parezcan en la tabla.
-
-Te lo levantamos y después comparas.
-
-Francisco
-```
-
----
 
 ## Toque 7 — día 60 · Las dos mitades
-
-*Poner en una hoja lo que mantenimiento ve y lo que dirección decide.*
-
-### Dirección general
 
 **Asunto:** Las dos mitades del problema
 
 ```
 Hola {{first_name}},
 
-Algo que veo seguido: mantenimiento sabe qué está mal, dirección sabe qué cuesta, y nadie tiene las dos mitades en la misma hoja.
+Algo que veo seguido en las plantas que visito.
 
-Ahí es donde se atoran los proyectos, y donde se caen las plantas.
+Mantenimiento sabe qué está mal. Dirección sabe qué cuesta. Y casi nunca están las dos mitades en la misma hoja, así que los proyectos se quedan atorados por falta de información, no por falta de dinero.
 
-El levantamiento junta las dos. ¿Te la generamos?
+El análisis que te propongo junta las dos cosas, para que la decisión sea fácil de tomar.
 
-Francisco
-```
+¿Te la preparo para {{company}}?
 
-### Mantenimiento / planta
+Si prefieres que lo trabaje directo con tu gente, dime con quién.
 
-**Asunto:** Que deje de ser tu opinión
-
-```
-Hola {{first_name}},
-
-Muchas veces el problema no es técnico. Es que dirección no ve lo que tú ves, y lo que pides suena a exageración.
-
-Un reporte fechado con mediciones convierte tu criterio en un documento. Deja de ser tu opinión.
-
-¿Te lo generamos?
+Saludos y espero saber de ti pronto.
 
 Francisco
 ```
-
-### Seguridad e higiene
-
-**Asunto:** De opinión a registro
-
-```
-Hola {{first_name}},
-
-Un hallazgo dicho en una junta se olvida. Un hallazgo documentado, con fecha y medición, ya no.
-
-Eso cambia por completo la conversación con dirección, y te cubre a ti.
-
-¿Te ayudamos a generarlo?
-
-Francisco
-```
-
-### Compras
-
-**Asunto:** Quien queda en medio
-
-```
-Hola {{first_name}},
-
-Cuando mantenimiento pide y dirección pregunta por qué, la que queda en medio es compras.
-
-Un levantamiento con evidencia y prioridades resuelve esa discusión antes de que empiece, y te deja con qué defender la partida.
-
-¿Te lo mando?
-
-Francisco
-```
-
----
 
 ## Toque 8 — día 75 · Cierre con la puerta abierta
-
-*Cerrar el ciclo con respeto y dejar la baja siempre a la mano.*
-
-### Dirección general
 
 **Asunto:** Cierro el tema por ahora
 
 ```
 Hola {{first_name}},
 
-Cierro el tema para no llenarte el correo.
+Cierro el tema para no llenarte el correo. Te agradezco el tiempo de leerme estas semanas.
 
-Si en algún momento la instalación eléctrica de {{company}} entra en agenda, aquí estoy y retomamos desde el levantamiento.
+Si en algún momento la instalación eléctrica de {{company}} entra en su agenda, aquí estoy y con mucho gusto retomamos desde el análisis.
 
-Si prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo. Gracias por el tiempo.
+Si prefieres que no te escriba más, respóndeme la palabra baja y lo registro hoy mismo.
+
+Saludos y mucho éxito con el cierre de año.
 
 Francisco
 ```
 
-### Mantenimiento / planta
+---
 
-**Asunto:** Cierro el seguimiento técnico
+# Perfil B · Mantenimiento y planta
+
+## Toque 1 — día 0 · Presentación
+
+**Asunto:** Continuidad de operación en su planta
 
 ```
 Hola {{first_name}},
 
-Cierro el seguimiento para no insistir.
+Soy Francisco Cuellar, Director General de ENNCO.
 
-Si en algún momento quieres el mapa térmico de la instalación, me escribes y lo agendamos sin más trámite.
+Te escribo porque tenemos clientes muy similares a ustedes que han obtenido muy buenos resultados en la continuidad de su operación y en el costo de sus servicios eléctricos.
 
-Si prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo.
+Sé que en tu área el objetivo es que la planta no se detenga. Nuestros proyectos dan resultados visibles desde el momento de la entrega.
 
-Francisco
+¿Cuándo podrías recibirme en tus oficinas para revisar cómo está la instalación y darte un análisis real de lo que encontremos?
+
+Si esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?
+
+Saludos y espero saber de ti pronto.
+
+Francisco Cuellar
+Director General, ENNCO
 ```
 
-### Seguridad e higiene
+## Toque 2 — día 3 · Bajar el costo de contestar
 
-**Asunto:** Cierro por ahora
+**Asunto:** Dos datos y te digo
 
 ```
 Hola {{first_name}},
 
-Cierro por ahora para no insistir.
+Te lo hago más fácil que una reunión.
 
-Si algún día necesitas el registro documentado de la instalación, aquí estoy y lo levantamos.
+Dime nada más dos cosas: si la revisión de la instalación eléctrica está en el plan de este año, y de cuándo es la última que se hizo. Con eso te digo de frente si van bien o si conviene adelantarla, sin que tengas que meter a nadie más todavía.
 
-Si prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo.
+¿Me compartes esos dos datos?
+
+Y si el tema lo lleva otra persona en {{company}}, te agradezco que me la presentes.
+
+Saludos y espero saber de ti pronto.
 
 Francisco
 ```
 
-### Compras
+## Toque 3 — día 7 · El calendario manda
+
+**Asunto:** Escoger la fecha con calma
+
+```
+Hola {{first_name}},
+
+Una idea que me han agradecido varios jefes de planta.
+
+Quien revisa su instalación a tiempo escoge la fecha, el alcance y con quién trabajarlo. Quien no, lo escoge todo el día que algo falla, a las prisas y con la línea parada.
+
+Todavía estamos a tiempo de que esto se planee con calma para el arranque de año.
+
+¿Te parece si vemos una fecha para la visita?
+
+Si necesitas el visto bueno de alguien más, dime con quién lo veo.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 4 — día 14 · Qué recibes exactamente
+
+**Asunto:** Qué queda por escrito
+
+```
+Hola {{first_name}},
+
+Para que sepas qué te llevas si me recibes.
+
+Vamos a la planta, revisamos tableros, conexiones y los equipos principales, y te dejo un documento con lo que se observó, dónde está y qué tan urgente es. Con eso tienes con qué sustentar lo que pidas.
+
+No es una visita de venta. Los números vienen después, y sólo si los pides.
+
+¿Agendamos?
+
+Si prefieres que lo coordine con alguien más de tu equipo, con gusto.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 5 — día 28 · Todo el frente eléctrico
+
+**Asunto:** Subestación, transformadores, tableros
+
+```
+Hola {{first_name}},
+
+Por si nos ubicas sólo como una empresa de paneles solares.
+
+En ENNCO hacemos obra eléctrica industrial: subestación, transformadores, tableros de distribución, mantenimiento y almacenamiento. Donde más hallazgos encontramos, de hecho, no es en los paneles: es en lo que menos se abre.
+
+Si tienes un frente eléctrico que lleva tiempo sin revisarse, por ahí empezamos.
+
+¿Cuál te preocupa más hoy en {{company}}?
+
+Y si esto lo decide otra persona, te agradezco la presentación.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 6 — día 42 · El dato completo
+
+**Asunto:** ¿Tienes el mapa o el reporte?
+
+```
+Hola {{first_name}},
+
+Pregunta directa, de las que se contestan rápido.
+
+¿Hoy tienes el estado completo de tu instalación documentado, o vas atendiendo conforme se reportan las fallas? La diferencia entre las dos es saber antes o enterarse después.
+
+Hace poco un cliente nuestro perdió dos millones ciento ochenta mil pesos en un solo día por un apagón. No lo cuento para asustarte, sino porque ese dato es justo lo que le faltaba.
+
+¿Te lo levantamos?
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 7 — día 60 · Que deje de ser tu opinión
+
+**Asunto:** De opinión a documento
+
+```
+Hola {{first_name}},
+
+Algo que me comentan seguido los jefes de mantenimiento.
+
+Muchas veces el problema no es técnico: es que dirección no ve lo que tú ves, y lo que pides suena a exageración. Un análisis con mediciones y fecha convierte tu criterio en un documento, y ahí la conversación cambia por completo.
+
+Eso es exactamente lo que te dejo cuando visito una planta.
+
+¿Te lo preparo para {{company}}?
+
+Si te ayuda que lo presente yo mismo con dirección, con mucho gusto.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 8 — día 75 · Cierre con la puerta abierta
 
 **Asunto:** Cierro el seguimiento
 
 ```
 Hola {{first_name}},
 
-Cierro el seguimiento.
+Cierro el seguimiento para no insistir. Te agradezco el tiempo.
 
-Si abren revisión de mantenimiento eléctrico con gusto participamos, y si no, el alcance mínimo que te mandé te sirve igual con cualquier proveedor.
+Si en algún momento quieres que revisemos la instalación de {{company}}, me escribes y lo agendamos sin más trámite.
 
-Si prefieres que no te escriba más, respóndeme baja y lo registro hoy mismo.
+Si prefieres que no te escriba más, respóndeme la palabra baja y lo registro hoy mismo.
+
+Saludos y que todo siga saliendo bien en tu turno.
 
 Francisco
 ```
 
 ---
 
-## Segunda vuelta — cuando contestan «habla con Juan»
+# Perfil C · Seguridad e higiene
 
-El CTA de dirección general pide exactamente esto, así que esta respuesta es el
-resultado BUENO de la secuencia, no una excepción. Escrito 31-ago-2026 (cerraba
-el bloqueador A3 de `bloqueadores-2026-08-29.md`).
+## Toque 1 — día 0 · Presentación
+
+**Asunto:** Instalación eléctrica documentada
+
+```
+Hola {{first_name}},
+
+Soy Francisco Cuellar, Director General de ENNCO.
+
+Te escribo porque tenemos clientes muy similares a ustedes que han logrado tener sus instalaciones eléctricas revisadas y documentadas, además de muy buenos resultados en el costo de sus servicios.
+
+Sé que en tu área lo que cuenta es poder demostrar en qué condiciones está todo, con fecha y por escrito.
+
+¿Cuándo podrías recibirme en tus oficinas para revisar la instalación y dejarte un análisis real de lo que encontremos?
+
+Si esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?
+
+Saludos y espero saber de ti pronto.
+
+Francisco Cuellar
+Director General, ENNCO
+```
+
+## Toque 2 — día 3 · Una sola pregunta
+
+**Asunto:** ¿Existe el registro?
+
+```
+Hola {{first_name}},
+
+Insisto con una sola pregunta, de las fáciles.
+
+¿Existe hoy un registro con fecha de la última revisión de la instalación eléctrica de {{company}}? Lo pregunto porque ese documento es el primero que se busca cuando alguien pide cuentas, y muchas plantas descubren que no lo tienen justo cuando lo necesitan.
+
+Si no lo tienen, con gusto te ayudo a generarlo.
+
+¿Te parece si lo vemos juntos?
+
+Y si el tema lo lleva alguien más, te agradezco que me lo presentes.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 3 — día 7 · Con calma o a las prisas
+
+**Asunto:** Antes de que lo pidan
+
+```
+Hola {{first_name}},
+
+Una observación de las plantas que visito.
+
+El expediente de la instalación eléctrica siempre se arma en uno de dos momentos: con calma, cuando alguien decide tenerlo en orden, o a las prisas, cuando ya se lo están pidiendo. El primero sale mejor y cuesta menos.
+
+Todavía estamos en el primer momento.
+
+¿Te propongo que lo dejemos armado antes del cierre de año?
+
+Si necesitas que lo revise alguien más de tu equipo, dime con quién.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 4 — día 14 · Un documento con fecha
+
+**Asunto:** Un documento con fecha
+
+```
+Hola {{first_name}},
+
+Para que sepas exactamente qué te dejo.
+
+Un documento fechado con lo que se observó y dónde: tableros, conexiones y equipos principales, cada hallazgo con su ubicación y su prioridad. Eso es lo que sirve el día que alguien pregunta si la instalación estaba revisada. Sin ese papel, la respuesta es la memoria de alguien.
+
+Y si todo está en orden, también queda por escrito y te sirve igual.
+
+¿Agendamos la visita?
+
+Si esto lo autoriza otra persona, con gusto lo veo con ella.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 5 — día 28 · Dónde solemos encontrar cosas
+
+**Asunto:** Dónde encontramos los hallazgos
+
+```
+Hola {{first_name}},
+
+Por si nos ubicas sólo como empresa de paneles solares.
+
+En ENNCO hacemos obra eléctrica industrial completa. Y donde más hallazgos encontramos no es en los paneles: es en subestación, transformadores y tableros de distribución, que son justo los que menos se abren y los que más pesan en un expediente.
+
+Si tienes alguno de esos sin revisar, por ahí conviene empezar.
+
+¿Cuál sería en {{company}}?
+
+Y si el tema lo lleva alguien más, te agradezco la presentación.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 6 — día 42 · Si mañana te lo piden
+
+**Asunto:** Si mañana te lo piden
+
+```
+Hola {{first_name}},
+
+Te hago la pregunta incómoda, con todo respeto.
+
+Si mañana te piden el estado de la instalación eléctrica de {{company}}, ¿lo tienes documentado? Si la respuesta es "habría que revisar", eso ya es un hallazgo, y es mejor encontrarlo hoy.
+
+Hace poco un cliente nuestro perdió dos millones ciento ochenta mil pesos en un día por un apagón. Lo que le faltaba era exactamente ese documento.
+
+¿Lo armamos?
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 7 — día 60 · De la junta al registro
+
+**Asunto:** Lo dicho y lo escrito
+
+```
+Hola {{first_name}},
+
+Algo que me comentan seguido en tu área.
+
+Un hallazgo dicho en una junta se olvida en dos semanas. Un hallazgo documentado, con fecha y medición, ya no: cambia la conversación con dirección y además te respalda a ti.
+
+Eso es lo que queda cuando hacemos el análisis de una planta.
+
+¿Te ayudo a generarlo en {{company}}?
+
+Si prefieres que lo presente yo con dirección, con mucho gusto lo hago.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 8 — día 75 · Cierre con la puerta abierta
+
+**Asunto:** Cierro por ahora
+
+```
+Hola {{first_name}},
+
+Cierro el tema para no insistir. Te agradezco el tiempo de leerme.
+
+Si algún día necesitas el registro documentado de la instalación de {{company}}, aquí estoy y lo armamos con gusto.
+
+Si prefieres que no te escriba más, respóndeme la palabra baja y lo registro hoy mismo.
+
+Saludos y mucho éxito.
+
+Francisco
+```
+
+---
+
+# Perfil D · Compras
+
+## Toque 1 — día 0 · Presentación
+
+**Asunto:** Comparar propuestas eléctricas parejo
+
+```
+Hola {{first_name}},
+
+Soy Francisco Cuellar, Director General de ENNCO.
+
+Te escribo porque tenemos clientes muy similares a ustedes que han obtenido muy buenos resultados en la reducción de costos de sus servicios eléctricos, y que además lograron comparar sus propuestas contra un mismo alcance.
+
+Sé que en compras lo difícil no es conseguir precios, es saber si son comparables.
+
+¿Cuándo podrías recibirme en tus oficinas para darte un análisis real de esto y mostrarte cómo lo estructuramos?
+
+Si esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?
+
+Saludos y espero saber de ti pronto.
+
+Francisco Cuellar
+Director General, ENNCO
+```
+
+## Toque 2 — día 3 · Algo útil antes de pedir nada
+
+**Asunto:** El alcance mínimo, de regalo
+
+```
+Hola {{first_name}},
+
+Te ofrezco algo útil antes de pedirte cualquier cosa.
+
+Tengo una hoja con el alcance mínimo que debería traer cualquier póliza de mantenimiento eléctrico: qué se revisa, qué se entrega y qué exigir por escrito. Sirve para comparar parejo, y te funciona igual aunque nos dejes fuera.
+
+¿Te la mando?
+
+Y si el tema lo lleva otra persona en {{company}}, te agradezco que me la presentes.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 3 — día 7 · El presupuesto del año
+
+**Asunto:** ¿Ya está en el presupuesto?
+
+```
+Hola {{first_name}},
+
+Pregunta práctica para no insistir a destiempo.
+
+El mantenimiento eléctrico y los proyectos de energía suelen definirse ahora, cuando se arma el presupuesto del año que entra. Si es su caso, conviene tener el alcance bien definido antes de pedir cotizaciones, porque de ahí sale todo lo demás.
+
+¿Esto ya está en el presupuesto, o se define en las próximas semanas?
+
+Si quien lo define es alguien más, dime con quién lo veo, por favor.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 4 — día 14 · Para que compares parejo
+
+**Asunto:** Un alcance, todas las propuestas
+
+```
+Hola {{first_name}},
+
+Para que sepas qué te llevo si me recibes.
+
+Un análisis de la instalación con lo observado, su ubicación y la prioridad de cada hallazgo. Con ese documento en la mano, todas las propuestas que pidas se cotizan contra el mismo alcance, y ahí sí se pueden comparar sin sorpresas después.
+
+Sin costo y sin compromiso de contratarnos.
+
+¿Te parece si lo vemos?
+
+Si prefieres que lo trabaje con el área técnica, con gusto.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 5 — día 28 · Alcances que cubrimos
+
+**Asunto:** Alcances que sí cubrimos
+
+```
+Hola {{first_name}},
+
+Por si nos tienes catalogados sólo como proveedor de paneles solares.
+
+Cubrimos obra eléctrica industrial, subestaciones, transformadores, tableros, mantenimiento y almacenamiento de energía. Lo digo para que sepas en qué concursos tiene sentido invitarnos y en cuáles no: si algo no es lo nuestro, te lo digo de frente y no te hago perder el tiempo.
+
+¿Tienes alguno de esos frentes en revisión en {{company}}?
+
+Y si esto lo maneja alguien más, te agradezco la presentación.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 6 — día 42 · Antes de comparar precios
+
+**Asunto:** Antes de comparar precios
+
+```
+Hola {{first_name}},
+
+Una sola idea y te dejo tranquilo.
+
+Antes de comparar precios conviene saber en qué condición está lo que se va a mantener. Sin ese dato, cada proveedor cotiza sobre supuestos distintos y las propuestas no son comparables, aunque en la tabla lo parezcan.
+
+Hace poco un cliente nuestro perdió dos millones ciento ochenta mil pesos en un día por un apagón, y había comparado sólo precios.
+
+¿Te levantamos el estado y después comparas?
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 7 — día 60 · Quien queda en medio
+
+**Asunto:** Con qué defender la partida
+
+```
+Hola {{first_name}},
+
+Algo que veo seguido y que a compras le pega directo.
+
+Cuando mantenimiento pide y dirección pregunta por qué, quien queda en medio eres tú. Un análisis con evidencia y prioridades resuelve esa discusión antes de que empiece, y te deja con qué defender la partida.
+
+Es justo lo que te dejo cuando visito una planta.
+
+¿Te lo preparo para {{company}}?
+
+Si te sirve que lo presente yo con dirección, con mucho gusto.
+
+Saludos y espero saber de ti pronto.
+
+Francisco
+```
+
+## Toque 8 — día 75 · Cierre con la puerta abierta
+
+**Asunto:** Te dejo la hoja y cierro el tema
+
+```
+Hola {{first_name}},
+
+Cierro el seguimiento. Te agradezco el tiempo de leerme estas semanas.
+
+Si abren revisión de mantenimiento eléctrico, con gusto participamos. Y si no, la hoja del alcance mínimo te sirve igual con cualquier proveedor.
+
+Si prefieres que no te escriba más, respóndeme la palabra baja y lo registro hoy mismo.
+
+Saludos y mucho éxito con el cierre de año.
+
+Francisco
+```
+
+---
+
+# Segunda vuelta — cuando contestan «habla con Juan»
+
+El rescate del referido está en casi todos los toques, así que esta respuesta es
+el resultado **bueno** de la secuencia, no una excepción.
 
 **Reglas de uso:**
 
-1. El correo al referido va en **hilo nuevo, con su propio asunto**. El referido
-   no vio el hilo anterior; contestarle dentro del hilo viejo le esconde el contexto
-   en un quoted-reply que nadie lee.
-2. El acuse al referidor va como **reply en el hilo original, el mismo día**. Cierra
-   el loop y le avisa que ya no le vas a escribir por ese canal.
-3. La secuencia del referidor se **detiene** al registrar su respuesta (se clasifica
-   POSITIVE en el Control Room). El referido **NO entra a la secuencia automática**:
-   se maneja manual, uno a uno, y su primera pieza es este correo.
-4. Si dan cargo sin nombre ("habla con mantenimiento"), usar la variante de
-   presentación para conseguir nombre y correo antes de escribir a nadie.
-5. Registrar siguiente acción y fecha (regla del playbook de respuestas).
+1. El correo al referido va en **hilo nuevo, con su propio asunto**.
+2. El acuse al referidor va como **reply en su hilo, el mismo día**.
+3. La secuencia del referidor se **detiene** al registrar su respuesta. El
+   referido **no entra a la secuencia automática**: se maneja manual, uno a uno.
+4. Si dan cargo sin nombre o sin correo, usar la variante de presentación.
+5. Registrar siguiente acción y fecha.
 
-El correo al referido sigue el molde de la secuencia (golpe → mecanismo → una
-pregunta → USP) y respeta el tope: 78 palabras. El referido típico lleva
-mantenimiento; si el cargo es otro, se ajusta solo la línea del levantamiento,
-no el resto.
-
-### Correo al referido
+## Correo al referido
 
 **Asunto:** {{referidor}} me dirigió contigo
 
 ```
 Hola {{first_name}},
 
-{{referidor}} me pidió verlo contigo directamente.
+Soy Francisco Cuellar, Director General de ENNCO. {{referidor}} me pidió que viera este tema directamente contigo.
 
-Le escribí por algo que le pasó a un cliente nuestro: un apagón le tiró la planta un día completo y perdió 2 millones 180 mil pesos. Empezó como casi todas: una conexión floja calentándose semanas, en un tablero que nadie abrió.
+Le escribí porque trabajamos con clientes muy similares a ustedes en la reducción de costos de sus servicios eléctricos, y porque nuestros proyectos dan resultados visibles desde la entrega.
 
-Hacemos un levantamiento con termografía, sin parar la planta, y te entregamos lo observado por escrito. Los números después, solo si los pides.
+¿Cuándo podrías recibirme en tus oficinas? Reviso la instalación contigo y te dejo un análisis por escrito, sin costo y sin compromiso.
 
-¿Qué semana te acomoda?
+Saludos y espero saber de ti pronto.
+
+Francisco Cuellar
+Director General, ENNCO
+```
+
+## Acuse al referidor (reply en su hilo, el mismo día)
+
+```
+Gracias, {{first_name}}. Hoy mismo le escribo a {{referido}} mencionando que tú me dirigiste con él, y con eso dejo de llenarte el correo: lo que siga, lo sigo con él.
+
+Saludos y gracias de nuevo.
 
 Francisco
 ```
 
-### Acuse al referidor (reply en su hilo, mismo día)
-
-```
-Gracias, {{first_name}}. Hoy mismo le escribo a {{referido}} mencionando que tú me dirigiste, y con eso dejo de llenarte el correo: lo que siga, lo sigo con él.
-
-Francisco
-```
-
-### Variante: dan el cargo pero no el nombre o el correo
+## Variante: dan el cargo pero no el nombre o el correo
 
 ```
 Gracias, {{first_name}}. ¿Me compartes su correo, o prefieres presentarnos con un mensaje corto? Como te acomode: con cualquiera de las dos le escribo hoy mismo.
 
+Saludos y gracias.
+
 Francisco
 ```
-
----
