@@ -38,7 +38,7 @@ export const directLaneSendInputSchema = z.object({
   }
   if (value.kind === "TOUCH") {
     const words = value.body_text.split(/\s+/u).filter(Boolean).length;
-    if (words > 100) context.addIssue({ code: "custom", message: "DIRECT_LANE_WORD_LIMIT_EXCEEDED" });
+    if (words > 120) context.addIssue({ code: "custom", message: "DIRECT_LANE_WORD_LIMIT_EXCEEDED" });
     if (value.touch_number === null) context.addIssue({ code: "custom", message: "DIRECT_LANE_TOUCH_NUMBER_REQUIRED" });
     if (value.touch_number === 1 && /(?:https?:\/\/|www\.|mailto:)/iu.test(value.body_text)) {
       context.addIssue({ code: "custom", message: "DIRECT_LANE_FIRST_TOUCH_LINK_FORBIDDEN" });

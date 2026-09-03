@@ -1,10 +1,11 @@
 ---
 title: Handover — operación comercial ENNCO (SLA de respuesta, ICP, copy y Control Room)
 para: Grant Keegan (CTO, Teckel AI) · grantkeegan@teckel-ai.com
-de: Teckel · corte 1-sep-2026
+de: Teckel · corte 3-sep-2026 (el copy pasó a la voz aprobada por el cliente)
 alcance: Todo lo necesario para operar las respuestas de prospectos: a quién escribimos, qué les decimos, dónde se trabaja y en cuánto tiempo hay que contestar
 base: repo Jorge13MAIND/ennco-revenue-platform (privado)
 honestidad: Lo que no verifiqué contra el sistema vivo va marcado [HUECO]. Ningún secreto viaja en este documento, por diseño.
+copy: La voz del correo es del cliente. Antes de editarla, lee el §3 completo y corre `npm run verify:copy`.
 ---
 
 # Handover — operación comercial ENNCO
@@ -152,42 +153,103 @@ apertura; **WhatsApp frío prohibido**, LinkedIn sólo manual.
 
 ## 3. Qué les decimos — el copy
 
-**Teckel es dueño del copy.** Se redacta, ajusta y optimiza sin consultar al
-cliente; lo único que espera visto bueno es el **primer envío**, por la cláusula
-07 del contrato. Jorge asume ese riesgo desde el 29-ago.
+**La voz es del cliente, no nuestra.** Esto cambió el 3-sep y es lo más
+importante de esta sección: Francisco Cuellar escribió y aprobó el copy. El
+toque 1 de dirección general es **su correo, palabra por palabra**, y los toques
+2 al 5 también son suyos; sólo se llenaron los espacios que dejó abiertos y se
+corrigieron dos erratas. Todo lo demás se derivó de ese registro.
 
-### La secuencia: 8 toques × 4 variantes = 32 correos
+Fuente vigente: **`docs/external/secuencia-ennco-copy.md`**.
+La versión anterior (molde de "golpe con la cifra", correos largos y
+argumentados, ancla de una pérdida de $2.18M) está **archivada** en
+`secuencia-ennco-copy-v1-ARCHIVADA-2026-08-29.md` y **no se usa para enviar**.
+Si la abres por error, lo notarás: suena a agencia, no a él.
 
-Fuente: **`docs/external/secuencia-ennco-copy.md`**. Días 0, 3, 7, 14, 28, 42, 60 y 75.
+### Su voz, y por qué respetarla al pie de la letra
 
-| Variante | Su miedo | Su CTA |
-|---|---|---|
-| Dirección general | El número y no tener el dato | Que te dirija con su gente |
-| Mantenimiento / planta | Que truene en su turno | Fecha concreta |
-| Seguridad e higiene | El arco y el acta | Que quede documentado |
-| Compras | Que le echen la culpa por el barato | Una herramienta antes de pedirle nada |
+Jorge rechazó dos versiones mías por salirse de esto. Vale más que cualquier
+buena idea de redacción que se te ocurra:
 
-**El ancla es un caso real**: un cliente de ENNCO perdió **$2,180,000 MXN en un
-día por un apagón** (confirmado por Francisco el 28-ago). Se usa sin nombrar a la
-empresa afectada. Estructura fija de cada correo: golpe con la cifra → el
-mecanismo → **una** pregunta fácil → USP en una línea. Entre 37 y 81 palabras,
-tope duro de 100. Sin ligas en el toque 1. Baja explícita en el toque 8.
+1. **Corto.** El toque 1 presenta y ronda las 100 palabras. **Del 2 en adelante,
+   ninguno pasa de 87.** Medidos: dirección 109·76·56·43·57·43·41·46 · mantenimiento
+   108·76·60·45·51·48·41·49 · seguridad 102·87·54·50·58·42·39·46 · compras
+   100·80·54·48·60·44·40·52.
+2. **Humilde, no insistente.** "Tal vez mi correo anterior no te pudo dar la
+   claridad", "Sé que estás muy ocupado". Reconoce el tiempo del otro antes de pedir.
+3. **Habla él, en primera persona.** "Puedo llamarte", "recibirme", "yo tengo
+   total certeza". Es el dueño escribiendo, no una empresa ni un equipo.
+4. **Optimista, no de miedo.** El registro es de oportunidad: costo de luz, P&L,
+   resultados. La versión archivada usaba el susto como palanca; ésta no.
+5. **Cero jerga.** Nunca termografía, dron, kWp, curva IV ni normas. Habla de
+   negocio incluso cuando el tema es técnico.
+6. **Empatía por analogía**, su recurso más personal: *"así como ustedes tienen
+   certeza de cuándo pueden aportar valor a un cliente..."*.
+7. **CTA suave, con salida doble.** "Avísame si puedo llamarte o programar una
+   reunión", "¿Cuándo podemos platicar, o con quién debería platicar?" — el
+   rescate del referido va **dentro de la misma pregunta**, no como posdata.
+8. **Cierre invariable:** "Saludos," y su nombre. En el toque 1, con cargo.
 
-**El CTA es "levantamiento", no "auditoría"** — sigue el proceso real de ENNCO: la
-segunda visita es un levantamiento de planta donde se muestran las observaciones,
-y el presupuesto viene **después**. Por eso los correos dicen que los números van
-al final: baja muchísimo la fricción del sí.
+### Los cuatro perfiles
 
-**Prohibido, aunque alguien lo escriba:** garantías, descuentos, precios finales,
-fechas de instalación comprometidas, ahorros prometidos en pesos o porcentaje, y
-resultados de clientes sin autorización.
+8 toques (días 0, 3, 7, 14, 28, 42, 60 y 75) × 4 perfiles = 32 correos.
+Cada prospecto recibe **una** variante completa.
+
+| Perfil | Ángulo (no es su miedo, es lo que le sirve) |
+|---|---|
+| Dirección general | Resultado financiero y cierre de año |
+| Mantenimiento / planta | Que no pare la línea, y tener con qué sustentar lo que pide |
+| Seguridad e higiene | Que esté revisado y documentado, con fecha |
+| Compras | Comparar propuestas contra el mismo alcance y defender la partida |
+
+Los asuntos genéricos están **diferenciados entre variantes** a propósito: si el
+director y el jefe de mantenimiento de la misma planta reciben el mismo asunto el
+mismo día, huele a automatización. El asunto del toque 5 sí es igual en las
+cuatro porque lo dictó Francisco y lleva nombre y empresa, así que ya se ve
+distinto para cada quien.
+
+### Dos invariantes NUESTROS que se movieron por su copy
+
+Cuando la voz aprobada del cliente choca con una preferencia nuestra, se mueve la
+nuestra. Pasó dos veces y las dos están en el repo:
+
+- **Tope del cuerpo: 100 → 120 palabras** (migración M042, aplicada a producción
+  y verificada). Su correo tiene **104** y los dos triggers vivos lo rechazaban:
+  `enforce_hybrid_dispatch_envelope_contract` del carril híbrido y
+  `enforce_direct_lane_release` del carril directo. Tal como estaba, **el motor
+  no podía enviar el correo que el cliente aprobó**. El tope de 400 de las
+  respuestas a hilo quedó intacto.
+- **De "exactamente una pregunta" a "máximo dos".** Su copy usa dos a propósito:
+  el CTA y el rescate del referido.
+
+### Prohibido, aunque alguien lo escriba
+
+Garantías, descuentos, precios, cotizaciones, ahorros prometidos en pesos o
+porcentaje, fechas de instalación comprometidas, clientes nombrados. Sin ligas en
+ningún toque. Sin HTML. Sin guiones largos. El toque 8 lleva **baja explícita**
+en las cuatro variantes, por LFPDPPP.
+
+### La compuerta del copy: `npm run verify:copy`
+
+`scripts/verify-copy-sequence.mjs`, 16 checks sobre el markdown que de verdad se
+envía. Existe porque `verify:campaign` sólo mira el artefacto sintético del
+canary y **nunca cubrió este archivo**. Vigila el tope del motor, las
+prohibiciones, la jerga fuera de su voz, que haya CTA, la baja en los cuatro
+cierres, los asuntos sin duplicar dentro de cada variante y, sobre todo, **que el
+toque 1 aprobado por el cliente siga intacto** (lo compara contra sus frases
+ancla). Validado inyectándole cinco defectos distintos: los cinco atrapados.
+
+> **Si editas el copy, corre este gate antes de commitear.** Y si el gate te
+> estorba porque marca algo que Francisco sí escribiría, **el que está mal es el
+> gate**: ajústalo y deja el porqué en el comentario. Me pasó: lo había calibrado
+> para el registro largo y marcaba sus correos cortos como "huecos".
 
 ### Segunda vuelta: cuando contestan "habla con Juan"
 
-El CTA de dirección pide precisamente eso, así que es el resultado **bueno**.
-Al final de `secuencia-ennco-copy.md`: correo al referido (hilo nuevo con asunto
-propio, 78 palabras), acuse al referidor, y variante para cuando dan el cargo sin
-el correo. El referido **no entra a la secuencia automática**: se maneja manual.
+El rescate del referido va dentro de la pregunta en casi todos los toques, así
+que esto es el resultado **bueno** de la secuencia. Al final de
+`secuencia-ennco-copy.md`: correo al referido (hilo nuevo con asunto propio),
+acuse al referidor el mismo día, y variante para cuando dan el cargo sin el
+correo. El referido **no entra a la secuencia automática**: se maneja manual.
 
 ### Respuestas a cada objeción
 
@@ -198,20 +260,35 @@ Reglas: una sola pregunta de calificación por mensaje, detener la secuencia ant
 de responder, nunca confirmar garantías/descuentos/precio/fecha, y una baja se
 confirma sin agregar otro pitch.
 
+> **[HUECO] Este playbook quedó en el registro viejo.** Se escribió antes del
+> 3-sep, así que sus textos no suenan a Francisco: son más largos y más
+> construidos que su voz. Funcionan, pero desafinan contra la secuencia. Pasarlos
+> a su registro es trabajo pendiente, y conviene hacerlo antes del primer envío.
+
 ### Lo que se adjunta cuando dicen "sí, mándamelo"
 
 En `docs/external/materiales-prospectos/`, marca ENNCO, sin precios:
 
-- **`Formato-Reporte-Levantamiento-ENNCO.pdf`** — el formato del reporte que
-  promete el toque 4: hallazgos con ubicación, lectura térmica y prioridad, con
-  las termografías FLIR reales de ENNCO (70.5 °C crítico vs 40.6 °C sano).
-- **`Alcance-Minimo-Poliza-ENNCO.pdf`** — lo que promete el toque de compras: los
-  tres mínimos de cualquier póliza, checklist de comparación imprimible y el
-  argumento fiscal (LISR 34-XIII: la deducción del 100% exige 5 años de operación,
-  y el mantenimiento es lo que la sostiene).
+- **`Formato-Reporte-Levantamiento-ENNCO.pdf`** — hallazgos con ubicación,
+  lectura térmica y prioridad, con las termografías FLIR reales de ENNCO
+  (70.5 °C crítico contra 40.6 °C sano).
+- **`Alcance-Minimo-Poliza-ENNCO.pdf`** — los tres mínimos de cualquier póliza,
+  checklist de comparación imprimible y el argumento fiscal (LISR 34-XIII: la
+  deducción del 100% exige 5 años de operación, y el mantenimiento es lo que la
+  sostiene).
 
 El HTML editable de ambos está al lado del PDF. **Cero JavaScript**: se imprimen
 con Cmd+P.
+
+> **[HUECO] Los PDFs se prometían en el copy viejo y ahora ya no se ofrecen igual.**
+> La versión archivada decía literalmente "¿te mando el formato del reporte?" en
+> el toque 4 y "¿te mando el alcance mínimo?" en el de compras. En el copy nuevo
+> el enganche es el **toque 7** ("¿te sirve si te mando primero el análisis por
+> escrito?"), y el alcance de póliza ya no se ofrece de forma explícita: el toque
+> 2 de compras sólo habla de definir un alcance claro. Los dos documentos siguen
+> siendo buenos y útiles; lo que hay que decidir es si se ofrecen explícitamente
+> en algún toque o si se mandan sólo cuando el prospecto pregunta. Ojo también con
+> que el PDF sí usa la palabra "termografía", que el copy evita a propósito.
 
 ---
 
@@ -603,7 +680,8 @@ Del lado de la base, `read_dispatch_health` ya expone `reply_operations`
 | Calendario de días hábiles 2026-2027 | **Vivo**. Estuvo vacío y mataba el ruteo de positivas |
 | `reply_operations` en el informe de salud | **Vivo en producción** (1-sep) |
 | Asignación de responsable | **Viva**: Jorge primario, sin respaldo |
-| Copy (32 correos + segunda vuelta + 2 PDFs) | **Escrito y verificado** |
+| Copy: 32 correos en la voz de Francisco + segunda vuelta + 2 PDFs | **Escrito, aprobado por Jorge el 3-sep y con gate propio** (`verify:copy` 16/16) |
+| Tope de palabras del motor | **120** desde el 3-sep (M042). Antes 100, y el correo aprobado tiene 104 |
 | 1,831 empresas | **Listas, 0 cargadas** — bloqueadas por el primer acceso de Jorge |
 | Alerta de Telegram + watchdog nuevo | **Código en `main`, NO desplegado** |
 | Envs de Telegram | **Faltan.** Sin ellos, mudo |
@@ -650,6 +728,11 @@ días fijos y **no ha arrancado**. Las tres exhibiciones del contrato corren ant
   Higiene" cae en `OTHER`, **no cuenta para el gate de 150 contactos y no puede
   ser el contacto de un lead calificado**. La variante que más responde al miedo
   es la que el sistema no sabe reconocer.
+- **[HUECO] El playbook de respuestas y los dos PDFs quedaron desalineados con
+  el copy nuevo.** Ver los dos avisos del §3: los textos de respuesta siguen en
+  el registro viejo, y el enganche de los PDFs cambió de toque. Ninguna de las
+  dos cosas rompe nada hoy porque no ha salido un correo, y las dos conviene
+  cerrarlas antes del primer envío.
 - **[HUECO]** No sé si ya tienes cuenta en Supabase, Vercel o el Workspace. Asumí
   que no; por eso el §6 lista todo desde cero.
 - **[HUECO]** El RACI (`docs/02-raci.md`) es del 11-ago y quedó desactualizado: las

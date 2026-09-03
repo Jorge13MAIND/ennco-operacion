@@ -48,9 +48,14 @@ check("EIGHT_TOUCHES", sequence.touches.length === 8, sequence.touches.length);
 check("CADENCE_MATCHES", JSON.stringify(sequence.cadence_days) === JSON.stringify(expectedDays), sequence.cadence_days);
 check("TOUCH_OFFSETS_MATCH", JSON.stringify(sequence.touches.map((touch) => touch.day_offset)) === JSON.stringify(expectedDays), sequence.touches.map((touch) => touch.day_offset));
 check("THREE_ROLE_VARIANTS", sequence.touches.every((touch) => JSON.stringify(Object.keys(touch.variants).sort()) === JSON.stringify(expectedVariants)), bodies.length);
-check("COPY_UNDER_100_WORDS", bodies.every((entry) => entry.body.trim().split(/\s+/).length <= 100), Math.max(...bodies.map((entry) => entry.body.trim().split(/\s+/).length)));
+// M042: el tope subio de 100 a 120 porque el copy aprobado por el cliente tiene 104 palabras.
+check("COPY_UNDER_120_WORDS", bodies.every((entry) => entry.body.trim().split(/\s+/).length <= 120), Math.max(...bodies.map((entry) => entry.body.trim().split(/\s+/).length)));
 check("SUBJECTS_UNDER_70_CHARS", bodies.every((entry) => entry.subject.length <= 70), Math.max(...bodies.map((entry) => entry.subject.length)));
-check("ONE_CTA_MAX", bodies.every((entry) => (entry.body.match(/\?/g) ?? []).length === 1), bodies.filter((entry) => (entry.body.match(/\?/g) ?? []).length !== 1).map((entry) => `${entry.touch}:${entry.variant}`));
+// M042: el copy aprobado por el cliente usa DOS preguntas por correo, a proposito:
+// el CTA principal (recibirme en tus oficinas) y el rescate de referido (si tu no
+// llevas esto, me diriges con quien si). Antes se exigia exactamente una, que era
+// preferencia nuestra. El tope sigue existiendo para cortar el correo interrogatorio.
+check("AT_MOST_TWO_CTAS", bodies.every((entry) => { const n = (entry.body.match(/\?/g) ?? []).length; return n >= 1 && n <= 2; }), bodies.filter((entry) => { const n = (entry.body.match(/\?/g) ?? []).length; return n < 1 || n > 2; }).map((entry) => `${entry.touch}:${entry.variant}`));
 check("FRANCISCO_SIGNATURE", bodies.every((entry) => entry.body.includes("Francisco")), true);
 check("INITIAL_SIGNAL_GROUNDED", Object.values(sequence.touches[0].variants).every((variant) => variant.body.includes("{{observed_signal}}") && variant.body.includes("{{source_name}}")), true);
 check("NO_UNICODE_DASHES", bodies.every((entry) => !/[\u2014\u2013]/.test(`${entry.subject}${entry.body}`)), true);
@@ -71,7 +76,7 @@ check("RESPONSE_PLAYBOOK_DRAFT_ONLY", playbook.status === "DRAFT_REVIEW_REQUIRED
 check("RESPONSE_PLAYBOOK_ONE_CTA_MAX", playbook.responses.every((response) => (response.body.match(/\?/g) ?? []).length <= 1), true);
 check("RESPONSE_PLAYBOOK_NO_COMMITMENTS", playbook.responses.every((response) => !/(te garantizo|descuento de|precio final es|queda instalado el|ahorro de \d)/i.test(response.body)), true);
 check("RESPONSE_PLAYBOOK_HAS_REFERRAL", playbook.responses.some((response) => response.intent === "REFERRAL") && typeof playbook.referral_outbound?.body === "string", playbook.responses.map((response) => response.intent));
-check("REFERRAL_OUTBOUND_UNDER_100_WORDS", (playbook.referral_outbound?.body ?? "").trim().split(/\s+/).length <= 100, (playbook.referral_outbound?.body ?? "").trim().split(/\s+/).length);
+check("REFERRAL_OUTBOUND_UNDER_120_WORDS", (playbook.referral_outbound?.body ?? "").trim().split(/\s+/).length <= 120, (playbook.referral_outbound?.body ?? "").trim().split(/\s+/).length);
 check("REFERRAL_OUTBOUND_ONE_CTA", ((playbook.referral_outbound?.body ?? "").match(/\?/g) ?? []).length === 1, true);
 check("REFERRAL_OUTBOUND_NO_COMMITMENTS", !/(te garantizo|garantizamos|descuento de|precio final|queda instalado el|ahorro de \d|[—–])/i.test(`${playbook.referral_outbound?.subject ?? ""}${playbook.referral_outbound?.body ?? ""}${playbook.referral_outbound?.incomplete_referral_body ?? ""}`), true);
 check("ANONYMOUS_REFERENCES_NOT_CASE_STUDIES", referenceCards.status === "INTERNAL_REFERENCE_NOT_CASE_STUDY" && referenceCards.publish_authorized === false && referenceCards.cards.every((card) => card.outcome_verified === false), { status: referenceCards.status, publish_authorized: referenceCards.publish_authorized });

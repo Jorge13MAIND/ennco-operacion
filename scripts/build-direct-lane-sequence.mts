@@ -24,9 +24,12 @@ const sourcePath = resolve(root, "docs/external/secuencia-ennco-copy.md");
 const targetPath = resolve(root, "data/campaigns/direct-lane-sequence-v1.json");
 const checkOnly = process.argv.includes("--check");
 
+// El copy del 3-sep invirtio la jerarquia: antes era "## Toque" con "### variante"
+// dentro; ahora es "# Perfil X · <variante>" con "## Toque" dentro. Se acepta el
+// nombre del perfil tal como aparece en el encabezado, en minusculas.
 const variantByHeading: Record<string, { key: DirectLaneSequence["variants"][number]["key"]; label: string }> = {
   "dirección general": { key: "DIRECCION", label: "Dirección general" },
-  "mantenimiento / planta": { key: "MANTENIMIENTO", label: "Mantenimiento / planta" },
+  "mantenimiento y planta": { key: "MANTENIMIENTO", label: "Mantenimiento y planta" },
   "seguridad e higiene": { key: "SEGURIDAD", label: "Seguridad e higiene" },
   compras: { key: "COMPRAS", label: "Compras" },
 };
@@ -43,16 +46,18 @@ let currentSubject: string | null = null;
 
 for (let index = 0; index < lines.length; index += 1) {
   const line = lines[index] ?? "";
-  const touchMatch = /^## Toque (\d) — día (\d+)/u.exec(line);
-  if (touchMatch) {
-    currentTouch = { touch: Number(touchMatch[1]), day: Number(touchMatch[2]) };
-    currentVariant = null;
+  if (/^# Segunda vuelta/u.test(line)) break;
+  // "# Perfil A · Dirección general" abre una variante y sus 8 toques.
+  const variantMatch = /^# Perfil [A-Z] · (.+)$/u.exec(line);
+  if (variantMatch) {
+    currentVariant = variantMatch[1]!.trim().toLocaleLowerCase("es-MX");
+    currentTouch = null;
+    currentSubject = null;
     continue;
   }
-  if (/^## Segunda vuelta/u.test(line)) break;
-  const variantMatch = /^### (.+)$/u.exec(line);
-  if (variantMatch && currentTouch) {
-    currentVariant = variantMatch[1]!.trim().toLocaleLowerCase("es-MX");
+  const touchMatch = /^## Toque (\d) — día (\d+)/u.exec(line);
+  if (touchMatch && currentVariant) {
+    currentTouch = { touch: Number(touchMatch[1]), day: Number(touchMatch[2]) };
     currentSubject = null;
     continue;
   }
@@ -97,7 +102,7 @@ const candidate: DirectLaneSequence = directLaneSequenceSchema.parse({
   source_sha256: sourceSha256,
   generated_at: previous?.source_sha256 === sourceSha256 && previous.generated_at ? previous.generated_at : new Date().toISOString(),
   sender_name: "Francisco Cuellar",
-  sender_title: "CEO, ENNCO",
+  sender_title: "Director General, ENNCO",
   day_offsets: [...DIRECT_LANE_DAY_OFFSETS],
   variants,
 });

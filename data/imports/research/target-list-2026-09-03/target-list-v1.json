@@ -1,0 +1,4529 @@
+{
+  "schema_version": "1.0.0",
+  "generated_for": "primeros 500 correos",
+  "measured_at": "2026-09-03",
+  "measurement": "apollo_mixed_people_api_search, 0 creditos",
+  "segmento": {
+    "naics": [
+      "322",
+      "325",
+      "326",
+      "327",
+      "331",
+      "336"
+    ],
+    "empleados": [
+      "201,500",
+      "501,1000",
+      "1001,2000",
+      "2001,5000",
+      "5001,10000",
+      "10001,20000"
+    ],
+    "person_locations": [
+      "Guanajuato, Mexico",
+      "Queretaro, Mexico"
+    ],
+    "email_status": "verified"
+  },
+  "universo_medido": {
+    "mantenimiento": 181,
+    "direccion": 75,
+    "compras": 53,
+    "seguridad": 34,
+    "total": 343
+  },
+  "score_v2": {
+    "contacto_verificado": 5,
+    "profepa_vigente": 4,
+    "sector_intensivo": 2,
+    "empleados_201_mas": 2,
+    "parque_industrial": 1,
+    "multi_contacto": 1,
+    "multi_perfil": 1
+  },
+  "plan_envio": {
+    "contactos": 160,
+    "toques_por_contacto": 3,
+    "dias_offset": [
+      0,
+      3,
+      7
+    ],
+    "correos_estimados": 480,
+    "regla_multi_contacto": "maximo 3 por empresa, separados 48 horas"
+  },
+  "authorization_state": "RESEARCH_ONLY_HOLD",
+  "external_effects_executed": false,
+  "excluidas": [
+    {
+      "empresa": "POSCO HOLDINGS",
+      "motivo": "EXCLUIDO_ANEXO_A_GRUPO",
+      "detalle": "El Anexo A nombra a POSCO MPPC. POSCO HOLDINGS es la matriz y aparecio en la busqueda de compras. Sin aclaracion de ENNCO sobre si la exclusion alcanza al grupo, no se contacta. Misma duda abierta que POSCO MVWPC en el sourcing del 26-ago."
+    }
+  ],
+  "empresas_priorizadas": [
+    {
+      "empresa": "KIRCHHOFF Automotive",
+      "score_v2": 15,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "PROFEPA-PNAA vigente, Tier 1 (+4)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "COMPRAS",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a3b18174686938ac216f0b",
+          "nombre_pila": "Frank",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "67e58615824e210001bee5b9",
+          "nombre_pila": "Hector",
+          "cargo": "Director of Procurement",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        },
+        {
+          "apollo_person_id": "5cdaf7dd80f93e0f1c860b88",
+          "nombre_pila": "Yadira",
+          "cargo": "Procurement Supervisor",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Nexteer Automotive",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "5 contactos alcanzables, permite multi-cargo (+1)",
+        "3 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 5,
+      "perfiles": [
+        "COMPRAS",
+        "MANTENIMIENTO",
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5d42516580f93e9502ac389a",
+          "nombre_pila": "Francisco",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "54a48a127468693b8cdb2f4f",
+          "nombre_pila": "Zahory",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "54abe5e4746869332d39e414",
+          "nombre_pila": "Jose",
+          "cargo": "Regional Facilities Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "57e0fc2ca6da987d60b70fa3",
+          "nombre_pila": "Mario",
+          "cargo": "Indirect Purchasing Manager (MX)",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS",
+          "nota": "indirectos: perfil exacto para poliza"
+        },
+        {
+          "apollo_person_id": "60fb9825983d2500015975df",
+          "nombre_pila": "Juan",
+          "cargo": "EHS Manager - Mexico Division",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "Bosal",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)",
+        "3 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "COMPRAS",
+        "DIRECCION",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "69983f6a0fe9830001cdc8f1",
+          "nombre_pila": "Valentin",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "691c597a11998000015bf94f",
+          "nombre_pila": "Luis",
+          "cargo": "Director General",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        },
+        {
+          "apollo_person_id": "67c7219721d4a60001ad7a02",
+          "nombre_pila": "Perla",
+          "cargo": "Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Condumex",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "DIRECCION",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "601a9dc4748327000113eedd",
+          "nombre_pila": "Gustavo",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "69d767334b9f19000187e7b5",
+          "nombre_pila": "Raul",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        },
+        {
+          "apollo_person_id": "5e60e35955a319000101cb6e",
+          "nombre_pila": "Julio",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Grupo DEACERO",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "DIRECCION",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "60c0b53ffc9d330001af603c",
+          "nombre_pila": "Saul",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "64c7b5eda979930001782659",
+          "nombre_pila": "Refugio",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "6816713b7a118a000153acf3",
+          "nombre_pila": "Juan",
+          "cargo": "Director General",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Innophos",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "MANTENIMIENTO",
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "642715f5c24ebc000182d507",
+          "nombre_pila": "David",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "6102e58c358ad60001250136",
+          "nombre_pila": "Alan",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "5da6ee6261c9f300017d0d38",
+          "nombre_pila": "Miguel",
+          "cargo": "EHS Manager",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "Johnson Matthey",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "MANTENIMIENTO",
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "57dfa6c2a6da980b414b346f",
+          "nombre_pila": "Ricardo",
+          "cargo": "Plant Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "5c608355f651251bed2c8b5f",
+          "nombre_pila": "Fernando",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "54a50c6d7468692cf0b2b278",
+          "nombre_pila": "Hugo",
+          "cargo": "Gerente de EHS",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "Martinrea International",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "DIRECCION",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a44eed7468692fa2e05a3d",
+          "nombre_pila": "Marin",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "68cb1cd368ac9b000194a9a2",
+          "nombre_pila": "Edgar",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "66c663ba4c8d5600016cae31",
+          "nombre_pila": "Francisco",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Novem Group",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "COMPRAS",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5e7fae4d4d0ff80001563573",
+          "nombre_pila": "Leonardo",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "67602d114cef820001cc8b02",
+          "nombre_pila": "Nicolas",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "6544a85e7819bf0001067bad",
+          "nombre_pila": "Sergio",
+          "cargo": "Purchasing Manager Americas",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Productos Pennsylvania",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "COMPRAS",
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "6101c59f37b4330001622357",
+          "nombre_pila": "Hayde",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        },
+        {
+          "apollo_person_id": "679d8c9120e9a4000127dfab",
+          "nombre_pila": "Alberto",
+          "cargo": "Director of Operations",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        },
+        {
+          "apollo_person_id": "66d4a972bdd4300001b0a410",
+          "nombre_pila": "Adriana",
+          "cargo": "Procurement & Sourcing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Shape Corp.",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "COMPRAS",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5d65576780f93e74f0c85385",
+          "nombre_pila": "Pedro",
+          "cargo": "Plant Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "54aab56f7468690377b31014",
+          "nombre_pila": "Rogelio",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "640e0b1532681b0001c096b1",
+          "nombre_pila": "Luis",
+          "cargo": "Procurement Director",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "TREMEC",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "COMPRAS",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "672c8d9d7229440001ccaeaf",
+          "nombre_pila": "Ildefonso",
+          "cargo": "Jefe de Mantenimiento Forjas y Tratamiento Termico",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "54a5995f74686938ac142f9d",
+          "nombre_pila": "Miguel",
+          "cargo": "Purchasing Manager GSM",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        },
+        {
+          "apollo_person_id": "5e6da5c812b54200011743b5",
+          "nombre_pila": "Carlos",
+          "cargo": "Purchasing Manager (TREMEC KUO)",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "The Gund Company",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "DIRECCION",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a584b57468692fa2fe0e9a",
+          "nombre_pila": "Victor",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "5e625a87b342a7000136497c",
+          "nombre_pila": "Carlos",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "54a758f374686965d9b04e2c",
+          "nombre_pila": "Rodrigo",
+          "cargo": "Director of Operations",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "ARTLUX",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "DIRECCION",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "57d58149a6da98538e81b155",
+          "nombre_pila": "Jose",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "54a1bd187468695c8295670c",
+          "nombre_pila": "Luis",
+          "cargo": "Director of Operations",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Avery Dennison",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "COMPRAS",
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "68df9f5f632b4900015a3c6c",
+          "nombre_pila": "Cesar",
+          "cargo": "EHS & ELS Manager Latam",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        },
+        {
+          "apollo_person_id": "649d1625ceaa9b000158f6c0",
+          "nombre_pila": "Cesar",
+          "cargo": "Procurement Manager Latam",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Carcoustics",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "COMPRAS",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5fd1a294d9b8670001dba9bc",
+          "nombre_pila": "Alejandro",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "57d83f8ea6da980a46bbcc33",
+          "nombre_pila": "Juan",
+          "cargo": "Program Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS",
+          "nota": "capex de programa, pertinente"
+        }
+      ]
+    },
+    {
+      "empresa": "DEDIENNE AEROSPACE",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "COMPRAS",
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "674a91378a8bc30001c1a80e",
+          "nombre_pila": "Edgar",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        },
+        {
+          "apollo_person_id": "5e9c5daeaa2fb2000112804d",
+          "nombre_pila": "Leticia",
+          "cargo": "Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Elay Group",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "COMPRAS",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a4559374686938ac70ad3f",
+          "nombre_pila": "Victor",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "54a7aad774686968294f394a",
+          "nombre_pila": "Ion",
+          "cargo": "Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "FANOSA",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "COMPRAS",
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "645b775380756c00013ccc8a",
+          "nombre_pila": "Flor",
+          "cargo": "Seguridad e Higiene",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        },
+        {
+          "apollo_person_id": "67a7a083ee763c0001cd3abe",
+          "nombre_pila": "Lizbeth",
+          "cargo": "Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Gerresheimer",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "COMPRAS",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "67066259c3fdf600015b141a",
+          "nombre_pila": "Maria",
+          "cargo": "Supervisor de Mantenimiento",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "57d396a2f651252c592d67fb",
+          "nombre_pila": "Rogelio",
+          "cargo": "Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Guala Closures",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "DIRECCION",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a4edeb74686932090d6c6e",
+          "nombre_pila": "Jose",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "5f99ab3c1082100001fe3e0a",
+          "nombre_pila": "Hector",
+          "cargo": "Director General Mexico",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Hatch Stamping Company",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "COMPRAS",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "57ddd347a6da987afd942ba2",
+          "nombre_pila": "Enrique",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "66c3a6f08c4cd5000132209f",
+          "nombre_pila": "Dulce",
+          "cargo": "Purchasing Supervisor",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Hi-Lex Mexicana",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "COMPRAS",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "63dd04b3ab6084000136434d",
+          "nombre_pila": "Luis",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "57d6f510a6da986b4d8c8be6",
+          "nombre_pila": "Arnulfo",
+          "cargo": "Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "IMS Gear",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "DIRECCION",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "683b9bbfcbedf20001c5e6de",
+          "nombre_pila": "Juan",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "54a5d6537468692fa2a3f3ac",
+          "nombre_pila": "Agustin",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Le Belier Groupe",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "COMPRAS",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "613a147b2edc6c0001ae7ab6",
+          "nombre_pila": "Omar",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "67d9d69b17166a0001e10019",
+          "nombre_pila": "Liliana",
+          "cargo": "Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Printpack",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "DIRECCION",
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a8ca367468693399f51006",
+          "nombre_pila": "Andre",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        },
+        {
+          "apollo_person_id": "63a2f4a9b1d3e70001f64448",
+          "nombre_pila": "Andres",
+          "cargo": "Coordinador de Seguridad Patrimonial",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD",
+          "nota": "patrimonial, no higiene industrial: verificar antes de usar variante seguridad"
+        }
+      ]
+    },
+    {
+      "empresa": "Siegfried Rhein Mexico",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "COMPRAS",
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "57dc1aaba6da98687b47b094",
+          "nombre_pila": "Marlene",
+          "cargo": "Jefe de Seguridad e Higiene",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        },
+        {
+          "apollo_person_id": "63a9813cc3c804000197d0cb",
+          "nombre_pila": "Maria",
+          "cargo": "Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Symrise AG",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "DIRECCION",
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a61c29746869344292e2c2",
+          "nombre_pila": "Juan",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        },
+        {
+          "apollo_person_id": "669febccbf157b00011e4ce5",
+          "nombre_pila": "Jose",
+          "cargo": "Latam Safety Manager",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "Ulbrich Stainless Steels",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "DIRECCION",
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "614ea7c47ea6fd0001f0e795",
+          "nombre_pila": "Daniel",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "54aa9e4b7468690b75b76c0e",
+          "nombre_pila": "Cesar",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Volkswagen Truck and Bus Mexico",
+      "score_v2": 11,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)",
+        "2 perfiles distintos (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "COMPRAS",
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "63bdc2b1f137320001000d6b",
+          "nombre_pila": "Isabel",
+          "cargo": "Coordinador de Seguridad e Higiene",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        },
+        {
+          "apollo_person_id": "65b7c2dfc8c22c0001079bab",
+          "nombre_pila": "Monserrat",
+          "cargo": "Gerente de Compras",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Lamosa Porcelanite",
+      "score_v2": 10,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "3 contactos alcanzables, permite multi-cargo (+1)"
+      ],
+      "contactos_alcanzables": 3,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5bc827cda3ae613052d95f0b",
+          "nombre_pila": "Ivan",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "54a4864c7468692cf0b5404e",
+          "nombre_pila": "Ildefonso",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "5570abde73696419c65d3f00",
+          "nombre_pila": "Vicente",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Ampacet Corporation",
+      "score_v2": 10,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "60f70490d08c4a0001fc5d36",
+          "nombre_pila": "Sergio",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "57e08de4a6da981c254078c8",
+          "nombre_pila": "Gustavo",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "GRAMMER Americas",
+      "score_v2": 10,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "60bf84b0b23a6f00016b7ec1",
+          "nombre_pila": "Rafael",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "55710c357369641b6ea80100",
+          "nombre_pila": "Adrian",
+          "cargo": "Gte. de Mantenimiento",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "KI Industries",
+      "score_v2": 10,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5f0d293dc1c64a00010af5f8",
+          "nombre_pila": "Alex",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "60e7f3188767bc00014d53ae",
+          "nombre_pila": "Fabiola",
+          "cargo": "Gerente de Planta",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Mubea",
+      "score_v2": 10,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a2de8b74686930c22b5743",
+          "nombre_pila": "Oscar",
+          "cargo": "Gerente de Mantenimiento de Planta",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "54a4b31c746869344226725c",
+          "nombre_pila": "Ruben",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "RONAL Wheels",
+      "score_v2": 10,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5e7c0bf46187330001276153",
+          "nombre_pila": "Fernando",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "5d4cec6da3ae61415b4dde11",
+          "nombre_pila": "Roberto",
+          "cargo": "Jefe de Mantenimiento Tratamiento Termico",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Topre Autoparts Mexico",
+      "score_v2": 10,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "6357c8cb8351120001896295",
+          "nombre_pila": "Luis",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "67a9986bb4b8270001ad5d03",
+          "nombre_pila": "Jesus",
+          "cargo": "Gerente de Planta",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Vibrantz Technologies",
+      "score_v2": 10,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)",
+        "2 contactos alcanzables, permite multi-cargo (+1)"
+      ],
+      "contactos_alcanzables": 2,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "63a992c32e55240001b505a5",
+          "nombre_pila": "Alan",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        },
+        {
+          "apollo_person_id": "64244eddf437b80001f0499f",
+          "nombre_pila": "Jaqueline",
+          "cargo": "Pigments Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "AAM - American Axle",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "6198f9baecceae0001fdc86f",
+          "nombre_pila": "Alejandro",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "ALPLA Mexico",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "6628c0e44e44e600067c62dc",
+          "nombre_pila": "Sergio",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Aernnova Aerospace",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "COMPRAS"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5ad0ad8fa6da98847fc72659",
+          "nombre_pila": "Luis",
+          "cargo": "Procurement & Business Development Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Afton Chemical",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5e6b72d316d9d000014bf465",
+          "nombre_pila": "Jose",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Airbus Helicopters",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "COMPRAS"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a4fe967468693b8cd22174",
+          "nombre_pila": "Carlos",
+          "cargo": "Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Auria",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "610ae2f4591a6c00017fe199",
+          "nombre_pila": "Wenceslao",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "BOS Automotive Products",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5d58ad01f651257391bb346d",
+          "nombre_pila": "Rafael",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Baomarc Automotive Solutions",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5e8c07543b5eb10001aaf879",
+          "nombre_pila": "Edwin",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "BizLink Group",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "57d42996a6da98537ecd5590",
+          "nombre_pila": "Jorge",
+          "cargo": "Director de Operaciones de Planta",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "CCL Secure",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "55706cae7369644ae70c3300",
+          "nombre_pila": "Oscar",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "COSENTINO",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "57e06dffa6da981c15d08038",
+          "nombre_pila": "Isabel",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Corbion",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5d580dfea3ae61c4969cde0c",
+          "nombre_pila": "Claudia",
+          "cargo": "EHS Manager",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "Corporacion Moctezuma",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "57d41c0fa6da9853a65bcc42",
+          "nombre_pila": "Jose",
+          "cargo": "Supervisor de Mantenimiento",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "DELFINGEN",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a3e9977468692cf01a051d",
+          "nombre_pila": "Hugues",
+          "cargo": "Celaya Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "DWK Life Sciences",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54c222907468691639c5ba7c",
+          "nombre_pila": "Sergio",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Eurotranciatura Mexico",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5d61d167f651257dbfc888e4",
+          "nombre_pila": "Carlos",
+          "cargo": "Gerente de Mantenimiento Planta",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Exo-s",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "57dfded1a6da980ad27c4eee",
+          "nombre_pila": "Juan",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "FANDELI",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "659f2abd949ae3000117759f",
+          "nombre_pila": "Eden",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Freudenberg Sealing Technologies",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "63eac25739989600011280dc",
+          "nombre_pila": "Luis",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "GKN plc",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "COMPRAS"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a51de27468692abf994b7e",
+          "nombre_pila": "Beatriz",
+          "cargo": "Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "GOTEC Group",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "6258dabd4d75230001779d02",
+          "nombre_pila": "Martin",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Gentherm",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "61b44d8f2447960001605f70",
+          "nombre_pila": "Jose",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Givaudan",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5f01af5f71ff5c0001285493",
+          "nombre_pila": "Eden",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Grupo AlEn",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "66d92f7a8f3a90000199354c",
+          "nombre_pila": "Vicente",
+          "cargo": "Jefe de Mantenimiento Mexico",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Grupo Industrial Saltillo",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "684765c714f55d00013c9739",
+          "nombre_pila": "Juan",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Grupo Vasconia",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a4ac87746869320999eb59",
+          "nombre_pila": "Carlos",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Guardian Industries",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "671bcaddc4ad690001773971",
+          "nombre_pila": "Elisa",
+          "cargo": "EHS Manager",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "Hanon Systems",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5dc900c30ff0100001acd20f",
+          "nombre_pila": "Carlos",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Hope Global",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "COMPRAS"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5d4eb88c80f93e6beac7dad3",
+          "nombre_pila": "Ramon",
+          "cargo": "Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "INX International Ink",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "6426fb2c764a7f0001c5e65e",
+          "nombre_pila": "Juan",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "ITP Aero",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "6833e37290531400014cc030",
+          "nombre_pila": "Manuel",
+          "cargo": "Coordinador de Seguridad e Higiene",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "Industrial Corona de Mexico",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a4782d7468693209bbef49",
+          "nombre_pila": "Victor",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Industrias Pegaduro",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "6424296c6356250001c113a3",
+          "nombre_pila": "Antonio",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Interceramic",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "65c232d93a6b300001432687",
+          "nombre_pila": "Fermin",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "KARTESIS INDUSTRIES",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "62876bd89a7ff200013e74b4",
+          "nombre_pila": "Raymundo",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Kautex Textron",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a2cce97468693825b5603e",
+          "nombre_pila": "Jerid",
+          "cargo": "Director of Operations",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "LINDAL Group",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "COMPRAS"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "57d9ed2ba6da987634157af3",
+          "nombre_pila": "Saul",
+          "cargo": "Group Procurement Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "MAHLE",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "66f8231da0ad4800010a7f58",
+          "nombre_pila": "Jorge",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Marquardt Group",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5e8145482d4b3000017110c6",
+          "nombre_pila": "Martin",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Mativ",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5c427f9da3ae616f73fa6b45",
+          "nombre_pila": "Fabian",
+          "cargo": "EHS Manager",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "Metalor Technologies",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "65bf5b1307203e00018f2a86",
+          "nombre_pila": "Josue",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Metalsa",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "659484c514a58300016babe4",
+          "nombre_pila": "Yoselin",
+          "cargo": "EHS Manager",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "Multimatic",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "67382075132e0b0001e1b51c",
+          "nombre_pila": "Gerardo",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Nolato Vermont",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "57e185faa6da987dd4283eda",
+          "nombre_pila": "Leonardo",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Novelis",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "COMPRAS"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "67a3a2e591686e0001f87ac5",
+          "nombre_pila": "Gustavo",
+          "cargo": "Purchasing Manager Mexico",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "O-I",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "61690d5304eed80001f41868",
+          "nombre_pila": "Diana",
+          "cargo": "Manager EHS",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "OECHSLER",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a6152074686936768366c0",
+          "nombre_pila": "Daniel",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Omya",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "COMPRAS"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "63abee72b12e640001aa9424",
+          "nombre_pila": "Juan",
+          "cargo": "Purchasing Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "PAC Worldwide",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "612a0b63f4a24d000196e616",
+          "nombre_pila": "Daniel",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Parker Lord",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5e87fd13fe3d5e0001004737",
+          "nombre_pila": "Armando",
+          "cargo": "General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Pirelli Mexico",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "55ca2fbef3e5bb47cf001f70",
+          "nombre_pila": "Oscar",
+          "cargo": "Country Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "REHAU Window Solutions",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "642bcf758d2e520001f7735d",
+          "nombre_pila": "Alfredo",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Rassini",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "68650a9390be97000160021a",
+          "nombre_pila": "Jair",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Rehrig Pacific Company",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "64cbc17b995600000130d6c9",
+          "nombre_pila": "Arturo",
+          "cargo": "Coordinador de Seguridad e Higiene",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "SaarGummi Group",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "674b80859a6cb80001eff61b",
+          "nombre_pila": "Joel",
+          "cargo": "Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Scania Mexico",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "63232924b8ce80000179b02e",
+          "nombre_pila": "Rene",
+          "cargo": "Jefe de Seguridad Operacional",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "Sensient Technologies",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "6817288dfca6fe00012c2c5e",
+          "nombre_pila": "Francisco",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Serviacero Comercial",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "608a6397f4bb4e0001f084d6",
+          "nombre_pila": "Joel",
+          "cargo": "COO | Director de Operaciones",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Shiloh Industries",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5d6924bda3ae61cbadd05411",
+          "nombre_pila": "Carlos",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Shurtape Technologies",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "624e27f2cf61550001e77d4d",
+          "nombre_pila": "Alberto",
+          "cargo": "Director General",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Suzuki Garphyttan",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "6359390ac534720001ab1258",
+          "nombre_pila": "Enrique",
+          "cargo": "HR & EHS Manager",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "TI Automotive",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "54a228b87468692e71152e12",
+          "nombre_pila": "Rene",
+          "cargo": "Site General Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Tachi-S Mexico",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "635947d5e7bb660001e74401",
+          "nombre_pila": "Daniel",
+          "cargo": "Plant Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Trelleborg Group",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5e720e4ba980e900011ddaf8",
+          "nombre_pila": "Erick",
+          "cargo": "Gerente de Mantenimiento y Procesos",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "US Farathane",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "61a23e05cbe356000187f5db",
+          "nombre_pila": "Jose",
+          "cargo": "HR Manager & EHS",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    },
+    {
+      "empresa": "WIPRO LAUAK",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "612bacd25178700001e2584f",
+          "nombre_pila": "Omar",
+          "cargo": "Maintenance Supervisor",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "Walter Pack",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "DIRECCION"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "67b588ec92ac100001d990d7",
+          "nombre_pila": "Miguel",
+          "cargo": "Country Manager",
+          "perfil": "DIRECCION",
+          "variante_copy": "DIRECCION"
+        }
+      ]
+    },
+    {
+      "empresa": "Wella Company",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "COMPRAS"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5ac98880a6da9840f6313942",
+          "nombre_pila": "Luis",
+          "cargo": "Procurement Manager",
+          "perfil": "COMPRAS",
+          "variante_copy": "COMPRAS"
+        }
+      ]
+    },
+    {
+      "empresa": "Winpak",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "MANTENIMIENTO"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "5d473951a3ae61a69a41dd75",
+          "nombre_pila": "Fermin",
+          "cargo": "Plant Maintenance Manager",
+          "perfil": "MANTENIMIENTO",
+          "variante_copy": "MANTENIMIENTO"
+        }
+      ]
+    },
+    {
+      "empresa": "ZKW",
+      "score_v2": 9,
+      "senales": [
+        "contacto decisor con correo verificado (+5)",
+        "sector intensivo en energia, NAICS 322/325/326/327/331/336 (+2)",
+        "201+ empleados (+2)"
+      ],
+      "contactos_alcanzables": 1,
+      "perfiles": [
+        "SEGURIDAD"
+      ],
+      "contactos": [
+        {
+          "apollo_person_id": "64eb70767000510001a17a28",
+          "nombre_pila": "Hector",
+          "cargo": "Environmental, Health and Safety Manager",
+          "perfil": "SEGURIDAD",
+          "variante_copy": "SEGURIDAD"
+        }
+      ]
+    }
+  ],
+  "seleccion_por_ola": [
+    {
+      "apollo_person_id": "54a3b18174686938ac216f0b",
+      "nombre_pila": "Frank",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "KIRCHHOFF Automotive",
+      "score_v2": 15,
+      "ola": "1"
+    },
+    {
+      "apollo_person_id": "5d42516580f93e9502ac389a",
+      "nombre_pila": "Francisco",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Nexteer Automotive",
+      "score_v2": 11,
+      "ola": "1"
+    },
+    {
+      "apollo_person_id": "69983f6a0fe9830001cdc8f1",
+      "nombre_pila": "Valentin",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Bosal",
+      "score_v2": 11,
+      "ola": "1"
+    },
+    {
+      "apollo_person_id": "601a9dc4748327000113eedd",
+      "nombre_pila": "Gustavo",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Condumex",
+      "score_v2": 11,
+      "ola": "1"
+    },
+    {
+      "apollo_person_id": "60c0b53ffc9d330001af603c",
+      "nombre_pila": "Saul",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Grupo DEACERO",
+      "score_v2": 11,
+      "ola": "1"
+    },
+    {
+      "apollo_person_id": "642715f5c24ebc000182d507",
+      "nombre_pila": "David",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Innophos",
+      "score_v2": 11,
+      "ola": "1"
+    },
+    {
+      "apollo_person_id": "57dfa6c2a6da980b414b346f",
+      "nombre_pila": "Ricardo",
+      "cargo": "Plant Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Johnson Matthey",
+      "score_v2": 11,
+      "ola": "1"
+    },
+    {
+      "apollo_person_id": "54a44eed7468692fa2e05a3d",
+      "nombre_pila": "Marin",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Martinrea International",
+      "score_v2": 11,
+      "ola": "1"
+    },
+    {
+      "apollo_person_id": "5e7fae4d4d0ff80001563573",
+      "nombre_pila": "Leonardo",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Novem Group",
+      "score_v2": 11,
+      "ola": "1"
+    },
+    {
+      "apollo_person_id": "5d65576780f93e74f0c85385",
+      "nombre_pila": "Pedro",
+      "cargo": "Plant Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Shape Corp.",
+      "score_v2": 11,
+      "ola": "1"
+    },
+    {
+      "apollo_person_id": "67e58615824e210001bee5b9",
+      "nombre_pila": "Hector",
+      "cargo": "Director of Procurement",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "KIRCHHOFF Automotive",
+      "score_v2": 15,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "5cdaf7dd80f93e0f1c860b88",
+      "nombre_pila": "Yadira",
+      "cargo": "Procurement Supervisor",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "KIRCHHOFF Automotive",
+      "score_v2": 15,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "54a48a127468693b8cdb2f4f",
+      "nombre_pila": "Zahory",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Nexteer Automotive",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "54abe5e4746869332d39e414",
+      "nombre_pila": "Jose",
+      "cargo": "Regional Facilities Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Nexteer Automotive",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "691c597a11998000015bf94f",
+      "nombre_pila": "Luis",
+      "cargo": "Director General",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Bosal",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "67c7219721d4a60001ad7a02",
+      "nombre_pila": "Perla",
+      "cargo": "Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Bosal",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "69d767334b9f19000187e7b5",
+      "nombre_pila": "Raul",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Condumex",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "5e60e35955a319000101cb6e",
+      "nombre_pila": "Julio",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Condumex",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "64c7b5eda979930001782659",
+      "nombre_pila": "Refugio",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Grupo DEACERO",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "6816713b7a118a000153acf3",
+      "nombre_pila": "Juan",
+      "cargo": "Director General",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Grupo DEACERO",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "6102e58c358ad60001250136",
+      "nombre_pila": "Alan",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Innophos",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "5da6ee6261c9f300017d0d38",
+      "nombre_pila": "Miguel",
+      "cargo": "EHS Manager",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Innophos",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "5c608355f651251bed2c8b5f",
+      "nombre_pila": "Fernando",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Johnson Matthey",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "54a50c6d7468692cf0b2b278",
+      "nombre_pila": "Hugo",
+      "cargo": "Gerente de EHS",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Johnson Matthey",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "68cb1cd368ac9b000194a9a2",
+      "nombre_pila": "Edgar",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Martinrea International",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "66c663ba4c8d5600016cae31",
+      "nombre_pila": "Francisco",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Martinrea International",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "67602d114cef820001cc8b02",
+      "nombre_pila": "Nicolas",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Novem Group",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "6544a85e7819bf0001067bad",
+      "nombre_pila": "Sergio",
+      "cargo": "Purchasing Manager Americas",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Novem Group",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "6101c59f37b4330001622357",
+      "nombre_pila": "Hayde",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Productos Pennsylvania",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "679d8c9120e9a4000127dfab",
+      "nombre_pila": "Alberto",
+      "cargo": "Director of Operations",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Productos Pennsylvania",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "66d4a972bdd4300001b0a410",
+      "nombre_pila": "Adriana",
+      "cargo": "Procurement & Sourcing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Productos Pennsylvania",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "54aab56f7468690377b31014",
+      "nombre_pila": "Rogelio",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Shape Corp.",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "640e0b1532681b0001c096b1",
+      "nombre_pila": "Luis",
+      "cargo": "Procurement Director",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Shape Corp.",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "672c8d9d7229440001ccaeaf",
+      "nombre_pila": "Ildefonso",
+      "cargo": "Jefe de Mantenimiento Forjas y Tratamiento Termico",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "TREMEC",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "54a5995f74686938ac142f9d",
+      "nombre_pila": "Miguel",
+      "cargo": "Purchasing Manager GSM",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "TREMEC",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "5e6da5c812b54200011743b5",
+      "nombre_pila": "Carlos",
+      "cargo": "Purchasing Manager (TREMEC KUO)",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "TREMEC",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "54a584b57468692fa2fe0e9a",
+      "nombre_pila": "Victor",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "The Gund Company",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "5e625a87b342a7000136497c",
+      "nombre_pila": "Carlos",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "The Gund Company",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "54a758f374686965d9b04e2c",
+      "nombre_pila": "Rodrigo",
+      "cargo": "Director of Operations",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "The Gund Company",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "57d58149a6da98538e81b155",
+      "nombre_pila": "Jose",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "ARTLUX",
+      "score_v2": 11,
+      "ola": "2"
+    },
+    {
+      "apollo_person_id": "54a1bd187468695c8295670c",
+      "nombre_pila": "Luis",
+      "cargo": "Director of Operations",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "ARTLUX",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "68df9f5f632b4900015a3c6c",
+      "nombre_pila": "Cesar",
+      "cargo": "EHS & ELS Manager Latam",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Avery Dennison",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "649d1625ceaa9b000158f6c0",
+      "nombre_pila": "Cesar",
+      "cargo": "Procurement Manager Latam",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Avery Dennison",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "5fd1a294d9b8670001dba9bc",
+      "nombre_pila": "Alejandro",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Carcoustics",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "57d83f8ea6da980a46bbcc33",
+      "nombre_pila": "Juan",
+      "cargo": "Program Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "nota": "capex de programa, pertinente",
+      "empresa": "Carcoustics",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "674a91378a8bc30001c1a80e",
+      "nombre_pila": "Edgar",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "DEDIENNE AEROSPACE",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "5e9c5daeaa2fb2000112804d",
+      "nombre_pila": "Leticia",
+      "cargo": "Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "DEDIENNE AEROSPACE",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "54a4559374686938ac70ad3f",
+      "nombre_pila": "Victor",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Elay Group",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "54a7aad774686968294f394a",
+      "nombre_pila": "Ion",
+      "cargo": "Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Elay Group",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "645b775380756c00013ccc8a",
+      "nombre_pila": "Flor",
+      "cargo": "Seguridad e Higiene",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "FANOSA",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "67a7a083ee763c0001cd3abe",
+      "nombre_pila": "Lizbeth",
+      "cargo": "Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "FANOSA",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "67066259c3fdf600015b141a",
+      "nombre_pila": "Maria",
+      "cargo": "Supervisor de Mantenimiento",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Gerresheimer",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "57d396a2f651252c592d67fb",
+      "nombre_pila": "Rogelio",
+      "cargo": "Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Gerresheimer",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "54a4edeb74686932090d6c6e",
+      "nombre_pila": "Jose",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Guala Closures",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "5f99ab3c1082100001fe3e0a",
+      "nombre_pila": "Hector",
+      "cargo": "Director General Mexico",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Guala Closures",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "57ddd347a6da987afd942ba2",
+      "nombre_pila": "Enrique",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Hatch Stamping Company",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "66c3a6f08c4cd5000132209f",
+      "nombre_pila": "Dulce",
+      "cargo": "Purchasing Supervisor",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Hatch Stamping Company",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "63dd04b3ab6084000136434d",
+      "nombre_pila": "Luis",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Hi-Lex Mexicana",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "57d6f510a6da986b4d8c8be6",
+      "nombre_pila": "Arnulfo",
+      "cargo": "Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Hi-Lex Mexicana",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "683b9bbfcbedf20001c5e6de",
+      "nombre_pila": "Juan",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "IMS Gear",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "54a5d6537468692fa2a3f3ac",
+      "nombre_pila": "Agustin",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "IMS Gear",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "613a147b2edc6c0001ae7ab6",
+      "nombre_pila": "Omar",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Le Belier Groupe",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "67d9d69b17166a0001e10019",
+      "nombre_pila": "Liliana",
+      "cargo": "Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Le Belier Groupe",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "54a8ca367468693399f51006",
+      "nombre_pila": "Andre",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Printpack",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "63a2f4a9b1d3e70001f64448",
+      "nombre_pila": "Andres",
+      "cargo": "Coordinador de Seguridad Patrimonial",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "nota": "patrimonial, no higiene industrial: verificar antes de usar variante seguridad",
+      "empresa": "Printpack",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "57dc1aaba6da98687b47b094",
+      "nombre_pila": "Marlene",
+      "cargo": "Jefe de Seguridad e Higiene",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Siegfried Rhein Mexico",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "63a9813cc3c804000197d0cb",
+      "nombre_pila": "Maria",
+      "cargo": "Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Siegfried Rhein Mexico",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "54a61c29746869344292e2c2",
+      "nombre_pila": "Juan",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Symrise AG",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "669febccbf157b00011e4ce5",
+      "nombre_pila": "Jose",
+      "cargo": "Latam Safety Manager",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Symrise AG",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "614ea7c47ea6fd0001f0e795",
+      "nombre_pila": "Daniel",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Ulbrich Stainless Steels",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "54aa9e4b7468690b75b76c0e",
+      "nombre_pila": "Cesar",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Ulbrich Stainless Steels",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "63bdc2b1f137320001000d6b",
+      "nombre_pila": "Isabel",
+      "cargo": "Coordinador de Seguridad e Higiene",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Volkswagen Truck and Bus Mexico",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "65b7c2dfc8c22c0001079bab",
+      "nombre_pila": "Monserrat",
+      "cargo": "Gerente de Compras",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Volkswagen Truck and Bus Mexico",
+      "score_v2": 11,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "5bc827cda3ae613052d95f0b",
+      "nombre_pila": "Ivan",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Lamosa Porcelanite",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "54a4864c7468692cf0b5404e",
+      "nombre_pila": "Ildefonso",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Lamosa Porcelanite",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "5570abde73696419c65d3f00",
+      "nombre_pila": "Vicente",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Lamosa Porcelanite",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "60f70490d08c4a0001fc5d36",
+      "nombre_pila": "Sergio",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Ampacet Corporation",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "57e08de4a6da981c254078c8",
+      "nombre_pila": "Gustavo",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Ampacet Corporation",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "60bf84b0b23a6f00016b7ec1",
+      "nombre_pila": "Rafael",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "GRAMMER Americas",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "55710c357369641b6ea80100",
+      "nombre_pila": "Adrian",
+      "cargo": "Gte. de Mantenimiento",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "GRAMMER Americas",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "5f0d293dc1c64a00010af5f8",
+      "nombre_pila": "Alex",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "KI Industries",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "60e7f3188767bc00014d53ae",
+      "nombre_pila": "Fabiola",
+      "cargo": "Gerente de Planta",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "KI Industries",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "54a2de8b74686930c22b5743",
+      "nombre_pila": "Oscar",
+      "cargo": "Gerente de Mantenimiento de Planta",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Mubea",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "54a4b31c746869344226725c",
+      "nombre_pila": "Ruben",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Mubea",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "5e7c0bf46187330001276153",
+      "nombre_pila": "Fernando",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "RONAL Wheels",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "5d4cec6da3ae61415b4dde11",
+      "nombre_pila": "Roberto",
+      "cargo": "Jefe de Mantenimiento Tratamiento Termico",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "RONAL Wheels",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "6357c8cb8351120001896295",
+      "nombre_pila": "Luis",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Topre Autoparts Mexico",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "67a9986bb4b8270001ad5d03",
+      "nombre_pila": "Jesus",
+      "cargo": "Gerente de Planta",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Topre Autoparts Mexico",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "63a992c32e55240001b505a5",
+      "nombre_pila": "Alan",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Vibrantz Technologies",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "64244eddf437b80001f0499f",
+      "nombre_pila": "Jaqueline",
+      "cargo": "Pigments Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Vibrantz Technologies",
+      "score_v2": 10,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "6198f9baecceae0001fdc86f",
+      "nombre_pila": "Alejandro",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "AAM - American Axle",
+      "score_v2": 9,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "6628c0e44e44e600067c62dc",
+      "nombre_pila": "Sergio",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "ALPLA Mexico",
+      "score_v2": 9,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "5ad0ad8fa6da98847fc72659",
+      "nombre_pila": "Luis",
+      "cargo": "Procurement & Business Development Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Aernnova Aerospace",
+      "score_v2": 9,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "5e6b72d316d9d000014bf465",
+      "nombre_pila": "Jose",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Afton Chemical",
+      "score_v2": 9,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "54a4fe967468693b8cd22174",
+      "nombre_pila": "Carlos",
+      "cargo": "Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Airbus Helicopters",
+      "score_v2": 9,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "610ae2f4591a6c00017fe199",
+      "nombre_pila": "Wenceslao",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Auria",
+      "score_v2": 9,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "5d58ad01f651257391bb346d",
+      "nombre_pila": "Rafael",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "BOS Automotive Products",
+      "score_v2": 9,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "5e8c07543b5eb10001aaf879",
+      "nombre_pila": "Edwin",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Baomarc Automotive Solutions",
+      "score_v2": 9,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "57d42996a6da98537ecd5590",
+      "nombre_pila": "Jorge",
+      "cargo": "Director de Operaciones de Planta",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "BizLink Group",
+      "score_v2": 9,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "55706cae7369644ae70c3300",
+      "nombre_pila": "Oscar",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "CCL Secure",
+      "score_v2": 9,
+      "ola": "3"
+    },
+    {
+      "apollo_person_id": "57e06dffa6da981c15d08038",
+      "nombre_pila": "Isabel",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "COSENTINO",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "5d580dfea3ae61c4969cde0c",
+      "nombre_pila": "Claudia",
+      "cargo": "EHS Manager",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Corbion",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "57d41c0fa6da9853a65bcc42",
+      "nombre_pila": "Jose",
+      "cargo": "Supervisor de Mantenimiento",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Corporacion Moctezuma",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "54a3e9977468692cf01a051d",
+      "nombre_pila": "Hugues",
+      "cargo": "Celaya Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "DELFINGEN",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "54c222907468691639c5ba7c",
+      "nombre_pila": "Sergio",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "DWK Life Sciences",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "5d61d167f651257dbfc888e4",
+      "nombre_pila": "Carlos",
+      "cargo": "Gerente de Mantenimiento Planta",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Eurotranciatura Mexico",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "57dfded1a6da980ad27c4eee",
+      "nombre_pila": "Juan",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Exo-s",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "659f2abd949ae3000117759f",
+      "nombre_pila": "Eden",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "FANDELI",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "63eac25739989600011280dc",
+      "nombre_pila": "Luis",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Freudenberg Sealing Technologies",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "54a51de27468692abf994b7e",
+      "nombre_pila": "Beatriz",
+      "cargo": "Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "GKN plc",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "6258dabd4d75230001779d02",
+      "nombre_pila": "Martin",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "GOTEC Group",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "61b44d8f2447960001605f70",
+      "nombre_pila": "Jose",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Gentherm",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "5f01af5f71ff5c0001285493",
+      "nombre_pila": "Eden",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Givaudan",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "66d92f7a8f3a90000199354c",
+      "nombre_pila": "Vicente",
+      "cargo": "Jefe de Mantenimiento Mexico",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Grupo AlEn",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "684765c714f55d00013c9739",
+      "nombre_pila": "Juan",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Grupo Industrial Saltillo",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "54a4ac87746869320999eb59",
+      "nombre_pila": "Carlos",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Grupo Vasconia",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "671bcaddc4ad690001773971",
+      "nombre_pila": "Elisa",
+      "cargo": "EHS Manager",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Guardian Industries",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "5dc900c30ff0100001acd20f",
+      "nombre_pila": "Carlos",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Hanon Systems",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "5d4eb88c80f93e6beac7dad3",
+      "nombre_pila": "Ramon",
+      "cargo": "Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Hope Global",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "6426fb2c764a7f0001c5e65e",
+      "nombre_pila": "Juan",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "INX International Ink",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "6833e37290531400014cc030",
+      "nombre_pila": "Manuel",
+      "cargo": "Coordinador de Seguridad e Higiene",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "ITP Aero",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "54a4782d7468693209bbef49",
+      "nombre_pila": "Victor",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Industrial Corona de Mexico",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "6424296c6356250001c113a3",
+      "nombre_pila": "Antonio",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Industrias Pegaduro",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "65c232d93a6b300001432687",
+      "nombre_pila": "Fermin",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Interceramic",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "62876bd89a7ff200013e74b4",
+      "nombre_pila": "Raymundo",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "KARTESIS INDUSTRIES",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "54a2cce97468693825b5603e",
+      "nombre_pila": "Jerid",
+      "cargo": "Director of Operations",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Kautex Textron",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "57d9ed2ba6da987634157af3",
+      "nombre_pila": "Saul",
+      "cargo": "Group Procurement Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "LINDAL Group",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "66f8231da0ad4800010a7f58",
+      "nombre_pila": "Jorge",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "MAHLE",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "5e8145482d4b3000017110c6",
+      "nombre_pila": "Martin",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Marquardt Group",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "5c427f9da3ae616f73fa6b45",
+      "nombre_pila": "Fabian",
+      "cargo": "EHS Manager",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Mativ",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "65bf5b1307203e00018f2a86",
+      "nombre_pila": "Josue",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Metalor Technologies",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "659484c514a58300016babe4",
+      "nombre_pila": "Yoselin",
+      "cargo": "EHS Manager",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Metalsa",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "67382075132e0b0001e1b51c",
+      "nombre_pila": "Gerardo",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Multimatic",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "57e185faa6da987dd4283eda",
+      "nombre_pila": "Leonardo",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Nolato Vermont",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "67a3a2e591686e0001f87ac5",
+      "nombre_pila": "Gustavo",
+      "cargo": "Purchasing Manager Mexico",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Novelis",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "61690d5304eed80001f41868",
+      "nombre_pila": "Diana",
+      "cargo": "Manager EHS",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "O-I",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "54a6152074686936768366c0",
+      "nombre_pila": "Daniel",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "OECHSLER",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "63abee72b12e640001aa9424",
+      "nombre_pila": "Juan",
+      "cargo": "Purchasing Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Omya",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "612a0b63f4a24d000196e616",
+      "nombre_pila": "Daniel",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "PAC Worldwide",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "5e87fd13fe3d5e0001004737",
+      "nombre_pila": "Armando",
+      "cargo": "General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Parker Lord",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "55ca2fbef3e5bb47cf001f70",
+      "nombre_pila": "Oscar",
+      "cargo": "Country Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Pirelli Mexico",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "642bcf758d2e520001f7735d",
+      "nombre_pila": "Alfredo",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "REHAU Window Solutions",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "68650a9390be97000160021a",
+      "nombre_pila": "Jair",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Rassini",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "64cbc17b995600000130d6c9",
+      "nombre_pila": "Arturo",
+      "cargo": "Coordinador de Seguridad e Higiene",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Rehrig Pacific Company",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "674b80859a6cb80001eff61b",
+      "nombre_pila": "Joel",
+      "cargo": "Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "SaarGummi Group",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "63232924b8ce80000179b02e",
+      "nombre_pila": "Rene",
+      "cargo": "Jefe de Seguridad Operacional",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Scania Mexico",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "6817288dfca6fe00012c2c5e",
+      "nombre_pila": "Francisco",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Sensient Technologies",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "608a6397f4bb4e0001f084d6",
+      "nombre_pila": "Joel",
+      "cargo": "COO | Director de Operaciones",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Serviacero Comercial",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "5d6924bda3ae61cbadd05411",
+      "nombre_pila": "Carlos",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Shiloh Industries",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "624e27f2cf61550001e77d4d",
+      "nombre_pila": "Alberto",
+      "cargo": "Director General",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Shurtape Technologies",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "6359390ac534720001ab1258",
+      "nombre_pila": "Enrique",
+      "cargo": "HR & EHS Manager",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "Suzuki Garphyttan",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "54a228b87468692e71152e12",
+      "nombre_pila": "Rene",
+      "cargo": "Site General Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "TI Automotive",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "635947d5e7bb660001e74401",
+      "nombre_pila": "Daniel",
+      "cargo": "Plant Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Tachi-S Mexico",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "5e720e4ba980e900011ddaf8",
+      "nombre_pila": "Erick",
+      "cargo": "Gerente de Mantenimiento y Procesos",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Trelleborg Group",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "61a23e05cbe356000187f5db",
+      "nombre_pila": "Jose",
+      "cargo": "HR Manager & EHS",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "US Farathane",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "612bacd25178700001e2584f",
+      "nombre_pila": "Omar",
+      "cargo": "Maintenance Supervisor",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "WIPRO LAUAK",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "67b588ec92ac100001d990d7",
+      "nombre_pila": "Miguel",
+      "cargo": "Country Manager",
+      "perfil": "DIRECCION",
+      "variante_copy": "DIRECCION",
+      "empresa": "Walter Pack",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "5ac98880a6da9840f6313942",
+      "nombre_pila": "Luis",
+      "cargo": "Procurement Manager",
+      "perfil": "COMPRAS",
+      "variante_copy": "COMPRAS",
+      "empresa": "Wella Company",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "5d473951a3ae61a69a41dd75",
+      "nombre_pila": "Fermin",
+      "cargo": "Plant Maintenance Manager",
+      "perfil": "MANTENIMIENTO",
+      "variante_copy": "MANTENIMIENTO",
+      "empresa": "Winpak",
+      "score_v2": 9,
+      "ola": "4"
+    },
+    {
+      "apollo_person_id": "64eb70767000510001a17a28",
+      "nombre_pila": "Hector",
+      "cargo": "Environmental, Health and Safety Manager",
+      "perfil": "SEGURIDAD",
+      "variante_copy": "SEGURIDAD",
+      "empresa": "ZKW",
+      "score_v2": 9,
+      "ola": "4"
+    }
+  ]
+}

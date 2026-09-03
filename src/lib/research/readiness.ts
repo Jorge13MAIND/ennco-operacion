@@ -1,15 +1,11 @@
 import {
+  REQUIRED_ROLE_CATEGORIES,
   calculateAccountRoleCoverage,
   isTargetRoleCategory,
   type AccountRoleCoverage,
   type ResearchRoleCategory,
   type TargetResearchRoleCategory,
 } from "@/lib/research/roles";
-
-/** Categorías cuya ausencia detiene el lanzamiento. Ver nota en el gate. */
-export const GATE_REQUIRED_ROLE_CATEGORIES = [
-  "CEO", "PLANT_DIRECTOR", "MAINTENANCE", "PROCUREMENT",
-] as const satisfies readonly TargetResearchRoleCategory[];
 
 export const RESEARCH_ACCOUNT_TARGET = 75;
 export const RESEARCH_CONTACT_TARGET = 150;
@@ -119,17 +115,22 @@ export function evaluateResearchReadiness(input: ResearchReadinessInput): Resear
   if (verifiedAccounts.length < RESEARCH_ACCOUNT_TARGET) extendReasons.push("RESEARCH_ACCOUNT_TARGET_NOT_MET");
   if (verifiedContacts.length < RESEARCH_CONTACT_TARGET) extendReasons.push("RESEARCH_CONTACT_TARGET_NOT_MET");
   if (accountCoverageGaps.length > 0) extendReasons.push("ACCOUNT_CONTACT_COVERAGE_INCOMPLETE");
-  const roleCategoryCounts = verifiedContacts.reduce((totals, contact) => {
-    if (contact.roleCategory !== "OTHER") totals[contact.roleCategory] += 1;
-    return totals;
-  }, { CEO: 0, PLANT_DIRECTOR: 0, MAINTENANCE: 0, PROCUREMENT: 0, SAFETY: 0 });
-  // SAFETY cuenta hacia el mínimo de 150 y puede ser el contacto de un lead
-  // calificado, pero NO se suma a las categorías que el gate exige tener
-  // cubiertas. El hueco que M043 vino a cerrar era que los cargos de seguridad
-  // e higiene cayeran en OTHER y no contaran para nada; convertirlos además en
-  // requisito de lanzamiento subiría la barra sin que nadie lo haya decidido.
-  for (const category of GATE_REQUIRED_ROLE_CATEGORIES) {
-    if (roleCategoryCounts[category] === 0) extendReasons.push(`TARGET_ROLE_CATEGORY_MISSING:${category}`);
+  // El acumulador se deriva de RESEARCH_ROLE_CATEGORIES en vez de enumerarlas a
+  // mano: cuando se agrego SAFETY, esta linea era uno de los tres sitios que
+  // habia que recordar. Ahora agregar una categoria no exige tocar este archivo.
+  const roleCategoryCounts = verifiedContacts.reduce(
+    (totals, contact) => {
+      // SAFETY suma como contacto valido pero no tiene renglon propio aqui:
+      // su ausencia no bloquea (REQUIRED_ROLE_CATEGORIES).
+      if (contact.roleCategory in totals) totals[contact.roleCategory as TargetResearchRoleCategory] += 1;
+      return totals;
+    },
+    Object.fromEntries(
+      REQUIRED_ROLE_CATEGORIES.map((category) => [category, 0]),
+    ) as Record<TargetResearchRoleCategory, number>,
+  );
+  for (const [category, count] of Object.entries(roleCategoryCounts)) {
+    if (count === 0) extendReasons.push(`TARGET_ROLE_CATEGORY_MISSING:${category}`);
   }
   if (input.accounts.some((account) => account.dedupeStatus === "UNRESOLVED")) {
     extendReasons.push("UNRESOLVED_ACCOUNT_DEDUPE");
