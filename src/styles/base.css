@@ -81,6 +81,8 @@ h3 {
   background: rgba(255, 255, 255, 0.98);
 }
 
+.site-header .shell { width: min(var(--header-wide), calc(100% - 48px)); }
+
 .topbar {
   display: flex;
   min-height: 82px;
@@ -214,7 +216,7 @@ main:focus { outline: none; }
 .footer a { font-weight: 700; }
 
 @media (max-width: 760px) {
-  .shell { width: min(100% - 32px, var(--content-wide)); }
+  .shell, .site-header .shell { width: min(100% - 32px, var(--content-wide)); }
   .topbar { min-height: 70px; }
   .brand-lockup { width: 118px; }
   .brand-context { display: none; }
