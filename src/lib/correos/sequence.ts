@@ -61,7 +61,7 @@ export function validateDirectLaneSequence(sequence: DirectLaneSequence): string
       if (touch.touch_number !== index + 1) problems.push(`${label}: número fuera de orden`);
       if (touch.day_offset !== DIRECT_LANE_DAY_OFFSETS[index]) problems.push(`${label}: day_offset ${touch.day_offset}`);
       const words = countWords(touch.body);
-      if (words > 100) problems.push(`${label}: ${words} palabras (tope 100)`);
+      if (words > 120) problems.push(`${label}: ${words} palabras (tope 120)`);
       if (/<[^>]+>/u.test(touch.body)) problems.push(`${label}: HTML prohibido`);
       if (touch.touch_number === 1 && /(?:https?:\/\/|www\.|mailto:)/iu.test(touch.body)) problems.push(`${label}: liga en toque 1`);
       if (/\{\{(?!first_name\}\}|company\}\})/u.test(`${touch.subject}${touch.body}`)) problems.push(`${label}: token desconocido`);

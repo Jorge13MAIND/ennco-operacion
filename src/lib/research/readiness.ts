@@ -1,8 +1,10 @@
 import {
+  REQUIRED_ROLE_CATEGORIES,
   calculateAccountRoleCoverage,
   isTargetRoleCategory,
   type AccountRoleCoverage,
   type ResearchRoleCategory,
+  type TargetResearchRoleCategory,
 } from "@/lib/research/roles";
 
 export const RESEARCH_ACCOUNT_TARGET = 75;
@@ -113,10 +115,20 @@ export function evaluateResearchReadiness(input: ResearchReadinessInput): Resear
   if (verifiedAccounts.length < RESEARCH_ACCOUNT_TARGET) extendReasons.push("RESEARCH_ACCOUNT_TARGET_NOT_MET");
   if (verifiedContacts.length < RESEARCH_CONTACT_TARGET) extendReasons.push("RESEARCH_CONTACT_TARGET_NOT_MET");
   if (accountCoverageGaps.length > 0) extendReasons.push("ACCOUNT_CONTACT_COVERAGE_INCOMPLETE");
-  const roleCategoryCounts = verifiedContacts.reduce((totals, contact) => {
-    if (contact.roleCategory !== "OTHER") totals[contact.roleCategory] += 1;
-    return totals;
-  }, { CEO: 0, PLANT_DIRECTOR: 0, MAINTENANCE: 0, PROCUREMENT: 0 });
+  // El acumulador se deriva de RESEARCH_ROLE_CATEGORIES en vez de enumerarlas a
+  // mano: cuando se agrego SAFETY, esta linea era uno de los tres sitios que
+  // habia que recordar. Ahora agregar una categoria no exige tocar este archivo.
+  const roleCategoryCounts = verifiedContacts.reduce(
+    (totals, contact) => {
+      // SAFETY suma como contacto valido pero no tiene renglon propio aqui:
+      // su ausencia no bloquea (REQUIRED_ROLE_CATEGORIES).
+      if (contact.roleCategory in totals) totals[contact.roleCategory as TargetResearchRoleCategory] += 1;
+      return totals;
+    },
+    Object.fromEntries(
+      REQUIRED_ROLE_CATEGORIES.map((category) => [category, 0]),
+    ) as Record<TargetResearchRoleCategory, number>,
+  );
   for (const [category, count] of Object.entries(roleCategoryCounts)) {
     if (count === 0) extendReasons.push(`TARGET_ROLE_CATEGORY_MISSING:${category}`);
   }

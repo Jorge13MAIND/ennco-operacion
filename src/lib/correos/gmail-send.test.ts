@@ -47,7 +47,9 @@ describe("direct lane gmail sender", () => {
 
   it.each([
     { ...touch, body_text: "Consulta https://example.test antes" },
-    { ...touch, body_text: Array.from({ length: 101 }, () => "palabra").join(" ") },
+    // M042: el tope subio a 120 porque el copy aprobado por el cliente tiene 104
+    // palabras. 121 es el primer cuerpo que debe seguir rebotando.
+    { ...touch, body_text: Array.from({ length: 121 }, () => "palabra").join(" ") },
     { ...touch, body_text: "<a href='x'>hola</a>" },
     { ...touch, touch_number: 2 },
     { ...touch, kind: "REPLY" as const, touch_number: null },

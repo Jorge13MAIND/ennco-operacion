@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  REQUIRED_ROLE_CATEGORIES,
   calculateAccountRoleCoverage,
   classifyRoleTitle,
+  isTargetRoleCategory,
   normalizeRoleTitle,
 } from "@/lib/research/roles";
 
@@ -38,6 +40,34 @@ describe("research buyer role taxonomy", () => {
       missingCategories: ["PLANT_DIRECTOR", "PROCUREMENT"],
     });
     expect(coverage[1]?.verifiedTargetContacts).toBe(0);
+  });
+
+  it("clasifica seguridad e higiene, la cuarta variante del copy", () => {
+    // Antes del 3-sep estos cargos caian en OTHER: no contaban para el gate de
+    // 150 contactos ni podian ser el contacto de un lead calificado, siendo el
+    // perfil que mas responde al angulo documental.
+    for (const title of [
+      "Coordinador de Seguridad e Higiene",
+      "Jefe de Seguridad Industrial",
+      "EHS Manager",
+      "Health and Safety Supervisor",
+      "Gerente de Seguridad",
+    ]) {
+      expect(classifyRoleTitle(title)).toBe("SAFETY");
+    }
+  });
+
+  it("no exige seguridad para avanzar, porque es el perfil mas escaso", () => {
+    // SAFETY cuenta como contacto objetivo pero no entra en la cobertura
+    // obligatoria: en Apollo hay 146 contactos de seguridad en el corredor
+    // contra 402-443 de los otros perfiles.
+    expect(isTargetRoleCategory("SAFETY")).toBe(true);
+    expect(REQUIRED_ROLE_CATEGORIES).not.toContain("SAFETY");
+    const coverage = calculateAccountRoleCoverage(["account-a"], [
+      { accountId: "account-a", category: "SAFETY", verified: true },
+    ]);
+    expect(coverage[0]?.verifiedTargetContacts).toBe(1);
+    expect(coverage[0]?.missingCategories).not.toContain("SAFETY");
   });
 
   it("fails closed for duplicate accounts or a contact outside the inventory", () => {

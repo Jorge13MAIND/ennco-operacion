@@ -3,11 +3,34 @@ export const RESEARCH_ROLE_CATEGORIES = [
   "PLANT_DIRECTOR",
   "MAINTENANCE",
   "PROCUREMENT",
+  // Seguridad e higiene es la cuarta variante del copy desde el 29-ago y el
+  // carril directo ya sabe asignarla (src/lib/correos/roles.ts). Este
+  // clasificador no la conocia: un Coordinador de Seguridad caia en OTHER,
+  // asi que no contaba para el gate de contactos verificados ni podia ser
+  // el contacto de un lead calificado, siendo el perfil que mas responde
+  // al angulo documental del copy.
+  "SAFETY",
   "OTHER",
 ] as const;
 
 export type ResearchRoleCategory = (typeof RESEARCH_ROLE_CATEGORIES)[number];
 export type TargetResearchRoleCategory = Exclude<ResearchRoleCategory, "OTHER">;
+
+/**
+ * Las categorias cuya AUSENCIA bloquea el avance de la investigacion.
+ *
+ * No son todas las validas. SAFETY cuenta como contacto objetivo y puede ser el
+ * contacto de un lead calificado, pero no se exige en cada lote: medido en
+ * Apollo el 2-sep, seguridad e higiene tiene 146 contactos alcanzables en el
+ * corredor contra 402-443 de los otros tres perfiles. Exigirla pararia el
+ * programa por falta del perfil mas escaso, no por falta de calidad.
+ */
+export const REQUIRED_ROLE_CATEGORIES = [
+  "CEO",
+  "PLANT_DIRECTOR",
+  "MAINTENANCE",
+  "PROCUREMENT",
+] as const satisfies ReadonlyArray<TargetResearchRoleCategory>;
 
 const ROLE_PATTERNS: ReadonlyArray<{
   category: TargetResearchRoleCategory;
@@ -66,6 +89,22 @@ const ROLE_PATTERNS: ReadonlyArray<{
       /\bsupply chain (?:director|manager|head)\b/u,
     ],
   },
+  {
+    category: "SAFETY",
+    patterns: [
+      /\bseguridad e higiene\b/u,
+      /\bhigiene y seguridad\b/u,
+      /\bseguridad industrial\b/u,
+      /\bcoordinador(?:a)? de seguridad\b/u,
+      /\bjef(?:e|a) de seguridad\b/u,
+      /\bgerente de seguridad\b/u,
+      /\bsafety (?:director|manager|head|coordinator|supervisor)\b/u,
+      /\behs\b/u,
+      /\bhse\b/u,
+      /\bhealth (?:and|&) safety\b/u,
+      /\benvironment(?:al)? health (?:and )?safety\b/u,
+    ],
+  },
 ];
 
 export function normalizeRoleTitle(value: string): string {
@@ -122,7 +161,8 @@ export function calculateAccountRoleCoverage(
     contactsByAccount.set(contact.accountId, (contactsByAccount.get(contact.accountId) ?? 0) + 1);
   }
 
-  const targetCategories = RESEARCH_ROLE_CATEGORIES.filter(isTargetRoleCategory);
+  // La cobertura se mide contra las requeridas: ver REQUIRED_ROLE_CATEGORIES.
+  const targetCategories = [...REQUIRED_ROLE_CATEGORIES];
   return accountIds.map((accountId) => {
     const present = categoriesByAccount.get(accountId) ?? new Set<TargetResearchRoleCategory>();
     return {

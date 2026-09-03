@@ -1,7 +1,11 @@
 import { createHash } from "node:crypto";
 import { z } from "zod";
 
-import { classifyRoleTitle, isTargetRoleCategory } from "@/lib/research/roles";
+import {
+  classifyRoleTitle,
+  isTargetRoleCategory,
+  type TargetResearchRoleCategory,
+} from "@/lib/research/roles";
 
 const SHA256_PATTERN = /^[a-f0-9]{64}$/u;
 const domainSchema = z.string().trim().toLowerCase().min(3).max(253)
@@ -68,7 +72,10 @@ export type ApolloInventoryPlan = {
     account_canonical_id: string;
     full_name: string;
     role_title: string;
-    role_category: "CEO" | "PLANT_DIRECTOR" | "MAINTENANCE" | "PROCUREMENT";
+    // Se deriva del clasificador en vez de repetir la lista: cuando entro SAFETY
+    // como cuarta variante del copy, esta union era uno de los sitios que habia
+    // que recordar a mano.
+    role_category: TargetResearchRoleCategory;
     normalized_email: string | null;
     email_status: "verified" | "guessed" | "unavailable" | "unknown";
     requires_email_reveal: boolean;
