@@ -56,6 +56,7 @@
     "verify:campaign": "node scripts/verify-campaign-package.mjs --repo .",
     "verify:copy": "node scripts/verify-copy-sequence.mjs --repo .",
     "verify:target-list": "node scripts/verify-target-list.mjs --repo .",
+    "verify:waves": "node scripts/verify-waves.mjs --repo .",
     "verify:m5-canary": "node --experimental-strip-types scripts/m5-shadow-canary.mts --repo .",
     "capture:m5-evidence": "node scripts/verify-campaign-package.mjs --repo . --write-evidence && node --experimental-strip-types scripts/m5-shadow-canary.mts --repo . --write-evidence",
     "capture:m5-browser": "node scripts/capture-m5-browser-evidence.mjs --repo .",
