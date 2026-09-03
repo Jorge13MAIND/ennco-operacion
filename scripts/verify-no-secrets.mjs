@@ -62,6 +62,11 @@ for (const file of tracked) {
       const match = line.match(new RegExp(`^\\s*${name}\\s*[:=]\\s*["']?([^\\s"']+)`));
       if (!match?.[1]) return false;
       const value = match[1];
+      // Un valor entre angulos es un hueco de runbook (<nuevo>, <openssl rand ...>),
+      // nunca un secreto: ningun token real empieza con "<". Se excluye porque un
+      // gate que marca placeholders entrena a la gente a ignorarlo, y entonces el
+      // dia que encuentre un secreto de verdad tampoco lo van a mirar.
+      if (value.startsWith("<")) return false;
       return !value.includes("${{") && !value.startsWith("process.env") && !/^(example|placeholder|changeme|unknown)$/i.test(value);
     });
 
