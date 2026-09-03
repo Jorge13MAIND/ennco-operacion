@@ -90,10 +90,13 @@ main.auth-shell {
 
 .cr-root .site-header.site-header-operations {
   border-bottom: 1px solid var(--cr-line);
-  background: rgba(245, 245, 247, 0.85);
+  /* El blur de 20px sobre el ancho completo re-difumina millones de pixeles
+     por frame de scroll en 4K. A 10px con fondo mas opaco se ve igual y cuesta
+     una fraccion. */
+  background: rgba(245, 245, 247, 0.94);
   box-shadow: none;
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .cr-root .site-header-operations .topbar { min-height: 64px; gap: 20px; }

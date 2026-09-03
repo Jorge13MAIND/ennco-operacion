@@ -4,6 +4,17 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   typedRoutes: true,
+  experimental: {
+    // Cache de cliente del App Router: un segmento visitado o precargado se
+    // reusa sin ir al servidor. Sin esto, cada click en el panel vuelve a
+    // ejecutar el snapshot completo (decenas de consultas) aunque el operador
+    // haya estado ahi hace cinco segundos. dynamic cubre navegaciones ya
+    // visitadas; static cubre lo que precargan los links con prefetch.
+    staleTimes: {
+      dynamic: 30,
+      static: 60,
+    },
+  },
   async headers() {
     return [
       {

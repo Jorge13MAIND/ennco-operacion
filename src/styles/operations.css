@@ -532,3 +532,30 @@ tbody tr:hover { background: #f3f7fb; }
 @media (max-width: 720px) {
   .brief-item { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* --- Esqueleto de carga ------------------------------------------------- */
+/* Lo que se pinta en el instante del click, mientras llega la pantalla real.
+   El brillo respeta prefers-reduced-motion. */
+.op-skeleton { display: grid; gap: 14px; padding-top: 6px; }
+.op-skeleton-line {
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(23, 32, 39, 0.06) 25%, rgba(23, 32, 39, 0.12) 50%, rgba(23, 32, 39, 0.06) 75%);
+  background-size: 200% 100%;
+  animation: op-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+.op-skeleton-eyebrow { width: 180px; height: 12px; }
+.op-skeleton-title { width: min(420px, 60%); height: 34px; margin-bottom: 8px; }
+.op-skeleton-panel {
+  display: grid; gap: 12px; padding: 22px 24px;
+  border: 1px solid var(--line); border-radius: 14px; background: var(--surface);
+}
+.op-skeleton-row { height: 18px; }
+.op-skeleton-row:nth-child(2n) { width: 92%; }
+.op-skeleton-row:nth-child(3n) { width: 84%; }
+@keyframes op-skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .op-skeleton-line { animation: none; }
+}

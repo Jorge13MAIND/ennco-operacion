@@ -76,7 +76,7 @@ export function OperationsNav({ variant }: { variant: "desktop" | "mobile" }) {
         {group.items.map((item) => {
           const active = pathname === item.href;
           return (
-            <Link aria-current={active ? "page" : undefined} href={item.href as Route} key={item.key}>
+            <Link aria-current={active ? "page" : undefined} href={item.href as Route} key={item.key} prefetch>
               <span aria-hidden="true" className="nav-indicator" />
               {itemLabel(item.key)}
             </Link>
