@@ -13,7 +13,12 @@ export function buildContentSecurityPolicy(nonce: string, development: boolean):
     "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
     "object-src 'none'",
     "base-uri 'self'",
-    "form-action 'self'",
+    // Chrome aplica form-action tambien a las REDIRECCIONES de un POST de
+    // formulario. El boton "Conectar con Google" envia a /api/v1/public/
+    // correos/oauth/start, que responde 303 hacia accounts.google.com: con
+    // 'self' a secas, Chrome bloqueaba esa redireccion en silencio y el boton
+    // parecia muerto.
+    "form-action 'self' https://accounts.google.com",
     "frame-ancestors 'none'",
     "manifest-src 'self'",
     "worker-src 'self' blob:",

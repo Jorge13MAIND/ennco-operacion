@@ -58,8 +58,9 @@ export default async function ConectarBuzonPage({ searchParams }: { searchParams
             <p>{shown.body}{params.buzon ? ` (${params.buzon})` : ""}</p>
           </section>
         ) : invitation ? (
-          <section className="panel">
-            <h1>Conectar {invitation.normalized_email}</h1>
+          <section className="panel connect-card">
+            <h1 className="connect-title">Conecta tu buzón</h1>
+            <p className="connect-mailbox"><code>{invitation.normalized_email}</code></p>
             <p>
               Esta liga autoriza al sistema comercial de ENNCO a <strong>enviar correos</strong> y <strong>leer las respuestas</strong> desde este buzón, y nada más.
               No pide tu contraseña, no da acceso a otros buzones y puedes revocarlo cuando quieras desde tu cuenta de Google.
@@ -69,7 +70,7 @@ export default async function ConectarBuzonPage({ searchParams }: { searchParams
                 Este es el buzón principal de tu empresa. El sistema lo trata con tope bajo (máximo 20 correos al día) para cuidar su reputación.
               </p>
             ) : null}
-            <ol>
+            <ol className="connect-steps">
               <li>Presiona <strong>Conectar con Google</strong>.</li>
               <li>En la pantalla de Google, inicia sesión <strong>exactamente</strong> como <code>{invitation.normalized_email}</code>.</li>
               <li>Acepta los permisos de Gmail. Serás regresado aquí con la confirmación.</li>
