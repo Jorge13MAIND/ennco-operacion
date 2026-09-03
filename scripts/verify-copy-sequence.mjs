@@ -15,7 +15,8 @@ const path = resolve(repo, "docs/external/secuencia-ennco-copy.md");
 const source = (await readFile(path)).toString("utf8");
 
 const WORD_LIMIT = 120;            // igual al trigger de la base (M042)
-const CTA_MIN_WORDS = 75;          // un correo de CTA mas corto que esto suena vacio
+const CTA_MIN_WORDS = 35;          // el registro aprobado por el cliente es corto: 40-75 palabras
+                                   // del toque 2 en adelante. Por debajo de 35 ya no dice nada.
 const PROHIBITED = /garantiz|descuento|precio final|\bahorro de \d|\d+\s*%|https?:\/\/|<[a-z/]|[—–]/i;
 const JARGON = /termograf|dron\b|kWp|curva IV|NOM-\d|arco el[eé]ctrico/i;
 
@@ -47,7 +48,12 @@ check("CTA_BODIES_NOT_HOLLOW", tooShort.length === 0, tooShort);
 const ctaCounts = bodies.map((b, i) => ({ i: i + 1, q: (b.match(/\?/g) ?? []).length, closing: isClosing(b) }));
 check("AT_MOST_TWO_CTAS", ctaCounts.every((x) => x.q <= 2), ctaCounts.filter((x) => x.q > 2));
 const sequenceCtas = ctaCounts.slice(0, sequenceCount);
-check("EVERY_NON_CLOSING_ASKS_SOMETHING", sequenceCtas.every((x) => x.closing || x.q >= 1), sequenceCtas.filter((x) => !x.closing && x.q < 1));
+// Un CTA puede ser pregunta ("¿Cuando podemos platicar?") o peticion directa
+// ("Avisame si puedo llamarte"), que es como cierra su toque 2.
+const SOFT_CTA = /av[ií]same|me dices|dime|me confirmas|quedo a tus/i;
+const hasCta = (i) => sequenceCtas[i].q >= 1 || SOFT_CTA.test(bodies[i]);
+const noCta = sequenceCtas.map((x, i) => ({ ...x, i: i + 1 })).filter((x, i) => !x.closing && !hasCta(i));
+check("EVERY_NON_CLOSING_HAS_A_CTA", noCta.length === 0, noCta);
 check("THIRTY_TWO_SEQUENCE_EMAILS", sequenceCount === 32, sequenceCount);
 
 const openingMarks = bodies.map((b, i) => {
@@ -69,8 +75,12 @@ check("SIGNED_BY_FRANCISCO", bodies.every((b) => b.includes("Francisco")), true)
 const closings = bodies.filter(isClosing).length;
 check("FOUR_CLOSING_TOUCHES_CARRY_OPT_OUT", closings === 4, closings);
 
-const duplicates = subjects.filter((s, i) => subjects.indexOf(s) !== i);
-check("NO_DUPLICATE_SUBJECTS", duplicates.length === 0, duplicates);
+// Un prospecto recibe UNA variante completa: el duplicado que le llegaria dos
+// veces es el que se repite dentro de su propia secuencia de 8.
+const perVariant = [0, 8, 16, 24].map((start) => subjects.slice(start, start + 8));
+const dupInVariant = perVariant.flatMap((set, v) =>
+  set.filter((s, i) => set.indexOf(s) !== i).map((s) => ({ variante: v + 1, asunto: s })));
+check("NO_DUPLICATE_SUBJECTS_WITHIN_VARIANT", dupInVariant.length === 0, dupInVariant);
 check("SUBJECTS_UNDER_70_CHARS", subjects.every((s) => s.length <= 70), Math.max(...subjects.map((s) => s.length)));
 
 const badTags = [...source.matchAll(/\{\{(\w+)\}\}/g)].map((m) => m[1])
