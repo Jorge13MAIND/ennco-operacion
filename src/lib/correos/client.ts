@@ -219,6 +219,24 @@ export async function completeDirectLaneAuthorization(config: RuntimeConfig, inp
       }));
 }
 
+/**
+ * Resuelve el OUTBOUND de un hilo de Gmail. Existe porque la API de Gmail
+ * REESCRIBE el Message-ID al enviar (verificado 4-sep: emite <CA...@mail.gmail.com>
+ * e ignora nuestro <msg-uuid@dominio>), asi que el In-Reply-To de una
+ * respuesta real casi nunca trae el molde de la plataforma. El threadId del
+ * proveedor si es estable en ambos lados.
+ */
+export async function resolveDirectLaneOutbound(config: RuntimeConfig, input: {
+  mailboxId: string;
+  providerThreadId: string;
+}): Promise<string | null> {
+  requireConfig(config);
+  const parsed = z.object({ status: z.string(), message_id: z.uuid().nullable() }).passthrough().parse(await callRpc(config, "resolve_direct_lane_outbound",
+    [config.organizationId, input.mailboxId, input.providerThreadId],
+    { target_mailbox_id: input.mailboxId, target_provider_thread_id: input.providerThreadId }));
+  return parsed.message_id;
+}
+
 export async function annotateDirectLaneInbound(config: RuntimeConfig, input: {
   providerEventId: string;
   rfcMessageId: string | null;

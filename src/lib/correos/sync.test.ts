@@ -81,6 +81,62 @@ describe("direct lane sync", () => {
     expect(updateCursor).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ historyId: "5100" }));
   });
 
+  it("links a reply through the provider thread when Gmail rewrote the Message-ID", async () => {
+    // El caso real del 4-sep: Outlook responde con In-Reply-To=<CA...@mail.gmail.com>
+    // (el ID que Gmail emitio de verdad), sin rastro del <msg-uuid@dominio>.
+    const applyEvent = vi.fn(async () => ({ status: "PROCESSED", provider_event_id: "41000000-0000-4000-8000-000000000502" }) as never);
+    const annotate = vi.fn(async () => ({ status: "ANNOTATED" }));
+    const updateCursor = vi.fn(async () => ({ status: "ADVANCED" }) as never);
+    const resolveOutbound = vi.fn(async () => "41000000-0000-4000-8000-000000000302");
+    const summary = await runDirectLaneSync(config, {
+      ...baseDeps,
+      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: { last_history_id: "5000" } })], totals: {}, flags: {} }) as never),
+      transport: () => ({
+        getProfile: async () => ({ status: 200, body: { historyId: "5000" } }),
+        listHistory: async () => ({ status: 200, body: { historyId: "5200", history: [{ id: "5060", messagesAdded: [{ message: { id: "m-2", threadId: "t-real" } }] }] } }),
+        getMessage: async () => ({ status: 200, body: {
+          id: "m-2", threadId: "t-real", internalDate: "1756900000000",
+          payload: { mimeType: "text/plain", headers: [
+            { name: "From", value: "Grant Keegan <grantkeegan@outlook.com>" },
+            { name: "Subject", value: "Re: Reducción de costos en servicios eléctricos" },
+            { name: "Message-ID", value: "<outlook-reply@outlook.com>" },
+            { name: "In-Reply-To", value: "<CAJVu=gK4bOOpA6BDe=34VsW5NL@mail.gmail.com>" },
+          ] },
+        } }),
+      }),
+      applyEvent, annotate, updateCursor, resolveOutbound,
+    });
+    expect(summary.appliedReplyEvents).toBe(1);
+    expect(resolveOutbound).toHaveBeenCalledWith(expect.anything(), { mailboxId: "41000000-0000-4000-8000-000000000201", providerThreadId: "t-real" });
+    expect(applyEvent).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({
+      eventKind: "REPLY", relatedOutboundMessageId: "41000000-0000-4000-8000-000000000302",
+    }));
+  });
+
+  it("still skips inbox mail that matches no thread of ours", async () => {
+    const applyEvent = vi.fn();
+    const resolveOutbound = vi.fn(async () => null);
+    const summary = await runDirectLaneSync(config, {
+      ...baseDeps,
+      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: { last_history_id: "5000" } })], totals: {}, flags: {} }) as never),
+      transport: () => ({
+        getProfile: async () => ({ status: 200, body: { historyId: "5000" } }),
+        listHistory: async () => ({ status: 200, body: { historyId: "5300", history: [{ id: "5070", messagesAdded: [{ message: { id: "m-3", threadId: "t-ajeno" } }] }] } }),
+        getMessage: async () => ({ status: 200, body: {
+          id: "m-3", threadId: "t-ajeno", internalDate: "1756900000000",
+          payload: { mimeType: "text/plain", headers: [
+            { name: "From", value: "Alguien <hilo@ajeno.test>" },
+            { name: "Subject", value: "Re: otra conversación" },
+            { name: "In-Reply-To", value: "<nada-nuestro@ajeno.test>" },
+          ] },
+        } }),
+      }),
+      applyEvent: applyEvent as never, updateCursor: vi.fn(async () => ({ status: "ADVANCED" }) as never), resolveOutbound,
+    });
+    expect(summary.appliedReplyEvents).toBe(0);
+    expect(applyEvent).not.toHaveBeenCalled();
+  });
+
   it("resets the cursor when Gmail returns 404 on history", async () => {
     const updateCursor = vi.fn(async () => ({ status: "ADVANCED" }) as never);
     const summary = await runDirectLaneSync(config, {

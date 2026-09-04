@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { annotateDirectLaneInbound, readDirectLaneCredential, readDirectLaneHealth, type DirectLaneMailboxHealth } from "@/lib/correos/client";
+import { annotateDirectLaneInbound, readDirectLaneCredential, readDirectLaneHealth, resolveDirectLaneOutbound, type DirectLaneMailboxHealth } from "@/lib/correos/client";
 import { openDirectLaneSecret } from "@/lib/correos/vault";
 import { applyDispatchProviderEvent, updateDispatchSyncCursor } from "@/lib/dispatch/client";
 import { getGmailAccessToken } from "@/lib/dispatch/gmail-token";
@@ -58,6 +58,7 @@ type SyncDependencies = {
   applyEvent?: typeof applyDispatchProviderEvent;
   updateCursor?: typeof updateDispatchSyncCursor;
   annotate?: typeof annotateDirectLaneInbound;
+  resolveOutbound?: typeof resolveDirectLaneOutbound;
 };
 
 export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDependencies = {}): Promise<DirectLaneSyncSummary> {
@@ -68,6 +69,7 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
   const applyEvent = deps.applyEvent ?? applyDispatchProviderEvent;
   const updateCursor = deps.updateCursor ?? updateDispatchSyncCursor;
   const annotate = deps.annotate ?? annotateDirectLaneInbound;
+  const resolveOutbound = deps.resolveOutbound ?? resolveDirectLaneOutbound;
   const summary: DirectLaneSyncSummary = { mailboxes: [], appliedReplyEvents: 0 };
   if (!config.directLaneVaultKey || !config.googleOauthClientId || !config.googleOauthClientSecret) return summary;
 
@@ -107,14 +109,22 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
         const kind = classifyGmailMessage(message);
         if (kind === "UNKNOWN") continue;
         const context = extractGmailEventContext(message);
-        // Sin enlace al mensaje que la originó no es una respuesta nuestra;
-        // la máquina canónica la pondría en cuarentena. Se omite en silencio.
-        if (!context.relatedOutboundMessageId) continue;
+        // Gmail reescribe el Message-ID al enviar (emite <CA...@mail.gmail.com>
+        // en lugar del <msg-uuid@dominio> nuestro), asi que el In-Reply-To de
+        // una respuesta real NO trae el molde de la plataforma. Cuando el
+        // encabezado no resuelve, el hilo del proveedor es el enlace estable:
+        // se busca el ultimo OUTBOUND nuestro con el mismo threadId.
+        let relatedOutbound = context.relatedOutboundMessageId;
+        if (!relatedOutbound && message.threadId) {
+          relatedOutbound = await resolveOutbound(config, { mailboxId: mailbox.mailbox_id, providerThreadId: message.threadId }).catch(() => null);
+        }
+        // Sin enlace por encabezado NI por hilo no es respuesta a algo nuestro.
+        if (!relatedOutbound) continue;
         const applied = await applyEvent(config, {
           mailboxId: mailbox.mailbox_id,
           externalEventId: message.id,
           providerMessageId: message.id,
-          relatedOutboundMessageId: context.relatedOutboundMessageId,
+          relatedOutboundMessageId: relatedOutbound,
           eventKind: kind,
           normalizedFrom: kind === "HARD_BOUNCE" ? context.failedRecipient ?? context.normalizedFrom : context.normalizedFrom,
           subject: context.subject,

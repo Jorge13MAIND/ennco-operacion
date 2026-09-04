@@ -8,9 +8,15 @@ import { z } from "zod";
  * literal, éste envía desde CUALQUIER buzón que la base haya conectado al
  * carril: el remitente viene del claim, no del código.
  *
- * Contrato que sí se conserva: texto plano, hilos por In-Reply-To/References,
- * Message-ID determinista (<msg-<uuid>@<dominio del buzón>>) para que el sync
- * de respuestas pueda enlazar cada contestación con el mensaje que la originó.
+ * Contrato que sí se conserva: texto plano, hilos por In-Reply-To/References.
+ *
+ * Sobre el Message-ID: la API de Gmail REESCRIBE el que pongamos y emite el
+ * suyo (<CA...@mail.gmail.com>; verificado 4-sep-2026 leyendo el mensaje
+ * enviado). Por eso, tras el envío se consulta el metadata del mensaje y se
+ * persiste el Message-ID REAL: los toques 2-8 lo usan en In-Reply-To para que
+ * el cliente del prospecto hile la secuencia, y el sync enlaza respuestas por
+ * threadId como red principal. El <msg-uuid@dominio> queda solo de respaldo
+ * si el metadata no se puede leer.
  */
 
 const emailSchema = z.email().transform((value) => value.trim().toLowerCase());
@@ -179,12 +185,40 @@ export class DirectLaneGmailSender {
     const body: unknown = await response.json().catch(() => null);
     const result = sendResponseSchema.safeParse(body);
     if (!result.success) throw new DirectLaneSendError("GMAIL_API_RESPONSE_INVALID");
+    const realMessageId = await this.readRealMessageId(result.data.id);
     return {
       provider: "GMAIL_API",
       provider_message_id: result.data.id,
       provider_thread_id: result.data.threadId,
-      rfc_message_id: rfcMessageId,
+      rfc_message_id: realMessageId ?? rfcMessageId,
       envelope_sha256: createHash("sha256").update(raw).digest("hex"),
     };
+  }
+
+  /**
+   * Message-ID REAL del mensaje ya enviado. Gmail ignora el header que
+   * mandamos, y este valor es el que el prospecto ve y el que su cliente pone
+   * en In-Reply-To al responder. Si la lectura falla no se rompe el envío: el
+   * determinista queda como respaldo (peor hilado, mismo despacho).
+   */
+  private async readRealMessageId(providerMessageId: string): Promise<string | null> {
+    try {
+      const response = await this.fetchImpl(
+        `https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(providerMessageId)}?format=metadata&metadataHeaders=Message-ID`,
+        { headers: { accept: "application/json", authorization: `Bearer ${this.accessToken}` }, cache: "no-store" },
+      );
+      if (!response.ok) return null;
+      const body: unknown = await response.json().catch(() => null);
+      const parsed = z.object({
+        payload: z.object({
+          headers: z.array(z.object({ name: z.string(), value: z.string() })).default([]),
+        }).partial().default({}),
+      }).passthrough().safeParse(body);
+      if (!parsed.success) return null;
+      const value = (parsed.data.payload.headers ?? []).find((header) => header.name.toLowerCase() === "message-id")?.value.trim() ?? null;
+      return value && /^<[^\s<>]+@[^\s<>]+>$/u.test(value) && value.length <= 998 ? value : null;
+    } catch {
+      return null;
+    }
   }
 }
