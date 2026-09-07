@@ -61,7 +61,7 @@ Soy Francisco Cuellar, Director General de ENNCO.
 
 Te escribo porque tenemos clientes muy similares a ustedes que han obtenido increíbles resultados en la reducción de costos y en servicios eléctricos.
 
-Ya va a terminar el año y sé que probablemente quieran lograr sus resultados financieros. Nuestros proyectos aportan resultados visibles desde el momento de la entrega.
+Ya va a terminar el año y sé que probablemente quieran lograr sus resultados financieros.
 
 ¿Cuándo podrías recibirme en tus oficinas para darte un análisis real de esto y mostrarte una estrategia de primer nivel para lograr esto?
 
@@ -221,7 +221,7 @@ Soy Francisco Cuellar, Director General de ENNCO.
 
 Te escribo porque tenemos clientes muy similares a ustedes que han obtenido muy buenos resultados en la continuidad de su operación y en el costo de sus servicios eléctricos.
 
-Sé que en tu área lo que cuenta es que la planta no se detenga. Nuestros proyectos aportan resultados visibles desde el momento de la entrega.
+Sé que en tu área lo que cuenta es que la planta no se detenga.
 
 ¿Cuándo podrías recibirme para revisar cómo está la instalación y darte un análisis real de lo que encontremos?
 

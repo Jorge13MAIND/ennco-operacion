@@ -88,14 +88,25 @@ const badTags = [...source.matchAll(/\{\{(\w+)\}\}/g)].map((m) => m[1])
 check("ONLY_KNOWN_MERGE_TAGS", badTags.length === 0, [...new Set(badTags)]);
 
 // El correo aprobado por el cliente es intocable: se verifica por sus frases ancla.
+// Cambios autorizados sobre el texto aprobado (cada uno con quien lo pidio y cuando):
+//  - 2026-09-07, Jorge, tras leer el correo recibido: se retira "Nuestros
+//    proyectos aportan resultados visibles desde el momento de la entrega"
+//    de los toques 1 de DIRECCION y MANTENIMIENTO. Motivo: lenguaje de
+//    folleto que no aporta y ocupa 11 palabras del tope de 120.
 const APPROVED_ANCHORS = [
   "Soy Francisco Cuellar, Director General de ENNCO.",
   "tenemos clientes muy similares a ustedes que han obtenido increíbles resultados en la reducción de costos y en servicios eléctricos",
-  "Nuestros proyectos aportan resultados visibles desde el momento de la entrega",
   "¿Cuándo podrías recibirme en tus oficinas para darte un análisis real de esto y mostrarte una estrategia de primer nivel para lograr esto?",
   "Si tú no te encargas de llevar esto, ¿podrías dirigirme con la persona encargada por favor?",
   "Saludos y espero saber de ti pronto.",
 ];
+// Frases retiradas por peticion del cliente: el gate ahora exige que NO vuelvan
+// solas (una regresion del copy seria tan grave como una edicion no autorizada).
+const RETIRED_PHRASES = [
+  "Nuestros proyectos aportan resultados visibles desde el momento de la entrega",
+];
+const regressed = RETIRED_PHRASES.filter((a) => source.includes(a));
+check("RETIRED_PHRASES_STAY_OUT", regressed.length === 0, regressed);
 const missing = APPROVED_ANCHORS.filter((a) => !source.includes(a));
 check("CLIENT_APPROVED_TOUCH1_INTACT", missing.length === 0, missing);
 
