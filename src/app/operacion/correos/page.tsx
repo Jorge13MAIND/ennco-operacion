@@ -209,7 +209,18 @@ export default async function CorreosPage() {
             <p>Crea la campaña con el copy aprobado. Queda en borrador hasta que teckel_admin la apruebe.</p>
             {canOperate ? <CreateCampaignAction /> : null}
           </div>
-        ) : overview.campaigns.map((campaign) => (
+        ) : null}
+        {/* Una campaña terminada sigue listada (historial), pero ya no bloquea crear la siguiente.
+            Sin esto, la primera campaña de prueba dejaba el formulario de creación
+            inalcanzable para siempre. */}
+        {overview.campaigns.length > 0 && overview.campaigns.every((campaign) => campaign.state === "COMPLETED") ? (
+          <div className="empty-state">
+            <strong>Sin campaña activa</strong>
+            <p>Las anteriores están terminadas. Crea la siguiente con el copy vigente; queda en borrador hasta que teckel_admin la apruebe.</p>
+            {canOperate ? <CreateCampaignAction /> : null}
+          </div>
+        ) : null}
+        {overview.campaigns.map((campaign) => (
           <div className="compact-operation-form" key={campaign.campaign_id} style={{ marginBottom: 12 }}>
             <div className="inline-operation">
               <strong>{campaign.name}</strong>
