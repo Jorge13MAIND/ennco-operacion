@@ -4,6 +4,14 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   typedRoutes: true,
+  // Los archivos de data/ se leen en tiempo de ejecucion con rutas construidas
+  // (process.cwd() + string), que el trazado de Next no puede seguir, asi que
+  // no viajaban al paquete serverless. Se incluyen explicitamente.
+  outputFileTracingIncludes: {
+    "/operacion/correos": ["./data/campaigns/**"],
+    "/operacion": ["./data/campaigns/**"],
+    "/api/v1/operations/correos/campaigns": ["./data/campaigns/**"],
+  },
   experimental: {
     // Cache de cliente del App Router: un segmento visitado o precargado se
     // reusa sin ir al servidor. Sin esto, cada click en el panel vuelve a
