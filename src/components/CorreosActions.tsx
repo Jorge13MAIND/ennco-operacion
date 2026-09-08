@@ -217,7 +217,13 @@ export function ApproveCampaignAction({ campaignId }: { campaignId: string }) {
 
 export function CampaignStateAction({ campaignId, state }: { campaignId: string; state: "RUNNING" | "PAUSED" | "COMPLETED" | "DRAFT" }) {
   const { status, error, run } = useMutation();
-  const [target, setTarget] = useState<"RUNNING" | "PAUSED" | "COMPLETED">(state === "RUNNING" ? "PAUSED" : "RUNNING");
+  // El destino por defecto depende del estado actual y debe seguirlo cuando
+  // la campana cambia sin remontar el componente (aprobar deja el select en
+  // 'Pausar' y el boton en 'Reanudar' si el estado interno no se resincroniza).
+  const defaultTarget = state === "RUNNING" ? "PAUSED" : "RUNNING";
+  const [target, setTarget] = useState<"RUNNING" | "PAUSED" | "COMPLETED">(defaultTarget);
+  const [seenState, setSeenState] = useState(state);
+  if (seenState !== state) { setSeenState(state); setTarget(defaultTarget); }
   if (state === "DRAFT" || state === "COMPLETED") return null;
   async function submit(formData: FormData) {
     await run(`/api/v1/operations/correos/campaigns/${campaignId}/state`, { state: String(formData.get("state")), reason: String(formData.get("reason")) });
