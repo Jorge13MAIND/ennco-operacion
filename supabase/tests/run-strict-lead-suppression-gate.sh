@@ -93,7 +93,7 @@ RACE_PID=$!
 
 RACE_READY=false
 for _attempt in $(seq 1 50); do
-  if rg -q 'SUPPRESSION_RACE_LOCK_HELD' "$RACE_LOG"; then
+  if grep -qE 'SUPPRESSION_RACE_LOCK_HELD' "$RACE_LOG"; then
     RACE_READY=true
     break
   fi

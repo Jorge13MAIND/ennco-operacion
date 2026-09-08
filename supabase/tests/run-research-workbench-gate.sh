@@ -90,17 +90,17 @@ if [[ "$RACE_A_STATUS" -ne 0 || "$RACE_B_STATUS" -ne 0 ]]; then
   sed -n '1,120p' "$RACE_B" >&2
   exit 1
 fi
-if ! rg -q 'CREATED|DUPLICATE' "$RACE_A" || ! rg -q 'CREATED|DUPLICATE' "$RACE_B"; then
+if ! grep -qE 'CREATED|DUPLICATE' "$RACE_A" || ! grep -qE 'CREATED|DUPLICATE' "$RACE_B"; then
   sed -n '1,120p' "$RACE_A" >&2
   sed -n '1,120p' "$RACE_B" >&2
   exit 1
 fi
 RACE_CREATED=0
 RACE_DUPLICATE=0
-if rg -q 'CREATED' "$RACE_A"; then RACE_CREATED=$((RACE_CREATED + 1)); fi
-if rg -q 'CREATED' "$RACE_B"; then RACE_CREATED=$((RACE_CREATED + 1)); fi
-if rg -q 'DUPLICATE' "$RACE_A"; then RACE_DUPLICATE=$((RACE_DUPLICATE + 1)); fi
-if rg -q 'DUPLICATE' "$RACE_B"; then RACE_DUPLICATE=$((RACE_DUPLICATE + 1)); fi
+if grep -qE 'CREATED' "$RACE_A"; then RACE_CREATED=$((RACE_CREATED + 1)); fi
+if grep -qE 'CREATED' "$RACE_B"; then RACE_CREATED=$((RACE_CREATED + 1)); fi
+if grep -qE 'DUPLICATE' "$RACE_A"; then RACE_DUPLICATE=$((RACE_DUPLICATE + 1)); fi
+if grep -qE 'DUPLICATE' "$RACE_B"; then RACE_DUPLICATE=$((RACE_DUPLICATE + 1)); fi
 if [[ "$RACE_CREATED" -ne 1 || "$RACE_DUPLICATE" -ne 1 ]]; then
   printf 'Same-source race did not produce exactly one CREATED and one DUPLICATE\n' >&2
   sed -n '1,120p' "$RACE_A" >&2

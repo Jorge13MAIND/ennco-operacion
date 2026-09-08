@@ -110,7 +110,7 @@ RACE_B_PID=$!
 wait "$RACE_A_PID"
 wait "$RACE_B_PID"
 
-if ! rg -q 'SCHEDULED' "$RACE_A_LOG" || ! rg -q 'SCHEDULED' "$RACE_B_LOG"; then
+if ! grep -qE 'SCHEDULED' "$RACE_A_LOG" || ! grep -qE 'SCHEDULED' "$RACE_B_LOG"; then
   printf 'Capacity concurrency sessions did not both succeed\n' >&2
   sed -n '1,160p' "$RACE_A_LOG" >&2
   sed -n '1,160p' "$RACE_B_LOG" >&2

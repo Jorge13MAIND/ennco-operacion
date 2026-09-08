@@ -61,8 +61,8 @@ SQL
 race "$RACE_A" f & A_PID=$!; race "$RACE_B" e & B_PID=$!
 A_STATUS=0; B_STATUS=0; wait "$A_PID" || A_STATUS=$?; wait "$B_PID" || B_STATUS=$?
 if [[ "$A_STATUS" -ne 0 || "$B_STATUS" -ne 0 ]] || \
-  [[ "$(rg -l '"item_count": 1' "$RACE_A" "$RACE_B" | wc -l | tr -d ' ')" -ne 1 ]] || \
-  [[ "$(rg -l '"item_count": 0' "$RACE_A" "$RACE_B" | wc -l | tr -d ' ')" -ne 1 ]]; then
+  [[ "$(grep -lE '"item_count": 1' "$RACE_A" "$RACE_B" | wc -l | tr -d ' ')" -ne 1 ]] || \
+  [[ "$(grep -lE '"item_count": 0' "$RACE_A" "$RACE_B" | wc -l | tr -d ' ')" -ne 1 ]]; then
   sed -n '1,160p' "$RACE_A" >&2; sed -n '1,160p' "$RACE_B" >&2; exit 1
 fi
 "${PSQL[@]}" <<'SQL'

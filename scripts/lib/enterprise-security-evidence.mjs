@@ -316,7 +316,7 @@ export function auditCiConfiguration(workflow) {
     ["K6_PINNED_VERSION", "k6-v1.6.1-linux-amd64.tar.gz"],
     ["K6_ARCHIVE_CHECKSUM", "68df4958a1b089dc6f70a234e07c7ec818922f83b261ca24f3abf79882b13343"],
     ["ZAP_FAIL_ACTION", "fail_action: true"],
-    ["ZAP_JSON_REPORT", "-J zap-report.json"],
+    ["ZAP_JSON_REPORT", "--input report_json.json"],
     ["ZAP_EVIDENCE_GATE", "security-evidence-gate.mjs zap"],
     ["ZAP_EXPECTED_TARGET", "--expected-target http://127.0.0.1:3000"],
     ["ZAP_GENERATED_REPORT_ALLOWLIST", "--allow-prefix report_html.html"],

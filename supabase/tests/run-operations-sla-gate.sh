@@ -90,8 +90,8 @@ if [[ "$RACE_A_STATUS" -ne 0 || "$RACE_B_STATUS" -ne 0 ]]; then
   sed -n '1,120p' "$RACE_B" >&2
   exit 1
 fi
-if [[ "$(rg -l '"replayed": false' "$RACE_A" "$RACE_B" | wc -l | tr -d ' ')" -ne 1 ]] \
-  || [[ "$(rg -l '"replayed": true' "$RACE_A" "$RACE_B" | wc -l | tr -d ' ')" -ne 1 ]]; then
+if [[ "$(grep -lE '"replayed": false' "$RACE_A" "$RACE_B" | wc -l | tr -d ' ')" -ne 1 ]] \
+  || [[ "$(grep -lE '"replayed": true' "$RACE_A" "$RACE_B" | wc -l | tr -d ' ')" -ne 1 ]]; then
   printf 'Operations idempotency race did not produce one commit and one replay\n' >&2
   sed -n '1,120p' "$RACE_A" >&2
   sed -n '1,120p' "$RACE_B" >&2
