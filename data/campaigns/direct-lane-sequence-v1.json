@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "source": "docs/external/secuencia-ennco-copy.md",
-  "source_sha256": "9c71935994d6fdf5e7d78a2cc784fb30b06980e1545ba75cf7d31bc4a1b1b43c",
-  "generated_at": "2026-09-07T19:54:57.907Z",
+  "source_sha256": "b73e35bb4daedbdfed361e0696e11ff80d4625e510415b1c5841750758e36289",
+  "generated_at": "2026-09-08T00:36:42.444Z",
   "sender_name": "Francisco Cuellar",
   "sender_title": "Director General, ENNCO",
   "day_offsets": [
@@ -24,7 +24,7 @@
           "touch_number": 1,
           "day_offset": 0,
           "subject": "Reducción de costos en servicios eléctricos",
-          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque tenemos clientes muy similares a ustedes que han obtenido increíbles resultados en la reducción de costos y en servicios eléctricos.\n\nYa va a terminar el año y sé que probablemente quieran lograr sus resultados financieros.\n\n¿Cuándo podrías recibirme en tus oficinas para darte un análisis real de esto y mostrarte una estrategia de primer nivel para lograr esto?\n\nSi tú no te encargas de llevar esto, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales en la parte eléctrica: mantenimiento, adecuaciones y el costo del servicio, y entregamos un reporte claro de qué conviene atender y qué no.\n\nYa va a terminar el año y sé que probablemente quieran lograr sus resultados financieros.\n\n¿Cuándo podrías recibirme en tus oficinas para revisar cómo está su instalación y dejarte un análisis real de lo que encontremos?\n\nSi tú no te encargas de llevar esto, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
         },
         {
           "touch_number": 2,
@@ -78,7 +78,7 @@
           "touch_number": 1,
           "day_offset": 0,
           "subject": "Continuidad de operación en su planta",
-          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque tenemos clientes muy similares a ustedes que han obtenido muy buenos resultados en la continuidad de su operación y en el costo de sus servicios eléctricos.\n\nSé que en tu área lo que cuenta es que la planta no se detenga.\n\n¿Cuándo podrías recibirme para revisar cómo está la instalación y darte un análisis real de lo que encontremos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales en el mantenimiento de su instalación eléctrica: tableros, transformadores y acometidas, y entregamos un reporte de lo que encontramos y de lo que conviene atender primero.\n\nSé que en tu área lo que cuenta es que la planta no se detenga.\n\n¿Cuándo podrías recibirme para revisar cómo está la instalación y darte un análisis real de lo que encontremos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
         },
         {
           "touch_number": 2,
@@ -132,7 +132,7 @@
           "touch_number": 1,
           "day_offset": 0,
           "subject": "Instalación eléctrica documentada",
-          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque tenemos clientes muy similares a ustedes que han logrado tener su instalación eléctrica revisada y documentada, además de muy buenos resultados en el costo de sus servicios.\n\nSé que en tu área lo que cuenta es poder demostrar en qué condiciones está todo, con fecha y por escrito.\n\n¿Cuándo podrías recibirme para revisar la instalación y dejarte un análisis real de lo que encontremos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales revisando y documentando su instalación eléctrica: qué hay, en qué condiciones está y qué se atendió, listo para una auditoría.\n\nSé que en tu área lo que cuenta es poder demostrar en qué condiciones está todo, con fecha y por escrito.\n\n¿Cuándo podrías recibirme para revisar la instalación y dejarte un análisis real de lo que encontremos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
         },
         {
           "touch_number": 2,
@@ -186,7 +186,7 @@
           "touch_number": 1,
           "day_offset": 0,
           "subject": "Comparar propuestas eléctricas parejo",
-          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque tenemos clientes muy similares a ustedes que han obtenido muy buenos resultados en la reducción de costos de sus servicios eléctricos, y que además lograron comparar sus propuestas contra un mismo alcance.\n\nSé que en compras lo difícil no es conseguir precios, es saber si son comparables.\n\n¿Cuándo podrías recibirme para darte un análisis real de esto y mostrarte cómo lo estructuramos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales en servicios eléctricos, y lo primero que entregamos es un alcance por escrito: qué incluye, qué no y por qué, para que las propuestas se comparen parejo.\n\nSé que en compras lo difícil no es conseguir precios, es saber si son comparables.\n\n¿Cuándo podrías recibirme para darte un análisis real de esto y mostrarte cómo lo estructuramos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
         },
         {
           "touch_number": 2,

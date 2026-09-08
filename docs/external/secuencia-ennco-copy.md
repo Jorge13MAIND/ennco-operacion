@@ -59,11 +59,11 @@ Hola {{first_name}},
 
 Soy Francisco Cuellar, Director General de ENNCO.
 
-Te escribo porque tenemos clientes muy similares a ustedes que han obtenido increíbles resultados en la reducción de costos y en servicios eléctricos.
+Te escribo porque trabajamos con plantas industriales en la parte eléctrica: mantenimiento, adecuaciones y el costo del servicio, y entregamos un reporte claro de qué conviene atender y qué no.
 
 Ya va a terminar el año y sé que probablemente quieran lograr sus resultados financieros.
 
-¿Cuándo podrías recibirme en tus oficinas para darte un análisis real de esto y mostrarte una estrategia de primer nivel para lograr esto?
+¿Cuándo podrías recibirme en tus oficinas para revisar cómo está su instalación y dejarte un análisis real de lo que encontremos?
 
 Si tú no te encargas de llevar esto, ¿podrías dirigirme con la persona encargada por favor?
 
@@ -219,7 +219,7 @@ Hola {{first_name}},
 
 Soy Francisco Cuellar, Director General de ENNCO.
 
-Te escribo porque tenemos clientes muy similares a ustedes que han obtenido muy buenos resultados en la continuidad de su operación y en el costo de sus servicios eléctricos.
+Te escribo porque trabajamos con plantas industriales en el mantenimiento de su instalación eléctrica: tableros, transformadores y acometidas, y entregamos un reporte de lo que encontramos y de lo que conviene atender primero.
 
 Sé que en tu área lo que cuenta es que la planta no se detenga.
 
@@ -377,7 +377,7 @@ Hola {{first_name}},
 
 Soy Francisco Cuellar, Director General de ENNCO.
 
-Te escribo porque tenemos clientes muy similares a ustedes que han logrado tener su instalación eléctrica revisada y documentada, además de muy buenos resultados en el costo de sus servicios.
+Te escribo porque trabajamos con plantas industriales revisando y documentando su instalación eléctrica: qué hay, en qué condiciones está y qué se atendió, listo para una auditoría.
 
 Sé que en tu área lo que cuenta es poder demostrar en qué condiciones está todo, con fecha y por escrito.
 
@@ -535,7 +535,7 @@ Hola {{first_name}},
 
 Soy Francisco Cuellar, Director General de ENNCO.
 
-Te escribo porque tenemos clientes muy similares a ustedes que han obtenido muy buenos resultados en la reducción de costos de sus servicios eléctricos, y que además lograron comparar sus propuestas contra un mismo alcance.
+Te escribo porque trabajamos con plantas industriales en servicios eléctricos, y lo primero que entregamos es un alcance por escrito: qué incluye, qué no y por qué, para que las propuestas se comparen parejo.
 
 Sé que en compras lo difícil no es conseguir precios, es saber si son comparables.
 
