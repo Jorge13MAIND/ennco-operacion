@@ -263,6 +263,10 @@ jobs:
           # Sin -J: la accion escribe report_json.json por defecto y ademas lo
           # sube como artefacto; con un nombre distinto la accion fallaba con
           # 'report_json.json does not exist' aunque el escaneo hubiera pasado.
+          # -I: zap-baseline devuelve 2 cuando solo hay WARN (anti-CSRF, cache,
+          # atributos controlables) y fail_action lo convertia en fallo; con -I
+          # solo un FAIL real tumba el trabajo y el gate JSON sigue evaluando todo.
+          cmd_options: "-I"
       - name: Gate ZAP JSON and bind evidence to commit
         if: always()
         run: node scripts/security-evidence-gate.mjs zap --repo . --expected-commit "$GITHUB_SHA" --source-snapshot security-evidence/source.json --input report_json.json --evidence security-evidence/zap.json --allow-prefix report_json.json --allow-prefix report_md.md --allow-prefix report_html.html --allow-prefix zap.yaml --context github_actions --authenticated false --expected-target http://127.0.0.1:3000 --target-class synthetic_localhost

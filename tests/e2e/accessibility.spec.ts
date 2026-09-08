@@ -24,6 +24,11 @@ const surfaces = [
 
 for (const surface of surfaces) {
   test(`${surface.name} has no automated WCAG A or AA violations`, async ({ page }) => {
+    // Movimiento reducido: la hoja de estilos apaga las animaciones de entrada
+    // (opacity 0 -> 1) y el DOM nace ya en su estado final. Esperar a que las
+    // animaciones terminen no bastaba en los runners: axe llegaba a medir texto
+    // a media transicion (#88888d en vez de #6e6e73) y reportaba contraste falso.
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(surface.path);
     // El contraste se evalúa sobre el estado final: las animaciones de entrada
     // componen opacity/transform y falsean el color efectivo si el scan corre

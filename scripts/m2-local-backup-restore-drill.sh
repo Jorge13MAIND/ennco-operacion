@@ -148,8 +148,11 @@ printf '%s\n' 'SYNTHETIC RECEIPT FIXTURE. NO PII. NO CUSTOMER DATA.' \
   > "$SOURCE_OBJECTS/receipts/REC-M2-001.txt"
 PREQUOTE_SHA="$(shasum -a 256 "$SOURCE_OBJECTS/prequotes/PQ-M2-001.json" | awk '{print $1}')"
 RECEIPT_SHA="$(shasum -a 256 "$SOURCE_OBJECTS/receipts/REC-M2-001.txt" | awk '{print $1}')"
-PREQUOTE_SIZE="$(stat -f '%z' "$SOURCE_OBJECTS/prequotes/PQ-M2-001.json" 2>/dev/null || stat -c '%s' "$SOURCE_OBJECTS/prequotes/PQ-M2-001.json")"
-RECEIPT_SIZE="$(stat -f '%z' "$SOURCE_OBJECTS/receipts/REC-M2-001.txt" 2>/dev/null || stat -c '%s' "$SOURCE_OBJECTS/receipts/REC-M2-001.txt")"
+# wc -c en vez de stat: en GNU, stat -f '%z' interpreta %z como archivo, imprime
+# la informacion del sistema de archivos del segundo operando y falla, asi que
+# la variable llegaba a psql con seis lineas y seed.sql rompia con "syntax error at or near :".
+PREQUOTE_SIZE="$(wc -c < "$SOURCE_OBJECTS/prequotes/PQ-M2-001.json" | tr -d ' ')"
+RECEIPT_SIZE="$(wc -c < "$SOURCE_OBJECTS/receipts/REC-M2-001.txt" | tr -d ' ')"
 
 CURRENT_STEP="initialize_disposable_postgres"
 log_command "initdb --no-locale --encoding=UTF8 --auth=trust -D <mktemp>/pgdata"
