@@ -44,6 +44,11 @@ aprobado tiene 104: se movió el número nuestro, no su voz). El toque 8 lleva
 **baja explícita** en las cuatro variantes, por LFPDPPP. Campos del sistema:
 `{{first_name}}` y `{{company}}`.
 
+**Todos los asuntos abren con el primer nombre** (Grant, 8-sep-2026), igual que
+el cuerpo. El toque 1 de las cuatro variantes usa el mismo:
+`{{first_name}}, sobre tu instalación eléctrica.` Los toques 2 al 8 conservan su
+frase, con el nombre al frente, y siguen siendo distintos dentro de una variante.
+
 ---
 
 # Perfil A · Dirección general
@@ -52,7 +57,7 @@ El toque 1 es el correo aprobado literal. Los toques 2 al 5 son de Francisco; s�
 
 ## Toque 1 — día 0 · Presentación
 
-**Asunto:** Reducción de costos en servicios eléctricos
+**Asunto:** {{first_name}}, sobre tu instalación eléctrica.
 
 ```
 Hola {{first_name}},
@@ -79,7 +84,7 @@ Director General, ENNCO
 
 ## Toque 2 — día 3 · Dar claridad de qué hacemos
 
-**Asunto:** Sobre mi correo anterior
+**Asunto:** {{first_name}}, sobre mi correo anterior
 
 ```
 Hola {{first_name}},
@@ -102,7 +107,7 @@ Director General, ENNCO
 
 ## Toque 3 — día 7 · Reconocer que está ocupado
 
-**Asunto:** Sé que estás ocupado
+**Asunto:** {{first_name}}, sé que estás ocupado
 
 ```
 Hola {{first_name}},
@@ -118,7 +123,7 @@ Francisco
 
 ## Toque 4 — día 14 · La pregunta directa
 
-**Asunto:** Su último mantenimiento eléctrico
+**Asunto:** {{first_name}}, su último mantenimiento eléctrico
 
 ```
 Hola {{first_name}},
@@ -154,7 +159,7 @@ Francisco
 
 ## Toque 6 — día 42 · Subir el argumento
 
-**Asunto:** Lo que no se ve en el recibo
+**Asunto:** {{first_name}}, lo que no se ve en el recibo
 
 ```
 Hola {{first_name}},
@@ -170,7 +175,7 @@ Francisco
 
 ## Toque 7 — día 60 · Bajar la barrera: por escrito antes de la reunión
 
-**Asunto:** ¿Te lo mando por escrito?
+**Asunto:** {{first_name}}, ¿te lo mando por escrito?
 
 ```
 Hola {{first_name}},
@@ -188,7 +193,7 @@ Francisco
 
 ## Toque 8 — día 75 · Cierre con baja explícita
 
-**Asunto:** Cierro el tema
+**Asunto:** {{first_name}}, cierro el tema
 
 ```
 Hola {{first_name}},
@@ -212,7 +217,7 @@ Derivado del registro aprobado. Ángulo: que la planta no se detenga y tener con
 
 ## Toque 1 — día 0 · Presentación
 
-**Asunto:** Continuidad de operación en su planta
+**Asunto:** {{first_name}}, sobre tu instalación eléctrica.
 
 ```
 Hola {{first_name}},
@@ -235,7 +240,7 @@ Director General, ENNCO
 
 ## Toque 2 — día 3 · Dar claridad de qué hacemos
 
-**Asunto:** Qué hacemos exactamente
+**Asunto:** {{first_name}}, qué hacemos exactamente
 
 ```
 Hola {{first_name}},
@@ -258,7 +263,7 @@ Director General, ENNCO
 
 ## Toque 3 — día 7 · Reconocer que está ocupado
 
-**Asunto:** Sé que traes mil cosas
+**Asunto:** {{first_name}}, sé que traes mil cosas
 
 ```
 Hola {{first_name}},
@@ -274,7 +279,7 @@ Francisco
 
 ## Toque 4 — día 14 · La pregunta directa
 
-**Asunto:** ¿Ya toca revisión?
+**Asunto:** {{first_name}}, ¿ya toca revisión?
 
 ```
 Hola {{first_name}},
@@ -310,7 +315,7 @@ Francisco
 
 ## Toque 6 — día 42 · Subir el argumento
 
-**Asunto:** Con qué sustentar lo que pides
+**Asunto:** {{first_name}}, con qué sustentar lo que pides
 
 ```
 Hola {{first_name}},
@@ -328,7 +333,7 @@ Francisco
 
 ## Toque 7 — día 60 · Bajar la barrera: por escrito antes de la reunión
 
-**Asunto:** El análisis, por escrito
+**Asunto:** {{first_name}}, el análisis por escrito
 
 ```
 Hola {{first_name}},
@@ -346,7 +351,7 @@ Francisco
 
 ## Toque 8 — día 75 · Cierre con baja explícita
 
-**Asunto:** Cierro el seguimiento
+**Asunto:** {{first_name}}, cierro el seguimiento
 
 ```
 Hola {{first_name}},
@@ -370,7 +375,7 @@ Derivado del registro aprobado. Ángulo: que la instalación esté revisada y do
 
 ## Toque 1 — día 0 · Presentación
 
-**Asunto:** Instalación eléctrica documentada
+**Asunto:** {{first_name}}, sobre tu instalación eléctrica.
 
 ```
 Hola {{first_name}},
@@ -393,7 +398,7 @@ Director General, ENNCO
 
 ## Toque 2 — día 3 · Dar claridad de qué hacemos
 
-**Asunto:** Para que quede claro qué hacemos
+**Asunto:** {{first_name}}, para que quede claro qué hacemos
 
 ```
 Hola {{first_name}},
@@ -416,7 +421,7 @@ Director General, ENNCO
 
 ## Toque 3 — día 7 · Reconocer que está ocupado
 
-**Asunto:** Sé que andas ocupado
+**Asunto:** {{first_name}}, sé que andas ocupado
 
 ```
 Hola {{first_name}},
@@ -432,7 +437,7 @@ Francisco
 
 ## Toque 4 — día 14 · La pregunta directa
 
-**Asunto:** ¿Quedó documentada la última revisión?
+**Asunto:** {{first_name}}, ¿quedó documentada la última revisión?
 
 ```
 Hola {{first_name}},
@@ -468,7 +473,7 @@ Francisco
 
 ## Toque 6 — día 42 · Subir el argumento
 
-**Asunto:** Lo dicho y lo escrito
+**Asunto:** {{first_name}}, lo dicho y lo escrito
 
 ```
 Hola {{first_name}},
@@ -486,7 +491,7 @@ Francisco
 
 ## Toque 7 — día 60 · Bajar la barrera: por escrito antes de la reunión
 
-**Asunto:** Para tu expediente
+**Asunto:** {{first_name}}, para tu expediente
 
 ```
 Hola {{first_name}},
@@ -504,7 +509,7 @@ Francisco
 
 ## Toque 8 — día 75 · Cierre con baja explícita
 
-**Asunto:** Cierro por ahora
+**Asunto:** {{first_name}}, cierro por ahora
 
 ```
 Hola {{first_name}},
@@ -528,7 +533,7 @@ Derivado del registro aprobado. Ángulo: comparar propuestas contra el mismo alc
 
 ## Toque 1 — día 0 · Presentación
 
-**Asunto:** Comparar propuestas eléctricas parejo
+**Asunto:** {{first_name}}, sobre tu instalación eléctrica.
 
 ```
 Hola {{first_name}},
@@ -551,7 +556,7 @@ Director General, ENNCO
 
 ## Toque 2 — día 3 · Dar claridad de qué hacemos
 
-**Asunto:** Qué incluye y qué no
+**Asunto:** {{first_name}}, qué incluye y qué no
 
 ```
 Hola {{first_name}},
@@ -574,7 +579,7 @@ Director General, ENNCO
 
 ## Toque 3 — día 7 · Reconocer que está ocupado
 
-**Asunto:** Sé que ves muchos proveedores
+**Asunto:** {{first_name}}, sé que ves muchos proveedores
 
 ```
 Hola {{first_name}},
@@ -590,7 +595,7 @@ Francisco
 
 ## Toque 4 — día 14 · La pregunta directa
 
-**Asunto:** ¿Qué incluye su póliza hoy?
+**Asunto:** {{first_name}}, ¿qué incluye su póliza hoy?
 
 ```
 Hola {{first_name}},
@@ -626,7 +631,7 @@ Francisco
 
 ## Toque 6 — día 42 · Subir el argumento
 
-**Asunto:** Con qué defender la partida
+**Asunto:** {{first_name}}, con qué defender la partida
 
 ```
 Hola {{first_name}},
@@ -644,7 +649,7 @@ Francisco
 
 ## Toque 7 — día 60 · Bajar la barrera: por escrito antes de la reunión
 
-**Asunto:** Antes de pedir propuestas
+**Asunto:** {{first_name}}, antes de pedir propuestas
 
 ```
 Hola {{first_name}},
@@ -662,7 +667,7 @@ Francisco
 
 ## Toque 8 — día 75 · Cierre con baja explícita
 
-**Asunto:** Te dejo la hoja y cierro el tema
+**Asunto:** {{first_name}}, te dejo la hoja y cierro el tema
 
 ```
 Hola {{first_name}},

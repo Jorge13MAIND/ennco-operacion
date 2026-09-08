@@ -83,6 +83,13 @@ const dupInVariant = perVariant.flatMap((set, v) =>
 check("NO_DUPLICATE_SUBJECTS_WITHIN_VARIANT", dupInVariant.length === 0, dupInVariant);
 check("SUBJECTS_UNDER_70_CHARS", subjects.every((s) => s.length <= 70), Math.max(...subjects.map((s) => s.length)));
 
+// El asunto personalizado es una decision de Grant (8-sep), no un adorno: si un
+// asunto pierde el nombre, el prospecto recibe un correo mas frio que el resto
+// de su secuencia. La segunda vuelta va aparte porque saluda al referido.
+const sequenceSubjects = subjects.slice(0, 32);
+const withoutName = sequenceSubjects.map((s, i) => ({ i: i + 1, asunto: s })).filter((x) => !x.asunto.includes("{{first_name}}"));
+check("EVERY_SUBJECT_OPENS_WITH_FIRST_NAME", withoutName.length === 0, withoutName);
+
 const badTags = [...source.matchAll(/\{\{(\w+)\}\}/g)].map((m) => m[1])
   .filter((t) => !["first_name", "company", "referidor", "referido"].includes(t));
 check("ONLY_KNOWN_MERGE_TAGS", badTags.length === 0, [...new Set(badTags)]);
@@ -96,6 +103,9 @@ check("ONLY_KNOWN_MERGE_TAGS", badTags.length === 0, [...new Set(badTags)]);
 //  - 2026-09-07, Grant: la primera frase de las cuatro variantes del toque 1
 //    pasa de "clientes muy similares... resultados" a que hace ENNCO y que
 //    entrega; en DIRECCION se retira "estrategia de primer nivel" del cierre.
+//  - 2026-09-08, Grant: el asunto se personaliza. Los 32 abren con
+//    {{first_name}} y el toque 1 de las cuatro variantes dice
+//    "{{first_name}}, sobre tu instalacion electrica." El cuerpo no se toca.
 const APPROVED_ANCHORS = [
   "Soy Francisco Cuellar, Director General de ENNCO.",
   "Si tú no te encargas de llevar esto, ¿podrías dirigirme con la persona encargada por favor?",
