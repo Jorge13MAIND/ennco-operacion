@@ -2,6 +2,8 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 import type { Route } from "next";
+import { CorreosStats } from "@/components/CorreosStats";
+import { loadDirectLaneStats } from "@/lib/correos/stats-loader";
 import Link from "next/link";
 import { z } from "zod";
 
@@ -88,7 +90,7 @@ function sumEnrollments(overview: DirectLaneOverview, statuses: string[]): numbe
 
 export default async function CorreosPage() {
   const access = await requireOperationsAccess();
-  const [screen, templates] = await Promise.all([loadDirectLaneScreen(access), loadPlaybookTemplates()]);
+  const [screen, templates, stats] = await Promise.all([loadDirectLaneScreen(access), loadPlaybookTemplates(), loadDirectLaneStats(access)]);
   const { overview } = screen;
   const live = screen.evidenceClass === "live";
   const canOperate = live && access.role !== "auditor_readonly";
@@ -251,6 +253,13 @@ export default async function CorreosPage() {
       </section>
 
       <section className="panel">
+          <div className="panel-head">
+            <h2>Estadísticas</h2>
+            <p>Métricas reales del carril: embudo, tasa de respuesta y apertura (direccional) por variante, buzón, estado y semana, y el ciclo de mejora de los viernes.</p>
+          </div>
+          <CorreosStats screen={stats} />
+        </section>
+        <section className="panel">
         <div className="panel-head portal-panel-head">
           <div>
             <h2>Respuestas del carril</h2>

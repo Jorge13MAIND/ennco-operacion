@@ -38,6 +38,7 @@ export const directLaneSendInputSchema = z.object({
     references: z.array(z.string().trim().min(3).max(998)).max(20).default([]),
   }).strict().nullable().default(null),
   list_unsubscribe_url: z.url().nullable().default(null),
+  open_pixel_url: z.url().nullable().default(null),
 }).strict().superRefine((value, context) => {
   if (/<(?:a|img|html|body|script|style)\b/iu.test(value.body_text)) {
     context.addIssue({ code: "custom", message: "DIRECT_LANE_HTML_FORBIDDEN" });
@@ -128,12 +129,35 @@ export function buildDirectLaneRawMessage(rawInput: DirectLaneSendInput): { raw:
     headers.push(`List-Unsubscribe: <${input.list_unsubscribe_url}>`);
     headers.push("List-Unsubscribe-Post: List-Unsubscribe=One-Click");
   }
-  headers.push(
-    "MIME-Version: 1.0",
-    "Content-Type: text/plain; charset=UTF-8",
-    "Content-Transfer-Encoding: base64",
-  );
-  return { raw: `${headers.join("\r\n")}\r\n\r\n${wrappedBase64(input.body_text)}\r\n`, rfcMessageId };
+  if (!input.open_pixel_url) {
+    headers.push(
+      "MIME-Version: 1.0",
+      "Content-Type: text/plain; charset=UTF-8",
+      "Content-Transfer-Encoding: base64",
+    );
+    return { raw: `${headers.join("\r\n")}\r\n\r\n${wrappedBase64(input.body_text)}\r\n`, rfcMessageId };
+  }
+  // Con pixel: multipart/alternative con la MISMA prosa en texto y en un HTML
+  // mínimo (párrafos y saltos, sin estilos, sin links salvo el pixel). El HTML
+  // se genera aquí a partir del texto, nunca viene del copy.
+  const boundary = `=_ennco_${input.message_id.replace(/-/gu, "")}`;
+  const html = `<!DOCTYPE html><html lang="es"><body>${textToMinimalHtml(input.body_text)}<img src="${escapeHtml(input.open_pixel_url)}" width="1" height="1" alt="" style="display:none"></body></html>`;
+  headers.push("MIME-Version: 1.0", `Content-Type: multipart/alternative; boundary="${boundary}"`);
+  const body = [
+    `--${boundary}`, "Content-Type: text/plain; charset=UTF-8", "Content-Transfer-Encoding: base64", "", wrappedBase64(input.body_text),
+    `--${boundary}`, "Content-Type: text/html; charset=UTF-8", "Content-Transfer-Encoding: base64", "", wrappedBase64(html),
+    `--${boundary}--`, "",
+  ].join("\r\n");
+  return { raw: `${headers.join("\r\n")}\r\n\r\n${body}`, rfcMessageId };
+}
+
+function escapeHtml(value: string): string {
+  return value.replace(/&/gu, "&amp;").replace(/</gu, "&lt;").replace(/>/gu, "&gt;").replace(/"/gu, "&quot;");
+}
+
+/** Párrafos separados por línea en blanco; saltos simples como <br>. */
+export function textToMinimalHtml(text: string): string {
+  return text.split(/\n\s*\n/u).map((paragraph) => `<p>${escapeHtml(paragraph.trim()).replace(/\n/gu, "<br>")}</p>`).join("");
 }
 
 export class DirectLaneGmailSender {

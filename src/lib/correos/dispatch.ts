@@ -1,4 +1,5 @@
-import { readDirectLaneCredential, claimDirectLaneDispatch, readDirectLaneHealth, settleDirectLaneDispatch, type DirectLaneClaim, type DirectLaneMailboxHealth } from "@/lib/correos/client";
+import { readDirectLaneCredential, claimDirectLaneDispatch, markDirectLaneOpenTracked, readDirectLaneHealth, settleDirectLaneDispatch, type DirectLaneClaim, type DirectLaneMailboxHealth } from "@/lib/correos/client";
+import { buildOpenPixelUrl, createOpenPixelToken, openPixelAllowed } from "@/lib/correos/open-pixel";
 import { DirectLaneGmailSender, DirectLaneSendError } from "@/lib/correos/gmail-send";
 import { openDirectLaneSecret } from "@/lib/correos/vault";
 import { getGmailAccessToken, GmailTokenError, invalidateGmailAccessToken } from "@/lib/dispatch/gmail-token";
@@ -27,6 +28,7 @@ export function mailboxesEligibleForTick(mailboxes: DirectLaneMailboxHealth[]): 
 type TickDependencies = {
   claim?: typeof claimDirectLaneDispatch;
   settle?: typeof settleDirectLaneDispatch;
+  markTracked?: typeof markDirectLaneOpenTracked;
   readCredential?: typeof readDirectLaneCredential;
   readHealth?: typeof readDirectLaneHealth;
   accessToken?: typeof getGmailAccessToken;
@@ -40,9 +42,16 @@ function unsubscribeUrlFor(config: RuntimeConfig, claim: DirectLaneClaim): strin
   return buildUnsubscribeUrl(config.appUrl, token);
 }
 
+function openPixelUrlFor(config: RuntimeConfig, claim: DirectLaneClaim, messageId: string): string | null {
+  if (claim.kind !== "TOUCH" || !config.dispatchSecret || !config.organizationId) return null;
+  if (!openPixelAllowed(config.openTracking, claim.touch_number ?? null)) return null;
+  return buildOpenPixelUrl(config.appUrl, createOpenPixelToken({ organizationId: config.organizationId, messageId, secret: config.dispatchSecret }));
+}
+
 export async function runDirectLaneTick(config: RuntimeConfig, deps: TickDependencies = {}): Promise<DirectLaneTickResult> {
   const claim = deps.claim ?? claimDirectLaneDispatch;
   const settle = deps.settle ?? settleDirectLaneDispatch;
+  const markTracked = deps.markTracked ?? markDirectLaneOpenTracked;
   const readCredential = deps.readCredential ?? readDirectLaneCredential;
   const readHealth = deps.readHealth ?? readDirectLaneHealth;
   const issueToken = deps.accessToken ?? getGmailAccessToken;
@@ -107,6 +116,7 @@ export async function runDirectLaneTick(config: RuntimeConfig, deps: TickDepende
       touch_number: claimed.touch_number ?? null,
       thread: claimed.thread ?? null,
       list_unsubscribe_url: claimed.kind === "TOUCH" ? unsubscribeUrlFor(config, claimed) : null,
+      open_pixel_url: openPixelUrlFor(config, claimed, messageId),
     };
     try {
       let sent;
@@ -128,6 +138,7 @@ export async function runDirectLaneTick(config: RuntimeConfig, deps: TickDepende
         providerThreadId: sent.provider_thread_id,
         rfcMessageId: sent.rfc_message_id,
       });
+      if (envelope.open_pixel_url) await markTracked(config, messageId).catch(() => undefined);
       entry.result = `SENT:${claimed.kind}`;
     } catch (error) {
       const code = error instanceof DirectLaneSendError || error instanceof GmailTokenError ? error.code : "DIRECT_LANE_SEND_UNKNOWN_ERROR";

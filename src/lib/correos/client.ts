@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 
@@ -241,6 +242,48 @@ export async function resolveDirectLaneOutbound(config: RuntimeConfig, input: {
     [config.organizationId, input.mailboxId, input.providerThreadId],
     { target_mailbox_id: input.mailboxId, target_provider_thread_id: input.providerThreadId }));
   return parsed.message_id;
+}
+
+/** Marca que el mensaje salió con pixel (denominador de la tasa de apertura). */
+export async function markDirectLaneOpenTracked(config: RuntimeConfig, messageId: string): Promise<{ status: string }> {
+  requireConfig(config);
+  return z.object({ status: z.string() }).passthrough().parse(await callRpc(config, "mark_direct_lane_open_tracked",
+    [config.organizationId, messageId], { target_message_id: messageId }));
+}
+
+/** Registra una apertura (la ruta pública del pixel ya verificó la firma del token). */
+export async function recordDirectLaneOpen(config: RuntimeConfig, messageId: string): Promise<{ status: string }> {
+  requireConfig(config);
+  return z.object({ status: z.string() }).passthrough().parse(await callRpc(config, "record_direct_lane_open",
+    [config.organizationId, messageId], { target_message_id: messageId }));
+}
+
+/** Estadísticas del carril para el cron (misma función que ve el operador, con prueba HMAC). */
+export async function readDirectLaneStatsSystem(config: RuntimeConfig, sinceIso: string, untilIso: string): Promise<unknown> {
+  requireConfig(config);
+  return callRpc(config, "read_direct_lane_stats_system", [config.organizationId, sinceIso, untilIso], { since_text: sinceIso, until_text: untilIso });
+}
+
+export async function storeDirectLaneWeeklyReport(config: RuntimeConfig, input: {
+  weekStart: string; metrics: unknown; previous: unknown; recommendations: readonly string[];
+}): Promise<{ status: string; report_id?: string }> {
+  requireConfig(config);
+  const metricsText = JSON.stringify(input.metrics);
+  const previousText = input.previous ? JSON.stringify(input.previous) : "";
+  const recommendationsText = JSON.stringify(input.recommendations);
+  const metricsSha = createHash("sha256").update(metricsText, "utf8").digest("hex");
+  return z.object({ status: z.string(), report_id: z.string().optional() }).passthrough().parse(await callRpc(config, "store_direct_lane_weekly_report",
+    [config.organizationId, input.weekStart, metricsSha],
+    { target_week_start: input.weekStart, target_metrics_text: metricsText, target_previous_text: previousText, target_recommendations_text: recommendationsText }));
+}
+
+const autoenrollResultSchema = z.object({ status: z.string(), reason: z.string().optional(), enrolled: z.number().int().optional(), room: z.number().int().optional() }).passthrough();
+export type DirectLaneAutoenrollResult = z.infer<typeof autoenrollResultSchema>;
+
+/** Llena el cupo de contactos nuevos del día de un buzón con la campaña en marcha. */
+export async function autoenrollDirectLane(config: RuntimeConfig, mailboxId: string): Promise<DirectLaneAutoenrollResult> {
+  requireConfig(config);
+  return autoenrollResultSchema.parse(await callRpc(config, "autoenroll_direct_lane", [config.organizationId, mailboxId], { target_mailbox_id: mailboxId }));
 }
 
 export async function annotateDirectLaneInbound(config: RuntimeConfig, input: {

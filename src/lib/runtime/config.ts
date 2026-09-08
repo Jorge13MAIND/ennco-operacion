@@ -47,6 +47,8 @@ const runtimeSchema = z.object({
   directLaneReleased: z.boolean(),
   directLaneMode: z.enum(["shadow", "live"]),
   directLaneVaultKey: z.string().regex(/^[A-Za-z0-9+/]{43}=$/u).optional(),
+  openTracking: z.enum(["off", "from_touch_2", "all"]),
+  autoEnroll: z.boolean(),
 });
 
 export type RuntimeConfig = z.infer<typeof runtimeSchema>;
@@ -128,6 +130,8 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
     directLaneReleased: envBoolean(environment.ENNCO_DIRECT_LANE_RELEASED, false),
     directLaneMode: environment.ENNCO_DIRECT_LANE_MODE === "live" ? "live" : "shadow",
     directLaneVaultKey: environment.ENNCO_DIRECT_LANE_VAULT_KEY || undefined,
+    openTracking: environment.ENNCO_OPEN_TRACKING === "all" ? "all" : environment.ENNCO_OPEN_TRACKING === "off" ? "off" : "from_touch_2",
+    autoEnroll: envBoolean(environment.ENNCO_AUTOENROLL, false),
   });
 
   const configuredValues = [config.supabaseUrl, config.supabasePublishableKey, config.organizationId];

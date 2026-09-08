@@ -29,6 +29,14 @@
     {
       "path": "/api/v1/internal/cron/correos-sync",
       "schedule": "2-59/5 13-23 * * 1-5"
+    },
+    {
+      "path": "/api/v1/internal/cron/correos-autoenroll",
+      "schedule": "0 15 * * 1-5"
+    },
+    {
+      "path": "/api/v1/internal/cron/correos-weekly",
+      "schedule": "0 20 * * 5"
     }
   ]
 }
