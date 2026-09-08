@@ -45,7 +45,12 @@ if ((k6.metrics?.http_req_failed?.value ?? 1) !== 0
   || (k6.metrics?.checks?.fails ?? 1) !== 0
   || (k6.metrics?.http_req_duration?.["p(95)"] ?? Infinity) >= 800) failures.push("LOAD_REPORT_INVALID");
 const playwrightMatch = playwright.match(/(\d+) passed/);
-if (!playwrightMatch || Number(playwrightMatch[1]) < 131 || !playwright.includes("4 skipped")) {
+const playwrightSkippedMatch = playwright.match(/(\d+) skipped/);
+// Dos pruebas corren solo en desktop-standard y se omiten en los otros cuatro
+// proyectos de playwright.config.ts: 2 x 4 = 8 omitidas. El valor anterior (4)
+// era de cuando la matriz tenia tres proyectos y dejaba el gate en FAIL.
+const expectedSkipped = 8;
+if (!playwrightMatch || Number(playwrightMatch[1]) < 131 || Number(playwrightSkippedMatch?.[1] ?? -1) !== expectedSkipped) {
   failures.push("PLAYWRIGHT_REPORT_INVALID");
 }
 
@@ -66,7 +71,7 @@ const report = {
   }])),
   metrics: {
     playwright_passed: playwrightMatch ? Number(playwrightMatch[1]) : null,
-    playwright_skipped: 4,
+    playwright_skipped: playwrightSkippedMatch ? Number(playwrightSkippedMatch[1]) : null,
     browser_surface_viewport_matrix: browser.surface_results?.length ?? null,
     browser_runtime_failures: browser.failures?.length ?? null,
     mobile_portal_lcp_p75_ms: browser.mobile_portal_profile?.lcp_p75_ms ?? null,
