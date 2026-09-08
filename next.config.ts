@@ -34,6 +34,10 @@ const nextConfig: NextConfig = {
           { key: "X-Frame-Options", value: "DENY" },
           { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
           { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+          // ZAP (regla 90004) marcaba su ausencia en cada corrida. La app no carga
+          // subrecursos de otros origenes (fuentes del sistema, imagenes propias,
+          // datos por fetch), asi que require-corp no rompe nada.
+          { key: "Cross-Origin-Embedder-Policy", value: "require-corp" },
           { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
           { key: "X-XSS-Protection", value: "0" },
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },

@@ -701,9 +701,14 @@ begin
   set qualification_reason = null
   where organization_id = item_record.organization_id and contact_id = item_record.subject_id;
 
-  delete from public.qualification_evidence_links qel using public.source_evidence se
-  where qel.organization_id=se.organization_id and qel.source_evidence_id=se.id
-    and se.organization_id=item_record.organization_id and lower(se.subject_type)='contact' and se.subject_id=item_record.subject_id;
+  -- La tabla nace en la migracion 0014 (integridad comercial). El gate de
+  -- retencion aplica solo 0001 a 0003 y aqui fallaba con 'relation does not
+  -- exist'; en produccion, donde existe, se borra igual que antes.
+  if to_regclass('public.qualification_evidence_links') is not null then
+    delete from public.qualification_evidence_links qel using public.source_evidence se
+    where qel.organization_id=se.organization_id and qel.source_evidence_id=se.id
+      and se.organization_id=item_record.organization_id and lower(se.subject_type)='contact' and se.subject_id=item_record.subject_id;
+  end if;
 
   delete from public.source_evidence
   where organization_id = item_record.organization_id

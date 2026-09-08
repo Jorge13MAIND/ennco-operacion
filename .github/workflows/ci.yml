@@ -26,6 +26,11 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # Historia completa: verify:m9-readiness comprueba con git cat-file que
+          # el commit de la evidencia exista; con el clon superficial por defecto
+          # (profundidad 1) fallaba en cada push.
+          fetch-depth: 0
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
@@ -58,6 +63,11 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # Historia completa: verify:m9-readiness comprueba con git cat-file que
+          # el commit de la evidencia exista; con el clon superficial por defecto
+          # (profundidad 1) fallaba en cada push.
+          fetch-depth: 0
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
@@ -110,6 +120,11 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # Historia completa: verify:m9-readiness comprueba con git cat-file que
+          # el commit de la evidencia exista; con el clon superficial por defecto
+          # (profundidad 1) fallaba en cada push.
+          fetch-depth: 0
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
@@ -161,6 +176,11 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # Historia completa: verify:m9-readiness comprueba con git cat-file que
+          # el commit de la evidencia exista; con el clon superficial por defecto
+          # (profundidad 1) fallaba en cada push.
+          fetch-depth: 0
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
@@ -205,6 +225,11 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # Historia completa: verify:m9-readiness comprueba con git cat-file que
+          # el commit de la evidencia exista; con el clon superficial por defecto
+          # (profundidad 1) fallaba en cada push.
+          fetch-depth: 0
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22

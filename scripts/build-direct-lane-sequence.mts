@@ -22,6 +22,10 @@ import {
 const root = resolve(import.meta.dirname, "..");
 const sourcePath = resolve(root, "docs/external/secuencia-ennco-copy.md");
 const targetPath = resolve(root, "data/campaigns/direct-lane-sequence-v1.json");
+// Copia identica dentro de src: la ruta de crear campana la IMPORTA (Turbopack no
+// resuelve importaciones fuera de src ni traza lecturas de disco con ruta
+// construida). El test de deriva exige que ambas copias sean identicas.
+const bundledPath = resolve(root, "src/generated/direct-lane-sequence-v1.json");
 const checkOnly = process.argv.includes("--check");
 
 // El copy del 3-sep invirtio la jerarquia: antes era "## Toque" con "### variante"
@@ -124,5 +128,6 @@ if (checkOnly) {
   console.log(`DIRECT_LANE_SEQUENCE_PASS ${candidate.variants.length} variantes × 8 toques`);
 } else {
   writeFileSync(targetPath, serialized);
+  writeFileSync(bundledPath, serialized);
   console.log(`Escrito ${targetPath}: ${candidate.variants.length} variantes × 8 toques, fuente ${sourceSha256.slice(0, 12)}`);
 }
