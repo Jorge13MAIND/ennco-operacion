@@ -128,24 +128,41 @@ export function MailboxStateAction({ mailboxId, status: currentStatus, canUnkill
   );
 }
 
-export function MailboxCapAction({ mailboxId, rampMode, fixedCap, capMax, isClientPrimary }: { mailboxId: string; rampMode: "AUTO" | "FIXED"; fixedCap: number; capMax: number; isClientPrimary: boolean }) {
+export function MailboxCapAction({ mailboxId, rampMode, fixedCap, capMax, isClientPrimary, rampSchedule, rampAnchorAt }: {
+  mailboxId: string; rampMode: "AUTO" | "FIXED" | "SCHEDULE"; fixedCap: number; capMax: number; isClientPrimary: boolean;
+  rampSchedule?: number[] | null; rampAnchorAt?: string | null;
+}) {
   const { status, error, run } = useMutation();
   async function submit(formData: FormData) {
-    await run(`/api/v1/operations/correos/mailboxes/${mailboxId}/configure`, {
-      ramp_mode: String(formData.get("ramp_mode")),
+    const mode = String(formData.get("ramp_mode"));
+    const scheduleText = String(formData.get("ramp_schedule") ?? "").trim();
+    const anchorText = String(formData.get("ramp_anchor_at") ?? "").trim();
+    const body: Record<string, unknown> = {
+      ramp_mode: mode,
       fixed_cap: Number(formData.get("fixed_cap")),
       cap_max: Number(formData.get("cap_max")),
       reason: String(formData.get("reason")),
-    });
+    };
+    if (mode === "SCHEDULE") {
+      // "5,10,15,20,25" -> [5,10,15,20,25]; el ultimo valor se sostiene.
+      body.ramp_schedule = scheduleText.split(/[,\s]+/u).filter(Boolean).map(Number);
+      // La fecha se ancla a las 00:00 de Mexico (UTC-6) para que la semana cambie los lunes.
+      if (anchorText) body.ramp_anchor_at = `${anchorText}T06:00:00Z`;
+    }
+    await run(`/api/v1/operations/correos/mailboxes/${mailboxId}/configure`, body);
   }
+  const anchorDefault = rampAnchorAt ? new Date(rampAnchorAt).toISOString().slice(0, 10) : "";
   return (
     <form action={(data) => void submit(data)} className="compact-operation-form">
       <label>Rampa
         <select defaultValue={rampMode} name="ramp_mode">
+          <option value="SCHEDULE">Semanal programada (topes por semana)</option>
           <option value="AUTO">Automática 5 → 10 → 20 → 40 por semana</option>
           <option value="FIXED">Fija</option>
         </select>
       </label>
+      <label>Topes por semana (si es programada)<input defaultValue={(rampSchedule ?? []).join(",")} name="ramp_schedule" pattern="[0-9,\s]*" placeholder="5,10,15,20,25" /></label>
+      <label>Lunes de arranque (si es programada)<input defaultValue={anchorDefault} name="ramp_anchor_at" type="date" /></label>
       <label>Tope fijo (si la rampa es fija)<input defaultValue={fixedCap} max={100} min={0} name="fixed_cap" type="number" /></label>
       <label>Techo diario<input defaultValue={capMax} max={isClientPrimary ? 20 : 100} min={0} name="cap_max" type="number" /></label>
       <label>Motivo<input maxLength={200} minLength={3} name="reason" required /></label>

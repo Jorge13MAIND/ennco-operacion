@@ -6,7 +6,9 @@ import { uuidSchema } from "@/lib/operations/mutations";
 
 const bodySchema = z.object({
   status: z.enum(["CONNECTED", "PAUSED", "KILLED"]).optional(),
-  ramp_mode: z.enum(["AUTO", "FIXED"]).optional(),
+  ramp_mode: z.enum(["AUTO", "FIXED", "SCHEDULE"]).optional(),
+  ramp_schedule: z.array(z.number().int().min(0).max(100)).min(1).max(12).optional(),
+  ramp_anchor_at: z.string().datetime({ offset: true }).optional(),
   fixed_cap: z.number().int().min(0).max(100).optional(),
   cap_max: z.number().int().min(0).max(100).optional(),
   display_name: z.string().trim().min(3).max(120).optional(),

@@ -176,14 +176,14 @@ export default async function CorreosPage() {
                       {mailbox.credential_connected_at ? <><br /><span className="fine">Conectado {stamp.format(new Date(mailbox.credential_connected_at))}</span></> : null}
                     </td>
                     <td data-label="Hoy">{mailbox.sent_today}/{mailbox.effective_cap}{mailbox.queued > 0 ? <><br /><span className="fine">{mailbox.queued} en cola</span></> : null}</td>
-                    <td data-label="Rampa">{mailbox.ramp_mode === "AUTO" ? "Automática" : `Fija ${mailbox.fixed_cap}`} · techo {mailbox.cap_max}{mailbox.first_send_at ? <><br /><span className="fine">Primer envío {stamp.format(new Date(mailbox.first_send_at))}</span></> : null}</td>
+                    <td data-label="Rampa">{mailbox.ramp_mode === "SCHEDULE" ? `Semanal ${(mailbox.ramp_schedule ?? []).join("→")} (semana ${(mailbox.ramp_week ?? 0) + 1})` : mailbox.ramp_mode === "AUTO" ? "Automática" : `Fija ${mailbox.fixed_cap}`} · techo {mailbox.cap_max}{mailbox.first_send_at ? <><br /><span className="fine">Primer envío {stamp.format(new Date(mailbox.first_send_at))}</span></> : null}</td>
                     <td data-label="Respuestas">{mailbox.sync?.last_synced_at ? `Sync ${stamp.format(new Date(mailbox.sync.last_synced_at))}` : "Sin sync"}{mailbox.sync?.last_error_code ? <><br /><span className="status blocked">{mailbox.sync.last_error_code}</span></> : null}</td>
                     <td data-label="Última actividad">{mailbox.last_error ? <span className="status blocked">{mailbox.last_error}</span> : `${mailbox.sent_total} enviados`}</td>
                     {canOperate ? (
                       <td data-label="Acción">
                         {mailbox.status !== "KILLED" && !mailbox.credential_active ? <ConnectMailboxAction email={mailbox.normalized_email} mailboxId={mailbox.mailbox_id} /> : null}
                         {mailbox.credential_active ? <MailboxStateAction canUnkill={screen.canApprove} mailboxId={mailbox.mailbox_id} status={mailbox.status} /> : null}
-                        {mailbox.credential_active ? <details><summary className="fine">Tope y rampa</summary><MailboxCapAction capMax={mailbox.cap_max} fixedCap={mailbox.fixed_cap} isClientPrimary={mailbox.is_client_primary} mailboxId={mailbox.mailbox_id} rampMode={mailbox.ramp_mode} /></details> : null}
+                        {mailbox.credential_active ? <details><summary className="fine">Tope y rampa</summary><MailboxCapAction capMax={mailbox.cap_max} fixedCap={mailbox.fixed_cap} isClientPrimary={mailbox.is_client_primary} mailboxId={mailbox.mailbox_id} rampAnchorAt={mailbox.ramp_anchor_at ?? null} rampMode={mailbox.ramp_mode} rampSchedule={mailbox.ramp_schedule ?? null} /></details> : null}
                         {mailbox.credential_active ? <details><summary className="fine">Desconectar</summary><RevokeMailboxAction mailboxId={mailbox.mailbox_id} /></details> : null}
                       </td>
                     ) : null}
