@@ -217,15 +217,26 @@ export function ApproveCampaignAction({ campaignId }: { campaignId: string }) {
 
 export function CampaignStateAction({ campaignId, state }: { campaignId: string; state: "RUNNING" | "PAUSED" | "COMPLETED" | "DRAFT" }) {
   const { status, error, run } = useMutation();
+  const [target, setTarget] = useState<"RUNNING" | "PAUSED" | "COMPLETED">(state === "RUNNING" ? "PAUSED" : "RUNNING");
   if (state === "DRAFT" || state === "COMPLETED") return null;
-  const target = state === "RUNNING" ? "PAUSED" : "RUNNING";
   async function submit(formData: FormData) {
-    await run(`/api/v1/operations/correos/campaigns/${campaignId}/state`, { state: target, reason: String(formData.get("reason")) });
+    await run(`/api/v1/operations/correos/campaigns/${campaignId}/state`, { state: String(formData.get("state")), reason: String(formData.get("reason")) });
   }
   return (
     <form action={(data) => void submit(data)} className="inline-operation">
+      <label>Estado
+        {/* Terminar es definitivo: una campaña COMPLETED no se reabre y deja de
+            despachar. Es lo que libera el formulario de crear la siguiente. */}
+        <select name="state" onChange={(event) => setTarget(event.currentTarget.value as typeof target)} value={target}>
+          {state === "RUNNING" ? <option value="PAUSED">Pausar (se puede reanudar)</option> : <option value="RUNNING">Reanudar</option>}
+          <option value="COMPLETED">Terminar (definitivo)</option>
+        </select>
+      </label>
       <label>Motivo<input maxLength={200} minLength={3} name="reason" required /></label>
-      <button className="text-button" disabled={status === "pending"} type="submit">{target === "PAUSED" ? "Pausar campaña" : "Reanudar campaña"}</button>
+      <button className="text-button" disabled={status === "pending"} type="submit">
+        {target === "COMPLETED" ? "Terminar campaña" : target === "PAUSED" ? "Pausar campaña" : "Reanudar campaña"}
+      </button>
+      {target === "COMPLETED" ? <span className="fine">Deja de despachar y no se puede reabrir. Las secuencias en curso se detienen.</span> : null}
       <Result error={error} status={status} />
     </form>
   );
