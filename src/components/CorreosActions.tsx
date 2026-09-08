@@ -161,10 +161,10 @@ export function MailboxCapAction({ mailboxId, rampMode, fixedCap, capMax, isClie
           <option value="FIXED">Fija</option>
         </select>
       </label>
-      <label>Topes por semana (si es programada)<input defaultValue={(rampSchedule ?? []).join(",")} name="ramp_schedule" pattern="[0-9,\s]*" placeholder="5,10,15,20,25" /></label>
+      <label>Contactos nuevos por día, por semana (si es programada)<input defaultValue={(rampSchedule ?? []).join(",")} name="ramp_schedule" pattern="[0-9,\s]*" placeholder="5,10,15,20,25" /></label>
       <label>Lunes de arranque (si es programada)<input defaultValue={anchorDefault} name="ramp_anchor_at" type="date" /></label>
       <label>Tope fijo (si la rampa es fija)<input defaultValue={fixedCap} max={100} min={0} name="fixed_cap" type="number" /></label>
-      <label>Techo diario<input defaultValue={capMax} max={isClientPrimary ? 20 : 100} min={0} name="cap_max" type="number" /></label>
+      <label>Techo diario total (nuevos más seguimientos)<input defaultValue={capMax} max={isClientPrimary ? 60 : 100} min={0} name="cap_max" type="number" /></label>
       <label>Motivo<input maxLength={200} minLength={3} name="reason" required /></label>
       <button className="text-button" disabled={status === "pending"} type="submit">Guardar tope</button>
       <Result error={error} status={status} />
