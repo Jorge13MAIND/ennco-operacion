@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "source": "docs/external/secuencia-ennco-copy.md",
-  "source_sha256": "db30c4d5e0a1e60b2ccd0fc3886ad50f727f57d36a987b75a2b4c368923408f0",
-  "generated_at": "2026-09-10T22:26:29.480Z",
+  "source_sha256": "230edbd05b04617870841e88b31d5fed0faf17afa88957bc47d8ae520aa9f5cd",
+  "generated_at": "2026-09-10T22:46:37.037Z",
   "sender_name": "Francisco Cuellar",
   "sender_title": "Director General, ENNCO",
   "day_offsets": [
@@ -24,49 +24,49 @@
           "touch_number": 1,
           "day_offset": 0,
           "subject": "{{first_name}}, sobre tu instalación eléctrica.",
-          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales en la parte eléctrica: mantenimiento, adecuaciones y el costo del servicio, y entregamos un reporte claro de qué conviene atender y qué no.\n\nYa va a terminar el año y sé que probablemente quieran lograr sus resultados financieros.\n\n¿Cuándo podrías recibirme en tus oficinas para revisar cómo está su instalación y dejarte un análisis real de lo que encontremos?\n\nSi tú no te encargas de llevar esto, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales en la parte eléctrica: mantenimiento, adecuaciones y el costo del servicio, y entregamos **un reporte claro de qué conviene atender y qué no**.\n\nYa va a terminar el año y sé que probablemente quieran lograr sus resultados financieros.\n\n¿Cuándo podrías recibirme en tus oficinas para revisar cómo está su instalación y dejarte **un análisis real de lo que encontremos**?\n\nSi tú no te encargas de llevar esto, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
         },
         {
           "touch_number": 2,
           "day_offset": 3,
           "subject": "{{first_name}}, sobre mi correo anterior",
-          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nInstalaciones y mantenimiento fotovoltaico, obra eléctrica industrial, subestaciones y transformadores, mantenimiento eléctrico y proyectos de energía.\n\nY te podemos ayudar con esto:\nBajar lo que pagan de luz, y que un problema eléctrico no les detenga la producción.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nInstalaciones y mantenimiento fotovoltaico, obra eléctrica industrial, subestaciones y transformadores, mantenimiento eléctrico y proyectos de energía.\n\nY te podemos ayudar con esto:\n**Bajar lo que pagan de luz**, y que un problema eléctrico **no les detenga la producción**.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
         },
         {
           "touch_number": 3,
           "day_offset": 7,
           "subject": "{{first_name}}, sé que estás ocupado",
-          "body": "Hola {{first_name}},\n\nSé que estás muy ocupado, pero así como ustedes tienen certeza de cuándo pueden aportar valor a un cliente, yo tengo total certeza de que puedo ayudarles considerablemente a bajar su costo de energía y a evitar paros por falla eléctrica.\n\n¿Cuándo podemos platicar, o con quién de tu empresa debería platicar?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nSé que estás muy ocupado, pero así como ustedes tienen certeza de cuándo pueden aportar valor a un cliente, yo tengo total certeza de que puedo ayudarles considerablemente a **bajar su costo de energía** y a **evitar paros por falla eléctrica**.\n\n¿Cuándo podemos platicar, o con quién de tu empresa debería platicar?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 4,
           "day_offset": 14,
           "subject": "{{first_name}}, su último mantenimiento eléctrico",
-          "body": "Hola {{first_name}},\n\n¿Cuándo fue la última vez que hicieron su mantenimiento eléctrico?\n\nHoy podrían estar pagando mucho más de luz y afectando su P&L por esto mismo.\n\n¿Quieres que agende una visita para verificarlo, o cuándo tienen programado su siguiente mantenimiento?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\n¿Cuándo fue la última vez que hicieron su mantenimiento eléctrico?\n\nHoy podrían estar **pagando mucho más de luz** y afectando su P&L por esto mismo.\n\n¿Quieres que **agende una visita** para verificarlo, o cuándo tienen programado su siguiente mantenimiento?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 5,
           "day_offset": 28,
           "subject": "{{first_name}}, esto es importante para {{company}}",
-          "body": "Hola {{first_name}},\n\nTe insisto porque de verdad creo que esto es importante para {{company}}.\n\nLa instalación eléctrica es de las pocas cosas que, cuando fallan, paran todo. Y cuando está bien atendida, se nota en el recibo de luz cada mes.\n\n¿Te parece si lo revisamos juntos, o me dices con quién lo debo ver?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nTe insisto porque de verdad creo que esto es importante para {{company}}.\n\nLa instalación eléctrica es de las pocas cosas que, **cuando fallan, paran todo**. Y cuando está bien atendida, **se nota en el recibo de luz cada mes**.\n\n¿Te parece si lo revisamos juntos, o me dices con quién lo debo ver?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 6,
           "day_offset": 42,
           "subject": "{{first_name}}, lo que no se ve en el recibo",
-          "body": "Hola {{first_name}},\n\nSi nunca han medido cómo está su instalación, lo más probable es que estén pagando de más sin saberlo. No es una falla de nadie, es que no se ve.\n\n¿Me dejas mostrarte cómo se ve eso en números?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nSi nunca han medido cómo está su instalación, lo más probable es que estén **pagando de más sin saberlo**. No es una falla de nadie, es que no se ve.\n\n¿Me dejas mostrarte **cómo se ve eso en números**?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 7,
           "day_offset": 60,
           "subject": "{{first_name}}, ¿te lo mando por escrito?",
-          "body": "Hola {{first_name}},\n\n¿Te sirve si en lugar de una reunión te mando primero el análisis por escrito?\n\nAsí lo revisas con calma, lo pasas con quien tenga que verlo, y si tiene sentido nos sentamos después.\n\n¿Te lo mando?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\n¿Te sirve si en lugar de una reunión te mando primero **el análisis por escrito**?\n\nAsí lo revisas con calma, lo pasas con quien tenga que verlo, y si tiene sentido nos sentamos después.\n\n**¿Te lo mando?**\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 8,
           "day_offset": 75,
           "subject": "{{first_name}}, cierro el tema",
-          "body": "Hola {{first_name}},\n\nCierro el tema para no incomodarte. Te agradezco el tiempo.\n\nSi en algún momento quieren revisar su instalación eléctrica o su costo de energía, aquí estoy.\n\nSi prefieres que no te escriba más, respóndeme la palabra baja y lo registro hoy mismo.\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nCierro el tema para no incomodarte. Te agradezco el tiempo.\n\nSi en algún momento quieren revisar su instalación eléctrica o su costo de energía, **aquí estoy**.\n\nSi prefieres que no te escriba más, respóndeme la palabra **baja** y lo registro hoy mismo.\n\nSaludos,\n\nFrancisco"
         }
       ]
     },
@@ -78,49 +78,49 @@
           "touch_number": 1,
           "day_offset": 0,
           "subject": "{{first_name}}, sobre tu instalación eléctrica.",
-          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales en el mantenimiento de su instalación eléctrica: tableros, transformadores e instalaciones fotovoltaicas, y entregamos un reporte de lo que encontramos y de lo que conviene atender primero.\n\nSé que en tu área lo que cuenta es que la planta no se detenga.\n\n¿Cuándo podrías recibirme para revisar cómo está la instalación y darte un análisis real de lo que encontremos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales en el mantenimiento de su instalación eléctrica: tableros, transformadores e instalaciones fotovoltaicas, y entregamos **un reporte de lo que encontramos y de lo que conviene atender primero**.\n\nSé que en tu área lo que cuenta es **que la planta no se detenga**.\n\n¿Cuándo podrías recibirme para revisar cómo está la instalación y darte un análisis real de lo que encontremos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
         },
         {
           "touch_number": 2,
           "day_offset": 3,
           "subject": "{{first_name}}, qué hacemos exactamente",
-          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nInstalaciones y mantenimiento fotovoltaico, mantenimiento eléctrico industrial, subestaciones, transformadores y tableros.\n\nY te podemos ayudar con esto:\nEncontrar lo que está por fallar antes de que pare la línea, y dejarte por escrito en qué condición está todo.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nInstalaciones y mantenimiento fotovoltaico, mantenimiento eléctrico industrial, subestaciones, transformadores y tableros.\n\nY te podemos ayudar con esto:\n**Encontrar lo que está por fallar antes de que pare la línea**, y dejarte **por escrito** en qué condición está todo.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
         },
         {
           "touch_number": 3,
           "day_offset": 7,
           "subject": "{{first_name}}, sé que traes mil cosas",
-          "body": "Hola {{first_name}},\n\nSé que estás muy ocupado, pero así como tú sabes qué equipo te va a dar problemas antes de que los dé, yo tengo total certeza de que puedo ayudarles considerablemente a evitar un paro por falla eléctrica y a bajar su costo de energía.\n\n¿Cuándo podemos platicar, o con quién de tu empresa debería platicar?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nSé que estás muy ocupado, pero así como tú sabes qué equipo te va a dar problemas antes de que los dé, yo tengo total certeza de que puedo ayudarles considerablemente a **evitar un paro por falla eléctrica** y a **bajar su costo de energía**.\n\n¿Cuándo podemos platicar, o con quién de tu empresa debería platicar?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 4,
           "day_offset": 14,
           "subject": "{{first_name}}, ¿ya toca revisión?",
-          "body": "Hola {{first_name}},\n\n¿Cuándo fue la última vez que hicieron su mantenimiento eléctrico?\n\nHoy podrían estar pagando más de luz y con algo por fallar sin que se note todavía.\n\n¿Quieres que agende una visita para verificarlo, o cuándo tienen programado su siguiente mantenimiento?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\n¿Cuándo fue la última vez que hicieron su mantenimiento eléctrico?\n\nHoy podrían estar pagando más de luz y con **algo por fallar sin que se note todavía**.\n\n¿Quieres que **agende una visita** para verificarlo, o cuándo tienen programado su siguiente mantenimiento?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 5,
           "day_offset": 28,
           "subject": "{{first_name}}, esto es importante para {{company}}",
-          "body": "Hola {{first_name}},\n\nTe insisto porque de verdad creo que esto es importante para {{company}}.\n\nLo que tira una planta casi nunca avisa, y casi siempre estaba a la vista de quien la abrió a tiempo.\n\n¿Te parece si lo revisamos juntos, o me dices con quién lo debo ver?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nTe insisto porque de verdad creo que esto es importante para {{company}}.\n\nLo que tira una planta **casi nunca avisa**, y casi siempre estaba **a la vista de quien la abrió a tiempo**.\n\n¿Te parece si lo revisamos juntos, o me dices con quién lo debo ver?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 6,
           "day_offset": 42,
           "subject": "{{first_name}}, con qué sustentar lo que pides",
-          "body": "Hola {{first_name}},\n\nAlgo que me comentan seguido los jefes de mantenimiento: el problema no es técnico, es que lo que piden suena a exageración sin un documento que lo respalde.\n\nEl análisis que te dejo convierte tu criterio en un reporte con fecha.\n\n¿Te lo preparo?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nAlgo que me comentan seguido los jefes de mantenimiento: el problema no es técnico, es que lo que piden suena a exageración sin un documento que lo respalde.\n\nEl análisis que te dejo convierte tu criterio en **un reporte con fecha**.\n\n**¿Te lo preparo?**\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 7,
           "day_offset": 60,
           "subject": "{{first_name}}, el análisis por escrito",
-          "body": "Hola {{first_name}},\n\n¿Te sirve si en lugar de una reunión te mando primero el análisis por escrito?\n\nAsí lo revisas con calma, lo pasas con quien tenga que autorizarlo, y si tiene sentido nos sentamos después.\n\n¿Te lo mando?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\n¿Te sirve si en lugar de una reunión te mando primero **el análisis por escrito**?\n\nAsí lo revisas con calma, lo pasas con quien tenga que autorizarlo, y si tiene sentido nos sentamos después.\n\n**¿Te lo mando?**\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 8,
           "day_offset": 75,
           "subject": "{{first_name}}, cierro el seguimiento",
-          "body": "Hola {{first_name}},\n\nCierro el seguimiento para no insistir. Te agradezco el tiempo.\n\nSi en algún momento quieren revisar la instalación eléctrica de {{company}}, me escribes y lo agendamos sin más trámite.\n\nSi prefieres que no te escriba más, respóndeme la palabra baja y lo registro hoy mismo.\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nCierro el seguimiento para no insistir. Te agradezco el tiempo.\n\nSi en algún momento quieren revisar la instalación eléctrica de {{company}}, me escribes y lo agendamos **sin más trámite**.\n\nSi prefieres que no te escriba más, respóndeme la palabra **baja** y lo registro hoy mismo.\n\nSaludos,\n\nFrancisco"
         }
       ]
     },
@@ -132,49 +132,49 @@
           "touch_number": 1,
           "day_offset": 0,
           "subject": "{{first_name}}, sobre tu instalación eléctrica.",
-          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales revisando y documentando su instalación eléctrica: qué hay, en qué condiciones está y qué se atendió, listo para una auditoría.\n\nSé que en tu área lo que cuenta es poder demostrar en qué condiciones está todo, con fecha y por escrito.\n\n¿Cuándo podrías recibirme para revisar la instalación y dejarte un análisis real de lo que encontremos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales revisando y documentando su instalación eléctrica: qué hay, en qué condiciones está y qué se atendió, **listo para una auditoría**.\n\nSé que en tu área lo que cuenta es poder demostrar en qué condiciones está todo, **con fecha y por escrito**.\n\n¿Cuándo podrías recibirme para revisar la instalación y dejarte un análisis real de lo que encontremos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
         },
         {
           "touch_number": 2,
           "day_offset": 3,
           "subject": "{{first_name}}, para que quede claro qué hacemos",
-          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nInstalaciones y mantenimiento fotovoltaico, revisión y mantenimiento de instalaciones eléctricas industriales, con reporte de lo observado.\n\nY te podemos ayudar con esto:\nQue tengas por escrito y con fecha en qué condición está cada parte, y que lo que esté mal se corrija antes de que sea un problema.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nInstalaciones y mantenimiento fotovoltaico, revisión y mantenimiento de instalaciones eléctricas industriales, con reporte de lo observado.\n\nY te podemos ayudar con esto:\nQue tengas **por escrito y con fecha** en qué condición está cada parte, y que lo que esté mal se corrija **antes de que sea un problema**.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
         },
         {
           "touch_number": 3,
           "day_offset": 7,
           "subject": "{{first_name}}, sé que andas ocupado",
-          "body": "Hola {{first_name}},\n\nSé que estás muy ocupado, pero así como ustedes tienen certeza de qué condición hay que documentar y cuándo, yo tengo total certeza de que puedo ayudarles considerablemente a tener su instalación eléctrica revisada y con respaldo por escrito.\n\n¿Cuándo podemos platicar, o con quién de tu empresa debería platicar?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nSé que estás muy ocupado, pero así como ustedes tienen certeza de qué condición hay que documentar y cuándo, yo tengo total certeza de que puedo ayudarles considerablemente a tener su instalación eléctrica **revisada y con respaldo por escrito**.\n\n¿Cuándo podemos platicar, o con quién de tu empresa debería platicar?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 4,
           "day_offset": 14,
           "subject": "{{first_name}}, ¿quedó documentada la última revisión?",
-          "body": "Hola {{first_name}},\n\n¿Cuándo fue la última revisión de la instalación eléctrica, y quedó documentada?\n\nLo pregunto porque ese registro es el primero que se busca cuando alguien pide cuentas, y muchas plantas descubren que no lo tienen justo ese día.\n\n¿Quieres que agende una visita para dejarlo armado?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\n¿Cuándo fue la última revisión de la instalación eléctrica, y **quedó documentada**?\n\nLo pregunto porque ese registro es **el primero que se busca cuando alguien pide cuentas**, y muchas plantas descubren que no lo tienen justo ese día.\n\n¿Quieres que agende una visita para dejarlo armado?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 5,
           "day_offset": 28,
           "subject": "{{first_name}}, esto es importante para {{company}}",
-          "body": "Hola {{first_name}},\n\nTe insisto porque de verdad creo que esto es importante para {{company}}.\n\nEl expediente de la instalación eléctrica se arma en uno de dos momentos: con calma, o a las prisas cuando ya lo están pidiendo. El primero sale mejor.\n\n¿Te parece si lo dejamos armado, o me dices con quién lo debo ver?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nTe insisto porque de verdad creo que esto es importante para {{company}}.\n\nEl expediente de la instalación eléctrica se arma en uno de dos momentos: **con calma, o a las prisas** cuando ya lo están pidiendo. **El primero sale mejor.**\n\n¿Te parece si lo dejamos armado, o me dices con quién lo debo ver?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 6,
           "day_offset": 42,
           "subject": "{{first_name}}, lo dicho y lo escrito",
-          "body": "Hola {{first_name}},\n\nUn hallazgo dicho en una junta se olvida en dos semanas. Un hallazgo con fecha y medición ya no, y además te respalda a ti.\n\nEso es lo que queda cuando revisamos una planta.\n\n¿Te ayudo a generarlo?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nUn hallazgo dicho en una junta se olvida en dos semanas. Un hallazgo **con fecha y medición** ya no, y además **te respalda a ti**.\n\nEso es lo que queda cuando revisamos una planta.\n\n¿Te ayudo a generarlo?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 7,
           "day_offset": 60,
           "subject": "{{first_name}}, para tu expediente",
-          "body": "Hola {{first_name}},\n\n¿Te sirve si en lugar de una reunión te mando primero el análisis por escrito?\n\nAsí lo revisas con calma, lo integras a tu expediente, y si tiene sentido nos sentamos después.\n\n¿Te lo mando?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\n¿Te sirve si en lugar de una reunión te mando primero **el análisis por escrito**?\n\nAsí lo revisas con calma, lo integras a tu expediente, y si tiene sentido nos sentamos después.\n\n**¿Te lo mando?**\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 8,
           "day_offset": 75,
           "subject": "{{first_name}}, cierro por ahora",
-          "body": "Hola {{first_name}},\n\nCierro el tema para no insistir. Te agradezco el tiempo de leerme.\n\nSi algún día necesitas el registro documentado de la instalación de {{company}}, aquí estoy.\n\nSi prefieres que no te escriba más, respóndeme la palabra baja y lo registro hoy mismo.\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nCierro el tema para no insistir. Te agradezco el tiempo de leerme.\n\nSi algún día necesitas **el registro documentado** de la instalación de {{company}}, aquí estoy.\n\nSi prefieres que no te escriba más, respóndeme la palabra **baja** y lo registro hoy mismo.\n\nSaludos,\n\nFrancisco"
         }
       ]
     },
@@ -186,49 +186,49 @@
           "touch_number": 1,
           "day_offset": 0,
           "subject": "{{first_name}}, sobre tu instalación eléctrica.",
-          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales en servicios eléctricos, y lo primero que entregamos es un alcance por escrito: qué incluye, qué no y por qué, para que las propuestas se comparen parejo.\n\nSé que en compras lo difícil no es conseguir precios, es saber si son comparables.\n\n¿Cuándo podrías recibirme para darte un análisis real de esto y mostrarte cómo lo estructuramos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales en servicios eléctricos, y lo primero que entregamos es **un alcance por escrito**: qué incluye, qué no y por qué, para que las propuestas **se comparen parejo**.\n\nSé que en compras lo difícil no es conseguir precios, es saber si son comparables.\n\n¿Cuándo podrías recibirme para darte un análisis real de esto y mostrarte cómo lo estructuramos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
         },
         {
           "touch_number": 2,
           "day_offset": 3,
           "subject": "{{first_name}}, qué incluye y qué no",
-          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nInstalaciones y mantenimiento fotovoltaico, obra eléctrica industrial, subestaciones, transformadores y pólizas de mantenimiento.\n\nY te podemos ayudar con esto:\nDefinir un alcance claro para que todas las propuestas que pidas se coticen contra lo mismo, y bajar lo que pagan de luz.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nInstalaciones y mantenimiento fotovoltaico, obra eléctrica industrial, subestaciones, transformadores y pólizas de mantenimiento.\n\nY te podemos ayudar con esto:\nDefinir un alcance claro para que todas las propuestas que pidas **se coticen contra lo mismo**, y **bajar lo que pagan de luz**.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
         },
         {
           "touch_number": 3,
           "day_offset": 7,
           "subject": "{{first_name}}, sé que ves muchos proveedores",
-          "body": "Hola {{first_name}},\n\nSé que estás muy ocupado, pero así como ustedes tienen certeza de cuándo un proveedor conviene y cuándo no, yo tengo total certeza de que puedo ayudarles considerablemente a comparar parejo sus propuestas eléctricas y a bajar ese costo.\n\n¿Cuándo podemos platicar, o con quién de tu empresa debería platicar?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nSé que estás muy ocupado, pero así como ustedes tienen certeza de cuándo un proveedor conviene y cuándo no, yo tengo total certeza de que puedo ayudarles considerablemente a **comparar parejo sus propuestas eléctricas** y a **bajar ese costo**.\n\n¿Cuándo podemos platicar, o con quién de tu empresa debería platicar?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 4,
           "day_offset": 14,
           "subject": "{{first_name}}, ¿qué incluye su póliza hoy?",
-          "body": "Hola {{first_name}},\n\n¿Cuándo fue la última vez que compararon lo que incluye su póliza de mantenimiento eléctrico?\n\nHoy podrían estar pagando más de luz, o pagando una póliza que no revisa lo que debería.\n\n¿Quieres que agende una visita para verificarlo, o cuándo revisan ese contrato?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\n¿Cuándo fue la última vez que compararon **lo que incluye su póliza** de mantenimiento eléctrico?\n\nHoy podrían estar pagando más de luz, o pagando una póliza que no revisa lo que debería.\n\n¿Quieres que **agende una visita** para verificarlo, o cuándo revisan ese contrato?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 5,
           "day_offset": 28,
           "subject": "{{first_name}}, esto es importante para {{company}}",
-          "body": "Hola {{first_name}},\n\nTe insisto porque de verdad creo que esto es importante para {{company}}.\n\nSin saber en qué condición está lo que se va a mantener, cada proveedor cotiza sobre supuestos distintos y las propuestas no son comparables, aunque en la tabla lo parezcan.\n\n¿Te parece si lo revisamos juntos, o me dices con quién lo debo ver?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nTe insisto porque de verdad creo que esto es importante para {{company}}.\n\nSin saber en qué condición está lo que se va a mantener, cada proveedor cotiza sobre supuestos distintos y las propuestas **no son comparables**, **aunque en la tabla lo parezcan**.\n\n¿Te parece si lo revisamos juntos, o me dices con quién lo debo ver?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 6,
           "day_offset": 42,
           "subject": "{{first_name}}, con qué defender la partida",
-          "body": "Hola {{first_name}},\n\nCuando mantenimiento pide y dirección pregunta por qué, quien queda en medio es compras.\n\nUn análisis con lo observado y sus prioridades resuelve esa discusión antes de que empiece, y te deja con qué defender la partida.\n\n¿Te lo preparo?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nCuando mantenimiento pide y dirección pregunta por qué, quien queda en medio es compras.\n\nUn análisis con lo observado y sus prioridades resuelve esa discusión antes de que empiece, y te deja **con qué defender la partida**.\n\n**¿Te lo preparo?**\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 7,
           "day_offset": 60,
           "subject": "{{first_name}}, antes de pedir propuestas",
-          "body": "Hola {{first_name}},\n\n¿Te sirve si en lugar de una reunión te mando primero el análisis por escrito?\n\nAsí lo revisas con calma, lo usas para pedir propuestas parejas, y si tiene sentido nos sentamos después.\n\n¿Te lo mando?\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\n¿Te sirve si en lugar de una reunión te mando primero **el análisis por escrito**?\n\nAsí lo revisas con calma, lo usas para **pedir propuestas parejas**, y si tiene sentido nos sentamos después.\n\n¿Te lo mando?\n\nSaludos,\n\nFrancisco"
         },
         {
           "touch_number": 8,
           "day_offset": 75,
           "subject": "{{first_name}}, te dejo la hoja y cierro el tema",
-          "body": "Hola {{first_name}},\n\nCierro el seguimiento. Te agradezco el tiempo de leerme.\n\nSi abren revisión de mantenimiento eléctrico, con gusto participamos. Y si no, el alcance que te comenté te sirve igual con cualquier proveedor.\n\nSi prefieres que no te escriba más, respóndeme la palabra baja y lo registro hoy mismo.\n\nSaludos,\n\nFrancisco"
+          "body": "Hola {{first_name}},\n\nCierro el seguimiento. Te agradezco el tiempo de leerme.\n\nSi abren revisión de mantenimiento eléctrico, con gusto participamos. Y si no, el alcance que te comenté **te sirve igual con cualquier proveedor**.\n\nSi prefieres que no te escriba más, respóndeme la palabra **baja** y lo registro hoy mismo.\n\nSaludos,\n\nFrancisco"
         }
       ]
     }

@@ -20,7 +20,12 @@ const CTA_MIN_WORDS = 35;          // el registro aprobado por el cliente es cor
 const PROHIBITED = /garantiz|descuento|precio final|\bahorro de \d|\d+\s*%|https?:\/\/|<[a-z/]|[—–]/i;
 const JARGON = /termograf|dron\b|kWp|curva IV|NOM-\d|arco el[eé]ctrico/i;
 
-const bodies = [...source.matchAll(/```\n([\s\S]*?)\n```/g)].map((m) => m[1]);
+const rawBodies = [...source.matchAll(/```\n([\s\S]*?)\n```/g)].map((m) => m[1]);
+// Las negritas se marcan con **asi** (Grant, 10-sep); el motor las quita del
+// texto plano y las convierte en <strong> en el HTML. Aqui se cuentan palabras y
+// frases sin los marcadores, y aparte se vigila que esten bien puestas.
+const stripBold = (text) => text.replace(/\*\*([^*\n]+)\*\*/gu, "$1");
+const bodies = rawBodies.map(stripBold);
 const subjects = [...source.matchAll(/\*\*Asunto:\*\* (.+)/g)].map((m) => m[1].trim());
 
 // La seccion de segunda vuelta juega con otras reglas: el acuse al referidor es
@@ -83,6 +88,15 @@ const dupInVariant = perVariant.flatMap((set, v) =>
 check("NO_DUPLICATE_SUBJECTS_WITHIN_VARIANT", dupInVariant.length === 0, dupInVariant);
 check("SUBJECTS_UNDER_70_CHARS", subjects.every((s) => s.length <= 70), Math.max(...subjects.map((s) => s.length)));
 
+const boldProblems = rawBodies.map((b, i) => {
+  const spans = (b.match(/\*\*[^*\n]+\*\*/gu) ?? []).length;
+  const markers = (b.match(/\*\*/gu) ?? []).length;
+  const inGreetingOrSignature = /^Hola[^\n]*\*\*|\*\*[^\n]*\n*Francisco[^\n]*$|Saludos[^\n]*\*\*/mu.test(b);
+  return { i: i + 1, spans, markers, inGreetingOrSignature };
+}).filter((x) => x.markers !== x.spans * 2 || x.spans > 2 || x.inGreetingOrSignature);
+check("BOLD_AT_MOST_TWO_PER_EMAIL_AND_BALANCED", boldProblems.length === 0, boldProblems);
+check("NO_BOLD_IN_SUBJECTS", subjects.every((s) => !s.includes("**")), subjects.filter((s) => s.includes("**")));
+
 // El asunto personalizado es una decision de Grant (8-sep), no un adorno: si un
 // asunto pierde el nombre, el prospecto recibe un correo mas frio que el resto
 // de su secuencia. La segunda vuelta va aparte porque saluda al referido.
@@ -106,6 +120,8 @@ check("ONLY_KNOWN_MERGE_TAGS", badTags.length === 0, [...new Set(badTags)]);
 //  - 2026-09-08, Grant: el asunto se personaliza. Los 32 abren con
 //    {{first_name}} y el toque 1 de las cuatro variantes dice
 //    "{{first_name}}, sobre tu instalacion electrica." El cuerpo no se toca.
+//  - 2026-09-10, Grant: negritas con **asi**, maximo dos por correo, en el
+//    beneficio y la peticion (y en "baja" del toque 8). El texto no cambia.
 //  - 2026-09-10, Paco (junta del 9-sep): el negocio es solar. Sale "acometidas"
 //    del toque 1 de MANTENIMIENTO ("instalaciones fotovoltaicas" en su lugar) y
 //    la lista de servicios del toque 2 abre en las cuatro variantes con

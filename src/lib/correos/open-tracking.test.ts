@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildDirectLaneRawMessage, textToMinimalHtml } from "@/lib/correos/gmail-send";
+import { buildDirectLaneRawMessage, hasBoldMarkers, stripBoldMarkers, textToMinimalHtml } from "@/lib/correos/gmail-send";
 import { buildOpenPixelUrl, createOpenPixelToken, openPixelAllowed, verifyOpenPixelToken } from "@/lib/correos/open-pixel";
 import { buildWeeklyRecommendations, directLaneStatsSchema, weekStartCdmx } from "@/lib/correos/stats";
 
@@ -35,6 +35,32 @@ describe("pixel de apertura", () => {
     expect(withPixel.raw).toContain("text/plain");
     expect(withPixel.raw).toContain("text/html");
     expect(textToMinimalHtml("Hola Juan,\n\nSoy Francisco.\nSegunda línea")).toBe("<p>Hola Juan,</p><p>Soy Francisco.<br>Segunda línea</p>");
+  });
+});
+
+describe("negritas del copy", () => {
+  const base = { message_id: msg, from_name: "Francisco Cuellar", from_email: "francisco@enncoenergia.com", to_email: "x@planta.test",
+    subject: "Hola", kind: "TOUCH" as const, touch_number: 1 };
+  it("el texto plano viaja sin marcadores y el HTML los convierte en <strong>", () => {
+    const body = "Hola Juan,\n\nEntregamos **un reporte con fecha** de lo que encontramos.\n\n**¿Te lo mando?**\n\nFrancisco";
+    expect(stripBoldMarkers(body)).toBe("Hola Juan,\n\nEntregamos un reporte con fecha de lo que encontramos.\n\n¿Te lo mando?\n\nFrancisco");
+    expect(hasBoldMarkers(body)).toBe(true);
+    expect(hasBoldMarkers("sin nada que resaltar")).toBe(false);
+    expect(textToMinimalHtml(body)).toBe("<p>Hola Juan,</p><p>Entregamos <strong>un reporte con fecha</strong> de lo que encontramos.</p><p><strong>¿Te lo mando?</strong></p><p>Francisco</p>");
+  });
+  it("con negritas y sin pixel el correo es multipart; el texto no lleva asteriscos y el HTML no lleva pixel", () => {
+    const raw = buildDirectLaneRawMessage({ ...base, body_text: "Hola Juan,\n\nTe dejo **un análisis real**.\n\nFrancisco" }).raw;
+    expect(raw).toContain("multipart/alternative");
+    const parts = raw.split("Content-Transfer-Encoding: base64\r\n\r\n").slice(1).map((chunk) => Buffer.from(chunk.split("\r\n--")[0]!.replace(/\r\n/gu, ""), "base64").toString("utf8"));
+    expect(parts[0]).toContain("Te dejo un análisis real.");
+    expect(parts[0]).not.toContain("**");
+    expect(parts[1]).toContain("<strong>un análisis real</strong>");
+    expect(parts[1]).not.toContain("<img");
+  });
+  it("sin negritas ni pixel sigue siendo texto plano; el copy no puede colar etiquetas", () => {
+    expect(buildDirectLaneRawMessage({ ...base, body_text: "Hola Juan,\n\nSin resaltar.\n\nFrancisco" }).raw).not.toContain("multipart");
+    expect(textToMinimalHtml("**<b>x</b>**")).toBe("<p><strong>&lt;b&gt;x&lt;/b&gt;</strong></p>");
+    expect(stripBoldMarkers("un ** suelto")).toBe("un ** suelto");
   });
 });
 

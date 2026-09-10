@@ -129,22 +129,27 @@ export function buildDirectLaneRawMessage(rawInput: DirectLaneSendInput): { raw:
     headers.push(`List-Unsubscribe: <${input.list_unsubscribe_url}>`);
     headers.push("List-Unsubscribe-Post: List-Unsubscribe=One-Click");
   }
-  if (!input.open_pixel_url) {
+  // Las negritas del copy vienen marcadas con **asi**. El texto plano viaja
+  // siempre sin marcadores; solo hay parte HTML cuando hace falta: por el pixel
+  // o porque hay algo que resaltar.
+  const plainText = stripBoldMarkers(input.body_text);
+  if (!input.open_pixel_url && !hasBoldMarkers(input.body_text)) {
     headers.push(
       "MIME-Version: 1.0",
       "Content-Type: text/plain; charset=UTF-8",
       "Content-Transfer-Encoding: base64",
     );
-    return { raw: `${headers.join("\r\n")}\r\n\r\n${wrappedBase64(input.body_text)}\r\n`, rfcMessageId };
+    return { raw: `${headers.join("\r\n")}\r\n\r\n${wrappedBase64(plainText)}\r\n`, rfcMessageId };
   }
-  // Con pixel: multipart/alternative con la MISMA prosa en texto y en un HTML
-  // mínimo (párrafos y saltos, sin estilos, sin links salvo el pixel). El HTML
-  // se genera aquí a partir del texto, nunca viene del copy.
+  // multipart/alternative con la MISMA prosa en texto y en un HTML mínimo
+  // (párrafos, saltos y <strong>; sin estilos, sin links salvo el pixel). El
+  // HTML se genera aquí a partir del texto, nunca viene del copy.
   const boundary = `=_ennco_${input.message_id.replace(/-/gu, "")}`;
-  const html = `<!DOCTYPE html><html lang="es"><body>${textToMinimalHtml(input.body_text)}<img src="${escapeHtml(input.open_pixel_url)}" width="1" height="1" alt="" style="display:none"></body></html>`;
+  const pixel = input.open_pixel_url ? `<img src="${escapeHtml(input.open_pixel_url)}" width="1" height="1" alt="" style="display:none">` : "";
+  const html = `<!DOCTYPE html><html lang="es"><body>${textToMinimalHtml(input.body_text)}${pixel}</body></html>`;
   headers.push("MIME-Version: 1.0", `Content-Type: multipart/alternative; boundary="${boundary}"`);
   const body = [
-    `--${boundary}`, "Content-Type: text/plain; charset=UTF-8", "Content-Transfer-Encoding: base64", "", wrappedBase64(input.body_text),
+    `--${boundary}`, "Content-Type: text/plain; charset=UTF-8", "Content-Transfer-Encoding: base64", "", wrappedBase64(plainText),
     `--${boundary}`, "Content-Type: text/html; charset=UTF-8", "Content-Transfer-Encoding: base64", "", wrappedBase64(html),
     `--${boundary}--`, "",
   ].join("\r\n");
@@ -155,9 +160,27 @@ function escapeHtml(value: string): string {
   return value.replace(/&/gu, "&amp;").replace(/</gu, "&lt;").replace(/>/gu, "&gt;").replace(/"/gu, "&quot;");
 }
 
-/** Párrafos separados por línea en blanco; saltos simples como <br>. */
+const BOLD_SPAN = /\*\*([^*\n]+)\*\*/gu;
+
+/** Quita los marcadores **asi** del copy: es lo que viaja en la parte de texto. */
+export function stripBoldMarkers(text: string): string {
+  return text.replace(BOLD_SPAN, "$1");
+}
+
+export function hasBoldMarkers(text: string): boolean {
+  return new RegExp(BOLD_SPAN.source, "u").test(text);
+}
+
+/**
+ * Párrafos separados por línea en blanco; saltos simples como <br>; **asi**
+ * como <strong>. Se escapa primero y se marca después, así el copy nunca
+ * puede meter una etiqueta propia.
+ */
 export function textToMinimalHtml(text: string): string {
-  return text.split(/\n\s*\n/u).map((paragraph) => `<p>${escapeHtml(paragraph.trim()).replace(/\n/gu, "<br>")}</p>`).join("");
+  return text
+    .split(/\n\s*\n/u)
+    .map((paragraph) => `<p>${escapeHtml(paragraph.trim()).replace(BOLD_SPAN, "<strong>$1</strong>").replace(/\n/gu, "<br>")}</p>`)
+    .join("");
 }
 
 export class DirectLaneGmailSender {
