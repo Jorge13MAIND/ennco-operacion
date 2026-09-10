@@ -1,0 +1,1 @@
+El primer job de Proyectos en GitHub llegó al gate de concurrencia y encontró rg ausente en el runner. Se cambió esa comprobación a grep, disponible en el runner estándar. El gate completo vuelve a pasar localmente. La firma, las transacciones y las reglas SQL no cambiaron.

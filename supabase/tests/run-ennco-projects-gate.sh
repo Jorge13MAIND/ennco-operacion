@@ -59,7 +59,7 @@ if [[ "$STATUS_ONE" = 0 && "$STATUS_TWO" = 0 ]] || [[ "$STATUS_ONE" != 0 && "$ST
   cat "$GATE_DIR/worker-1.log" "$GATE_DIR/worker-2.log"
   printf '%s\n' 'Concurrent append must have exactly one winner' >&2; exit 1
 fi
-rg -q 'PROJECT_VERSION_CONFLICT' "$GATE_DIR/worker-1.log" "$GATE_DIR/worker-2.log"
+grep -q 'PROJECT_VERSION_CONFLICT' "$GATE_DIR/worker-1.log" "$GATE_DIR/worker-2.log"
 "${PSQL[@]}" -v project_id="$CONCURRENT_PROJECT" <<'SQL'
 select test_projects.assert((select count(*) from public.ennco_project_records where project_id=:'project_id'::uuid)=1,'concurrent append has one record');
 select test_projects.assert((select version from public.ennco_projects where id=:'project_id'::uuid)=2,'concurrent append increments version once');

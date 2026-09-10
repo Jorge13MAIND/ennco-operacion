@@ -1,6 +1,6 @@
 {
-  "deploymentId": "dpl_HpeUAuyp262g8WQ1d7YhhZ7Q4ee2",
-  "sha": "031cc02c8164a7f2f538d695e99a578ac90abfa2",
+  "deploymentId": "dpl_3yWVVd2HCZywUyJjXScjatM2VJzx",
+  "sha": "c1842f886bd22ae3039d59e145700877b022460a",
   "url": "https://ennco-operacion-git-grant-proyect-6ce00c-jorge13mainds-projects.vercel.app",
   "readyState": "READY",
   "projects": [
@@ -21,7 +21,7 @@
   "drive": "NOT_CONFIGURED",
   "pdf": {
     "status": 200,
-    "bytes": 8383
+    "bytes": 8384
   },
   "writeGuard": {
     "status": 409,
@@ -29,7 +29,8 @@
   },
   "detailsStatus": 200,
   "recordCount": 7,
+  "numericOverflow": [],
   "axeViolations": [],
   "pageErrors": [],
-  "verifiedAt": "2026-09-10T23:52:53.515Z"
+  "verifiedAt": "2026-09-10T23:57:45.997Z"
 }
