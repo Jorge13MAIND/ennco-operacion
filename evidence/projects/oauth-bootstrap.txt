@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: el callback admite sólo loopback exacto y rechaza estados ajenos incluso Unicode
+ok 1 - el callback admite sólo loopback exacto y rechaza estados ajenos incluso Unicode
+  ---
+  duration_ms: 1.068338
+  type: 'test'
+  ...
+# Subtest: verifica cuenta, scopes y renovación antes de persistir únicamente credenciales de Drive
+ok 2 - verifica cuenta, scopes y renovación antes de persistir únicamente credenciales de Drive
+  ---
+  duration_ms: 15.156612
+  type: 'test'
+  ...
+# Subtest: rechaza cuenta equivocada, consentimiento parcial y respuestas fallidas sin mostrar tokens
+ok 3 - rechaza cuenta equivocada, consentimiento parcial y respuestas fallidas sin mostrar tokens
+  ---
+  duration_ms: 5.77177
+  type: 'test'
+  ...
+# Subtest: impide configuración pública, salida dentro del repositorio y redirects no registrados
+ok 4 - impide configuración pública, salida dentro del repositorio y redirects no registrados
+  ---
+  duration_ms: 5.23302
+  type: 'test'
+  ...
+# Subtest: --check no abre conexión, no escribe credenciales ni muestra secretos
+ok 5 - --check no abre conexión, no escribe credenciales ni muestra secretos
+  ---
+  duration_ms: 66.176769
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 179.205191

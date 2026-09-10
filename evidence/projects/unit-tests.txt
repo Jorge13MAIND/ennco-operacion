@@ -1,0 +1,11 @@
+> ennco-operacion@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.10 /home/atlas/[2026-08-03] Ennco/💻 Repositorios de GitHub/ennco-proyectos
+
+
+ Test Files  94 passed (94)
+      Tests  591 passed (591)
+   Start at  17:43:45
+   Duration  7.36s (transform 5.73s, setup 0ms, import 19.28s, tests 7.01s, environment 18ms)

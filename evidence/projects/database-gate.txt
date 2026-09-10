@@ -1,0 +1,113 @@
+> ennco-operacion@0.1.0 verify:projects:db
+> bash supabase/tests/run-ennco-projects-gate.sh
+
+CREATE SCHEMA
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+ALTER FUNCTION
+GRANT
+GRANT
+GRANT
+INSERT 0 2
+INSERT 0 7
+INSERT 0 3
+INSERT 0 2
+INSERT 0 7
+SET
+SET
+DO
+RESET
+ expect_error
+--------------
+
+(1 row)
+
+ assert
+--------
+
+(1 row)
+
+ assert
+--------
+
+(1 row)
+
+ assert
+--------
+
+(1 row)
+
+ assert
+--------
+
+(1 row)
+
+ assert
+--------
+
+(1 row)
+
+ assert
+--------
+
+(1 row)
+
+ assert
+--------
+
+(1 row)
+
+SET
+SET
+DO
+RESET
+SET
+SET
+DO
+RESET
+SET
+ expect_error
+--------------
+
+(1 row)
+
+ expect_error
+--------------
+
+(1 row)
+
+RESET
+GRANT
+SET
+SET
+ assert
+--------
+
+(1 row)
+
+ assert
+--------
+
+(1 row)
+
+RESET
+REVOKE
+DELETE 2
+ assert
+--------
+
+(1 row)
+
+ assert
+--------
+
+(1 row)
+
+psql:/home/atlas/[2026-08-03] Ennco/💻 Repositorios de GitHub/ennco-proyectos/supabase/rollbacks/202609100055_ennco_projects.down.sql:10: NOTICE:  drop cascades to 3 other objects
+DETAIL:  drop cascades to trigger ennco_records_immutable on table ennco_project_records
+drop cascades to trigger ennco_catalogs_immutable on table ennco_project_catalogs
+drop cascades to trigger ennco_audit_immutable on table app.ennco_project_audit
+DO
+ENNCO projects DB gate passed (isolated local PostgreSQL; no production changes).
