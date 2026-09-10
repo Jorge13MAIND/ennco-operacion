@@ -132,6 +132,7 @@
   margin-block: 24px;
 }
 .projects-metric {
+  container-type: inline-size;
   padding: 22px;
   border: 1px solid var(--cr-line-strong);
   border-radius: 16px;
@@ -150,6 +151,12 @@
   font-size: clamp(1.4rem, 2.4vw, 2.25rem);
   letter-spacing: -0.04em;
   overflow-wrap: anywhere;
+}
+.projects-metric > strong[data-numeric] {
+  font-size: clamp(1rem, 10cqw, 2rem);
+  white-space: nowrap;
+  overflow-wrap: normal;
+  font-variant-numeric: tabular-nums;
 }
 .projects-metric > small {
   color: var(--cr-muted);

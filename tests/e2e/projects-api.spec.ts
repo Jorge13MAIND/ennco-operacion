@@ -1,5 +1,9 @@
 import { test, expect, type APIRequestContext } from "@playwright/test";
 import { randomBytes } from "node:crypto";
+test.skip(
+  process.env.ENNCO_PROJECTS_E2E !== "true",
+  "Usar playwright.projects.config.ts para la API sintética de proyectos.",
+);
 const origin = process.env.PROJECTS_E2E_BASE_URL ?? "http://localhost:3017";
 const idem = () => randomBytes(32).toString("hex");
 const headers = (key = idem()) => ({ origin, "idempotency-key": key });

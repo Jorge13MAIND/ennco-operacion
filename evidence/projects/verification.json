@@ -1,7 +1,7 @@
 {
   "verifiedAt": "2026-09-10T23:47:54.598808+00:00",
   "baseCommit": "c943c32a8ff7609e4893b70f021ba2187495ed07",
-  "implementationSha256": "61157a98bf991e01549a097a59c7814be92a849192c800c4a80f1dd723c152f2",
+  "implementationSha256": "578c8d99ab0240a4d253bffd4f9b4f616237853419a42e86ed415dd5240c0230",
   "unitTests": {
     "files": 94,
     "passed": 591
@@ -28,5 +28,13 @@
   "secretScan": "PASS, 0 findings",
   "actualDrive": "NOT_CONNECTED",
   "production": "NOT_DEPLOYED",
-  "pacoAcceptance": "PENDING"
+  "pacoAcceptance": "PENDING",
+  "followup": {
+    "reason": "Importes largos en tarjetas y ejecución de las pruebas API sólo en su configuración dedicada",
+    "e2ePassed": 6,
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "build": "PASS",
+    "ciJob": "projects, YAML parsed"
+  }
 }

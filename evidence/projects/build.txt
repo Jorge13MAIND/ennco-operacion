@@ -7,20 +7,20 @@
 
 PRIVACY_NOTICE_CONTENT_SHA256_PASS d4a24f23350d8a3522f75a169938afe7bcd868c9c812b46aadcbc52681fc718e
 ▲ Next.js 16.3.4 (Turbopack)
-✓ Running next.config.ts took 30ms
+✓ Running next.config.ts took 35ms
 - Experiments (use with caution):
   · staleTimes
 
   Creating an optimized production build ...
-✓ Compiled successfully in 3.5s
+✓ Compiled successfully in 835ms
   Running TypeScript ...
-  Finished TypeScript in 5.7s ...
+  Finished TypeScript in 5.5s ...
   Collecting page data using 7 workers ...
   Generating static pages using 7 workers (0/26) ...
   Generating static pages using 7 workers (6/26)
   Generating static pages using 7 workers (12/26)
   Generating static pages using 7 workers (19/26)
-✓ Generating static pages using 7 workers (26/26) in 173ms
+✓ Generating static pages using 7 workers (26/26) in 407ms
   Finalizing page optimization ...
 
 Route (app)

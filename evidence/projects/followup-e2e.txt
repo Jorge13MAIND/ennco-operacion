@@ -1,0 +1,16 @@
+> ennco-operacion@0.1.0 test:projects:e2e
+> playwright test --config playwright.projects.config.ts --grep rechaza solicitudes|edición simultánea|precio y cliente|compras pendientes|superficies son accesibles|maestro distingue
+
+
+Running 6 tests using 1 worker
+
+(node:1633496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/projects-api.spec.ts:22:1 › rechaza solicitudes sin origen, claves ausentes e inyección de cálculo (214ms)
+  ✓  2 tests/e2e/projects-api.spec.ts:63:1 › detecta edición simultánea y repite la misma solicitud sin duplicados (185ms)
+  ✓  3 tests/e2e/projects-api.spec.ts:105:1 › precio y cliente congelados sobreviven a un reintento posterior a editar el expediente (269ms)
+  ✓  4 tests/e2e/projects-api.spec.ts:164:1 › compras pendientes se mantienen bloqueadas y un mal total se rechaza (140ms)
+  ✓  5 tests/e2e/projects.spec.ts:265:1 › el catálogo tiene campos técnicos y las superficies son accesibles en escritorio y móvil (14.3s)
+  ✓  6 tests/e2e/projects.spec.ts:641:1 › el maestro distingue costos conocidos de expedientes pendientes de presupuesto (4.2s)
+
+  6 passed (21.3s)

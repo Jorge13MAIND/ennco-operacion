@@ -335,7 +335,16 @@ export function Metric({
   return (
     <div className="projects-metric">
       <span>{label}</span>
-      <strong>{value}</strong>
+      <strong
+        data-numeric={
+          typeof value === "number" ||
+          (typeof value === "string" && /^[$\d-]/.test(value))
+            ? true
+            : undefined
+        }
+      >
+        {value}
+      </strong>
       {help ? <small>{help}</small> : null}
     </div>
   );
