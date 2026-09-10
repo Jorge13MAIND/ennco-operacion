@@ -1,70 +1,43 @@
-# Secuencia ENNCO — copy en la voz aprobada por Francisco
+-- M053: vocabulario solar en la campana viva.
+--
+-- Paco, junta del 9-sep (Jorge y Grant presentes): "el negocio es solar". Sale
+-- "acometidas" del toque 1 de MANTENIMIENTO ("instalaciones fotovoltaicas" en
+-- su lugar) y la lista de servicios del toque 2 abre en las cuatro variantes
+-- con "instalaciones y mantenimiento fotovoltaico", con las palabras de Paco.
+--
+-- El copy fuente y el JSON generado ya traen el cambio; esta migracion lo lleva
+-- a la campana YA APROBADA, cuyo copy quedo congelado en sequence_touches. Igual
+-- que la 051: se localiza por el sha de contenido del manifiesto (anterior o
+-- nuevo, para poder reaplicarla), escribe asunto y cuerpo de los 32 toques
+-- desde el JSON, actualiza los sha por variante y el manifiesto, y lo anota en
+-- audit_log. En una base nueva (CI) no encuentra nada y no toca una fila.
 
-Versión 2026-09-03. **El toque 1 de dirección general es el correo que Francisco
-Cuellar aprobó**, palabra por palabra. Los toques 2 al 5 de dirección son también
-suyos: los escribió él y aquí sólo se llenaron los espacios que dejó abiertos.
-Todo lo demás se derivó de ese registro, y Jorge lo aprobó el 3-sep.
-
-La v1 (molde de "golpe con la cifra", correos largos y argumentados) queda
-archivada en `secuencia-ennco-copy-v1-ARCHIVADA-2026-08-29.md` y **no se usa**.
-
-8 toques · 4 perfiles · 32 correos · más la segunda vuelta, al final.
-Compuerta: `npm run verify:copy`.
-
-## La voz, tal como Francisco la escribe
-
-Se respeta como ley. Quien edite este archivo la conserva:
-
-1. **Corto.** El toque 1 presenta y ronda las 100 palabras; del 2 en adelante
-   ninguno pasa de 75. Un correo largo aquí suena a agencia, no a él.
-2. **Humilde, no insistente.** "Tal vez mi correo anterior no te pudo dar la
-   claridad", "Sé que estás muy ocupado". Reconoce el tiempo del otro antes de
-   pedir algo.
-3. **Habla él, en primera persona.** "Puedo llamarte", "recibirme", "yo tengo
-   total certeza". Es el dueño escribiendo, no una empresa.
-4. **Registro de negocio, sin jerga.** Costo de luz, P&L, paros, resultados.
-   **Nunca** termografía, dron, kWp ni normas.
-5. **Empatía por analogía**, que es su recurso más personal: "así como ustedes
-   tienen certeza de cuándo pueden aportar valor a un cliente...".
-6. **CTA suave y con salida doble.** "Avísame si puedo llamarte o programar una
-   reunión", "¿Cuándo podemos platicar, o con quién debería platicar?" — el
-   rescate del referido va dentro de la misma pregunta.
-7. **Cierre invariable:** "Saludos," y su nombre. En el toque 1, con cargo.
-8. Párrafos de una o dos líneas. Cero signos de exclamación, cero emojis.
-
-## Reglas duras del sistema
-
-No puede salir, aunque alguien lo escriba: garantías, descuentos, precios,
-cotizaciones, ahorros prometidos en pesos o porcentaje, fechas de instalación
-comprometidas, clientes nombrados. Sin ligas en ningún toque. Sin HTML.
-Sin guiones largos.
-
-**Tope de 120 palabras por cuerpo** (migración M042; antes eran 100 y el correo
-aprobado tiene 104: se movió el número nuestro, no su voz). El toque 8 lleva
-**baja explícita** en las cuatro variantes, por LFPDPPP. Campos del sistema:
-`{{first_name}}` y `{{company}}`.
-
-**El negocio es solar** (Paco, junta del 9-sep-2026): fuera "acometidas"; el toque 1 de
-Mantenimiento dice "instalaciones fotovoltaicas" y la lista de servicios del toque 2 abre en
-las cuatro variantes con "instalaciones y mantenimiento fotovoltaico", con las palabras de Paco.
-
-**Todos los asuntos abren con el primer nombre** (Grant, 8-sep-2026), igual que
-el cuerpo. El toque 1 de las cuatro variantes usa el mismo:
-`{{first_name}}, sobre tu instalación eléctrica.` Los toques 2 al 8 conservan su
-frase, con el nombre al frente, y siguen siendo distintos dentro de una variante.
-
----
-
-# Perfil A · Dirección general
-
-El toque 1 es el correo aprobado literal. Los toques 2 al 5 son de Francisco; sólo se llenaron sus espacios abiertos.
-
-## Toque 1 — día 0 · Presentación
-
-**Asunto:** {{first_name}}, sobre tu instalación eléctrica.
-
-```
-Hola {{first_name}},
+do $$
+declare
+  sha_secuencia_anterior constant text := 'eaf154058d848f9cfea464e398b6c795dd99978ed41f66d726dc3c3ab021c90e';
+  sha_secuencia_nueva    constant text := 'b1ec779fd7f29391ff89457639b748e99ae33adea7c7f9da0f8bc3cda8cdb7f6';
+  sha_fuente_nueva       constant text := 'db30c4d5e0a1e60b2ccd0fc3886ad50f727f57d36a987b75a2b4c368923408f0';
+  sha_por_variante constant jsonb := jsonb_build_object(
+    '1', '049e808b7c63d8e87009c30800a668aea704e61f350f90f90edde59381245bf4',
+    '2', '7aff5154239836eb50a8b09ab86170657398278bcdfeb2fdc6dc6b8c87b6c5c3',
+    '3', 'ccd275161ea592b9355550f9ca514ac4a7dc9e944fcf08f973ece9cf62660ea4',
+    '4', '21ccc342f653a6c993ed00d9c0e20c8d83ba3a30609126c69a47b2846c620fc1'
+  );
+  campana record;
+  manifiesto jsonb;
+  toques_actualizados integer;
+begin
+  for campana in
+    select id, organization_id, manifest_json, manifest_sha256
+    from public.campaigns
+    where lane = 'DIRECT'
+      and manifest_json->>'content_sha256' in (sha_secuencia_anterior, sha_secuencia_nueva)
+  loop
+    update public.sequence_touches st
+    set subject_template = nuevo.subject_template,
+        body_template = nuevo.body_template
+    from (values
+      (1, 1, '{{first_name}}, sobre tu instalación eléctrica.', 'Hola {{first_name}},
 
 Soy Francisco Cuellar, Director General de ENNCO.
 
@@ -79,19 +52,8 @@ Si tú no te encargas de llevar esto, ¿podrías dirigirme con la persona encarg
 Saludos y espero saber de ti pronto.
 
 Francisco Cuellar
-Director General, ENNCO
-```
-
-> Lo único que se tocó del original: `(name)` pasó a `{{first_name}}`, coma
-> después de "Cuellar", acentos en "sé" y "tú", "aportar" corregido a "aportan",
-> y el signo de apertura de la segunda pregunta. Ni una palabra más.
-
-## Toque 2 — día 3 · Dar claridad de qué hacemos
-
-**Asunto:** {{first_name}}, sobre mi correo anterior
-
-```
-Hola {{first_name}},
+Director General, ENNCO'),
+      (1, 2, '{{first_name}}, sobre mi correo anterior', 'Hola {{first_name}},
 
 Tal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.
 
@@ -106,15 +68,8 @@ Avísame si puedo llamarte o programar una reunión con ustedes esta semana.
 Saludos,
 
 Francisco
-Director General, ENNCO
-```
-
-## Toque 3 — día 7 · Reconocer que está ocupado
-
-**Asunto:** {{first_name}}, sé que estás ocupado
-
-```
-Hola {{first_name}},
+Director General, ENNCO'),
+      (1, 3, '{{first_name}}, sé que estás ocupado', 'Hola {{first_name}},
 
 Sé que estás muy ocupado, pero así como ustedes tienen certeza de cuándo pueden aportar valor a un cliente, yo tengo total certeza de que puedo ayudarles considerablemente a bajar su costo de energía y a evitar paros por falla eléctrica.
 
@@ -122,15 +77,8 @@ Sé que estás muy ocupado, pero así como ustedes tienen certeza de cuándo pue
 
 Saludos,
 
-Francisco
-```
-
-## Toque 4 — día 14 · La pregunta directa
-
-**Asunto:** {{first_name}}, su último mantenimiento eléctrico
-
-```
-Hola {{first_name}},
+Francisco'),
+      (1, 4, '{{first_name}}, su último mantenimiento eléctrico', 'Hola {{first_name}},
 
 ¿Cuándo fue la última vez que hicieron su mantenimiento eléctrico?
 
@@ -140,15 +88,8 @@ Hoy podrían estar pagando mucho más de luz y afectando su P&L por esto mismo.
 
 Saludos,
 
-Francisco
-```
-
-## Toque 5 — día 28 · Por qué importa para su empresa
-
-**Asunto:** {{first_name}}, esto es importante para {{company}}
-
-```
-Hola {{first_name}},
+Francisco'),
+      (1, 5, '{{first_name}}, esto es importante para {{company}}', 'Hola {{first_name}},
 
 Te insisto porque de verdad creo que esto es importante para {{company}}.
 
@@ -158,15 +99,8 @@ La instalación eléctrica es de las pocas cosas que, cuando fallan, paran todo.
 
 Saludos,
 
-Francisco
-```
-
-## Toque 6 — día 42 · Subir el argumento
-
-**Asunto:** {{first_name}}, lo que no se ve en el recibo
-
-```
-Hola {{first_name}},
+Francisco'),
+      (1, 6, '{{first_name}}, lo que no se ve en el recibo', 'Hola {{first_name}},
 
 Si nunca han medido cómo está su instalación, lo más probable es que estén pagando de más sin saberlo. No es una falla de nadie, es que no se ve.
 
@@ -174,15 +108,8 @@ Si nunca han medido cómo está su instalación, lo más probable es que estén 
 
 Saludos,
 
-Francisco
-```
-
-## Toque 7 — día 60 · Bajar la barrera: por escrito antes de la reunión
-
-**Asunto:** {{first_name}}, ¿te lo mando por escrito?
-
-```
-Hola {{first_name}},
+Francisco'),
+      (1, 7, '{{first_name}}, ¿te lo mando por escrito?', 'Hola {{first_name}},
 
 ¿Te sirve si en lugar de una reunión te mando primero el análisis por escrito?
 
@@ -192,15 +119,8 @@ Así lo revisas con calma, lo pasas con quien tenga que verlo, y si tiene sentid
 
 Saludos,
 
-Francisco
-```
-
-## Toque 8 — día 75 · Cierre con baja explícita
-
-**Asunto:** {{first_name}}, cierro el tema
-
-```
-Hola {{first_name}},
+Francisco'),
+      (1, 8, '{{first_name}}, cierro el tema', 'Hola {{first_name}},
 
 Cierro el tema para no incomodarte. Te agradezco el tiempo.
 
@@ -210,21 +130,8 @@ Si prefieres que no te escriba más, respóndeme la palabra baja y lo registro h
 
 Saludos,
 
-Francisco
-```
-
----
-
-# Perfil B · Mantenimiento y planta
-
-Derivado del registro aprobado. Ángulo: que la planta no se detenga y tener con qué sustentar lo que pide.
-
-## Toque 1 — día 0 · Presentación
-
-**Asunto:** {{first_name}}, sobre tu instalación eléctrica.
-
-```
-Hola {{first_name}},
+Francisco'),
+      (2, 1, '{{first_name}}, sobre tu instalación eléctrica.', 'Hola {{first_name}},
 
 Soy Francisco Cuellar, Director General de ENNCO.
 
@@ -239,15 +146,8 @@ Si esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favo
 Saludos y espero saber de ti pronto.
 
 Francisco Cuellar
-Director General, ENNCO
-```
-
-## Toque 2 — día 3 · Dar claridad de qué hacemos
-
-**Asunto:** {{first_name}}, qué hacemos exactamente
-
-```
-Hola {{first_name}},
+Director General, ENNCO'),
+      (2, 2, '{{first_name}}, qué hacemos exactamente', 'Hola {{first_name}},
 
 Tal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.
 
@@ -262,15 +162,8 @@ Avísame si puedo llamarte o programar una reunión con ustedes esta semana.
 Saludos,
 
 Francisco
-Director General, ENNCO
-```
-
-## Toque 3 — día 7 · Reconocer que está ocupado
-
-**Asunto:** {{first_name}}, sé que traes mil cosas
-
-```
-Hola {{first_name}},
+Director General, ENNCO'),
+      (2, 3, '{{first_name}}, sé que traes mil cosas', 'Hola {{first_name}},
 
 Sé que estás muy ocupado, pero así como tú sabes qué equipo te va a dar problemas antes de que los dé, yo tengo total certeza de que puedo ayudarles considerablemente a evitar un paro por falla eléctrica y a bajar su costo de energía.
 
@@ -278,15 +171,8 @@ Sé que estás muy ocupado, pero así como tú sabes qué equipo te va a dar pro
 
 Saludos,
 
-Francisco
-```
-
-## Toque 4 — día 14 · La pregunta directa
-
-**Asunto:** {{first_name}}, ¿ya toca revisión?
-
-```
-Hola {{first_name}},
+Francisco'),
+      (2, 4, '{{first_name}}, ¿ya toca revisión?', 'Hola {{first_name}},
 
 ¿Cuándo fue la última vez que hicieron su mantenimiento eléctrico?
 
@@ -296,15 +182,8 @@ Hoy podrían estar pagando más de luz y con algo por fallar sin que se note tod
 
 Saludos,
 
-Francisco
-```
-
-## Toque 5 — día 28 · Por qué importa para su empresa
-
-**Asunto:** {{first_name}}, esto es importante para {{company}}
-
-```
-Hola {{first_name}},
+Francisco'),
+      (2, 5, '{{first_name}}, esto es importante para {{company}}', 'Hola {{first_name}},
 
 Te insisto porque de verdad creo que esto es importante para {{company}}.
 
@@ -314,15 +193,8 @@ Lo que tira una planta casi nunca avisa, y casi siempre estaba a la vista de qui
 
 Saludos,
 
-Francisco
-```
-
-## Toque 6 — día 42 · Subir el argumento
-
-**Asunto:** {{first_name}}, con qué sustentar lo que pides
-
-```
-Hola {{first_name}},
+Francisco'),
+      (2, 6, '{{first_name}}, con qué sustentar lo que pides', 'Hola {{first_name}},
 
 Algo que me comentan seguido los jefes de mantenimiento: el problema no es técnico, es que lo que piden suena a exageración sin un documento que lo respalde.
 
@@ -332,15 +204,8 @@ El análisis que te dejo convierte tu criterio en un reporte con fecha.
 
 Saludos,
 
-Francisco
-```
-
-## Toque 7 — día 60 · Bajar la barrera: por escrito antes de la reunión
-
-**Asunto:** {{first_name}}, el análisis por escrito
-
-```
-Hola {{first_name}},
+Francisco'),
+      (2, 7, '{{first_name}}, el análisis por escrito', 'Hola {{first_name}},
 
 ¿Te sirve si en lugar de una reunión te mando primero el análisis por escrito?
 
@@ -350,15 +215,8 @@ Así lo revisas con calma, lo pasas con quien tenga que autorizarlo, y si tiene 
 
 Saludos,
 
-Francisco
-```
-
-## Toque 8 — día 75 · Cierre con baja explícita
-
-**Asunto:** {{first_name}}, cierro el seguimiento
-
-```
-Hola {{first_name}},
+Francisco'),
+      (2, 8, '{{first_name}}, cierro el seguimiento', 'Hola {{first_name}},
 
 Cierro el seguimiento para no insistir. Te agradezco el tiempo.
 
@@ -368,21 +226,8 @@ Si prefieres que no te escriba más, respóndeme la palabra baja y lo registro h
 
 Saludos,
 
-Francisco
-```
-
----
-
-# Perfil C · Seguridad e higiene
-
-Derivado del registro aprobado. Ángulo: que la instalación esté revisada y documentada, con fecha.
-
-## Toque 1 — día 0 · Presentación
-
-**Asunto:** {{first_name}}, sobre tu instalación eléctrica.
-
-```
-Hola {{first_name}},
+Francisco'),
+      (3, 1, '{{first_name}}, sobre tu instalación eléctrica.', 'Hola {{first_name}},
 
 Soy Francisco Cuellar, Director General de ENNCO.
 
@@ -397,15 +242,8 @@ Si esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favo
 Saludos y espero saber de ti pronto.
 
 Francisco Cuellar
-Director General, ENNCO
-```
-
-## Toque 2 — día 3 · Dar claridad de qué hacemos
-
-**Asunto:** {{first_name}}, para que quede claro qué hacemos
-
-```
-Hola {{first_name}},
+Director General, ENNCO'),
+      (3, 2, '{{first_name}}, para que quede claro qué hacemos', 'Hola {{first_name}},
 
 Tal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.
 
@@ -420,15 +258,8 @@ Avísame si puedo llamarte o programar una reunión con ustedes esta semana.
 Saludos,
 
 Francisco
-Director General, ENNCO
-```
-
-## Toque 3 — día 7 · Reconocer que está ocupado
-
-**Asunto:** {{first_name}}, sé que andas ocupado
-
-```
-Hola {{first_name}},
+Director General, ENNCO'),
+      (3, 3, '{{first_name}}, sé que andas ocupado', 'Hola {{first_name}},
 
 Sé que estás muy ocupado, pero así como ustedes tienen certeza de qué condición hay que documentar y cuándo, yo tengo total certeza de que puedo ayudarles considerablemente a tener su instalación eléctrica revisada y con respaldo por escrito.
 
@@ -436,15 +267,8 @@ Sé que estás muy ocupado, pero así como ustedes tienen certeza de qué condic
 
 Saludos,
 
-Francisco
-```
-
-## Toque 4 — día 14 · La pregunta directa
-
-**Asunto:** {{first_name}}, ¿quedó documentada la última revisión?
-
-```
-Hola {{first_name}},
+Francisco'),
+      (3, 4, '{{first_name}}, ¿quedó documentada la última revisión?', 'Hola {{first_name}},
 
 ¿Cuándo fue la última revisión de la instalación eléctrica, y quedó documentada?
 
@@ -454,15 +278,8 @@ Lo pregunto porque ese registro es el primero que se busca cuando alguien pide c
 
 Saludos,
 
-Francisco
-```
-
-## Toque 5 — día 28 · Por qué importa para su empresa
-
-**Asunto:** {{first_name}}, esto es importante para {{company}}
-
-```
-Hola {{first_name}},
+Francisco'),
+      (3, 5, '{{first_name}}, esto es importante para {{company}}', 'Hola {{first_name}},
 
 Te insisto porque de verdad creo que esto es importante para {{company}}.
 
@@ -472,15 +289,8 @@ El expediente de la instalación eléctrica se arma en uno de dos momentos: con 
 
 Saludos,
 
-Francisco
-```
-
-## Toque 6 — día 42 · Subir el argumento
-
-**Asunto:** {{first_name}}, lo dicho y lo escrito
-
-```
-Hola {{first_name}},
+Francisco'),
+      (3, 6, '{{first_name}}, lo dicho y lo escrito', 'Hola {{first_name}},
 
 Un hallazgo dicho en una junta se olvida en dos semanas. Un hallazgo con fecha y medición ya no, y además te respalda a ti.
 
@@ -490,15 +300,8 @@ Eso es lo que queda cuando revisamos una planta.
 
 Saludos,
 
-Francisco
-```
-
-## Toque 7 — día 60 · Bajar la barrera: por escrito antes de la reunión
-
-**Asunto:** {{first_name}}, para tu expediente
-
-```
-Hola {{first_name}},
+Francisco'),
+      (3, 7, '{{first_name}}, para tu expediente', 'Hola {{first_name}},
 
 ¿Te sirve si en lugar de una reunión te mando primero el análisis por escrito?
 
@@ -508,15 +311,8 @@ Así lo revisas con calma, lo integras a tu expediente, y si tiene sentido nos s
 
 Saludos,
 
-Francisco
-```
-
-## Toque 8 — día 75 · Cierre con baja explícita
-
-**Asunto:** {{first_name}}, cierro por ahora
-
-```
-Hola {{first_name}},
+Francisco'),
+      (3, 8, '{{first_name}}, cierro por ahora', 'Hola {{first_name}},
 
 Cierro el tema para no insistir. Te agradezco el tiempo de leerme.
 
@@ -526,21 +322,8 @@ Si prefieres que no te escriba más, respóndeme la palabra baja y lo registro h
 
 Saludos,
 
-Francisco
-```
-
----
-
-# Perfil D · Compras
-
-Derivado del registro aprobado. Ángulo: comparar propuestas contra el mismo alcance y defender la partida.
-
-## Toque 1 — día 0 · Presentación
-
-**Asunto:** {{first_name}}, sobre tu instalación eléctrica.
-
-```
-Hola {{first_name}},
+Francisco'),
+      (4, 1, '{{first_name}}, sobre tu instalación eléctrica.', 'Hola {{first_name}},
 
 Soy Francisco Cuellar, Director General de ENNCO.
 
@@ -555,15 +338,8 @@ Si esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favo
 Saludos y espero saber de ti pronto.
 
 Francisco Cuellar
-Director General, ENNCO
-```
-
-## Toque 2 — día 3 · Dar claridad de qué hacemos
-
-**Asunto:** {{first_name}}, qué incluye y qué no
-
-```
-Hola {{first_name}},
+Director General, ENNCO'),
+      (4, 2, '{{first_name}}, qué incluye y qué no', 'Hola {{first_name}},
 
 Tal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.
 
@@ -578,15 +354,8 @@ Avísame si puedo llamarte o programar una reunión con ustedes esta semana.
 Saludos,
 
 Francisco
-Director General, ENNCO
-```
-
-## Toque 3 — día 7 · Reconocer que está ocupado
-
-**Asunto:** {{first_name}}, sé que ves muchos proveedores
-
-```
-Hola {{first_name}},
+Director General, ENNCO'),
+      (4, 3, '{{first_name}}, sé que ves muchos proveedores', 'Hola {{first_name}},
 
 Sé que estás muy ocupado, pero así como ustedes tienen certeza de cuándo un proveedor conviene y cuándo no, yo tengo total certeza de que puedo ayudarles considerablemente a comparar parejo sus propuestas eléctricas y a bajar ese costo.
 
@@ -594,15 +363,8 @@ Sé que estás muy ocupado, pero así como ustedes tienen certeza de cuándo un 
 
 Saludos,
 
-Francisco
-```
-
-## Toque 4 — día 14 · La pregunta directa
-
-**Asunto:** {{first_name}}, ¿qué incluye su póliza hoy?
-
-```
-Hola {{first_name}},
+Francisco'),
+      (4, 4, '{{first_name}}, ¿qué incluye su póliza hoy?', 'Hola {{first_name}},
 
 ¿Cuándo fue la última vez que compararon lo que incluye su póliza de mantenimiento eléctrico?
 
@@ -612,15 +374,8 @@ Hoy podrían estar pagando más de luz, o pagando una póliza que no revisa lo q
 
 Saludos,
 
-Francisco
-```
-
-## Toque 5 — día 28 · Por qué importa para su empresa
-
-**Asunto:** {{first_name}}, esto es importante para {{company}}
-
-```
-Hola {{first_name}},
+Francisco'),
+      (4, 5, '{{first_name}}, esto es importante para {{company}}', 'Hola {{first_name}},
 
 Te insisto porque de verdad creo que esto es importante para {{company}}.
 
@@ -630,15 +385,8 @@ Sin saber en qué condición está lo que se va a mantener, cada proveedor cotiz
 
 Saludos,
 
-Francisco
-```
-
-## Toque 6 — día 42 · Subir el argumento
-
-**Asunto:** {{first_name}}, con qué defender la partida
-
-```
-Hola {{first_name}},
+Francisco'),
+      (4, 6, '{{first_name}}, con qué defender la partida', 'Hola {{first_name}},
 
 Cuando mantenimiento pide y dirección pregunta por qué, quien queda en medio es compras.
 
@@ -648,15 +396,8 @@ Un análisis con lo observado y sus prioridades resuelve esa discusión antes de
 
 Saludos,
 
-Francisco
-```
-
-## Toque 7 — día 60 · Bajar la barrera: por escrito antes de la reunión
-
-**Asunto:** {{first_name}}, antes de pedir propuestas
-
-```
-Hola {{first_name}},
+Francisco'),
+      (4, 7, '{{first_name}}, antes de pedir propuestas', 'Hola {{first_name}},
 
 ¿Te sirve si en lugar de una reunión te mando primero el análisis por escrito?
 
@@ -666,15 +407,8 @@ Así lo revisas con calma, lo usas para pedir propuestas parejas, y si tiene sen
 
 Saludos,
 
-Francisco
-```
-
-## Toque 8 — día 75 · Cierre con baja explícita
-
-**Asunto:** {{first_name}}, te dejo la hoja y cierro el tema
-
-```
-Hola {{first_name}},
+Francisco'),
+      (4, 8, '{{first_name}}, te dejo la hoja y cierro el tema', 'Hola {{first_name}},
 
 Cierro el seguimiento. Te agradezco el tiempo de leerme.
 
@@ -684,60 +418,51 @@ Si prefieres que no te escriba más, respóndeme la palabra baja y lo registro h
 
 Saludos,
 
-Francisco
-```
+Francisco')
+    ) as nuevo(version, touch_number, subject_template, body_template),
+    public.sequence_versions sv
+    where sv.id = st.sequence_version_id
+      and sv.campaign_id = campana.id
+      and sv.version = nuevo.version
+      and st.touch_number = nuevo.touch_number
+      and (st.subject_template is distinct from nuevo.subject_template or st.body_template is distinct from nuevo.body_template);
+    get diagnostics toques_actualizados = row_count;
 
----
+    update public.sequence_versions sv
+    set content_sha256 = sha_por_variante->>sv.version::text
+    where sv.campaign_id = campana.id
+      and sha_por_variante ? sv.version::text;
 
-# Segunda vuelta — cuando contestan «habla con Juan»
+    manifiesto := campana.manifest_json
+      || jsonb_build_object('content_sha256', sha_secuencia_nueva, 'sequence_source_sha256', sha_fuente_nueva)
+      || jsonb_build_object('variants', (
+           select jsonb_agg(jsonb_build_object(
+                    'key', v->>'key',
+                    'version', (v->>'version')::integer,
+                    'content_sha256', coalesce(sha_por_variante->>(v->>'version'), v->>'content_sha256'))
+                  order by (v->>'version')::integer)
+           from jsonb_array_elements(campana.manifest_json->'variants') v));
 
-El rescate del referido va dentro de la pregunta en casi todos los toques, así
-que esta respuesta es el resultado **bueno** de la secuencia, no una excepción.
+    -- Idempotente: si el manifiesto ya describe este copy no se reescribe nada
+    -- ni se anota un cambio que no ocurrio.
+    if manifiesto is distinct from campana.manifest_json then
+      update public.campaigns
+      set manifest_json = manifiesto,
+          manifest_sha256 = encode(extensions.digest(convert_to(manifiesto::text, 'utf8'), 'sha256'), 'hex'),
+          updated_at = now()
+      where id = campana.id;
 
-**Reglas de uso:**
-
-1. El correo al referido va en **hilo nuevo, con su propio asunto**.
-2. El acuse al referidor va como **reply en su hilo, el mismo día**.
-3. La secuencia del referidor se **detiene** al registrar su respuesta. El
-   referido **no entra a la secuencia automática**: se maneja manual.
-4. Si dan cargo sin nombre o sin correo, usar la variante de presentación.
-5. Registrar siguiente acción y fecha.
-
-## Correo al referido
-
-**Asunto:** {{referidor}} me dirigió contigo
-
-```
-Hola {{first_name}},
-
-Soy Francisco Cuellar, Director General de ENNCO. {{referidor}} me pidió que viera este tema directamente contigo.
-
-Le escribí porque trabajamos con clientes muy similares a ustedes bajando su costo de energía y evitando paros por falla eléctrica.
-
-¿Cuándo podemos platicar, o prefieres que te mande primero el análisis por escrito?
-
-Saludos,
-
-Francisco Cuellar
-Director General, ENNCO
-```
-
-## Acuse al referidor (reply en su hilo, el mismo día)
-
-```
-Gracias, {{first_name}}. Hoy mismo le escribo a {{referido}} mencionando que tú me dirigiste con él, y con eso dejo de llenarte el correo.
-
-Saludos y gracias de nuevo.
-
-Francisco
-```
-
-## Variante: dan el cargo pero no el nombre o el correo
-
-```
-Gracias, {{first_name}}. ¿Me compartes su correo, o prefieres presentarnos con un mensaje corto? Como te acomode, con cualquiera de las dos le escribo hoy mismo.
-
-Saludos,
-
-Francisco
-```
+      insert into public.audit_log (organization_id, actor_user_id, action, record_type, record_id, old_data, new_data)
+      values (
+        campana.organization_id, null, 'DIRECT_LANE_CAMPAIGN_COPY_SOLAR_WORDING', 'campaigns', campana.id,
+        jsonb_build_object('manifest_sha256', campana.manifest_sha256,
+                           'content_sha256', campana.manifest_json->>'content_sha256'),
+        jsonb_build_object(
+          'manifest_sha256', encode(extensions.digest(convert_to(manifiesto::text, 'utf8'), 'sha256'), 'hex'),
+          'content_sha256', sha_secuencia_nueva,
+          'touches_updated', toques_actualizados,
+          'authorized_by', 'Grant Keegan, teckel_admin, 2026-09-10; vocabulario de Paco en la junta del 9-sep',
+          'reason', 'El negocio es solar: sale acometidas, entran instalaciones y mantenimiento fotovoltaico'));
+    end if;
+  end loop;
+end $$;

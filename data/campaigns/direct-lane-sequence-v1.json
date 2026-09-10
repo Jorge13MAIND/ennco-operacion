@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "source": "docs/external/secuencia-ennco-copy.md",
-  "source_sha256": "a9b61f3ed9674b20dd3e08a9aec482a22f0c76a1a54cb5ccd1ad4c6376cb2a3b",
-  "generated_at": "2026-09-08T22:12:09.601Z",
+  "source_sha256": "db30c4d5e0a1e60b2ccd0fc3886ad50f727f57d36a987b75a2b4c368923408f0",
+  "generated_at": "2026-09-10T22:26:29.480Z",
   "sender_name": "Francisco Cuellar",
   "sender_title": "Director General, ENNCO",
   "day_offsets": [
@@ -30,7 +30,7 @@
           "touch_number": 2,
           "day_offset": 3,
           "subject": "{{first_name}}, sobre mi correo anterior",
-          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nObra eléctrica industrial, subestaciones y transformadores, mantenimiento eléctrico y proyectos de energía.\n\nY te podemos ayudar con esto:\nBajar lo que pagan de luz, y que un problema eléctrico no les detenga la producción.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nInstalaciones y mantenimiento fotovoltaico, obra eléctrica industrial, subestaciones y transformadores, mantenimiento eléctrico y proyectos de energía.\n\nY te podemos ayudar con esto:\nBajar lo que pagan de luz, y que un problema eléctrico no les detenga la producción.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
         },
         {
           "touch_number": 3,
@@ -78,13 +78,13 @@
           "touch_number": 1,
           "day_offset": 0,
           "subject": "{{first_name}}, sobre tu instalación eléctrica.",
-          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales en el mantenimiento de su instalación eléctrica: tableros, transformadores y acometidas, y entregamos un reporte de lo que encontramos y de lo que conviene atender primero.\n\nSé que en tu área lo que cuenta es que la planta no se detenga.\n\n¿Cuándo podrías recibirme para revisar cómo está la instalación y darte un análisis real de lo que encontremos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO.\n\nTe escribo porque trabajamos con plantas industriales en el mantenimiento de su instalación eléctrica: tableros, transformadores e instalaciones fotovoltaicas, y entregamos un reporte de lo que encontramos y de lo que conviene atender primero.\n\nSé que en tu área lo que cuenta es que la planta no se detenga.\n\n¿Cuándo podrías recibirme para revisar cómo está la instalación y darte un análisis real de lo que encontremos?\n\nSi esto no lo llevas tú, ¿podrías dirigirme con la persona encargada por favor?\n\nSaludos y espero saber de ti pronto.\n\nFrancisco Cuellar\nDirector General, ENNCO"
         },
         {
           "touch_number": 2,
           "day_offset": 3,
           "subject": "{{first_name}}, qué hacemos exactamente",
-          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nMantenimiento eléctrico industrial, subestaciones, transformadores y tableros.\n\nY te podemos ayudar con esto:\nEncontrar lo que está por fallar antes de que pare la línea, y dejarte por escrito en qué condición está todo.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nInstalaciones y mantenimiento fotovoltaico, mantenimiento eléctrico industrial, subestaciones, transformadores y tableros.\n\nY te podemos ayudar con esto:\nEncontrar lo que está por fallar antes de que pare la línea, y dejarte por escrito en qué condición está todo.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
         },
         {
           "touch_number": 3,
@@ -138,7 +138,7 @@
           "touch_number": 2,
           "day_offset": 3,
           "subject": "{{first_name}}, para que quede claro qué hacemos",
-          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nRevisión y mantenimiento de instalaciones eléctricas industriales, con reporte de lo observado.\n\nY te podemos ayudar con esto:\nQue tengas por escrito y con fecha en qué condición está cada parte, y que lo que esté mal se corrija antes de que sea un problema.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nInstalaciones y mantenimiento fotovoltaico, revisión y mantenimiento de instalaciones eléctricas industriales, con reporte de lo observado.\n\nY te podemos ayudar con esto:\nQue tengas por escrito y con fecha en qué condición está cada parte, y que lo que esté mal se corrija antes de que sea un problema.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
         },
         {
           "touch_number": 3,
@@ -192,7 +192,7 @@
           "touch_number": 2,
           "day_offset": 3,
           "subject": "{{first_name}}, qué incluye y qué no",
-          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nObra eléctrica industrial, subestaciones, transformadores y pólizas de mantenimiento.\n\nY te podemos ayudar con esto:\nDefinir un alcance claro para que todas las propuestas que pidas se coticen contra lo mismo, y bajar lo que pagan de luz.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
+          "body": "Hola {{first_name}},\n\nTal vez mi correo anterior no te pudo dar la claridad de qué hacemos y por qué es relevante para ti.\n\nHacemos esto:\nInstalaciones y mantenimiento fotovoltaico, obra eléctrica industrial, subestaciones, transformadores y pólizas de mantenimiento.\n\nY te podemos ayudar con esto:\nDefinir un alcance claro para que todas las propuestas que pidas se coticen contra lo mismo, y bajar lo que pagan de luz.\n\nAvísame si puedo llamarte o programar una reunión con ustedes esta semana.\n\nSaludos,\n\nFrancisco\nDirector General, ENNCO"
         },
         {
           "touch_number": 3,

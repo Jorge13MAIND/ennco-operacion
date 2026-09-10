@@ -106,6 +106,10 @@ check("ONLY_KNOWN_MERGE_TAGS", badTags.length === 0, [...new Set(badTags)]);
 //  - 2026-09-08, Grant: el asunto se personaliza. Los 32 abren con
 //    {{first_name}} y el toque 1 de las cuatro variantes dice
 //    "{{first_name}}, sobre tu instalacion electrica." El cuerpo no se toca.
+//  - 2026-09-10, Paco (junta del 9-sep): el negocio es solar. Sale "acometidas"
+//    del toque 1 de MANTENIMIENTO ("instalaciones fotovoltaicas" en su lugar) y
+//    la lista de servicios del toque 2 abre en las cuatro variantes con
+//    "instalaciones y mantenimiento fotovoltaico".
 const APPROVED_ANCHORS = [
   "Soy Francisco Cuellar, Director General de ENNCO.",
   "Si tú no te encargas de llevar esto, ¿podrías dirigirme con la persona encargada por favor?",
@@ -124,9 +128,20 @@ const RETIRED_PHRASES = [
   "tenemos clientes muy similares a ustedes",
   "increíbles resultados",
   "estrategia de primer nivel",
+  // 2026-09-10, Paco: el negocio es solar; "acometidas" no vuelve.
+  "acometidas",
 ];
-const regressed = RETIRED_PHRASES.filter((a) => source.includes(a));
+// Se vigila lo que SALE (cuerpos y asuntos), no la prosa del markdown: el
+// documento explica por que se retiro cada frase y tiene que poder nombrarla.
+const outgoing = [...bodies, ...subjects].join("\n");
+const regressed = RETIRED_PHRASES.filter((a) => outgoing.includes(a));
 check("RETIRED_PHRASES_STAY_OUT", regressed.length === 0, regressed);
+// Las palabras del cliente sobre su propio negocio (junta del 9-sep) tienen que
+// seguir en la lista de servicios de las cuatro variantes.
+const SOLAR_SERVICES = "Instalaciones y mantenimiento fotovoltaico";
+const servicesLines = (source.match(/^Hacemos esto:\n/gmu) ?? []).length;
+const solarServicesLines = (source.match(new RegExp(`^Hacemos esto:\\n${SOLAR_SERVICES}`, "gmu")) ?? []).length;
+check("SERVICES_LEAD_WITH_SOLAR", servicesLines === 4 && solarServicesLines === 4, { servicios: servicesLines, solares: solarServicesLines });
 const missing = APPROVED_ANCHORS.filter((a) => !source.includes(a));
 check("CLIENT_APPROVED_TOUCH1_INTACT", missing.length === 0, missing);
 
