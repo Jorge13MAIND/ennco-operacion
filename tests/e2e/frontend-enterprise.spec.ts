@@ -70,12 +70,10 @@ test("Control Room keeps ENNCO identity, private context, grouped navigation and
     await expect(mobileNavigation.getByRole("heading", { name: "Gobierno" })).toBeVisible();
   }
 
-  const authorization = page.getByRole("region", { name: "Autorización efectiva" });
-  const commercialTruth = page.getByRole("region", { name: "Verdad comercial" });
-  await expect(authorization).toBeVisible();
-  await expect(commercialTruth).toBeVisible();
-  expect((await authorization.boundingBox())?.y ?? Number.POSITIVE_INFINITY)
-    .toBeLessThan((await commercialTruth.boundingBox())?.y ?? Number.NEGATIVE_INFINITY);
+  // La franja "Autorización efectiva" se retiró de la portada (Grant, 10-sep):
+  // la verdad comercial es lo que queda a la vista.
+  await expect(page.getByRole("region", { name: "Verdad comercial" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Autorización efectiva" })).toHaveCount(0);
 });
 
 test("session exit returns to an explicit signed-out access state", async ({ page }, testInfo) => {

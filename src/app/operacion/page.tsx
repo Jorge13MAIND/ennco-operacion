@@ -28,7 +28,6 @@ export default async function OperationsPage() {
   const access = await requireOperationsAccess();
   const snapshot = await loadOperationsPortal(access);
   const capacityLabels = { HEALTHY: "Disponible", WARNING: "Atención", FULL: "Lleno", UNKNOWN: "Bloqueado" } as const;
-  const effectiveRelease = snapshot.health.externalSendAllowed ? "HABILITADO" : "BLOQUEADO";
   return (
     <main className="shell section operations-main" id="main-content" tabIndex={-1}>
       <header className="operations-page-heading">
@@ -39,21 +38,6 @@ export default async function OperationsPage() {
         </div>
         {snapshot.evidenceClass === "live" ? null : <span className="badge">{operationalLabel(snapshot.evidenceClass)}</span>}
       </header>
-
-      <section aria-label="Autorización efectiva" className={`command-status ${snapshot.health.externalSendAllowed ? "ready" : "blocked"}`}>
-        <div className="command-status-primary">
-          <span>Autorización efectiva</span>
-          <strong>{effectiveRelease}</strong>
-          <p>{snapshot.health.externalSendAllowed
-            ? "Los controles actuales permiten operar dentro del manifiesto aprobado."
-            : "Ningún proveedor activo sustituye los gates, el manifiesto y la evidencia requerida."}</p>
-        </div>
-        <div className="command-status-facts">
-          <div><span>Botón de apagado</span><strong>{snapshot.health.killSwitch ? "ACTIVO" : "INACTIVO"}</strong></div>
-          <div><span>Reply sync</span><strong>{snapshot.health.replySync}</strong></div>
-          <div><span>Riesgo abierto</span><strong>{snapshot.health.openP0} P0 · {snapshot.health.openP1} P1</strong></div>
-        </div>
-      </section>
 
       {snapshot.evidenceClass === "synthetic_demo" ? (
         <div className="notice operations-disclosure">

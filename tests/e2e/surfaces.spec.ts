@@ -93,7 +93,6 @@ test("control room never presents setup as live commercial truth", async ({ page
   await expect(page.getByText("Modo sintético. Tráfico externo en cero.")).toBeVisible();
   await expect(page.getByText("Leads contractuales")).toBeVisible();
   await expect(page.getByText("Pipeline estricto")).toBeVisible();
-  await expect(page.getByText("BLOQUEADO", { exact: true })).toBeVisible();
   await expect(page.getByText("Vincular en base las 3 empresas y sus 6 dominios bloqueados")).toBeVisible();
   await expect(page.getByText("Aprobar aviso 2026-08-11-v1 ligado a SHA256")).toBeVisible();
   const desktopNavigation = page.locator("nav.operations-nav");
