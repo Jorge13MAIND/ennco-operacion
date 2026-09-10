@@ -1091,3 +1091,60 @@ main.auth-shell .mfa-secret { border-radius: 10px; background: #f5f5f7; font-fam
   .cr-root .cr-trend-col { min-width: 34px; }
   .cr-root .cr-stats-table th:first-child, .cr-root .cr-stats-table td:first-child { padding-left: 12px; }
 }
+
+
+/* ---------- 18. Respuestas del carril en tarjetas ---------- */
+
+.cr-root .cr-replies { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding: 0 22px 22px; }
+.cr-root .cr-reply {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid var(--cr-line);
+  border-radius: 14px;
+  background: var(--cr-surface);
+  box-shadow: var(--cr-shadow-card);
+}
+.cr-root .cr-reply.is-answered { background: #fafafa; }
+.cr-root .cr-reply .status.ready { background: var(--cr-good-bg); color: var(--cr-good-fg); }
+.cr-root .cr-reply-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.cr-root .cr-reply-head > div { display: grid; gap: 2px; min-width: 0; }
+.cr-root .cr-reply-head strong { color: var(--cr-ink); font-size: 0.98rem; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.cr-root .cr-reply-head span:not(.status) { color: var(--cr-muted); font-size: 0.76rem; }
+.cr-root .cr-reply-head .status { flex: none; }
+.cr-root .cr-reply-meta { margin: 0; color: var(--cr-muted); font-family: var(--font-data); font-size: 0.64rem; overflow-wrap: anywhere; }
+.cr-root .cr-reply-subject { margin: 0; color: var(--cr-ink); font-size: 0.88rem; font-weight: 600; overflow-wrap: anywhere; }
+.cr-root .cr-reply-text { margin: 0; color: var(--cr-body); font-size: 0.82rem; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cr-root .cr-reply-empty { margin: 0; color: var(--cr-muted); font-size: 0.8rem; font-style: italic; }
+.cr-root .cr-reply-body summary { color: var(--cr-accent); font-size: 0.74rem; font-weight: 600; cursor: pointer; }
+.cr-root .cr-reply-body[open] summary { margin-bottom: 8px; }
+/* Abierto el correo completo, el extracto sobra. */
+.cr-root .cr-reply:has(.cr-reply-body[open]) .cr-reply-excerpt { display: none; }
+.cr-root .cr-reply-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 4px; padding-top: 12px; border-top: 1px solid var(--cr-line); }
+.cr-root .cr-reply-link { color: var(--cr-accent); font-size: 0.78rem; font-weight: 600; }
+.cr-root .cr-reply-compose { flex: 1 1 100%; }
+.cr-root .cr-reply-compose summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--cr-accent);
+  border-radius: 999px;
+  color: var(--cr-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.cr-root .cr-reply-compose summary::-webkit-details-marker { display: none; }
+.cr-root .cr-reply-compose summary::before { content: "+"; margin-right: 8px; font-size: 1rem; line-height: 1; }
+.cr-root .cr-reply-compose[open] summary::before { content: "–"; }
+.cr-root .cr-reply-compose[open] summary { background: var(--cr-accent); color: #fff; }
+.cr-root .cr-reply-compose .compact-operation-form { margin-top: 12px; box-shadow: none; }
+.cr-root .cr-reply-compose .compact-operation-form .text-button { justify-self: start; width: auto; }
+
+@media (max-width: 900px) {
+  .cr-root .cr-replies { grid-template-columns: 1fr; padding-inline: 16px; }
+}

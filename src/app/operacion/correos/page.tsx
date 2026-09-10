@@ -15,9 +15,9 @@ import {
   EnrollContactsAction,
   MailboxCapAction,
   MailboxStateAction,
-  ReplyAction,
   RevokeMailboxAction,
 } from "@/components/CorreosActions";
+import { CorreosReplies } from "@/components/CorreosReplies";
 import { MetricValue } from "@/components/MetricValue";
 import { requireOperationsAccess } from "@/lib/auth/authorization";
 import { loadDirectLaneScreen, type DirectLaneOverview } from "@/lib/correos/overview";
@@ -78,10 +78,6 @@ async function loadPlaybookTemplates(): Promise<Array<{ intent: string; label: s
 
 function Flag({ label, ok, okText, badText }: { label: string; ok: boolean; okText: string; badText: string }) {
   return <div><span>{label}</span><strong className={`status ${ok ? "" : "blocked"}`}>{ok ? okText : badText}</strong></div>;
-}
-
-function firstName(fullName: string | null | undefined): string {
-  return (fullName ?? "").trim().split(/\s+/u)[0] || "hola";
 }
 
 function sumEnrollments(overview: DirectLaneOverview, statuses: string[]): number {
@@ -267,22 +263,7 @@ export default async function CorreosPage() {
           </div>
           <span className="badge">{overview.pending_replies.length} recientes</span>
         </div>
-        {overview.pending_replies.length === 0 ? (
-          <div className="empty-state"><strong>Sin respuestas</strong><p>Cuando un prospecto conteste, aparece aquí y llega un aviso por Telegram.</p></div>
-        ) : overview.pending_replies.map((reply) => (
-          <div className="compact-operation-form" key={reply.provider_event_id} style={{ marginBottom: 12 }}>
-            <div className="inline-operation">
-              <strong>{reply.contact ?? reply.from_email}</strong>
-              <span className="fine">{reply.role_title ?? ""} · {reply.account ?? ""} · {stamp.format(new Date(reply.observed_at))} · {reply.mailbox_email}</span>
-              <span className={`status ${reply.classification === "UNREVIEWED" ? "blocked" : ""}`}>{reply.classification === "UNREVIEWED" ? "Sin clasificar" : operationalLabel(reply.classification)}</span>
-              {reply.already_answered ? <span className="status">Respondida</span> : null}
-            </div>
-            <p style={{ whiteSpace: "pre-wrap", margin: 0 }}><strong>{reply.subject}</strong>{"\n"}{reply.body_text || "(sin cuerpo capturado; ábrela en el buzón)"}</p>
-            {canOperate && !reply.already_answered ? (
-              <ReplyAction cc={runningCampaign?.cc_on_reply_email ?? null} firstName={firstName(reply.contact)} providerEventId={reply.provider_event_id} templates={templates} />
-            ) : null}
-          </div>
-        ))}
+        <CorreosReplies canOperate={canOperate} cc={runningCampaign?.cc_on_reply_email ?? null} replies={overview.pending_replies} templates={templates} />
       </section>
 
       <section className="panel">
