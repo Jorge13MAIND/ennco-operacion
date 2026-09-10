@@ -9,6 +9,7 @@ const surfaces = [
   { path: "/operacion", name: "control-room" },
   { path: "/operacion/alertas", name: "control-room-alerts" },
   { path: "/operacion/cadencia", name: "control-room-cadence" },
+  { path: "/operacion/correos/estadisticas", name: "control-room-stats" },
   { path: "/operacion/respuestas", name: "control-room-replies" },
   { path: "/operacion/leads", name: "control-room-leads" },
   { path: "/operacion/empresas", name: "control-room-accounts" },

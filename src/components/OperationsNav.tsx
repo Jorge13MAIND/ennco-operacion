@@ -23,7 +23,7 @@ const moduleLabels: Record<OperationModuleKey, string> = {
   entrega: "Entrega",
 };
 
-type NavKey = "home" | "correos" | "inteligencia" | OperationModuleKey;
+type NavKey = "home" | "correos" | "estadisticas" | "inteligencia" | OperationModuleKey;
 
 const groups: Array<{ label: string; items: Array<{ key: NavKey; href: string }> }> = [
   {
@@ -40,6 +40,7 @@ const groups: Array<{ label: string; items: Array<{ key: NavKey; href: string }>
     label: "Comercial",
     items: [
       { key: "correos", href: "/operacion/correos" },
+      { key: "estadisticas", href: "/operacion/correos/estadisticas" },
       { key: "respuestas", href: "/operacion/respuestas" },
       { key: "leads", href: "/operacion/leads" },
       { key: "empresas", href: "/operacion/empresas" },
@@ -63,6 +64,7 @@ const groups: Array<{ label: string; items: Array<{ key: NavKey; href: string }>
 function itemLabel(key: NavKey): string {
   if (key === "home") return "Hoy";
   if (key === "correos") return "Correos";
+  if (key === "estadisticas") return "Estadísticas";
   if (key === "inteligencia") return "Inteligencia";
   return moduleLabels[key];
 }
