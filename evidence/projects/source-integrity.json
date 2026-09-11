@@ -1,0 +1,20 @@
+[
+  {
+    "file": "MEST PROGRAM 2.0 - Act - Recuperado PARCIAL.xlsm",
+    "sha256": "aa11dfac9f93c78d9c05ef94b23e5faa03a2d99c9e775b441f2f50834731de28",
+    "size": 3424849,
+    "unchangedFromAudit": true
+  },
+  {
+    "file": "[2026-09-09] DatosRecuperados (2).xlsx",
+    "sha256": "5434d87db2851d2cde65060b4dee345ffba674f37e58288f4a114cac8863dce4",
+    "size": 245086,
+    "unchangedFromAudit": true
+  },
+  {
+    "file": "[2026-09-09] Proceso Administrativo y Operativo de Proyectos ENNCO.docx",
+    "sha256": "a765ba24b63f0a4bf0df16959e7e32060c752c0572d86afdcb89be2b1c9b417f",
+    "size": 16344,
+    "unchangedFromAudit": "read-only handling; original baseline not retained"
+  }
+]

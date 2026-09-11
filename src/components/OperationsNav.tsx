@@ -3,6 +3,7 @@
 import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 import type { OperationModuleKey } from "@/lib/operations/portal";
 
@@ -23,9 +24,20 @@ const moduleLabels: Record<OperationModuleKey, string> = {
   entrega: "Entrega",
 };
 
-type NavKey = "home" | "correos" | "estadisticas" | "inteligencia" | OperationModuleKey;
+type NavKey =
+  | "home"
+  | "correos"
+  | "estadisticas"
+  | "inteligencia"
+  | "projects-master"
+  | "projects-list"
+  | "projects-catalogs"
+  | OperationModuleKey;
 
-const groups: Array<{ label: string; items: Array<{ key: NavKey; href: string }> }> = [
+const groups: Array<{
+  label: string;
+  items: Array<{ key: NavKey; href: string }>;
+}> = [
   {
     label: "Control",
     items: [
@@ -59,6 +71,14 @@ const groups: Array<{ label: string; items: Array<{ key: NavKey; href: string }>
       { key: "entrega", href: "/operacion/entrega" },
     ],
   },
+  {
+    label: "Proyectos ENNCO",
+    items: [
+      { key: "projects-master", href: "/operacion/proyectos" },
+      { key: "projects-list", href: "/operacion/proyectos/lista" },
+      { key: "projects-catalogs", href: "/operacion/proyectos/catalogos" },
+    ],
+  },
 ];
 
 function itemLabel(key: NavKey): string {
@@ -66,19 +86,52 @@ function itemLabel(key: NavKey): string {
   if (key === "correos") return "Correos";
   if (key === "estadisticas") return "Estadísticas";
   if (key === "inteligencia") return "Inteligencia";
+  if (key === "projects-master") return "Control Maestro";
+  if (key === "projects-list") return "Proyectos";
+  if (key === "projects-catalogs") return "Catálogos";
   return moduleLabels[key];
 }
 
 export function OperationsNav({ variant }: { variant: "desktop" | "mobile" }) {
   const pathname = usePathname();
+  const navigation = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (variant === "desktop" && pathname.startsWith("/operacion/proyectos")) {
+      const sidebar = navigation.current?.closest<HTMLElement>(
+        ".operations-sidebar",
+      );
+      const activeGroup = navigation.current
+        ?.querySelector('[aria-current="page"]')
+        ?.closest(".operations-nav-group");
+      if (sidebar && activeGroup) {
+        const container = sidebar.getBoundingClientRect();
+        const group = activeGroup.getBoundingClientRect();
+        if (group.bottom > container.bottom)
+          sidebar.scrollTop += group.bottom - container.bottom + 16;
+        else if (group.top < container.top)
+          sidebar.scrollTop -= container.top - group.top + 16;
+      }
+    }
+  }, [pathname, variant]);
   const links = groups.map((group) => (
     <section className="operations-nav-group" key={group.label}>
       <h2>{group.label}</h2>
       <div>
         {group.items.map((item) => {
-          const active = pathname === item.href;
+          const active =
+            item.key === "projects-list"
+              ? pathname.startsWith("/operacion/proyectos/") &&
+                !pathname.startsWith("/operacion/proyectos/catalogos")
+              : item.key === "projects-catalogs"
+                ? pathname === item.href || pathname.startsWith(`${item.href}/`)
+                : pathname === item.href;
           return (
-            <Link aria-current={active ? "page" : undefined} href={item.href as Route} key={item.key} prefetch>
+            <Link
+              aria-current={active ? "page" : undefined}
+              href={item.href as Route}
+              key={item.key}
+              prefetch
+            >
               <span aria-hidden="true" className="nav-indicator" />
               {itemLabel(item.key)}
             </Link>
@@ -92,10 +145,20 @@ export function OperationsNav({ variant }: { variant: "desktop" | "mobile" }) {
     return (
       <details className="operations-mobile-menu">
         <summary>Menú de operación</summary>
-        <nav aria-label="Módulos de operación">{links}</nav>
+        <nav aria-label="Módulos de operación" className="operations-nav">
+          {links}
+        </nav>
       </details>
     );
   }
 
-  return <nav aria-label="Módulos de operación" className="operations-nav">{links}</nav>;
+  return (
+    <nav
+      aria-label="Módulos de operación"
+      className="operations-nav"
+      ref={navigation}
+    >
+      {links}
+    </nav>
+  );
 }

@@ -1,0 +1,40 @@
+{
+  "verifiedAt": "2026-09-10T23:47:54.598808+00:00",
+  "baseCommit": "c943c32a8ff7609e4893b70f021ba2187495ed07",
+  "implementationSha256": "578c8d99ab0240a4d253bffd4f9b4f616237853419a42e86ed415dd5240c0230",
+  "unitTests": {
+    "files": 94,
+    "passed": 591
+  },
+  "e2eTests": {
+    "passed": 13,
+    "seconds": 52.2,
+    "mode": "local synthetic HTTP and browser",
+    "includes": [
+      "three complete lifecycles",
+      "axe desktop/mobile",
+      "concurrency",
+      "idempotency",
+      "versioned schedules",
+      "cost visibility"
+    ]
+  },
+  "oauthBootstrapTests": 5,
+  "lint": "PASS",
+  "typecheck": "PASS",
+  "build": "PASS",
+  "postgresql": "PASS isolated PostgreSQL 17, concurrency, HMAC attestation, rollback",
+  "historicalDraftRows": 187,
+  "secretScan": "PASS, 0 findings",
+  "actualDrive": "NOT_CONNECTED",
+  "production": "NOT_DEPLOYED",
+  "pacoAcceptance": "PENDING",
+  "followup": {
+    "reason": "Importes largos en tarjetas y ejecución de las pruebas API sólo en su configuración dedicada",
+    "e2ePassed": 6,
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "build": "PASS",
+    "ciJob": "projects, YAML parsed"
+  }
+}

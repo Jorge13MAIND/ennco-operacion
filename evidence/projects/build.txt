@@ -1,0 +1,127 @@
+> ennco-operacion@0.1.0 build
+> npm run verify:privacy-notice && next build
+
+
+> ennco-operacion@0.1.0 verify:privacy-notice
+> node --experimental-strip-types scripts/verify-privacy-notice.mts
+
+PRIVACY_NOTICE_CONTENT_SHA256_PASS d4a24f23350d8a3522f75a169938afe7bcd868c9c812b46aadcbc52681fc718e
+▲ Next.js 16.3.4 (Turbopack)
+✓ Running next.config.ts took 35ms
+- Experiments (use with caution):
+  · staleTimes
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 835ms
+  Running TypeScript ...
+  Finished TypeScript in 5.5s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/26) ...
+  Generating static pages using 7 workers (6/26)
+  Generating static pages using 7 workers (12/26)
+  Generating static pages using 7 workers (19/26)
+✓ Generating static pages using 7 workers (26/26) in 407ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /api/v1/assistant/messages
+├ ƒ /api/v1/events
+├ ƒ /api/v1/exports/[dataset]
+├ ƒ /api/v1/health
+├ ƒ /api/v1/internal/cron/correos-autoenroll
+├ ƒ /api/v1/internal/cron/correos-dispatch
+├ ƒ /api/v1/internal/cron/correos-sync
+├ ƒ /api/v1/internal/cron/correos-weekly
+├ ƒ /api/v1/internal/cron/daily-snapshot
+├ ƒ /api/v1/internal/cron/dispatch
+├ ƒ /api/v1/internal/cron/gmail-sync
+├ ƒ /api/v1/internal/cron/watchdog
+├ ƒ /api/v1/internal/synthetic/golden-path
+├ ƒ /api/v1/operations/approvals/[id]/decision
+├ ƒ /api/v1/operations/capacity/config
+├ ƒ /api/v1/operations/correos/campaigns
+├ ƒ /api/v1/operations/correos/campaigns/[id]/approve
+├ ƒ /api/v1/operations/correos/campaigns/[id]/enroll
+├ ƒ /api/v1/operations/correos/campaigns/[id]/state
+├ ƒ /api/v1/operations/correos/mailboxes/[id]/configure
+├ ƒ /api/v1/operations/correos/mailboxes/[id]/connect
+├ ƒ /api/v1/operations/correos/mailboxes/[id]/revoke
+├ ƒ /api/v1/operations/correos/replies/[id]/send
+├ ƒ /api/v1/operations/incidents/[id]/transition
+├ ƒ /api/v1/operations/infrastructure/annex-a/apply
+├ ƒ /api/v1/operations/infrastructure/gmail/oauth/callback
+├ ƒ /api/v1/operations/infrastructure/gmail/oauth/start
+├ ƒ /api/v1/operations/infrastructure/hybrid/mailboxes/[id]/observations
+├ ƒ /api/v1/operations/infrastructure/hybrid/mailboxes/snapshot
+├ ƒ /api/v1/operations/infrastructure/hybrid/readiness
+├ ƒ /api/v1/operations/infrastructure/hybrid/releases
+├ ƒ /api/v1/operations/infrastructure/provider/snapshot
+├ ƒ /api/v1/operations/infrastructure/readiness
+├ ƒ /api/v1/operations/inteligencia/apollo
+├ ƒ /api/v1/operations/inteligencia/icp
+├ ƒ /api/v1/operations/inteligencia/sugerencias
+├ ƒ /api/v1/operations/leads/[id]/evidence
+├ ƒ /api/v1/operations/leads/[id]/opportunity
+├ ƒ /api/v1/operations/leads/[id]/qualify
+├ ƒ /api/v1/operations/meetings/[id]/outcome
+├ ƒ /api/v1/operations/opportunities/[id]/approval
+├ ƒ /api/v1/operations/opportunities/[id]/capacity
+├ ƒ /api/v1/operations/opportunities/[id]/meetings
+├ ƒ /api/v1/operations/opportunities/[id]/payments
+├ ƒ /api/v1/operations/opportunities/[id]/transition
+├ ƒ /api/v1/operations/provider-events/[id]/review
+├ ƒ /api/v1/operations/tasks/[id]/assign
+├ ƒ /api/v1/operations/tasks/[id]/complete
+├ ƒ /api/v1/prequotes
+├ ƒ /api/v1/prequotes/[folio]/pdf
+├ ƒ /api/v1/projects
+├ ƒ /api/v1/projects/[id]
+├ ƒ /api/v1/projects/[id]/calculate
+├ ƒ /api/v1/projects/[id]/documents
+├ ƒ /api/v1/projects/[id]/documents/[documentId]
+├ ƒ /api/v1/projects/[id]/drive
+├ ƒ /api/v1/projects/[id]/pdf
+├ ƒ /api/v1/projects/[id]/records
+├ ƒ /api/v1/projects/catalogs
+├ ƒ /api/v1/projects/catalogs/refresh
+├ ƒ /api/v1/projects/members
+├ ƒ /api/v1/public/correos/o/[token]
+├ ƒ /api/v1/public/correos/oauth/start
+├ ƒ /api/v1/research/accounts
+├ ƒ /api/v1/research/accounts/[id]/contact-candidates
+├ ƒ /api/v1/research/accounts/[id]/evidence
+├ ƒ /api/v1/research/accounts/[id]/review
+├ ƒ /api/v1/research/contact-candidates/[id]/verify
+├ ƒ /api/v1/research/dedupe/[id]/resolve
+├ ƒ /api/v1/research/imports
+├ ƒ /api/v1/research/inventory/readiness
+├ ƒ /api/v1/research/inventory/snapshots
+├ ƒ /api/v1/unsubscribe
+├ ƒ /api/v1/webhooks/gmail
+├ ƒ /auth/callback
+├ ƒ /correos/conectar
+├ ƒ /diagnostico
+├ ƒ /ingreso
+├ ƒ /ingreso/mfa
+├ ƒ /ingreso/nueva-contrasena
+├ ƒ /ingreso/recuperar
+├ ƒ /operacion
+├ ƒ /operacion/[module]
+├ ƒ /operacion/correos
+├ ƒ /operacion/correos/estadisticas
+├ ƒ /operacion/inteligencia
+├ ƒ /operacion/proyectos
+├ ƒ /operacion/proyectos/[id]
+├ ƒ /operacion/proyectos/catalogos
+├ ƒ /operacion/proyectos/lista
+├ ƒ /privacidad
+├ ƒ /robots.txt
+└ ƒ /sitemap.xml
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

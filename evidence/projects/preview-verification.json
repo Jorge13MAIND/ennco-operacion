@@ -1,0 +1,36 @@
+{
+  "deploymentId": "dpl_3yWVVd2HCZywUyJjXScjatM2VJzx",
+  "sha": "c1842f886bd22ae3039d59e145700877b022460a",
+  "url": "https://ennco-operacion-git-grant-proyect-6ce00c-jorge13mainds-projects.vercel.app",
+  "readyState": "READY",
+  "projects": [
+    {
+      "segment": "RESIDENTIAL",
+      "folio": "DEMO-0001"
+    },
+    {
+      "segment": "COMMERCIAL",
+      "folio": "DEMO-0002"
+    },
+    {
+      "segment": "INDUSTRIAL",
+      "folio": "DEMO-0003"
+    }
+  ],
+  "readOnly": true,
+  "drive": "NOT_CONFIGURED",
+  "pdf": {
+    "status": 200,
+    "bytes": 8384
+  },
+  "writeGuard": {
+    "status": 409,
+    "error": "PROJECT_DEMO_READ_ONLY"
+  },
+  "detailsStatus": 200,
+  "recordCount": 7,
+  "numericOverflow": [],
+  "axeViolations": [],
+  "pageErrors": [],
+  "verifiedAt": "2026-09-10T23:57:45.997Z"
+}

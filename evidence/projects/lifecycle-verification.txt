@@ -1,0 +1,29 @@
+Verificación de ciclos Proyectos ENNCO
+Fecha UTC: 2026-09-10T23:42:06Z
+Comando: npx playwright test --config playwright.projects.config.ts tests/e2e/projects-lifecycle.spec.ts
+Destino: http://localhost:3017
+Modo: API HTTP de la aplicación, almacenamiento de demostración sintética local; sin mocks de reglas de negocio.
+
+RESIDENTIAL: 1 sistema solar, 5 kWp, 7,300 kWh/año estimados — PASS
+COMMERCIAL: 2 sistemas solares, 10 kWp, 14,600 kWh/año estimados — PASS
+INDUSTRIAL: 4 sistemas solares, 20 kWp, 29,200 kWh/año estimados — PASS
+Resultado: 3 passed (6.9s)
+
+Cobertura por caso:
+- Alta sin vínculo ni calificación automática de oportunidad comercial.
+- Recibo manual confirmado, cálculo con procedencia sintética y validación técnica explícita del caso de prueba.
+- Propuesta calculada y aceptada; presupuesto original y nueva revisión autorizada, conservados.
+- Contrato y calendario de dos parcialidades.
+- Compra rechazada antes de anticipo; liberada después de confirmación; objetivo de cinco días hábiles comprobado desde esa confirmación.
+- Orden principal, dos recepciones parciales y gasto con IVA separado.
+- Dos pagos parciales a proveedor sin duplicar costos incurridos ni comprometidos.
+- Factura al cliente que no aumenta cobros; anticipo y saldo asignados a parcialidades distintas.
+- Avance físico superior al porcentaje cobrado genera aviso.
+- Cierre técnico posible con saldo; cierre financiero prematuro rechazado sin excepción.
+- Cierre financiero conciliado y conservación de revisiones originales.
+- Utilidad real del proyecto antes de IVA: 2,400 / 4,800 / 9,600 MXN, respectivamente.
+- Exportación de propuesta, expediente técnico, control financiero y contrato borrador como PDF válidos.
+- Estado general CLOSED después de ambos cierres; relectura confirma cifras.
+
+Lint: npx eslint tests/e2e/projects-lifecycle.spec.ts --max-warnings=0 — PASS.
+Límites: pruebas sintéticas de software; no son aceptación de Paco, validación eléctrica real, precisión OCR con recibos reales ni prueba de Drive o persistencia Supabase en producción. Los permisos de áreas en modo vivo se comprueban separadamente mediante pruebas de base de datos. La comprobación de calendario de este recorrido corresponde al periodo de ejecución de septiembre de 2026.

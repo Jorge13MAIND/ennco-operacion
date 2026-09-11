@@ -1,0 +1,23 @@
+> ennco-operacion@0.1.0 test:projects:e2e
+> playwright test --config playwright.projects.config.ts
+
+
+Running 13 tests using 1 worker
+
+(node:1626539) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/projects-api.spec.ts:18:1 › rechaza solicitudes sin origen, claves ausentes e inyección de cálculo (124ms)
+  ✓   2 tests/e2e/projects-api.spec.ts:59:1 › detecta edición simultánea y repite la misma solicitud sin duplicados (90ms)
+  ✓   3 tests/e2e/projects-api.spec.ts:101:1 › precio y cliente congelados sobreviven a un reintento posterior a editar el expediente (172ms)
+  ✓   4 tests/e2e/projects-api.spec.ts:160:1 › compras pendientes se mantienen bloqueadas y un mal total se rechaza (54ms)
+  ✓   5 tests/e2e/projects-lifecycle.spec.ts:41:3 › ciclo completo sintético RESIDENTIAL: expediente, ingeniería, compras, cobros y cierre (788ms)
+  ✓   6 tests/e2e/projects-lifecycle.spec.ts:41:3 › ciclo completo sintético COMMERCIAL: expediente, ingeniería, compras, cobros y cierre (710ms)
+  ✓   7 tests/e2e/projects-lifecycle.spec.ts:41:3 › ciclo completo sintético INDUSTRIAL: expediente, ingeniería, compras, cobros y cierre (628ms)
+  ✓   8 tests/e2e/projects.spec.ts:68:1 › los tres segmentos se crean desde el formulario y conservan su expediente (6.7s)
+  ✓   9 tests/e2e/projects.spec.ts:84:1 › recibo confirmado, revisión de ingeniería y anticipo liberan el seguimiento real del expediente (8.9s)
+  ✓  10 tests/e2e/projects.spec.ts:265:1 › el catálogo tiene campos técnicos y las superficies son accesibles en escritorio y móvil (10.6s)
+  ✓  11 tests/e2e/projects.spec.ts:352:1 › una fuente consultada requiere revisión antes de usarse para dimensionar el proyecto (11.8s)
+  ✓  12 tests/e2e/projects.spec.ts:503:1 › un cobro cubre varias parcialidades sin duplicarse y conserva revisiones del calendario (6.3s)
+  ✓  13 tests/e2e/projects.spec.ts:641:1 › el maestro distingue costos conocidos de expedientes pendientes de presupuesto (3.8s)
+
+  13 passed (52.2s)
