@@ -34,7 +34,7 @@ TAB = "Tab_Amp_Cir_AC!"
 a.f("J17", "F17/SQRT(3)").f("J18", INV.format(52)).f("J19", f"F19*{INV.format(2)}")
 a.f("F18", f"INDEX({TAB}$M$94:$M$96,{INV.format(51)})", text=True)
 a.f("F27", "J18*F19").f("F28", "F27*1.25")
-first = f"COUNTIF({TAB}$E$13:$E$38,\"<\"&F28)+1"
+first = f"COUNTIF({TAB}$E$13:$E$38,\"<\"&F28/MAX(F29,1))+1"
 a.f("J28", f"INDEX({TAB}$E$13:$E$38,{first})").f("F30", f"INDEX({TAB}$C$13:$C$38,{first})").f("I30", f"INDEX({TAB}$D$13:$D$38,{first})", text=True)
 a.f("F29", f"ROUNDUP(F28/{TAB}$E$38,0)")
 a.f("G32", f"INDEX({TAB}$D$13:$D$38,MATCH(F32,{TAB}$C$13:$C$38,0))", text=True).f("J27", f"INDEX({TAB}$E$13:$E$38,MATCH(F32,{TAB}$C$13:$C$38,0))").f("F33", "J27")

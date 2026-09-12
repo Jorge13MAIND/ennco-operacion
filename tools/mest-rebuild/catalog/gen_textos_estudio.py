@@ -126,7 +126,8 @@ for vac, b, est, cal, precio, kind in BLOCKS:
     ra = find(cells, "Año", "A")[1]
     d0, d1 = ra + 2, ra + 31
     n = f'COUNTIF($H${d0}:$H${d1},"<0")'
-    e.f(f"D{r + 2}", f'TEXT({n}+ABS(INDEX($H${d0}:$H${d1},{n}))/INDEX($G${d0}:$G${d1},{n}+1),"0.00")&" Años"', text=True)
+    gt = find(cells, "Gran Total (MXN)")[1]
+    e.f(f"D{r + 2}", f'IF({n}=0,TEXT(MAX($H${gt}-$H${r + 1},0)/MAX($G${d0},1),"0.00")&" Años",IF({n}>=30,"No recupera en 30 años",TEXT({n}+ABS(INDEX($H${d0}:$H${d1},{n}))/INDEX($G${d0}:$G${d1},{n}+1),"0.00")&" Años"))', text=True)
     rs = find(cells, "Ahorro Energético:")[1] + 4
     e.f(f"B{rs}", f"MIN(1,D{d0}/B{d0})").f(f"E{rs}", f"G{d0}/C{d0}")
     gt = find(cells, "Gran Total (MXN)")[1]

@@ -1,5 +1,7 @@
 """Cal_Tarifa_Residencial, Cal_Tarifa_Comercial, Cal_Tarifa_Industrial."""
+import os
 from common import Catalog, save, cols, num_to_col, col_to_num
+FID = bool(os.environ.get("FIDELITY"))  # modo fidelidad: reproduce las fórmulas del MEST aun donde se corrigieron
 
 L = cols("D", "O")   # historial (izquierda), D = periodo más reciente
 R = cols("R", "AC")  # proyección (derecha), R = periodo actual
@@ -66,14 +68,14 @@ for j, col in enumerate(R):
         c.f(f"{col}8", f"INDEX($D$8:$O$8,1)-INDEX(Gen_Energía!$P$49:$P$60,{LATEST})")
     else:
         prev = R[j - 1]
-        c.f(f"{col}8", f"IF({col}$4=0,{prev}8,INDEX($D$8:$O$8,{k})-INDEX(Gen_Energía!$P$49:$P$60,MOD({LATEST}+{j}-1,12)+1)+{prev}8)")
+        c.f(f"{col}8", f"IF({col}$4=0,{prev}8,INDEX($D$8:$O$8,{k})-INDEX(Gen_Energía!$P$49:$P$60,MOD({LATEST}+{j}-1,12)+1)+{'' if FID else 'MIN('}{prev}8{'' if FID else ',0)'})")
     c.f(f"{col}10", f"MIN({col}8,$Q$10*$C$4)").f(f"{col}11", f"MIN(MAX({col}8-{col}10,0),$Q$11*$C$4)").f(f"{col}12", f"MIN(MAX({col}8-{col}10-{col}11,0),$Q$12*$C$4)").f(f"{col}13", f"MAX({col}8-{col}10-{col}11-{col}12,0)")
-    c.f(f"{col}22", f"IF({col}$4=0,0,MAX({col}10,Tarifas!$C$92*$C$4)*$R$16)").f(f"{col}23", f"{col}11*$R$17").f(f"{col}24", f"{col}12*$R$18").f(f"{col}25", f"{col}13*$R$19").f(f"{col}26", f"SUM({col}22:{col}25)")
-    c.f(f"{col}33", f"IF({col}$4=0,0,$R$29*$C$4)").f(f"{col}34", f"MAX({col}8,0)*$R$30").f(f"{col}35", f"{col}33+{col}34")
-    if j == 0:
-        c.f(f"{col}36", f"{vac}!$G$66-D8+R8")
-    else:
-        c.f(f"{col}36", f"{R[j - 1]}36-{L[j]}8+{col}8")
+    c.f(f"{col}22", f"IF({col}$4=0,0,MAX({col}10,Tarifas!$C$92*$C$4)*$R$16)").f(f"{col}23", f"{col}11*$R$17" if FID else f"IF({col}$4=0,0,{col}11*$R$17)").f(f"{col}24", f"{col}12*$R$18" if FID else f"IF({col}$4=0,0,{col}12*$R$18)").f(f"{col}25", f"{col}13*$R$19" if FID else f"IF({col}$4=0,0,{col}13*$R$19)").f(f"{col}26", f"SUM({col}22:{col}25)")
+    c.f(f"{col}33", f"IF({col}$4=0,0,$R$29*$C$4)").f(f"{col}34", f"MAX({col}8,0)*$R$30" if FID else f"IF({col}$4=0,0,MAX({col}8,0)*$R$30)").f(f"{col}35", f"{col}33+{col}34")
+    if FID:  # ventana móvil tal como la tenía el MEST (resta meses en orden secuencial y arrastra el neto)
+        c.f(f"{col}36", f"{vac}!$G$66-D8+R8" if j == 0 else f"{R[j - 1]}36-{L[j]}8+{col}8")
+    else:    # ventana de 12 meses coherente: sale el mes homólogo del historial y entra el neto facturado (nunca negativo)
+        c.f(f"{col}36", f"{vac}!$G$66-INDEX($D$8:$O$8,1)+MAX(R8,0)" if j == 0 else f"{R[j - 1]}36-IF({col}$4=0,0,INDEX($D$8:$O$8,{k}))+IF({col}$4=0,0,MAX({col}8,0))")
     c.f(f"{col}37", f'IF({col}41="DAC",{col}35,{col}26)').f(f"{col}38", f"{col}37*Tarifas!$C$85").f(f"{col}39", f"({col}37+{col}38)*Tarifas!$C$94").f(f"{col}40", f"{col}37+{col}38+{col}39")
     c.f(f"{col}41", f'IF({col}36>Tarifas!$O$18,"DAC",{vac}!$G$20)', text=True)
     c.f(f"{col}42", f"IF({col}$4=0,0,INDEX($D$40:$O$40,{k})*(1+{vac}!$K$27/{k}))")
@@ -89,10 +91,11 @@ c.f("C11", f"{vac}!$G$19", text=True).f("Q11", "C11", text=True)
 MT = 'OR($C$11="GDMTO",$C$11="GDMTH",$C$11="DIST",$C$11="DIT")'
 for i, col in enumerate(L):
     c.f(f"{col}10", f"{vac}!F{27 + i}").f(f"{col}12", f"{col}10").f(f"{col}14", f"{vac}!D{27 + i}").f(f"{col}16", f"MAX({col}14,0)")
-    c.f(f"{col}17", f"{col}16").f(f"{col}20", f"IF({col}18=0,100,ROUND({col}10/SQRT({col}10^2+{col}18^2)*100,2))")
+    c.f(f"{col}17", f'IF($C$11="GDBT",IFERROR({col}10/(({col}9-{col}8)*24*{FC}),0),{col}16)').f(f"{col}20", f"IF({col}18=0,100,ROUND({col}10/SQRT({col}10^2+{col}18^2)*100,2))")
 for col, days, kwh, base, flag in [(x, f"({x}9-{x}8)", f"{x}10", f"{x}12", f"{x}10<>0") for x in L] + [(x, f"({x}9-{x}8)", f"MAX({x}10,0)", f"MAX({x}10,0)", f"{x}$4<>0") for x in R]:
-    c.f(f"{col}23", f"IF({flag},Tarifas!$G$48*$C$4,0)").f(f"{col}24", f"{kwh}*Tarifas!$E$48").f(f"{col}25", f"{kwh}*Tarifas!$D$48").f(f"{col}26", f"{kwh}*Tarifas!$F$48")
-    c.f(f"{col}27", f"MAX({base},0)*Tarifas!$I$48").f(f"{col}28", f"IFERROR({kwh}/({days}*24*{FC}),0)*Tarifas!$J$48").f(f"{col}29", f"{kwh}*Tarifas!$H$48").f(f"{col}31", f"SUM({col}23:{col}29)")
+    kwfact = f"IFERROR({kwh}/({days}*24*{FC}),0)"
+    c.f(f"{col}23", f"IF({flag},Tarifas!$G$48*$C$4,0)").f(f"{col}24", f'IF($C$11="GDBT",{kwfact}*Tarifas!$E$48,{kwh}*Tarifas!$E$48)').f(f"{col}25", f"{kwh}*Tarifas!$D$48").f(f"{col}26", f"{kwh}*Tarifas!$F$48")
+    c.f(f"{col}27", f"MAX({base},0)*Tarifas!$I$48").f(f"{col}28", f"{kwfact}*Tarifas!$J$48" if FID else f'IF($C$11="GDBT",{kwfact}*Tarifas!$J$48,{kwh}*Tarifas!$J$48)').f(f"{col}29", f"{kwh}*Tarifas!$H$48").f(f"{col}31", f"SUM({col}23:{col}29)")
     c.f(f"{col}34", f"{col}23").f(f"{col}35", f"{col}31-{col}34").f(f"{col}36", f"IF({MT},{col}31*Tarifas!$C$89,0)")
     c.f(f"{col}37", f'IF(OR({MT},$C$11="GDBT"),IF({col}20<90,Tarifas!$C$91*(90/{col}20-1)*{col}31,-Tarifas!$C$90*{col}31),0)')
     c.f(f"{col}38", f"{col}31+{col}36+{col}37").f(f"{col}39", f"{col}38*Tarifas!$C$85").f(f"{col}40", f"{col}38+{col}39").f(f"{col}41", f"{col}38*Tarifas!$C$87").f(f"{col}43", f"{col}40+{col}41")

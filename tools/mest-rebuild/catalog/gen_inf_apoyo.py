@@ -13,7 +13,7 @@ SEGS = [
 for g in SEGS:
     vac, cal, r0 = g["vac"], g["cal"], g["r0"]
     r1 = r0 + 29
-    c.f(g["costo"], f"{vac}!$F$105").f(g["ded"], f"{g['costo']}/(1+Tarifas!$C$85)*Tarifas!$C$93")
+    c.f(g["costo"], f"{vac}!$F$105").f(g["ded"], f'IF({vac}!$M$105="Si",{g["costo"]}/(1+Tarifas!$C$85)*Tarifas!$C$93,0)')
     for i in range(30):
         r = r0 + i
         c.f(f"{g['cons']}{r}", f"{vac}!$G$66")
@@ -26,10 +26,10 @@ for g in SEGS:
             c.f(f"{g['acum']}{r}", f"{g['acum']}{r - 1}+{g['ahorro']}{r}").f(f"{g['flujo']}{r}", f"{g['ahorro']}{r}")
         c.f(f"{g['consfv']}{r}", f"MAX({g['cons']}{r}-{g['prod']}{r},0)").f(f"{g['ahorro']}{r}", f"{g['pago']}{r}-{g['pagofv']}{r}")
         c.f(f"{g['flag']}{r}", f"IF({g['y']}{r}<=${g['n'][:-2] if g['n'][1].isalpha() else g['n'][0]}${g['n'][len(g['n'][:-2]) if g['n'][1].isalpha() else 1:]},{g['y']}{r},0)")
-    c.f(f"{g['flujo']}{r0 - 1}", f"-{g['costo']}").f(g["tir"], f"IRR({g['flujo']}{r0 - 1}:{g['flujo']}{r1})")
+    c.f(f"{g['flujo']}{r0 - 1}", f"-{g['costo']}").f(g["tir"], f"IFERROR(IRR({g['flujo']}{r0 - 1}:{g['flujo']}{r1}),0)")
     acum = f"{g['acum']}{r0}:{g['acum']}{r1}"
-    c.f(g["n"], f'COUNTIF({acum},"<"&({g["costo"]}-{g["ded"]}))')
-    c.f(g["cum"], f"INDEX({acum},{g['n']})").f(g["rem"], f"{g['costo']}-{g['cum']}").f(g["sav"], f"INDEX({g['ahorro']}{r0}:{g['ahorro']}{r1},{g['n']}+1)").f(g["frac"], f"{g['rem']}/{g['sav']}")
+    c.f(g["n"], f'MIN(COUNTIF({acum},"<"&({g["costo"]}-{g["ded"]})),29)')
+    c.f(g["cum"], f"IF({g['n']}=0,0,INDEX({acum},{g['n']}))").f(g["rem"], f"{g['costo']}-{g['cum']}").f(g["sav"], f"INDEX({g['ahorro']}{r0}:{g['ahorro']}{r1},{g['n']}+1)").f(g["frac"], f"IFERROR(MAX({g['rem']},0)/{g['sav']},0)")
     if g.get("months"):
         c.f(g["months"], f"{g['frac']}*12")
     if g.get("total"):
