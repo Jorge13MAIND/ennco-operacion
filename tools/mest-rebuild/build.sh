@@ -14,7 +14,8 @@ cd "$T/catalog" && for g in gen_*.py; do python3 "$g" >/dev/null; done
 cd "$T"
 python3 apply.py --in "$ORIG" --catalog "$S"/wt-mest/build/cat_*.json --out "$B/v1-$TAG.xlsm"
 python3 finalize.py --in "$B/v1-$TAG.xlsm" --out "$B/v2-$TAG.xlsm" --images "$B/img"
-$PY vba_patch.py --in "$B/v2-$TAG.xlsm" --out "$B/calculadora-$TAG.xlsm" --password-file "$PWFILE" --export "$B/vba-original"
+$PY vba_patch.py --in "$B/v2-$TAG.xlsm" --out "$B/v3-$TAG.xlsm" --password-file "$PWFILE" --export "$B/vba-original"
+$PY vba_clean.py --in "$B/v3-$TAG.xlsm" --out "$B/calculadora-$TAG.xlsm"
 python3 vba_check.py "$B/calculadora-$TAG.xlsm"
 ./recalc.sh "$B/calculadora-$TAG.xlsm" "$B/recalc" >/dev/null
 python3 verify.py --original "$ORIG" --recalc "$B/recalc/calculadora-$TAG.xlsx" --allow "$S/pruebas_permitidas.json" --report "$B/verificacion-$TAG.md" --show 15 || true
