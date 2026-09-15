@@ -16,7 +16,7 @@ const privateHeaders = { "Cache-Control": "private, no-store" } as const;
  * conectado llena el cupo de contactos nuevos del día (rampa semanal menos
  * lo ya enviado y lo ya en cola) desde la reserva verificada, en orden de
  * prioridad, saltando banderas, suprimidos y ya inscritos. Apagada por
- * defecto: ENNCO_AUTOENROLL=on la enciende; mientras, la inscripción es un
+ * defecto: ENNCO_AUTOENROLL=true la enciende (envBoolean solo acepta "true"; "on" cuenta como apagada); mientras, la inscripción es un
  * clic del operador.
  */
 export async function GET(request: Request): Promise<NextResponse> {
