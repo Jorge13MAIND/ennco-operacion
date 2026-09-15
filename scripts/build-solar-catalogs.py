@@ -108,7 +108,8 @@ def cities(wb):
         if not name:
             continue
         out.append({
-            "city": name, "division": s.v(f"C{r}"),
+            # El libro trae "Nuevo León" en Guadalupe; la división CFE de Monterrey/Guadalupe es Golfo Norte.
+            "city": name, "division": {"Nuevo León": "Golfo Norte"}.get(s.v(f"C{r}") or "", s.v(f"C{r}")),
             "irradiance": [s.n(f"{num_to_col(col_to_num('D') + i)}{r}") for i in range(12)],
             "tMaxC": s.n(f"Q{r}"), "tMinC": s.n(f"R{r}"), "region": s.v(f"S{r}"), "latitude": s.n(f"T{r}"),
             "state": s.v(f"V{r}"), "tMax2C": s.n(f"W{r}"),
@@ -219,7 +220,7 @@ def generation_defaults(wb):
     s = Sheet(wb, "Gen_Energía")
     out = {}
     for seg, base in (("RESIDENTIAL", 7), ("COMMERCIAL", 66), ("INDUSTRIAL", 125)):
-        out[seg] = {"safetyMargin": s.n(f"V{base}"), "performanceRatio": s.n(f"D{base + 5}"), "loss1": s.n(f"D{base + 6}"), "loss2": s.n(f"D{base + 7}"),
+        out[seg] = {"safetyMargin": s.n(f"V{base}") if s.n(f"V{base}") is not None else s.n("V66"), "performanceRatio": s.n(f"D{base + 5}"), "loss1": s.n(f"D{base + 6}"), "loss2": s.n(f"D{base + 7}"),
                     "daysPerMonth": [s.n(f"{num_to_col(col_to_num('G') + i)}{base + 2}") for i in range(12)]}
     return out
 

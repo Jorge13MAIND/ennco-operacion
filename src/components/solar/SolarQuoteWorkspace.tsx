@@ -154,7 +154,7 @@ export function SolarQuoteWorkspace({ catalog, versions, initial, defaults, exam
             <div className="solar-months solar-wide">
               {input.consumptionKwh.map((kwh, i) => (
                 <div className="solar-month" key={i}>
-                  <span>{monthLabel(input.billedMonth, i * (input.period === "Bimestral" ? 1 : 1))}</span>
+                  <span>{monthLabel(input.billedMonth, i)}</span>
                   <input aria-label={`kWh periodo ${i + 1}`} type="number" inputMode="decimal" value={kwh} onChange={(e) => setArray("consumptionKwh", i, Number(e.currentTarget.value || 0))} />
                   {isInd ? <input aria-label={`kW periodo ${i + 1}`} type="number" inputMode="decimal" placeholder="kW" value={input.demandKw?.[i] ?? 0} onChange={(e) => setArray("demandKw", i, Number(e.currentTarget.value || 0))} /> : null}
                 </div>
@@ -260,6 +260,7 @@ export function SolarQuoteWorkspace({ catalog, versions, initial, defaults, exam
                     <Metric label="TIR" value={pct(result.projection.irr)} note={`retorno ${result.projection.paybackTotal.toFixed(2)} años`} tone="good" />
                     <Metric label="Módulos para cubrir el consumo" value={String(result.modulesNeeded)} note={`${n2(result.systemNeededKw)} kW necesarios`} />
                     <Metric label="Deducción fiscal" value={money(result.projection.deduction)} note={input.taxDeduction ? "ISR sobre costo sin IVA" : "no aplicada"} />
+                    {result.powerFactor != null ? <Metric label="Factor de potencia" value={`${result.powerFactor.toFixed(2)} %`} note={result.powerFactor < 90 ? "penalización CFE" : "bonificación CFE"} tone={result.powerFactor < 90 ? "bad" : "good"} /> : null}
                   </div>
                   {result.demandWarning ? <div className="projects-notice" data-tone="warning">{result.demandWarning}</div> : null}
                   {inverterWarnings.map((w) => <div className="projects-notice" data-tone="warning" key={w}>{w}</div>)}

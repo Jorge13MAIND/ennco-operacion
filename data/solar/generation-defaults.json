@@ -40,7 +40,7 @@
   ]
  },
  "INDUSTRIAL": {
-  "safetyMargin": null,
+  "safetyMargin": 0.93,
   "performanceRatio": 0.8,
   "loss1": 0.03072,
   "loss2": 0.14846,

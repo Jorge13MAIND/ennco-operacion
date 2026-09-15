@@ -67,6 +67,7 @@ export async function getQuote(access: OperationsAccessContext, id: string): Pro
 }
 
 export async function saveQuote(access: OperationsAccessContext, payload: QuoteSaveInput): Promise<StoredQuote> {
+  if (access.role === "auditor_readonly") throw new Error("SOLAR_FORBIDDEN");
   const { catalog, versions } = await loadSolarCatalog(access);
   const result = computeQuote(payload.input, catalog);
   const summary = quoteSummary(result);

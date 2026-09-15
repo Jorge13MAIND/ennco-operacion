@@ -1,4 +1,4 @@
-import { api, body, context } from "@/lib/projects/server";
+import { api, body, context, ProjectApiError } from "@/lib/projects/server";
 import { quoteSaveSchema } from "@/lib/solar/schema";
 import { listQuotes, saveQuote } from "@/lib/solar/server";
 
@@ -12,6 +12,11 @@ export async function POST(request: Request) {
   return api(async () => {
     const c = await context(request);
     const payload = quoteSaveSchema.parse(await body(request));
-    return { quote: await saveQuote(c, payload) };
+    try {
+      return { quote: await saveQuote(c, payload) };
+    } catch (e) {
+      const code = e instanceof Error ? e.message : "SOLAR_STORAGE_UNAVAILABLE";
+      throw new ProjectApiError(code, code === "SOLAR_FORBIDDEN" ? 403 : code === "SOLAR_QUOTE_VERSION_CONFLICT" ? 409 : code === "SOLAR_QUOTE_NOT_FOUND" ? 404 : 503);
+    }
   });
 }

@@ -5,18 +5,21 @@ export function excelRound(value: number, digits = 0): number {
   const factor = 10 ** digits;
   const scaled = Math.abs(value) * factor;
   const rounded = Math.round(scaled + 1e-9);
-  return (Math.sign(value) || 1) * rounded / factor;
+  const out = (Math.sign(value) || 1) * rounded / factor;
+  return out === 0 ? 0 : out;
 }
 /** ROUNDUP de Excel: se aleja de cero. */
 export function excelRoundUp(value: number, digits = 0): number {
   const factor = 10 ** digits;
   const scaled = Math.abs(value) * factor;
   const rounded = Math.ceil(scaled - 1e-9);
-  return (Math.sign(value) || 1) * rounded / factor;
+  const out = (Math.sign(value) || 1) * rounded / factor;
+  return out === 0 ? 0 : out;
 }
 /** INT de Excel: hacia menos infinito. */
 export function excelInt(value: number): number {
-  return Math.floor(value + 1e-9);
+  const out = Math.floor(value + 1e-9);
+  return out === 0 ? 0 : out;
 }
 export function safeDiv(numerator: number, denominator: number, fallback = 0): number {
   return Number.isFinite(numerator / denominator) && denominator !== 0 ? numerator / denominator : fallback;
