@@ -1185,3 +1185,33 @@ main.auth-shell .mfa-secret { border-radius: 10px; background: #f5f5f7; font-fam
   .cr-root .cr-activity-search input { min-width: 0; width: 100%; }
   .cr-root .cr-activity-table .num { text-align: left; }
 }
+
+/* Leads (/operacion/leads): franja de avance y tabla de contactos */
+.cr-root .cr-leads-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.cr-root .cr-leads-kpis .metric {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-height: 92px;
+  padding: 12px 14px;
+  border: 1px solid var(--cr-line);
+  border-radius: var(--cr-radius-card);
+  background: var(--cr-surface);
+}
+.cr-root .cr-leads-kpis .metric-total { background: var(--cr-ink); color: #fff; }
+.cr-root .cr-leads-kpis .metric-total .cr-kpi-label, .cr-root .cr-leads-kpis .metric-total strong, .cr-root .cr-leads-kpis .metric-total .cr-kpi-note { color: #fff; }
+.cr-root .cr-leads-kpis .cr-kpi-label { color: var(--cr-muted); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.cr-root .cr-leads-kpis .metric strong { display: flex; align-items: baseline; gap: 8px; color: var(--cr-ink); font-size: 1.5rem; letter-spacing: -0.02em; line-height: 1; }
+.cr-root .cr-leads-kpis .metric strong em { color: var(--cr-body); font-size: 0.82rem; font-style: normal; font-weight: 600; letter-spacing: 0; }
+.cr-root .cr-leads-kpis .metric[data-tone="good"] strong em { color: var(--cr-viz-1); }
+.cr-root .cr-leads-kpis .metric[data-tone="bad"] strong em { color: #b42318; }
+.cr-root .cr-leads-kpis .cr-kpi-note { color: var(--cr-muted); font-size: 0.78rem; }
+.cr-root .cr-leads-table { width: 100%; }
+.cr-root .cr-leads-table th, .cr-root .cr-leads-table td { vertical-align: top; }
+.cr-root .cr-leads-table .num { text-align: right; white-space: nowrap; }
+.cr-root .cr-leads-good { color: var(--cr-viz-1); }
+.cr-root .cr-leads-pages { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 14px; }
+@media (max-width: 720px) {
+  .cr-root .cr-leads-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cr-root .cr-leads-table .num { text-align: left; }
+}

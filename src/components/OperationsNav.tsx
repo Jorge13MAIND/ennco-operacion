@@ -57,7 +57,6 @@ const groups: Array<{
       { key: "actividad", href: "/operacion/correos/actividad" },
       { key: "respuestas", href: "/operacion/respuestas" },
       { key: "leads", href: "/operacion/leads" },
-      { key: "empresas", href: "/operacion/empresas" },
       { key: "precotizaciones", href: "/operacion/precotizaciones" },
       { key: "campanas", href: "/operacion/campanas" },
       { key: "pipeline", href: "/operacion/pipeline" },

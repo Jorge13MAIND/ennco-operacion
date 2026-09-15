@@ -245,7 +245,7 @@ export default async function CorreosPage() {
             ) : null}
           </div>
         ))}
-        {overview.unverified_contacts > 0 ? <p className="fine">{overview.unverified_contacts} contactos sin verificar no entran a ninguna secuencia (rebotes &lt; 2%). Verificación: <Link href={"/operacion/empresas" as Route}>Empresas</Link>.</p> : null}
+        {overview.unverified_contacts > 0 ? <p className="fine">{overview.unverified_contacts} contactos sin verificar no entran a ninguna secuencia (rebotes &lt; 2%). Verificación: <Link href={"/operacion/leads" as Route}>Leads</Link>.</p> : null}
         {overview.upcoming.length > 0 ? (
           <p className="fine">Próximos toques: {overview.upcoming.map((item) => `${dayStamp.format(new Date(`${item.day}T12:00:00-06:00`))} · ${item.touches}`).join(" — ")}</p>
         ) : null}
