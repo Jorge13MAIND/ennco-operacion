@@ -32,7 +32,7 @@ returns jsonb language sql stable security definer set search_path=public,app,pg
       and m.created_at>=since_at and m.created_at<until_at
       and (target_mailbox_id is null or m.mailbox_id=target_mailbox_id)
       and (target_campaign_id is null or e.campaign_id=target_campaign_id)
-      and (target_status is null or m.status=target_status)
+      and (target_status is null or m.status::text=target_status)
   ),
   filtered as (
     select * from base b
