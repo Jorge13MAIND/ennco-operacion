@@ -41,6 +41,7 @@ export const LEAD_LIST_LABELS: Record<string, string> = {
   LANZAMIENTO_SEPTIEMBRE: "Lanzamiento septiembre",
   RESERVA_SEPTIEMBRE: "Reserva septiembre",
   NUEVOS_AMPLIACION_1000: "Nuevos · ampliación 1,000 créditos",
+  RETENIDOS_REVISION: "Retenidos en revisión",
   SIN_LISTA: "Sin lista (pruebas internas)",
 };
 

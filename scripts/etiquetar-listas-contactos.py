@@ -18,6 +18,7 @@ LISTAS = [  # (archivo, etiqueta) en orden de prioridad
     ("01-lanzamiento-septiembre.csv", "LANZAMIENTO_SEPTIEMBRE"),
     ("05-nuevos-preseleccionados-1000-creditos.csv", "NUEVOS_AMPLIACION_1000"),
     ("02-reserva-septiembre.csv", "RESERVA_SEPTIEMBRE"),
+    ("03-retenidos-revision.csv", "RETENIDOS_REVISION"),
 ]
 INVENTARIO = "00-inventario-completo.csv"
 
