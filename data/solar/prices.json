@@ -1,0 +1,779 @@
+{
+ "RESIDENTIAL": {
+  "bands": [
+   {
+    "fromW": 1.0,
+    "toW": 5000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.95,
+     "Fronius": 0.98,
+     "SMA": 0.96,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 5001.0,
+    "toW": 10000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.8799999999999999,
+     "Fronius": 0.9099999999999999,
+     "SMA": 0.8899999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 10001.0,
+    "toW": 15000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7799999999999999,
+     "Fronius": 0.8099999999999999,
+     "SMA": 0.7899999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 15001.0,
+    "toW": 50000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7299999999999999,
+     "Fronius": 0.7599999999999999,
+     "SMA": 0.7399999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 50001.0,
+    "toW": 100000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7099999999999999,
+     "Fronius": 0.7399999999999999,
+     "SMA": 0.7199999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 100001.0,
+    "toW": 150000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.87,
+     "Fronius": 0.9,
+     "SMA": 0.88,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 150001.0,
+    "toW": 200000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.84,
+     "Fronius": 0.87,
+     "SMA": 0.85,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 200001.0,
+    "toW": 250000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.8099999999999999,
+     "Fronius": 0.84,
+     "SMA": 0.82,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 250001.0,
+    "toW": 300000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7799999999999999,
+     "Fronius": 0.8099999999999999,
+     "SMA": 0.7899999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 300001.0,
+    "toW": 350000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7799999999999999,
+     "Fronius": 0.8099999999999999,
+     "SMA": 0.7899999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 350001.0,
+    "toW": 400000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7699999999999999,
+     "Fronius": 0.7999999999999999,
+     "SMA": 0.7799999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 400001.0,
+    "toW": 450000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7699999999999999,
+     "Fronius": 0.7999999999999999,
+     "SMA": 0.7799999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 450001.0,
+    "toW": 500000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7699999999999999,
+     "Fronius": 0.7999999999999999,
+     "SMA": 0.7799999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 500001.0,
+    "toW": 550000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7689999999999999,
+     "Fronius": 0.7989999999999999,
+     "SMA": 0.7789999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 550001.0,
+    "toW": 600000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7679999999999999,
+     "Fronius": 0.7979999999999999,
+     "SMA": 0.7779999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 600001.0,
+    "toW": 650000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7669999999999999,
+     "Fronius": 0.7969999999999999,
+     "SMA": 0.7769999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 650001.0,
+    "toW": 700000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7659999999999999,
+     "Fronius": 0.7959999999999999,
+     "SMA": 0.7759999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 700001.0,
+    "toW": 750000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7649999999999999,
+     "Fronius": 0.7949999999999999,
+     "SMA": 0.7749999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 750001.0,
+    "toW": 800000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7639999999999999,
+     "Fronius": 0.7939999999999999,
+     "SMA": 0.7739999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 800001.0,
+    "toW": 850000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7629999999999999,
+     "Fronius": 0.7929999999999999,
+     "SMA": 0.7729999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 850001.0,
+    "toW": 900000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7619999999999999,
+     "Fronius": 0.7919999999999999,
+     "SMA": 0.7719999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 900001.0,
+    "toW": 950000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7609999999999999,
+     "Fronius": 0.7909999999999999,
+     "SMA": 0.7709999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 950001.0,
+    "toW": 1000000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7609999999999999,
+     "Fronius": 0.7909999999999999,
+     "SMA": 0.7709999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   }
+  ],
+  "structureUsdPerModule": 85.0,
+  "laborUsdPerModule": 100.0
+ },
+ "COMMERCIAL": {
+  "bands": [
+   {
+    "fromW": 1.0,
+    "toW": 5000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.95,
+     "Fronius": 0.98,
+     "SMA": 0.96,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 5001.0,
+    "toW": 10000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.8799999999999999,
+     "Fronius": 0.9099999999999999,
+     "SMA": 0.8899999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 10001.0,
+    "toW": 15000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7799999999999999,
+     "Fronius": 0.8099999999999999,
+     "SMA": 0.7899999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 15001.0,
+    "toW": 50000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7299999999999999,
+     "Fronius": 0.7599999999999999,
+     "SMA": 0.7399999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 50001.0,
+    "toW": 100000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7099999999999999,
+     "Fronius": 0.7399999999999999,
+     "SMA": 0.7199999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 100001.0,
+    "toW": 150000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.87,
+     "Fronius": 0.9,
+     "SMA": 0.88,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 150001.0,
+    "toW": 200000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.84,
+     "Fronius": 0.87,
+     "SMA": 0.85,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 200001.0,
+    "toW": 250000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.8099999999999999,
+     "Fronius": 0.84,
+     "SMA": 0.82,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 250001.0,
+    "toW": 300000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7799999999999999,
+     "Fronius": 0.8099999999999999,
+     "SMA": 0.7899999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 300001.0,
+    "toW": 350000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7799999999999999,
+     "Fronius": 0.8099999999999999,
+     "SMA": 0.7899999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 350001.0,
+    "toW": 400000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7699999999999999,
+     "Fronius": 0.7999999999999999,
+     "SMA": 0.7799999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 400001.0,
+    "toW": 450000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7699999999999999,
+     "Fronius": 0.7999999999999999,
+     "SMA": 0.7799999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 450001.0,
+    "toW": 500000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7699999999999999,
+     "Fronius": 0.7999999999999999,
+     "SMA": 0.7799999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 500001.0,
+    "toW": 550000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7689999999999999,
+     "Fronius": 0.7989999999999999,
+     "SMA": 0.7789999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 550001.0,
+    "toW": 600000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7679999999999999,
+     "Fronius": 0.7979999999999999,
+     "SMA": 0.7779999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 600001.0,
+    "toW": 650000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7669999999999999,
+     "Fronius": 0.7969999999999999,
+     "SMA": 0.7769999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 650001.0,
+    "toW": 700000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7659999999999999,
+     "Fronius": 0.7959999999999999,
+     "SMA": 0.7759999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 700001.0,
+    "toW": 750000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7649999999999999,
+     "Fronius": 0.7949999999999999,
+     "SMA": 0.7749999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 750001.0,
+    "toW": 800000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7639999999999999,
+     "Fronius": 0.7939999999999999,
+     "SMA": 0.7739999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 800001.0,
+    "toW": 850000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7629999999999999,
+     "Fronius": 0.7929999999999999,
+     "SMA": 0.7729999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 850001.0,
+    "toW": 900000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7619999999999999,
+     "Fronius": 0.7919999999999999,
+     "SMA": 0.7719999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 900001.0,
+    "toW": 950000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7609999999999999,
+     "Fronius": 0.7909999999999999,
+     "SMA": 0.7709999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 950001.0,
+    "toW": 1000000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7599999999999999,
+     "Fronius": 0.7899999999999999,
+     "SMA": 0.7699999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   }
+  ],
+  "structureUsdPerModule": 85.0,
+  "laborUsdPerModule": 100.0
+ },
+ "INDUSTRIAL": {
+  "bands": [
+   {
+    "fromW": 1.0,
+    "toW": 5000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.95,
+     "Fronius": 0.98,
+     "SMA": 0.96,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 5001.0,
+    "toW": 10000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.8799999999999999,
+     "Fronius": 0.9099999999999999,
+     "SMA": 0.8899999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 10001.0,
+    "toW": 15000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7799999999999999,
+     "Fronius": 0.8099999999999999,
+     "SMA": 0.7899999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 15001.0,
+    "toW": 50000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7299999999999999,
+     "Fronius": 0.7599999999999999,
+     "SMA": 0.7399999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 50001.0,
+    "toW": 100000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7099999999999999,
+     "Fronius": 0.7399999999999999,
+     "SMA": 0.7199999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 100001.0,
+    "toW": 150000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.87,
+     "Fronius": 0.9,
+     "SMA": 0.88,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 150001.0,
+    "toW": 200000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.84,
+     "Fronius": 0.87,
+     "SMA": 0.85,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 200001.0,
+    "toW": 250000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.8099999999999999,
+     "Fronius": 0.84,
+     "SMA": 0.82,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 250001.0,
+    "toW": 300000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7799999999999999,
+     "Fronius": 0.8099999999999999,
+     "SMA": 0.7899999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 300001.0,
+    "toW": 350000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7799999999999999,
+     "Fronius": 0.8099999999999999,
+     "SMA": 0.7899999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 350001.0,
+    "toW": 400000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7699999999999999,
+     "Fronius": 0.7999999999999999,
+     "SMA": 0.7799999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 400001.0,
+    "toW": 450000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7699999999999999,
+     "Fronius": 0.7999999999999999,
+     "SMA": 0.7799999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 450001.0,
+    "toW": 500000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7699999999999999,
+     "Fronius": 0.7999999999999999,
+     "SMA": 0.7799999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 500001.0,
+    "toW": 550000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7689999999999999,
+     "Fronius": 0.7989999999999999,
+     "SMA": 0.7789999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 550001.0,
+    "toW": 600000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7679999999999999,
+     "Fronius": 0.7979999999999999,
+     "SMA": 0.7779999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 600001.0,
+    "toW": 650000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7669999999999999,
+     "Fronius": 0.7969999999999999,
+     "SMA": 0.7769999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 650001.0,
+    "toW": 700000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7659999999999999,
+     "Fronius": 0.7959999999999999,
+     "SMA": 0.7759999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 700001.0,
+    "toW": 750000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7649999999999999,
+     "Fronius": 0.7949999999999999,
+     "SMA": 0.7749999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 750001.0,
+    "toW": 800000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7639999999999999,
+     "Fronius": 0.7939999999999999,
+     "SMA": 0.7739999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 800001.0,
+    "toW": 850000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7629999999999999,
+     "Fronius": 0.7929999999999999,
+     "SMA": 0.7729999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 850001.0,
+    "toW": 900000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7619999999999999,
+     "Fronius": 0.7919999999999999,
+     "SMA": 0.7719999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 900001.0,
+    "toW": 950000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7609999999999999,
+     "Fronius": 0.7909999999999999,
+     "SMA": 0.7709999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   },
+   {
+    "fromW": 950001.0,
+    "toW": 1000000.0,
+    "usdPerW": {
+     "Growatt New Energy": 0.7599999999999999,
+     "Fronius": 0.7899999999999999,
+     "SMA": 0.7699999999999999,
+     "Otro 1": null,
+     "Otro 2": null
+    }
+   }
+  ],
+  "structureUsdPerModule": 85.0,
+  "laborUsdPerModule": 100.0
+ }
+}

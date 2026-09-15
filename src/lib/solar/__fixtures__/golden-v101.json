@@ -1,0 +1,770 @@
+{
+ "RESIDENTIAL": {
+  "inputs": {
+   "segment": "RESIDENTIAL",
+   "customer": {
+    "name": "Ejemplo residential",
+    "subtitle": "",
+    "supplier": "Comisión Federal de Eléctricidad"
+   },
+   "city": "Saltillo",
+   "period": "Bimestral",
+   "summerTariff": false,
+   "currentTariff": "DAC",
+   "baseTariff": "1",
+   "contractedDemandKw": null,
+   "periodStartSerial": null,
+   "periodEndSerial": null,
+   "billedMonth": 12,
+   "meterType": "Digital",
+   "phases": 2.0,
+   "voltage": 220.0,
+   "electricalConfig": "2F-3H@220/127 V 60 Hz",
+   "annualIncrease": 0.07,
+   "consumptionKwh": [
+    788.0,
+    0.0,
+    890.0,
+    0.0,
+    1101.0,
+    0.0,
+    1270.0,
+    0.0,
+    802.0,
+    0.0,
+    848.0,
+    0.0
+   ],
+   "demandKw": null,
+   "kwhBase": 0.0,
+   "kwhIntermediate": 0.0,
+   "kwhPeak": 0.0,
+   "kwhSemiPeak": 0.0,
+   "kwBase": 0.0,
+   "kwIntermediate": 0.0,
+   "kwPeak": 0.0,
+   "kwSemiPeak": 0.0,
+   "kvarh": 0.0,
+   "moduleModel": "Longi - LR7-72HTHF-615M (615W)",
+   "orientationCount": 1.0,
+   "orientations": [
+    {
+     "modules": 7.0,
+     "azimuth": 0.0,
+     "inclination": 20.0
+    },
+    {
+     "modules": 0.0,
+     "azimuth": 0.0,
+     "inclination": 0.0
+    },
+    {
+     "modules": 0.0,
+     "azimuth": 0.0,
+     "inclination": 0.0
+    },
+    {
+     "modules": 0.0,
+     "azimuth": 0.0,
+     "inclination": 0.0
+    }
+   ],
+   "mountingSystem": "Superficie de Concreto (Con Perforación)",
+   "degradation": 0.0042,
+   "inverters": [
+    {
+     "model": "Growatt (MIN 4600TL-X2)",
+     "quantity": 1.0
+    }
+   ],
+   "services": [
+    {
+     "enabled": true,
+     "concept": "Gestión de Contrato de Interconexión (GE)",
+     "costMxn": 1200.0
+    },
+    {
+     "enabled": true,
+     "concept": "Medidor Bidireccional",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": false,
+     "concept": "",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": false,
+     "concept": "",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": false,
+     "concept": "",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": false,
+     "concept": "",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": false,
+     "concept": "",
+     "costMxn": 0.0
+    }
+   ],
+   "currency": "MXN",
+   "exchangeRate": 21.33,
+   "pricePerWatt": 18.25,
+   "utilityFactor": 0.5,
+   "discount": 0.0,
+   "addIva": true,
+   "taxDeduction": true,
+   "advances": [
+    0.6,
+    0.2,
+    0.15,
+    0.05
+   ],
+   "financingBase": 0.0,
+   "financing": [
+    {
+     "share": 0.5,
+     "months": 6.0
+    },
+    {
+     "share": 0.0,
+     "months": 0.0
+    },
+    {
+     "share": 0.0,
+     "months": 0.0
+    }
+   ],
+   "language": "Español",
+   "structureWarrantyYears": 20.0,
+   "startTime": "2 a 3 semanas",
+   "deliveryTime": "2 a 3 semanas",
+   "validityDays": 30.0
+  },
+  "expected": {
+   "averageConsumption": 474.916666666667,
+   "annualGeneration": 6674.57685289685,
+   "annualConsumption": 5699.0,
+   "coverage": 1.17118386609876,
+   "modulePowerW": 615.0,
+   "modulesNeeded": 6.0,
+   "systemNeededKw": 3.69,
+   "minModules": 2.0,
+   "maxModules": 8.0,
+   "modulesTotal": 7.0,
+   "systemKw": 4.305,
+   "cashPrice": 92528.85,
+   "advancesMxn": [
+    55517.31,
+    18505.77,
+    13879.3275,
+    4626.4425
+   ],
+   "financingMxn": [
+    46264.425,
+    0.0,
+    0.0
+   ],
+   "monthlyPayment": 7710.7375,
+   "generationMonthly": [
+    549.53251766784,
+    549.1250037504,
+    648.62207365536,
+    553.009120776,
+    545.742638235648,
+    497.38347104544,
+    521.1084219264,
+    537.886533996,
+    529.37968096944,
+    599.689203278256,
+    588.74936481648,
+    554.348822779584
+   ],
+   "generationAnnual": 6674.57685289685,
+   "billWithout": [
+    6442.901696,
+    0.0,
+    7230.5816,
+    0.0,
+    8859.997872,
+    0.0,
+    10165.07536,
+    0.0,
+    6551.014624,
+    0.0,
+    6906.242816,
+    0.0
+   ],
+   "billWith": [
+    357.68832,
+    0.0,
+    357.68832,
+    0.0,
+    357.68832,
+    0.0,
+    67.8194,
+    0.0,
+    67.8194,
+    0.0,
+    67.8194,
+    0.0
+   ],
+   "billWithoutAnnual": 46155.813968,
+   "billWithAnnual": 1276.52316,
+   "projection": {
+    "cost": 92528.85,
+    "deduction": 23929.875,
+    "irr": 0.645477157282387,
+    "firstPayment": 46155.813968,
+    "firstPaymentPv": 1276.52316,
+    "paybackYears": 1.0,
+    "paybackFraction": 0.992268315932083,
+    "paybackMonths": 11.907219791185
+   },
+   "bomTotalMxn": 83123.01,
+   "suggestedPricePerWatt": 19.3084808362369,
+   "dacFlags": [
+    "DAC",
+    "DAC",
+    "DAC",
+    "DAC",
+    "DAC",
+    "DAC",
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "netKwh": [
+    -355.098187596064,
+    -355.098187596064,
+    -605.755709014304,
+    -605.755709014304,
+    -1005.38690344566,
+    -1005.38690344566,
+    -778.513012726752,
+    -778.513012726752,
+    -736.507968649152,
+    -736.507968649152,
+    -975.576852896848,
+    -975.576852896848
+   ]
+  }
+ },
+ "COMMERCIAL": {
+  "inputs": {
+   "segment": "COMMERCIAL",
+   "customer": {
+    "name": "Ejemplo commercial",
+    "subtitle": "",
+    "supplier": "Comisión Federal de Eléctricidad"
+   },
+   "city": "Irapuato",
+   "period": "Bimestral",
+   "summerTariff": false,
+   "currentTariff": "PDBT",
+   "baseTariff": null,
+   "contractedDemandKw": 10.0,
+   "periodStartSerial": 45567.0,
+   "periodEndSerial": 45620.0,
+   "billedMonth": 11,
+   "meterType": "Digital",
+   "phases": 2.0,
+   "voltage": 220.0,
+   "electricalConfig": "2F-3H@220/127 V 60 Hz",
+   "annualIncrease": 0.07,
+   "consumptionKwh": [
+    2655.0,
+    0.0,
+    2317.0,
+    0.0,
+    3071.0,
+    0.0,
+    2572.0,
+    0.0,
+    2618.0,
+    0.0,
+    2781.0,
+    0.0
+   ],
+   "demandKw": null,
+   "kwhBase": 0.0,
+   "kwhIntermediate": 0.0,
+   "kwhPeak": 0.0,
+   "kwhSemiPeak": 0.0,
+   "kwBase": 0.0,
+   "kwIntermediate": 100.0,
+   "kwPeak": 0.0,
+   "kwSemiPeak": 0.0,
+   "kvarh": 0.0,
+   "moduleModel": "Longi - LR7-72HTHF-615M (615W)",
+   "orientationCount": 1.0,
+   "orientations": [
+    {
+     "modules": 18.0,
+     "azimuth": -34.0,
+     "inclination": 15.0
+    },
+    {
+     "modules": 0.0,
+     "azimuth": 0.0,
+     "inclination": 0.0
+    },
+    {
+     "modules": 0.0,
+     "azimuth": 0.0,
+     "inclination": 0.0
+    },
+    {
+     "modules": 0.0,
+     "azimuth": 0.0,
+     "inclination": 0.0
+    }
+   ],
+   "mountingSystem": "Superficie de Concreto (Con Perforación)",
+   "degradation": 0.0042,
+   "inverters": [
+    {
+     "model": "Growatt (MIN 5000TL-X2)",
+     "quantity": 2.0
+    }
+   ],
+   "services": [
+    {
+     "enabled": false,
+     "concept": "Unidad de Verificación de Instalaciones Eléctricas",
+     "costMxn": 3500.0
+    },
+    {
+     "enabled": false,
+     "concept": "Unidad de Inspección de la Industria Eléctrica",
+     "costMxn": 3500.0
+    },
+    {
+     "enabled": false,
+     "concept": "Medidor Bidireccional",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": false,
+     "concept": "",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": false,
+     "concept": "",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": false,
+     "concept": "",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": false,
+     "concept": "",
+     "costMxn": 0.0
+    }
+   ],
+   "currency": "MXN",
+   "exchangeRate": 21.23,
+   "pricePerWatt": 17.8559651745943,
+   "utilityFactor": 0.51,
+   "discount": 0.0,
+   "addIva": true,
+   "taxDeduction": true,
+   "advances": [
+    0.6,
+    0.2,
+    0.15,
+    0.05
+   ],
+   "financingBase": 229292.02,
+   "financing": [
+    {
+     "share": 0.5,
+     "months": 6.0
+    },
+    {
+     "share": 0.0,
+     "months": 0.0
+    },
+    {
+     "share": 0.0,
+     "months": 0.0
+    }
+   ],
+   "language": "Español",
+   "structureWarrantyYears": 20.0,
+   "startTime": "1 a 2 semanas",
+   "deliveryTime": "3 a 4 semanas",
+   "validityDays": 30.0
+  },
+  "expected": {
+   "averageConsumption": 1334.5,
+   "annualGeneration": 18630.3371751176,
+   "annualConsumption": 16014.0,
+   "coverage": 1.16337811759196,
+   "modulePowerW": 615.0,
+   "modulesNeeded": 16.0,
+   "systemNeededKw": 9.84,
+   "minModules": 4.0,
+   "maxModules": 18.0,
+   "modulesTotal": 18.0,
+   "systemKw": 11.07,
+   "cashPrice": 229292.02,
+   "advancesMxn": [
+    137575.212,
+    45858.404,
+    34393.803,
+    11464.601
+   ],
+   "financingMxn": [
+    114646.01,
+    0.0,
+    0.0
+   ],
+   "monthlyPayment": 19107.6683333333,
+   "generationMonthly": [
+    1648.4431721314,
+    1626.79126087054,
+    1866.04448763148,
+    1628.0635168097,
+    1488.78447588509,
+    1398.892525695,
+    1385.94849952882,
+    1359.36306245945,
+    1362.35050788695,
+    1590.74400926105,
+    1698.55591995714,
+    1576.35573700098
+   ],
+   "generationAnnual": 18630.3371751176,
+   "billWithout": [
+    13814.18116,
+    0.0,
+    12067.264664,
+    0.0,
+    15964.232232,
+    0.0,
+    13385.204624,
+    0.0,
+    13622.950656,
+    0.0,
+    14465.398552,
+    0.0
+   ],
+   "billWith": [
+    92.1004,
+    0.0,
+    92.1004,
+    0.0,
+    92.1004,
+    0.0,
+    92.1004,
+    0.0,
+    92.1004,
+    0.0,
+    92.1004,
+    0.0
+   ],
+   "billWithoutAnnual": 83319.23188800001,
+   "billWithAnnual": 552.6024,
+   "projection": {
+    "cost": 229292.02,
+    "deduction": 59299.6603448276,
+    "irr": 0.5058020286551,
+    "firstPayment": 83319.231888,
+    "firstPaymentPv": 552.6024,
+    "paybackYears": 1.0,
+    "paybackFraction": 1.65452692888489,
+    "paybackTotal": 2.65452692888489
+   },
+   "bomTotalMxn": 205679.6368,
+   "suggestedPricePerWatt": 18.5799129900632,
+   "netKwh": [
+    0.0,
+    0.0,
+    -443.798909132382,
+    -443.798909132382,
+    -1318.63465763441,
+    -1318.63465763441,
+    -1863.4826503292,
+    -1863.4826503292,
+    -1577.32367555302,
+    -1577.32367555302,
+    -1982.03724589942,
+    -1982.03724589942
+   ]
+  }
+ },
+ "INDUSTRIAL": {
+  "inputs": {
+   "segment": "INDUSTRIAL",
+   "customer": {
+    "name": "Ejemplo industrial",
+    "subtitle": "",
+    "supplier": "Comisión Federal de Eléctricidad"
+   },
+   "city": "León",
+   "period": "Mensual",
+   "summerTariff": false,
+   "currentTariff": "GDMTH",
+   "baseTariff": null,
+   "contractedDemandKw": 432.0,
+   "periodStartSerial": 45565.0,
+   "periodEndSerial": 45596.0,
+   "billedMonth": 10,
+   "meterType": "Digital",
+   "phases": 3.0,
+   "voltage": 440.0,
+   "electricalConfig": "3F-4H@440/254 V 60 Hz",
+   "annualIncrease": 0.07,
+   "consumptionKwh": [
+    55157.0,
+    53897.0,
+    69021.0,
+    60893.0,
+    65316.0,
+    70867.0,
+    56265.0,
+    53347.0,
+    61658.0,
+    56841.0,
+    51490.0,
+    63677.0
+   ],
+   "demandKw": [
+    256.0,
+    236.0,
+    248.0,
+    255.0,
+    250.0,
+    268.0,
+    252.0,
+    242.0,
+    241.0,
+    248.0,
+    253.0,
+    253.0
+   ],
+   "kwhBase": 12600.0,
+   "kwhIntermediate": 38395.0,
+   "kwhPeak": 4162.0,
+   "kwhSemiPeak": 0.0,
+   "kwBase": 112.0,
+   "kwIntermediate": 256.0,
+   "kwPeak": 182.0,
+   "kwSemiPeak": 0.0,
+   "kvarh": 4022.0,
+   "moduleModel": "Best Solar - MGL630N-144BM10 (635W)",
+   "orientationCount": 1.0,
+   "orientations": [
+    {
+     "modules": 537.0,
+     "azimuth": 58.0,
+     "inclination": 5.0
+    },
+    {
+     "modules": 0.0,
+     "azimuth": 0.0,
+     "inclination": 0.0
+    },
+    {
+     "modules": 0.0,
+     "azimuth": 0.0,
+     "inclination": 0.0
+    },
+    {
+     "modules": 0.0,
+     "azimuth": 0.0,
+     "inclination": 0.0
+    }
+   ],
+   "mountingSystem": "Sobre Terreno",
+   "degradation": 0.0042,
+   "inverters": [
+    {
+     "model": "Growatt (Growatt MAC 60KTL3-X MV)",
+     "quantity": 5.0
+    }
+   ],
+   "services": [
+    {
+     "enabled": true,
+     "concept": "Unidad de Verificación de Instalaciones Eléctricas",
+     "costMxn": 3500.0
+    },
+    {
+     "enabled": true,
+     "concept": "Unidad de Inspección de la Industria Eléctrica",
+     "costMxn": 3500.0
+    },
+    {
+     "enabled": true,
+     "concept": "Medidor Bidireccional",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": true,
+     "concept": "Gestión de Contrato de Interconexión (Modalidad Generación Distrobioda)",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": true,
+     "concept": "Fireman Switch / PEFS PV / Rapid Shutdown",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": true,
+     "concept": "",
+     "costMxn": 0.0
+    },
+    {
+     "enabled": true,
+     "concept": "",
+     "costMxn": 0.0
+    }
+   ],
+   "currency": "MXN",
+   "exchangeRate": 20.0,
+   "pricePerWatt": 16.586,
+   "utilityFactor": 0.5,
+   "discount": 0.0,
+   "addIva": true,
+   "taxDeduction": true,
+   "advances": [
+    0.6,
+    0.2,
+    0.15,
+    0.05
+   ],
+   "financingBase": 0.0,
+   "financing": [
+    {
+     "share": 0.05,
+     "months": 0.0
+    },
+    {
+     "share": 0.1,
+     "months": 0.0
+    },
+    {
+     "share": 0.2,
+     "months": 0.0
+    }
+   ],
+   "language": "Español",
+   "structureWarrantyYears": 20.0,
+   "startTime": "1 a 2 semanas",
+   "deliveryTime": "2 a 3 semanas",
+   "validityDays": 30.0
+  },
+  "expected": {
+   "averageConsumption": 59869.0833333333,
+   "annualGeneration": 473406.613386834,
+   "annualConsumption": 718429.0,
+   "coverage": 0.658946970941922,
+   "modulePowerW": 635.0,
+   "modulesNeeded": 815.0,
+   "systemNeededKw": 517.525,
+   "minModules": 35.0,
+   "maxModules": 565.0,
+   "modulesTotal": 537.0,
+   "systemKw": 340.995,
+   "cashPrice": 6568781.9612,
+   "advancesMxn": [
+    3941269.17672,
+    1313756.39224,
+    985317.29418,
+    328439.09806
+   ],
+   "financingMxn": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "monthlyPayment": 0.0,
+   "generationMonthly": [
+    37462.616669134,
+    39337.3801219391,
+    46487.4198989812,
+    42149.0671681664,
+    40199.1074338924,
+    39087.9058898713,
+    38090.0922585053,
+    36968.7701404621,
+    34983.4508697898,
+    39678.1477624699,
+    40800.9067521335,
+    38161.7484214891
+   ],
+   "generationAnnual": 473406.613386834,
+   "billWithout": [
+    197742.644536392,
+    195834.748403185,
+    254227.690203655,
+    221199.746567709,
+    240603.653503132,
+    257361.909474078,
+    207321.290162662,
+    193840.644773899,
+    227152.44533835,
+    206508.641284311,
+    189762.646371839,
+    231293.536574861
+   ],
+   "billWith": [
+    46991.1352849264,
+    74743.1508406926,
+    40606.5213703999,
+    62767.0542212364,
+    74189.2822695401,
+    20545.0280569998,
+    42441.8542868676,
+    103120.587996191,
+    88610.569466605,
+    75050.5770910466,
+    110474.852624747,
+    61605.5568499476
+   ],
+   "billWithoutAnnual": 2622849.597194073,
+   "billWithAnnual": 801146.1703592,
+   "projection": {
+    "cost": 6568781.9612,
+    "deduction": 1698822.921,
+    "irr": 0.40955707041576,
+    "firstPayment": 2622849.59719407,
+    "firstPaymentPv": 801146.170359201,
+    "paybackYears": 2.0,
+    "paybackFraction": 1.34146735134569
+   },
+   "bomTotalMxn": 5132250.0,
+   "suggestedPricePerWatt": 15.0508071965865,
+   "netKwh": [
+    15478.8522375301,
+    22876.0932478665,
+    13328.2515785109,
+    19378.383330866,
+    22320.6198780609,
+    6859.58010101882,
+    14115.9328318336,
+    30667.8925661076,
+    26228.0941101288,
+    22802.9077414947,
+    32052.2298595379,
+    18913.5491302102
+   ],
+   "capacitorKvar": -9.14668843359469
+  }
+ }
+}

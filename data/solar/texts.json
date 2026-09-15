@@ -1,0 +1,293 @@
+{
+ "RESIDENTIAL": [
+  {
+   "row": 6,
+   "es": "ENNCO es una empresa mexicana de ingeniería eléctrica con sede en el Bajío, dedicada a diseñar, instalar y mantener soluciones energéticas que reducen el costo de la energía de sus clientes.",
+   "en": "ENNCO is a Mexican electrical engineering company based in the Bajío region, dedicated to designing, installing and maintaining energy solutions that reduce its clients' energy costs."
+  },
+  {
+   "row": 7,
+   "es": "En ENNCO nos distinguimos por la calidad técnica y la confianza en cada proyecto. Ofrecemos ingeniería eléctrica y soluciones fotovoltaicas que cumplen con la normativa vigente y superan las expectativas de nuestros clientes, con un equipo enfocado en la excelencia y el cuidado de cada detalle.",
+   "en": "At ENNCO we stand out for technical quality and trust in every project. We provide electrical engineering and photovoltaic solutions that comply with current regulations and exceed our clients' expectations, with a team focused on excellence and attention to every detail."
+  },
+  {
+   "row": 8,
+   "es": "Gracias a nuestro compromiso con la calidad en la planeación, el diseño y la ejecución de cada proyecto, en ENNCO nos distinguimos por el profesionalismo y la dedicación hacia nuestros clientes. Buscamos un desarrollo eficaz, confiable y a la vanguardia en cada proyecto que emprendemos juntos.",
+   "en": "Thanks to our commitment to quality in the planning, design and execution of every project, at ENNCO we stand out for our professionalism and dedication to our clients. We pursue efficient, reliable and cutting-edge development in every project we undertake together."
+  },
+  {
+   "row": 9,
+   "es": "ENNCO ofrece cobertura en todo México, llevando sus servicios de ingeniería y soluciones energéticas a donde el cliente lo necesite.",
+   "en": "ENNCO offers coverage throughout Mexico, bringing its engineering services and energy solutions wherever the client needs them."
+  },
+  {
+   "row": 10,
+   "es": "Ser una empresa líder en el sector de la energía eficiente y renovable, con un enfoque primordial en la calidad de nuestros productos, consultoría altamente especializada y un riguroso seguimiento operativo en cada proyecto.",
+   "en": "To be a leading company in the efficient and renewable energy sector, with a primary focus on the quality of our products, highly specialized consulting and rigorous operational follow-up in every project."
+  },
+  {
+   "row": 11,
+   "es": "Responsabilidad:",
+   "en": "Responsibility:"
+  },
+  {
+   "row": 12,
+   "es": "Confianza:",
+   "en": "Trust:"
+  },
+  {
+   "row": 13,
+   "es": "Actitud de Servicio:",
+   "en": "Service Attitude:"
+  },
+  {
+   "row": 14,
+   "es": "Compromiso:",
+   "en": "Commitment:"
+  },
+  {
+   "row": 15,
+   "es": "Nos esforzamos por ofrecer excelencia en cada uno de nuestros productos y servicios.",
+   "en": "We strive to deliver excellence in each of our products and services."
+  },
+  {
+   "row": 16,
+   "es": "Estaremos juntos en cada etapa del proceso, asegurando la mejora de la eficiencia energética.",
+   "en": "We will be with you at every stage of the process, ensuring the improvement of energy efficiency."
+  },
+  {
+   "row": 17,
+   "es": "Ofrecemos una atención centrada en la amabilidad, agilidad y claridad, para satisfacer sus necesidades de manera eficaz.",
+   "en": "We offer customer service focused on friendliness, agility and clarity to effectively meet your needs."
+  },
+  {
+   "row": 18,
+   "es": "Ofrecemos productos y servicios que se adaptan y cumplen con sus necesidades.",
+   "en": "We offer products and services that adapt to and meet your needs."
+  },
+  {
+   "row": 19,
+   "es": "Hemos desarrollado proyectos residenciales, comerciales e industriales en instalaciones eléctricas, tableros, transformadores y sistemas fotovoltaicos, generando alianzas de largo plazo con nuestros clientes para optimizar el uso y la gestión de la energía en sus procesos.",
+   "en": "We have developed residential, commercial and industrial projects in electrical installations, switchboards, transformers and photovoltaic systems, building long-term partnerships with our clients to optimize energy use and management in their processes."
+  },
+  {
+   "row": 20,
+   "es": "En ENNCO estamos comprometidos con la calidad, la confiabilidad y la seguridad en cada uno de nuestros proyectos. Personalizamos cada solución y elegimos equipos certificados a nivel nacional e internacional, adaptados a las condiciones de cada sitio, para garantizar un desempeño óptimo en la operación.",
+   "en": "At ENNCO we are committed to quality, reliability and safety in each of our projects. We tailor every solution and select nationally and internationally certified equipment, adapted to the conditions of each site, to guarantee optimal performance in operation."
+  },
+  {
+   "row": 24,
+   "es": "A continuación, se presenta un ejemplo preliminar del sistema de montaje propuesto, el cual puede modificarse en cuanto a modelo y características tras la realización del levantamiento técnico en el sitio de instalación.",
+   "en": "Below is a preliminary example of the proposed mounting system, which may be modified in terms of model and features following the completion of the technical survey at the installation site."
+  },
+  {
+   "row": 25,
+   "es": "De acuerdo con la Norma Oficial Mexicana NOM-001-SEDE y el National Electrical Code (NEC), en su artículo 690, se especifica el tipo de conductor eléctrico necesario para garantizar un buen desempeño y seguridad en instalaciones fotovoltaicas a nivel residencial, comercial e industrial. Por lo tanto, en este proyecto se utilizará el tipo de cable requerido, que cumple con las siguientes condiciones:",
+   "en": "According to the Mexican Official Standard NOM-001-SEDE and the National Electrical Code (NEC), Article 690 specifies the type of electrical conductor required to ensure optimal performance and safety in residential, commercial and industrial photovoltaic installations. Therefore, in this project the required type of cable will be used, which meets the following conditions:"
+  },
+  {
+   "row": 27,
+   "es": "Considerando la ubicación de la instalación, la orientación e inclinación, así como la base de datos de radiación solar de la zona, se determina la siguiente estimación de energía generada en comparación con el consumo energético de la propiedad.",
+   "en": "Considering the installation location, orientation and tilt, as well as the solar radiation database for the area, the following estimate of energy generation is determined in comparison with the property's energy consumption."
+  },
+  {
+   "row": 28,
+   "es": "La siguiente gráfica muestra el comportamiento de la generación de energía del sistema fotovoltaico durante un año. La cantidad de energía generada puede disminuir debido a factores como el clima, la acumulación de suciedad en los módulos y la falta de mantenimiento.",
+   "en": "The following graph shows the energy generation performance of the photovoltaic system over the course of a year. The amount of energy generated may decrease due to factors such as weather conditions, dirt accumulation on the modules and lack of maintenance."
+  }
+ ],
+ "COMMERCIAL": [
+  {
+   "row": 36,
+   "es": "ENNCO es una empresa mexicana de ingeniería eléctrica con sede en el Bajío, dedicada a diseñar, instalar y mantener soluciones energéticas que reducen el costo de la energía de sus clientes.",
+   "en": "ENNCO is a Mexican electrical engineering company based in the Bajío region, dedicated to designing, installing and maintaining energy solutions that reduce its clients' energy costs."
+  },
+  {
+   "row": 37,
+   "es": "En ENNCO nos distinguimos por la calidad técnica y la confianza en cada proyecto. Ofrecemos ingeniería eléctrica y soluciones fotovoltaicas que cumplen con la normativa vigente y superan las expectativas de nuestros clientes, con un equipo enfocado en la excelencia y el cuidado de cada detalle.",
+   "en": "At ENNCO we stand out for technical quality and trust in every project. We provide electrical engineering and photovoltaic solutions that comply with current regulations and exceed our clients' expectations, with a team focused on excellence and attention to every detail."
+  },
+  {
+   "row": 38,
+   "es": "Gracias a nuestro compromiso con la calidad en la planeación, el diseño y la ejecución de cada proyecto, en ENNCO nos distinguimos por el profesionalismo y la dedicación hacia nuestros clientes. Buscamos un desarrollo eficaz, confiable y a la vanguardia en cada proyecto que emprendemos juntos.",
+   "en": "Thanks to our commitment to quality in the planning, design and execution of every project, at ENNCO we stand out for our professionalism and dedication to our clients. We pursue efficient, reliable and cutting-edge development in every project we undertake together."
+  },
+  {
+   "row": 39,
+   "es": "ENNCO ofrece cobertura en todo México, llevando sus servicios de ingeniería y soluciones energéticas a donde el cliente lo necesite.",
+   "en": "ENNCO offers coverage throughout Mexico, bringing its engineering services and energy solutions wherever the client needs them."
+  },
+  {
+   "row": 40,
+   "es": "Ser una empresa líder en el sector de la energía eficiente y renovable, con un enfoque primordial en la calidad de nuestros productos, consultoría altamente especializada y un riguroso seguimiento operativo en cada proyecto.",
+   "en": "To be a leading company in the efficient and renewable energy sector, with a primary focus on the quality of our products, highly specialized consulting and rigorous operational follow-up in every project."
+  },
+  {
+   "row": 41,
+   "es": "Responsabilidad:",
+   "en": "Responsibility:"
+  },
+  {
+   "row": 42,
+   "es": "Confianza:",
+   "en": "Trust:"
+  },
+  {
+   "row": 43,
+   "es": "Actitud de Servicio:",
+   "en": "Service Attitude:"
+  },
+  {
+   "row": 44,
+   "es": "Compromiso:",
+   "en": "Commitment:"
+  },
+  {
+   "row": 45,
+   "es": "Nos esforzamos por ofrecer excelencia en cada uno de nuestros productos y servicios.",
+   "en": "We strive to deliver excellence in each of our products and services."
+  },
+  {
+   "row": 46,
+   "es": "Estaremos juntos en cada etapa del proceso, asegurando la mejora de la eficiencia energética.",
+   "en": "We will be with you at every stage of the process, ensuring the improvement of energy efficiency."
+  },
+  {
+   "row": 47,
+   "es": "Ofrecemos una atención centrada en la amabilidad, agilidad y claridad, para satisfacer sus necesidades de manera eficaz.",
+   "en": "We offer customer service focused on friendliness, agility and clarity to effectively meet your needs."
+  },
+  {
+   "row": 48,
+   "es": "Ofrecemos productos y servicios que se adaptan y cumplen con sus necesidades.",
+   "en": "We offer products and services that adapt to and meet your needs."
+  },
+  {
+   "row": 49,
+   "es": "Hemos desarrollado proyectos residenciales, comerciales e industriales en instalaciones eléctricas, tableros, transformadores y sistemas fotovoltaicos, generando alianzas de largo plazo con nuestros clientes para optimizar el uso y la gestión de la energía en sus procesos.",
+   "en": "We have developed residential, commercial and industrial projects in electrical installations, switchboards, transformers and photovoltaic systems, building long-term partnerships with our clients to optimize energy use and management in their processes."
+  },
+  {
+   "row": 50,
+   "es": "En ENNCO estamos comprometidos con la calidad, la confiabilidad y la seguridad en cada uno de nuestros proyectos. Personalizamos cada solución y elegimos equipos certificados a nivel nacional e internacional, adaptados a las condiciones de cada sitio, para garantizar un desempeño óptimo en la operación.",
+   "en": "At ENNCO we are committed to quality, reliability and safety in each of our projects. We tailor every solution and select nationally and internationally certified equipment, adapted to the conditions of each site, to guarantee optimal performance in operation."
+  },
+  {
+   "row": 54,
+   "es": "A continuación, se presenta un ejemplo preliminar del sistema de montaje propuesto, el cual puede modificarse en cuanto a modelo y características tras la realización del levantamiento técnico en el sitio de instalación.",
+   "en": "Below is a preliminary example of the proposed mounting system, which may be modified in terms of model and features following the completion of the technical survey at the installation site."
+  },
+  {
+   "row": 55,
+   "es": "De acuerdo con la Norma Oficial Mexicana NOM-001-SEDE y el National Electrical Code (NEC), en su artículo 690, se especifica el tipo de conductor eléctrico necesario para garantizar un buen desempeño y seguridad en instalaciones fotovoltaicas a nivel residencial, comercial e industrial. Por lo tanto, en este proyecto se utilizará el tipo de cable requerido, que cumple con las siguientes condiciones:",
+   "en": "According to the Mexican Official Standard NOM-001-SEDE and the National Electrical Code (NEC), Article 690 specifies the type of electrical conductor required to ensure optimal performance and safety in residential, commercial and industrial photovoltaic installations. Therefore, in this project the required type of cable will be used, which meets the following conditions:"
+  },
+  {
+   "row": 57,
+   "es": "Considerando la ubicación de la instalación, la orientación e inclinación, así como la base de datos de radiación solar de la zona, se determina la siguiente estimación de energía generada en comparación con el consumo energético de la propiedad.",
+   "en": "Considering the installation location, orientation and tilt, as well as the solar radiation database for the area, the following estimate of energy generation is determined in comparison with the property's energy consumption."
+  },
+  {
+   "row": 58,
+   "es": "La siguiente gráfica muestra el comportamiento de la generación de energía del sistema fotovoltaico durante un año. La cantidad de energía generada puede disminuir debido a factores como el clima, la acumulación de suciedad en los módulos y la falta de mantenimiento.",
+   "en": "The following graph shows the energy generation performance of the photovoltaic system over the course of a year. The amount of energy generated may decrease due to factors such as weather conditions, dirt accumulation on the modules and lack of maintenance."
+  }
+ ],
+ "INDUSTRIAL": [
+  {
+   "row": 67,
+   "es": "ENNCO es una empresa mexicana de ingeniería eléctrica con sede en el Bajío, dedicada a diseñar, instalar y mantener soluciones energéticas que reducen el costo de la energía de sus clientes.",
+   "en": "ENNCO is a Mexican electrical engineering company based in the Bajío region, dedicated to designing, installing and maintaining energy solutions that reduce its clients' energy costs."
+  },
+  {
+   "row": 68,
+   "es": "En ENNCO nos distinguimos por la calidad técnica y la confianza en cada proyecto. Ofrecemos ingeniería eléctrica y soluciones fotovoltaicas que cumplen con la normativa vigente y superan las expectativas de nuestros clientes, con un equipo enfocado en la excelencia y el cuidado de cada detalle.",
+   "en": "At ENNCO we stand out for technical quality and trust in every project. We provide electrical engineering and photovoltaic solutions that comply with current regulations and exceed our clients' expectations, with a team focused on excellence and attention to every detail."
+  },
+  {
+   "row": 69,
+   "es": "Gracias a nuestro compromiso con la calidad en la planeación, el diseño y la ejecución de cada proyecto, en ENNCO nos distinguimos por el profesionalismo y la dedicación hacia nuestros clientes. Buscamos un desarrollo eficaz, confiable y a la vanguardia en cada proyecto que emprendemos juntos.",
+   "en": "Thanks to our commitment to quality in the planning, design and execution of every project, at ENNCO we stand out for our professionalism and dedication to our clients. We pursue efficient, reliable and cutting-edge development in every project we undertake together."
+  },
+  {
+   "row": 70,
+   "es": "ENNCO ofrece cobertura en todo México, llevando sus servicios de ingeniería y soluciones energéticas a donde el cliente lo necesite.",
+   "en": "ENNCO offers coverage throughout Mexico, bringing its engineering services and energy solutions wherever the client needs them."
+  },
+  {
+   "row": 71,
+   "es": "Ser una empresa líder en el sector de la energía eficiente y renovable, con un enfoque primordial en la calidad de nuestros productos, consultoría altamente especializada y un riguroso seguimiento operativo en cada proyecto.",
+   "en": "To be a leading company in the efficient and renewable energy sector, with a primary focus on the quality of our products, highly specialized consulting and rigorous operational follow-up in every project."
+  },
+  {
+   "row": 72,
+   "es": "Responsabilidad:",
+   "en": "Responsibility:"
+  },
+  {
+   "row": 73,
+   "es": "Confianza:",
+   "en": "Trust:"
+  },
+  {
+   "row": 74,
+   "es": "Actitud de Servicio:",
+   "en": "Service Attitude:"
+  },
+  {
+   "row": 75,
+   "es": "Compromiso:",
+   "en": "Commitment:"
+  },
+  {
+   "row": 76,
+   "es": "Nos esforzamos por ofrecer excelencia en cada uno de nuestros productos y servicios.",
+   "en": "We strive to deliver excellence in each of our products and services."
+  },
+  {
+   "row": 77,
+   "es": "Estaremos juntos en cada etapa del proceso, asegurando la mejora de la eficiencia energética.",
+   "en": "We will be with you at every stage of the process, ensuring the improvement of energy efficiency."
+  },
+  {
+   "row": 78,
+   "es": "Ofrecemos una atención centrada en la amabilidad, agilidad y claridad, para satisfacer sus necesidades de manera eficaz.",
+   "en": "We offer customer service focused on friendliness, agility and clarity to effectively meet your needs."
+  },
+  {
+   "row": 79,
+   "es": "Ofrecemos productos y servicios que se adaptan y cumplen con sus necesidades.",
+   "en": "We offer products and services that adapt to and meet your needs."
+  },
+  {
+   "row": 80,
+   "es": "Hemos desarrollado proyectos residenciales, comerciales e industriales en instalaciones eléctricas, tableros, transformadores y sistemas fotovoltaicos, generando alianzas de largo plazo con nuestros clientes para optimizar el uso y la gestión de la energía en sus procesos.",
+   "en": "We have developed residential, commercial and industrial projects in electrical installations, switchboards, transformers and photovoltaic systems, building long-term partnerships with our clients to optimize energy use and management in their processes."
+  },
+  {
+   "row": 81,
+   "es": "En ENNCO estamos comprometidos con la calidad, la confiabilidad y la seguridad en cada uno de nuestros proyectos. Personalizamos cada solución y elegimos equipos certificados a nivel nacional e internacional, adaptados a las condiciones de cada sitio, para garantizar un desempeño óptimo en la operación.",
+   "en": "At ENNCO we are committed to quality, reliability and safety in each of our projects. We tailor every solution and select nationally and internationally certified equipment, adapted to the conditions of each site, to guarantee optimal performance in operation."
+  },
+  {
+   "row": 85,
+   "es": "A continuación, se presenta un ejemplo preliminar del sistema de montaje propuesto, el cual puede modificarse en cuanto a modelo y características tras la realización del levantamiento técnico en el sitio de instalación.",
+   "en": "Below is a preliminary example of the proposed mounting system, which may be modified in terms of model and features following the completion of the technical survey at the installation site."
+  },
+  {
+   "row": 86,
+   "es": "De acuerdo con la Norma Oficial Mexicana NOM-001-SEDE y el National Electrical Code (NEC), en su artículo 690, se especifica el tipo de conductor eléctrico necesario para garantizar un buen desempeño y seguridad en instalaciones fotovoltaicas a nivel residencial, comercial e industrial. Por lo tanto, en este proyecto se utilizará el tipo de cable requerido, que cumple con las siguientes condiciones:",
+   "en": "According to the Mexican Official Standard NOM-001-SEDE and the National Electrical Code (NEC), Article 690 specifies the type of electrical conductor required to ensure optimal performance and safety in residential, commercial and industrial photovoltaic installations. Therefore, in this project the required type of cable will be used, which meets the following conditions:"
+  },
+  {
+   "row": 88,
+   "es": "Considerando la ubicación de la instalación, la orientación e inclinación, así como la base de datos de radiación solar de la zona, se determina la siguiente estimación de energía generada en comparación con el consumo energético de la propiedad.",
+   "en": "Considering the installation location, orientation and tilt, as well as the solar radiation database for the area, the following estimate of energy generation is determined in comparison with the property's energy consumption."
+  },
+  {
+   "row": 89,
+   "es": "La siguiente gráfica muestra el comportamiento de la generación de energía del sistema fotovoltaico durante un año. La cantidad de energía generada puede disminuir debido a factores como el clima, la acumulación de suciedad en los módulos y la falta de mantenimiento.",
+   "en": "The following graph shows the energy generation performance of the photovoltaic system over the course of a year. The amount of energy generated may decrease due to factors such as weather conditions, dirt accumulation on the modules and lack of maintenance."
+  }
+ ]
+}

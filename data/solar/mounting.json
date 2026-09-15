@@ -1,0 +1,86 @@
+{
+ "es": [
+  {
+   "code": 1,
+   "name": "Lámina Acanalada",
+   "description": "Sistema prefabricado en aluminio anodizado, anclado sobre las crestas de la lámina con perforación con pija de punta cónica y sellado con EPDM. Este sistema cuenta con la certificación UL1703, la cual establece y garantiza un desempeño sin anomalías al sistema de protección contra sobrecargas eléctricas y excelente conductividad al sistema de tierra física."
+  },
+  {
+   "code": 2,
+   "name": "Lámina Engargolada",
+   "description": "Sistema prefabricado en aluminio anodizado, anclado mecánicamente sobre crestas de la lámina sin perforación; eliminando por completo los posibles riesgos de filtración de agua. Este sistema cuenta con la certificación UL1703, la cual establece y garantiza un desempeño sin anomalías al sistema de protección contra sobrecargas eléctricas y excelente conductividad al sistema de tierra física."
+  },
+  {
+   "code": 3,
+   "name": "Superficie de Concreto (Sin Perforar)",
+   "description": "Sistema prefabricado en aluminio anodizado, anclado mediante contrapesos manufacturados de concreto impermeable con base de hule para evitar la acumulación de humedad en la zona, montado directamente sobre la superficie de concreto; eliminando por completo los posibles riesgos de filtración de agua. Este sistema cuenta con la certificación UL1703, la cual establece y garantiza un desempeño sin anomalías al sistema de protección contra sobrecargas eléctricas y excelente conductividad al sistema de tierra física."
+  },
+  {
+   "code": 4,
+   "name": "Superficie de Concreto (Con Perforación)",
+   "description": "Sistema prefabricado en aluminio anodizado, anclado directamente sobre la superficie de perforación con una perforación de una medida 3/8\" X 2 1/2\", con un sistema de sujeción de taquete químico y sellador epóxico; eliminando por completo los posibles riesgos de filtración de agua. Este sistema cuenta con la certificación UL1703, la cual establece y garantiza un desempeño sin anomalías al sistema de protección contra sobrecargas eléctricas y excelente conductividad al sistema de tierra física."
+  },
+  {
+   "code": 5,
+   "name": "Sobre Terreno",
+   "description": "Sistema prefabricado en aluminio anodizado, anclado mediante contrapesos manufacturados de concreto impermeable con base de hule para evitar la acumulación de humedad en la zona, montado directamente sobre la superficie del terreno. Este sistema cuenta con la certificación UL1703, la cual establece y garantiza un desempeño sin anomalías al sistema de protección contra sobrecargas eléctricas y excelente conductividad al sistema de tierra física."
+  },
+  {
+   "code": 6,
+   "name": "Estructura de Acero",
+   "description": "Sistema prefabricado en aluminio anodizado, anclado mecánicamente con tornillería inoxidable y con material inerte para una separación galvánica sobre la estructura de acero desarrollada previamente. Este sistema cuenta con la certificación UL1703, la cual establece y garantiza un desempeño sin anomalías al sistema de protección contra sobrecargas eléctricas y excelente conductividad al sistema de tierra física, además de una larga duración contra la corrosión."
+  },
+  {
+   "code": 7,
+   "name": "Sistema De Montaje Flotante",
+   "description": "Sistema de montaje fabricado con materiales de alta gama, resistentes a la corrosión, la radiación UV y condiciones climáticas extremas, este sistema garantiza una durabilidad excepcional y un mantenimiento mínimo a lo largo de su vida útil. Especialmente diseñado para entornos acuáticos, ofrece una solución innovadora y eficiente que maximiza la generación de energía solar en superficies de agua, como lagos, embalses o estanques."
+  },
+  {
+   "code": 8,
+   "name": "Carport",
+   "description": "Sistema prefabricado en acero galvanizado por inmersión en caliente, añadiendo un método de sujeción para los módulos solares con rieles de aluminio anodizado y tornillería en acero inoxidable; el sistema Carport con módulos con marco de aluminio, no garantiza la impermeabilidad en la zona. Este sistema cuenta con la certificación UL1703, la cual establece y garantiza un desempeño sin anomalías al sistema de protección contra sobrecargas eléctricas y excelente conductividad al sistema de tierra física, además de una larga duración contra la corrosión."
+  }
+ ],
+ "en": [
+  {
+   "code": 1,
+   "name": "Trapezoidal Sheet (R´s)",
+   "description": "Prefabricated system in anodized aluminum, anchored on the crests of the sheet with perforation with a conical tip spike and sealed with EPDM. This system has UL1703 certification, which establishes and guarantees fault-free performance of the electrical overload protection system and excellent conductivity of the ground system."
+  },
+  {
+   "code": 2,
+   "name": "Engargolada Sheet (KR)",
+   "description": "Prefabricated system in anodized aluminum, mechanically anchored on ridges of the sheet without perforation; completely eliminating the possible risks of water filtration. This system has UL1703 certification, which establishes and guarantees fault-free performance of the electrical overload protection system and excellent conductivity of the ground system."
+  },
+  {
+   "code": 3,
+   "name": "Concrete Surface (Without Drilling)",
+   "description": "Prefabricated system in anodized aluminum, anchored by counterweights manufactured from waterproof concrete with a rubber base to prevent the accumulation of humidity in the area, mounted directly on the concrete surface; completely eliminating the possible risks of water filtration. This system has UL1703 certification, which establishes and guarantees fault-free performance of the electrical overload protection system and excellent conductivity of the ground system."
+  },
+  {
+   "code": 4,
+   "name": "Concrete Surface (With Drilling)",
+   "description": "Prefabricated system in anodized aluminum, anchored directly on the drilling surface with a drilling measuring 3/8\" and a depth of 2 1/2\", with a fastening system of chemical dowel and epoxy sealant; completely eliminating the possible risks of water filtration. This system has UL1703 certification, which establishes and guarantees fault-free performance of the electrical overload protection system and excellent conductivity of the ground system."
+  },
+  {
+   "code": 5,
+   "name": "On the ground",
+   "description": "Prefabricated system in anodized aluminum, anchored by counterweights manufactured from waterproof concrete with a rubber base to prevent the accumulation of humidity in the area, mounted directly on the surface of the ground. This system has UL1703 certification, which establishes and guarantees fault-free performance of the electrical overload protection system and excellent conductivity of the ground system."
+  },
+  {
+   "code": 6,
+   "name": "Steel Structure",
+   "description": "Prefabricated system in anodized aluminum, mechanically anchored with stainless screws and inert material for galvanic separation on the previously developed steel structure. This system has UL1703 certification, which establishes and guarantees trouble-free performance of the protection system against electrical overloads and excellent conductivity of the ground system, in addition to long life against corrosion."
+  },
+  {
+   "code": 7,
+   "name": "Floating Mounting System",
+   "description": "Mounting system manufactured with high-end materials, resistant to corrosion, UV radiation, and extreme weather conditions. This system ensures exceptional durability and minimal maintenance throughout its lifespan. Specifically designed for aquatic environments, it offers an innovative and efficient solution that maximizes solar energy generation on water surfaces, such as lakes, reservoirs, or ponds."
+  },
+  {
+   "code": 8,
+   "name": "Carport",
+   "description": "Prefabricated system in hot-dip galvanized steel, adding a fastening method for the solar modules with anodized aluminum rails and stainless steel screws; The Carport system with modules with an aluminum frame does not guarantee waterproofing in the area. This system has UL1703 certification, which establishes and guarantees trouble-free performance of the protection system against electrical overloads and excellent conductivity of the ground system, in addition to long life against corrosion."
+  }
+ ]
+}

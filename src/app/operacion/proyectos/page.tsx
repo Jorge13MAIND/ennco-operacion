@@ -1,5 +1,11 @@
-import { ProjectsOverview } from "@/components/projects/ProjectsOverview";
+import { SolarHome } from "@/components/solar/SolarHome";
+import { requireOperationsAccess } from "@/lib/auth/authorization";
+import { listQuotes, loadSolarCatalog } from "@/lib/solar/server";
+
 export const dynamic = "force-dynamic";
-export default function ProjectsPage() {
-  return <ProjectsOverview view="master" />;
+
+export default async function ProjectsMasterPage() {
+  const access = await requireOperationsAccess();
+  const [{ versions }, quotes] = await Promise.all([loadSolarCatalog(access), listQuotes(access).catch(() => [])]);
+  return <SolarHome live={access.evidenceClass === "live"} quotes={quotes} versions={versions} />;
 }

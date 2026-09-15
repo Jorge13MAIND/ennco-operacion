@@ -88,7 +88,7 @@ function itemLabel(key: NavKey): string {
   if (key === "estadisticas") return "Estadísticas";
   if (key === "actividad") return "Actividad";
   if (key === "inteligencia") return "Inteligencia";
-  if (key === "projects-master") return "Control Maestro";
+  if (key === "projects-master") return "Cotizador";
   if (key === "projects-list") return "Proyectos";
   if (key === "projects-catalogs") return "Catálogos";
   return moduleLabels[key];

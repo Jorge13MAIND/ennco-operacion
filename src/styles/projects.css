@@ -629,3 +629,37 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Cotizador solar */
+.solar-page .projects-header { align-items: flex-start; }
+.solar-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.solar-name { min-width: 280px; padding: 10px 12px; border: 1px solid var(--cr-line-strong); border-radius: 10px; font: inherit; }
+.solar-layout { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px; align-items: start; margin-top: 18px; }
+.solar-form { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.solar-results { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.solar-section { border: 1px solid var(--cr-line-strong); border-radius: 14px; background: var(--surface); padding: 0 18px 14px; }
+.solar-section > summary { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 14px 0; cursor: pointer; font-weight: 700; list-style: none; }
+.solar-section > summary::-webkit-details-marker { display: none; }
+.solar-section > summary small { color: var(--cr-muted); font-weight: 500; font-size: 0.78rem; }
+.solar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.solar-grid .projects-field span small { color: var(--cr-muted); font-weight: 500; }
+.solar-grid .projects-field input, .solar-grid .projects-field select { padding: 8px 10px; border: 1px solid var(--cr-line-strong); border-radius: 8px; font: inherit; }
+.solar-wide { grid-column: 1 / -1; }
+.solar-inline { display: grid; grid-template-columns: 120px repeat(3, minmax(0, 1fr)); gap: 10px; align-items: end; padding: 10px; border: 1px dashed var(--cr-line-strong); border-radius: 10px; }
+.solar-inline > strong { padding-bottom: 8px; font-size: 0.82rem; }
+.solar-inline .solar-wide { grid-column: auto / span 2; }
+.solar-toggle { display: flex; align-items: center; gap: 8px; align-self: end; padding-bottom: 8px; }
+.solar-months { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.solar-month { display: grid; gap: 4px; }
+.solar-month span { font-size: 0.74rem; color: var(--cr-muted); }
+.solar-month input { width: 100%; padding: 6px 8px; border: 1px solid var(--cr-line-strong); border-radius: 8px; font: inherit; }
+.solar-sub > summary { cursor: pointer; font-size: 0.82rem; color: var(--cr-muted); }
+.solar-suggested { display: flex; align-items: center; gap: 10px; }
+.solar-tabs button[aria-current="page"] { background: var(--cr-ink, #111); color: #fff; }
+.solar-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-block: 0; }
+.solar-metrics .projects-metric[data-tone="good"] strong { color: var(--cr-viz-1, #0fb074); }
+.solar-h3 { margin: 8px 0 4px; font-size: 0.95rem; }
+.projects-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.solar-bill td:first-child { white-space: nowrap; }
+@media (max-width: 1100px) { .solar-layout { grid-template-columns: 1fr; } .solar-results { position: static; } }
+@media (max-width: 720px) { .solar-grid { grid-template-columns: 1fr; } .solar-months { grid-template-columns: repeat(2, minmax(0, 1fr)); } .solar-inline { grid-template-columns: 1fr 1fr; } .solar-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

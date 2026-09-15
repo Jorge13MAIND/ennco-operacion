@@ -1,0 +1,62 @@
+{
+ "RESIDENTIAL": {
+  "safetyMargin": 0.93,
+  "performanceRatio": 0.8,
+  "loss1": 0.003,
+  "loss2": 0.003,
+  "daysPerMonth": [
+   31.0,
+   28.0,
+   31.0,
+   30.0,
+   31.0,
+   30.0,
+   31.0,
+   31.0,
+   30.0,
+   31.0,
+   30.0,
+   31.0
+  ]
+ },
+ "COMMERCIAL": {
+  "safetyMargin": 0.93,
+  "performanceRatio": 0.8,
+  "loss1": 0.003,
+  "loss2": 0.043460000000000006,
+  "daysPerMonth": [
+   31.0,
+   28.0,
+   31.0,
+   30.0,
+   31.0,
+   30.0,
+   31.0,
+   31.0,
+   30.0,
+   31.0,
+   30.0,
+   31.0
+  ]
+ },
+ "INDUSTRIAL": {
+  "safetyMargin": null,
+  "performanceRatio": 0.8,
+  "loss1": 0.03072,
+  "loss2": 0.14846,
+  "daysPerMonth": [
+   31.0,
+   28.0,
+   31.0,
+   30.0,
+   31.0,
+   30.0,
+   31.0,
+   31.0,
+   30.0,
+   31.0,
+   30.0,
+   31.0
+  ]
+ }
+}
