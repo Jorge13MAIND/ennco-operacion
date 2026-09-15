@@ -1,4 +1,5 @@
 import { factorK as lookupFactorK, findCity, findModule } from "@/lib/solar/catalog";
+import { effectivePeriod } from "@/lib/solar/defaults";
 import { sum } from "@/lib/solar/math";
 import type { GenerationResult, OrientationGeneration, QuoteInput, SolarCatalog } from "@/lib/solar/types";
 
@@ -23,9 +24,13 @@ export function computeGeneration(input: QuoteInput, catalog: SolarCatalog): Gen
   const latitude = city.latitude ?? 0;
   const irradiance = city.irradiance.map((v) => v ?? 0);
   const days = defaults.daysPerMonth;
-  const orientations: OrientationGeneration[] = input.orientations.slice(0, 4).map((o) => {
-    const powerW = o.modules > 0 ? panel.pmaxW : 0;
+  const warnings: string[] = [];
+  const period = effectivePeriod(input);
+  const orientations: OrientationGeneration[] = input.orientations.slice(0, 4).map((o, index) => {
+    // Energía por módulo siempre con la potencia del módulo (el libro la anula sin módulos; aquí sirve para dimensionar desde cero).
+    const powerW = panel.pmaxW;
     const k = lookupFactorK(catalog, latitude, o.inclination);
+    if (o.modules > 0 && k.every((v) => v === 0)) warnings.push(`Orientación ${index + 1}: no hay Factor K para latitud ${latitude}° e inclinación ${o.inclination}° (usa múltiplos de 5° entre 0 y 90); la generación de esa orientación es 0.`);
     const energyPerModule = irradiance.map((g, i) => (powerW / 1000) * g * (k[i] ?? 0) * (days[i] ?? 0) * parameters.performanceRatio * parameters.safetyMargin * (1 - parameters.loss1 - parameters.loss2));
     const energy = energyPerModule.map((e) => o.modules * e);
     return { modules: o.modules, inclination: o.inclination, azimuth: o.azimuth, powerW, irradiance, factorK: k, days, energyPerModule, energy, annual: sum(energy) };
@@ -35,8 +40,13 @@ export function computeGeneration(input: QuoteInput, catalog: SolarCatalog): Gen
   const latest = Math.min(12, Math.max(1, Math.round(input.billedMonth || 12)));
   // S{r} = INDEX(F27:F38, MOD(latest - mes, 12) + 1): consumo del mes calendario m.
   const consumptionByMonth = Array.from({ length: 12 }, (_, i) => input.consumptionKwh[(((latest - (i + 1)) % 12) + 12) % 12] ?? 0);
+  if (period === "Bimestral") {
+    const billed = input.consumptionKwh.filter((v) => v !== 0).length;
+    if (billed > 6) warnings.push(`Periodo bimestral con ${billed} renglones de consumo: el libro espera 6 recibos con ceros en los meses intermedios; la generación se está contando de más.`);
+    if ((input.consumptionKwh[0] ?? 0) === 0 && billed > 0) warnings.push("El primer renglón del historial debe ser el último recibo (distinto de cero); si empieza en cero, los periodos facturados quedan desalineados.");
+  }
   const periodGeneration = monthly.map((v, i) => {
-    if (input.period !== "Bimestral") return v;
+    if (period !== "Bimestral") return v;
     if (consumptionByMonth[i] === 0) return 0;
     return v + (monthly[(i + 11) % 12] ?? 0);
   });
@@ -44,6 +54,6 @@ export function computeGeneration(input: QuoteInput, catalog: SolarCatalog): Gen
   const annualConsumption = sum(input.consumptionKwh);
   return {
     latitude, latestMonth: latest, orientations, monthly, consumptionByMonth, periodGeneration, annual, annualConsumption,
-    coverage: annualConsumption > 0 ? Math.min(1, annual / annualConsumption) : 0, parameters,
+    coverageCapped: annualConsumption > 0 ? Math.min(1, annual / annualConsumption) : 0, warnings, parameters,
   };
 }

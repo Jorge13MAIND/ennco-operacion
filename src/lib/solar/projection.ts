@@ -33,5 +33,6 @@ export function computeProjection(params: {
   const remaining = params.cost - cum;
   const nextSavings = years[n]?.savings ?? 0;
   const fraction = nextSavings !== 0 ? Math.max(remaining, 0) / nextSavings : 0;
-  return { cost: params.cost, deduction: params.deduction, irr: irr(cashFlows), years, paybackYears: n, paybackFraction: fraction, paybackTotal: n + fraction, paybackMonths: fraction * 12 };
+  const recovers = nextSavings > 0 && !(n >= 29 && cum < threshold);
+  return { cost: params.cost, deduction: params.deduction, irr: irr(cashFlows), years, paybackYears: n, paybackFraction: fraction, paybackTotal: n + fraction, paybackMonths: fraction * 12, recovers };
 }

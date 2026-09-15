@@ -1,4 +1,5 @@
 import { dacRow, findCity, loadFactor, lowVoltageTariff, MEDIUM_VOLTAGE_TARIFFS, mediumVoltageTariff, residentialTariff } from "@/lib/solar/catalog";
+import { effectivePeriod } from "@/lib/solar/defaults";
 import { excelRound, safeDiv, sum } from "@/lib/solar/math";
 import type { BillColumn, GenerationResult, QuoteInput, SolarCatalog, TariffResult } from "@/lib/solar/types";
 
@@ -20,11 +21,12 @@ export function projectedMonth(latest: number, j: number): number {
 
 export function computeResidentialBill(input: QuoteInput, generation: GenerationResult, catalog: SolarCatalog): TariffResult {
   const city = findCity(catalog, input.city);
-  const row = residentialTariff(catalog, input.baseTariff ?? input.currentTariff);
-  if (!row) throw new Error(`SOLAR_TARIFF_NOT_FOUND: ${input.baseTariff ?? input.currentTariff}`);
+  const baseCode = input.baseTariff || (input.currentTariff.toUpperCase() === "DAC" ? "1" : input.currentTariff);
+  const row = residentialTariff(catalog, baseCode);
+  if (!row) throw new Error(`SOLAR_TARIFF_NOT_FOUND: ${baseCode}`);
   const dac = dacRow(catalog, city?.region ?? null);
   const rates = catalog.tariffs.rates;
-  const mpp = input.period === "Bimestral" ? 2 : 1;
+  const mpp = effectivePeriod(input) === "Bimestral" ? 2 : 1;
   const summer = input.summerTariff;
   const step1 = summer ? row.summerBasicStep : row.basicStep;
   const step2 = summer ? row.summerIntermediateStep : row.intermediateStep;
@@ -90,12 +92,22 @@ export function computeResidentialBill(input: QuoteInput, generation: Generation
   const remainingShare = safeDiv(annualWith, projected, 0);
   return {
     tariff: input.currentTariff, zone: city?.region ?? null, monthsPerPeriod: mpp, without, with: withPv, annualWithout, annualWith,
-    savingsShare: 1 - remainingShare, remainingShare, warnings: dac ? [] : [`Sin tarifa DAC para la región ${city?.region ?? "?"}`],
+    savingsShare: projected > 0 ? 1 - remainingShare : 0, remainingShare, warnings: dac ? [] : [`Sin tarifa DAC para la región ${city?.region ?? "?"}`],
   };
 }
 
 /** Fechas del historial (Excel serial). Comercial: cada periodo dura lo mismo que el último; industrial alterna 31/30 días. */
-export function periodDates(start: number, end: number, monthly: boolean): { left: Array<{ start: number; end: number; days: number }>; right: Array<{ start: number; end: number; days: number }> } {
+export function periodDates(startSerial: number | null | undefined, endSerial: number | null | undefined, monthly: boolean): { left: Array<{ start: number; end: number; days: number }>; right: Array<{ start: number; end: number; days: number }>; assumed: boolean } {
+  const fallbackDays = monthly ? 31 : 59;
+  let start = startSerial ?? 0;
+  let end = endSerial ?? 0;
+  let assumed = false;
+  if (!(Number.isFinite(start) && Number.isFinite(end)) || end <= start) {
+    // Sin fechas válidas se asume un periodo típico que termina en la fecha dada (o hoy).
+    end = Number.isFinite(end) && end > 0 ? end : Math.round((Date.now() - Date.UTC(1899, 11, 30)) / 86_400_000);
+    start = end - fallbackDays;
+    assumed = true;
+  }
   const left = [{ start, end, days: end - start }];
   for (let i = 1; i < 12; i += 1) {
     const prev = left[i - 1]!;
@@ -109,7 +121,7 @@ export function periodDates(start: number, end: number, monthly: boolean): { lef
     const e = s + (left[j]!.end - left[j]!.start);
     right.push({ start: s, end: e, days: e - s });
   }
-  return { left, right };
+  return { left, right, assumed };
 }
 
 export function computeCommercialBill(input: QuoteInput, generation: GenerationResult, catalog: SolarCatalog): TariffResult {
@@ -120,12 +132,13 @@ export function computeCommercialBill(input: QuoteInput, generation: GenerationR
   if (!row) throw new Error(`SOLAR_TARIFF_NOT_FOUND: ${tariff} ${zone ?? ""}`);
   const rates = catalog.tariffs.rates;
   const fc = loadFactor(catalog, tariff);
-  const mpp = input.period === "Bimestral" ? 2 : 1;
+  const mpp = effectivePeriod(input) === "Bimestral" ? 2 : 1;
+  // Ninguna tarifa de baja tensión es de media tensión: el cargo por medición del 2 % queda en 0 aquí, como en el libro.
   const mt = MEDIUM_VOLTAGE_TARIFFS.includes(tariff);
   const gdbt = tariff === "GDBT";
   const cons = input.consumptionKwh;
   const demand = input.demandKw ?? Array(12).fill(0);
-  const dates = periodDates(input.periodStartSerial ?? 0, input.periodEndSerial ?? 0, false);
+  const dates = periodDates(input.periodStartSerial, input.periodEndSerial, false);
   const latest = generation.latestMonth;
   const P = generation.periodGeneration;
   const charges = (days: number, kwh: number, base: number, flag: boolean, fp: number) => {
@@ -167,7 +180,7 @@ export function computeCommercialBill(input: QuoteInput, generation: GenerationR
   const annualWithout = sum(without.map((c) => c.total as number));
   const annualWith = sum(withPv.map((c) => c.total as number));
   const remainingShare = safeDiv(annualWith, annualWithout, 0);
-  return { tariff, zone, monthsPerPeriod: mpp, without, with: withPv, annualWithout, annualWith, savingsShare: 1 - remainingShare, remainingShare, warnings: [] };
+  return { tariff, zone, monthsPerPeriod: mpp, without, with: withPv, annualWithout, annualWith, savingsShare: annualWithout > 0 ? 1 - remainingShare : 0, remainingShare, warnings: dates.assumed ? ["Sin fechas válidas del último periodo: se asumió un periodo de 59 días que termina hoy."] : [] };
 }
 
 export function computeIndustrialBill(input: QuoteInput, generation: GenerationResult, catalog: SolarCatalog): TariffResult {
@@ -180,7 +193,7 @@ export function computeIndustrialBill(input: QuoteInput, generation: GenerationR
   const fc = loadFactor(catalog, tariff);
   const mt = MEDIUM_VOLTAGE_TARIFFS.includes(tariff);
   const cons = input.consumptionKwh;
-  const dates = periodDates(input.periodStartSerial ?? 0, input.periodEndSerial ?? 0, true);
+  const dates = periodDates(input.periodStartSerial, input.periodEndSerial, true);
   const latest = generation.latestMonth;
   const P = generation.periodGeneration;
   const base0 = { kwhBase: input.kwhBase ?? 0, kwhIntermediate: input.kwhIntermediate ?? 0, kwhPeak: input.kwhPeak ?? 0, kwhSemiPeak: input.kwhSemiPeak ?? 0, kwBase: input.kwBase ?? 0, kwIntermediate: input.kwIntermediate ?? 0, kwPeak: input.kwPeak ?? 0, kwSemiPeak: input.kwSemiPeak ?? 0, kvarh: input.kvarh ?? 0 };
@@ -190,7 +203,8 @@ export function computeIndustrialBill(input: QuoteInput, generation: GenerationR
   };
   const charges = (days: number, kwh: number, parts: typeof base0) => {
     const billableKw = safeDiv(kwh, days * 24 * fc, 0);
-    const fp = parts.kvarh === 0 ? 100 : excelRound((kwh / Math.sqrt(kwh ** 2 + parts.kvarh ** 2)) * 100, 2);
+    // Sin energía no hay factor de potencia que penalizar (el libro divide entre cero y da infinito).
+    const fp = parts.kvarh === 0 || kwh <= 0 ? 100 : excelRound((kwh / Math.sqrt(kwh ** 2 + parts.kvarh ** 2)) * 100, 2);
     const fixed = row.fixed;
     const distribution = billableKw * row.distribution;
     const transmission = kwh * row.transmission;
@@ -203,7 +217,7 @@ export function computeIndustrialBill(input: QuoteInput, generation: GenerationR
     const mem = kwh * row.mem;
     const supply = fixed + distribution + transmission + cenace + energyBase + energyIntermediate + energyPeak + energySemiPeak + capacity + mem;
     const metering = mt ? supply * rates.lowVoltageMetering : 0;
-    const powerFactorAdj = fp < 90 ? rates.powerFactorPenalty * (90 / fp - 1) * supply : -rates.powerFactorBonus * supply;
+    const powerFactorAdj = fp > 0 && fp < 90 ? rates.powerFactorPenalty * (90 / fp - 1) * supply : -rates.powerFactorBonus * supply;
     const subtotal = supply + metering + powerFactorAdj;
     const iva = subtotal * rates.iva;
     const dap = supply * rates.dapIndustrial;
@@ -237,7 +251,8 @@ export function computeIndustrialBill(input: QuoteInput, generation: GenerationR
   const avgFp = sum(withPv.map((c) => c.powerFactor as number)) / 12 / 100;
   const target = input.targetPowerFactor ?? 0.96;
   const capacitorKvar = avgDemand * (Math.tan(Math.acos(avgFp)) - Math.tan(Math.acos(target)));
-  return { tariff, zone, monthsPerPeriod: 1, without, with: withPv, annualWithout, annualWith, savingsShare: 1 - remainingShare, remainingShare, warnings: [], extra: { averageDemandKw: avgDemand, averagePowerFactor: avgFp, targetPowerFactor: target, capacitorKvar } };
+  const indWarnings = dates.assumed ? ["Sin fechas válidas del último periodo: se asumió un periodo de 31 días que termina hoy."] : [];
+  return { tariff, zone, monthsPerPeriod: 1, without, with: withPv, annualWithout, annualWith, savingsShare: annualWithout > 0 ? 1 - remainingShare : 0, remainingShare, warnings: indWarnings, extra: { averageDemandKw: avgDemand, averagePowerFactor: avgFp, targetPowerFactor: target, capacitorKvar } };
 }
 
 export function computeBill(input: QuoteInput, generation: GenerationResult, catalog: SolarCatalog): TariffResult {

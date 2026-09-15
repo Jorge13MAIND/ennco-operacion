@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import scenarios from "@/lib/solar/__fixtures__/scenarios-v101.json";
-import { workbookCatalog } from "@/lib/solar/catalog";
+import { workbookCatalog } from "@/lib/solar/workbook";
 import { computeQuote } from "@/lib/solar/quote";
 import type { QuoteInput } from "@/lib/solar/types";
 
@@ -109,5 +109,64 @@ describe("robustez", () => {
   it("ciudad o tarifa inexistente avisan con un código claro", () => {
     expect(() => computeQuote({ ...base, city: "Atlántida" }, catalog)).toThrow(/SOLAR_CITY_NOT_FOUND/u);
     expect(() => computeQuote({ ...base, currentTariff: "GDMTX" }, catalog)).toThrow(/SOLAR_TARIFF_NOT_FOUND/u);
+  });
+});
+
+describe("hallazgos de la revisión independiente (15-sep)", () => {
+  const ind = cases.I1_gdmto!.inputs;
+  const res = cases.R1_leon!.inputs;
+  it("A1: consumo 0 con kVArh no produce infinito en el recibo industrial", () => {
+    const result = computeQuote({ ...ind, consumptionKwh: Array(12).fill(0), kvarh: 4000 }, catalog);
+    expect(Number.isFinite(result.bill.annualWithout)).toBe(true);
+    expect(Number.isFinite(result.bill.annualWith)).toBe(true);
+    expect(Number.isFinite(result.projection.irr)).toBe(true);
+  });
+  it("A3: el industrial siempre es mensual aunque la captura diga bimestral", () => {
+    const monthly = computeQuote(ind, catalog);
+    const bimonthly = computeQuote({ ...ind, period: "Bimestral" }, catalog);
+    expect(bimonthly.bill.annualWith).toBeCloseTo(monthly.bill.annualWith, 6);
+    expect(bimonthly.generation.periodGeneration).toEqual(monthly.generation.periodGeneration);
+  });
+  it("A2: bimestral con 12 renglones o primer renglón en cero avisa", () => {
+    const full = computeQuote({ ...res, consumptionKwh: Array(12).fill(500) }, catalog);
+    expect(full.warnings.some((w) => /bimestral/u.test(w))).toBe(true);
+    const shifted = computeQuote({ ...res, consumptionKwh: [0, 788, 0, 890, 0, 1101, 0, 1270, 0, 802, 0, 848] }, catalog);
+    expect(shifted.warnings.some((w) => /primer renglón/u.test(w))).toBe(true);
+  });
+  it("A4: sin fechas válidas se asume un periodo y se avisa; nunca hay días negativos", () => {
+    const result = computeQuote({ ...cases.C2_guadalajara!.inputs, periodStartSerial: null, periodEndSerial: null }, catalog);
+    expect(result.bill.without.every((c) => (c.days as number) > 0)).toBe(true);
+    expect(result.warnings.some((w) => /fechas/u.test(w))).toBe(true);
+    const inverted = computeQuote({ ...cases.C2_guadalajara!.inputs, periodStartSerial: 45620, periodEndSerial: 45567 }, catalog);
+    expect(inverted.bill.annualWithout).toBeGreaterThan(0);
+  });
+  it("A5: inclinación sin Factor K avisa en vez de callar", () => {
+    const result = computeQuote({ ...res, orientations: [{ modules: 7, azimuth: 0, inclination: 17 }] }, catalog);
+    expect(result.annualGeneration).toBe(0);
+    expect(result.warnings.some((w) => /Factor K/u.test(w))).toBe(true);
+  });
+  it("A6: sin módulos capturados ya se dimensiona el sistema necesario", () => {
+    const result = computeQuote({ ...res, orientations: [{ modules: 0, azimuth: 0, inclination: 20 }] }, catalog);
+    expect(result.modulesNeeded).toBeGreaterThan(0);
+    expect(result.annualGeneration).toBe(0);
+  });
+  it("A10: inversor desconocido avisa; los inversores adicionales entran al BOM (corrección 18)", () => {
+    const unknown = computeQuote({ ...res, inverters: [{ model: "Inversor X", quantity: 1 }] }, catalog);
+    expect(unknown.warnings.some((w) => /no está en el catálogo/u.test(w))).toBe(true);
+    const two = computeQuote({ ...res, inverters: [{ model: "Growatt (MIN 4600TL-X2)", quantity: 1 }, { model: "Growatt (MIN 2500TL-X2)", quantity: 1 }] }, catalog);
+    expect(two.pricing.bom.filter((l) => l.concept === "Inversor")).toHaveLength(2);
+  });
+  it("A8/A9: ahorro nulo no reporta 100 % y el retorno se marca como no recuperado", () => {
+    const result = computeQuote({ ...res, consumptionKwh: Array(12).fill(0), orientations: [{ modules: 10, azimuth: 0, inclination: 20 }] }, catalog);
+    expect(result.bill.savingsShare).toBe(0);
+    expect(result.projection.recovers).toBe(false);
+  });
+  it("A11: flujos en cero dan TIR 0", () => {
+    const result = computeQuote({ ...res, consumptionKwh: Array(12).fill(0), pricePerWatt: 0, services: [], taxDeduction: false, orientations: [{ modules: 0, azimuth: 0, inclination: 20 }] }, catalog);
+    expect(result.projection.irr).toBe(0);
+  });
+  it("A12: DAC sin tarifa base usa la tarifa 1", () => {
+    const result = computeQuote({ ...res, currentTariff: "DAC", baseTariff: null }, catalog);
+    expect(result.bill.without[0]?.tariff).toBe("DAC");
   });
 });

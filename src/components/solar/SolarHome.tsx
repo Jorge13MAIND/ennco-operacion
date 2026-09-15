@@ -14,7 +14,7 @@ const segmentLabel: Record<string, string> = { RESIDENTIAL: "Residencial", COMME
 const stamp = new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeZone: "America/Mexico_City" });
 const pct = (v: number | undefined) => (typeof v === "number" ? `${(v * 100).toFixed(1)} %` : "—");
 
-export function SolarHome({ quotes, versions, live }: { quotes: StoredQuote[]; versions: CatalogVersions; live: boolean }) {
+export function SolarHome({ quotes, versions, live, storageError }: { quotes: StoredQuote[]; versions: CatalogVersions; live: boolean; storageError?: boolean }) {
   const overridden = Object.values(versions).filter((v) => v.source === "catalog").length;
   return (
     <main className="shell section operations-main projects-page" id="main-content" tabIndex={-1}>
@@ -22,6 +22,7 @@ export function SolarHome({ quotes, versions, live }: { quotes: StoredQuote[]; v
         <Link className="projects-button" href={"/operacion/proyectos/catalogos" as Route}>Catálogos</Link>
       </PageHeader>
       {!live ? <div className="projects-disclosure"><strong>Modo demostración.</strong> Las cotizaciones no se guardan en este ambiente.</div> : null}
+      {storageError ? <div className="projects-notice" data-tone="danger" role="alert">No se pudieron leer las cotizaciones guardadas. Puedes cotizar; la lista se reintenta al abrir de nuevo.</div> : null}
       <section className="projects-card-grid" aria-label="Nueva cotización">
         {SEGMENTS.map((s) => (
           <article className="projects-card" key={s.key}>
@@ -49,8 +50,8 @@ export function SolarHome({ quotes, versions, live }: { quotes: StoredQuote[]; v
                     <td>{q.summary.city ?? "—"}<br /><span className="projects-help">{q.summary.tariff ?? ""}</span></td>
                     <td className="num">{q.summary.systemKw != null ? `${q.summary.systemKw.toFixed(2)} kW` : "—"}<br /><span className="projects-help">{q.summary.modules ?? "—"} módulos</span></td>
                     <td className="num">{q.summary.annualGeneration != null ? `${Math.round(q.summary.annualGeneration).toLocaleString("es-MX")} kWh` : "—"}<br /><span className="projects-help">cobertura {pct(q.summary.coverage)}</span></td>
-                    <td className="num">{money(q.summary.annualWithout)}<br /><span className="projects-help">{money(q.summary.annualWith)}</span></td>
-                    <td className="num">{money(q.summary.cashPrice)}</td>
+                    <td className="num">{q.summary.annualWithout != null ? money(q.summary.annualWithout) : "—"}<br /><span className="projects-help">{q.summary.annualWith != null ? money(q.summary.annualWith) : "—"}</span></td>
+                    <td className="num">{q.summary.cashPrice != null ? money(q.summary.cashPrice) : "—"}</td>
                     <td className="num">{pct(q.summary.irr)}<br /><span className="projects-help">{q.summary.paybackTotal != null ? `${q.summary.paybackTotal.toFixed(2)} años` : "—"}</span></td>
                     <td>{stamp.format(new Date(q.updatedAt))}</td>
                   </tr>
@@ -61,7 +62,7 @@ export function SolarHome({ quotes, versions, live }: { quotes: StoredQuote[]; v
         )}
       </Panel>
       <Panel title="Catálogos en uso" description="El libro v1.0.1 es la base. Una versión aprobada en Catálogos con categoría solar_* la sustituye.">
-        <p className="projects-help">{overridden === 0 ? "Todos los catálogos vienen del libro (módulos, inversores, ciudades, Factor K, tarifas CFE 2024, precios, montaje)." : `${overridden} catálogo(s) sustituidos por versiones aprobadas en Catálogos.`} Herramientas de ingeniería (sombras, arreglos, circuitos) llegan en la siguiente fase.</p>
+        <p className="projects-help">{overridden === 0 ? "Todos los catálogos vienen del libro (módulos, inversores, ciudades, Factor K, tarifas CFE 2024 del MEST con referencia 2026 pendiente de confirmar, precios, montaje)." : `${overridden} catálogo(s) sustituidos por versiones aprobadas en Catálogos.`} Herramientas de ingeniería (sombras, arreglos, circuitos) llegan en la siguiente fase.</p>
       </Panel>
     </main>
   );

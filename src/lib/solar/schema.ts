@@ -6,7 +6,7 @@ import type { QuoteInput } from "@/lib/solar/types";
 const number = z.coerce.number().finite();
 const nonNeg = number.min(0);
 
-export const orientationSchema = z.object({ modules: nonNeg.max(100000), azimuth: number.min(-360).max(360), inclination: nonNeg.max(90) });
+export const orientationSchema = z.object({ modules: nonNeg.max(100000), azimuth: number.min(-360).max(360), inclination: nonNeg.max(90).multipleOf(5, "La inclinación va de 5 en 5 grados (Factor K del libro)") });
 
 export const quoteInputSchema = z.object({
   segment: z.enum(["RESIDENTIAL", "COMMERCIAL", "INDUSTRIAL"]),
@@ -48,6 +48,15 @@ export const quoteInputSchema = z.object({
   structureWarrantyYears: nonNeg.nullable().optional(),
   startTime: z.string().max(80).nullable().optional(), deliveryTime: z.string().max(80).nullable().optional(), validityDays: nonNeg.nullable().optional(),
   generation: z.object({ performanceRatio: number.min(0).max(1).optional(), safetyMargin: number.min(0).max(1).optional(), loss1: number.min(0).max(1).optional(), loss2: number.min(0).max(1).optional() }).nullable().optional(),
+}).superRefine((value, ctx) => {
+  if (value.segment !== "RESIDENTIAL") {
+    if (value.periodStartSerial == null || value.periodEndSerial == null || value.periodEndSerial <= value.periodStartSerial) {
+      ctx.addIssue({ code: "custom", path: ["periodEndSerial"], message: "Captura inicio y fin del último periodo (el fin debe ser posterior al inicio)." });
+    }
+  }
+  if (value.segment === "INDUSTRIAL" && value.period !== "Mensual") ctx.addIssue({ code: "custom", path: ["period"], message: "El recibo industrial es mensual." });
+  if (value.segment === "RESIDENTIAL" && value.currentTariff.toUpperCase() === "DAC" && !value.baseTariff) ctx.addIssue({ code: "custom", path: ["baseTariff"], message: "Con DAC indica la tarifa base (1 a 1F)." });
+  value.inverters.forEach((inv, i) => { if (inv.model && inv.quantity < 1) ctx.addIssue({ code: "custom", path: ["inverters", i, "quantity"], message: "La cantidad de inversores debe ser al menos 1." }); });
 });
 
 /** El tipo inferido debe poder usarse como QuoteInput (verificación en compilación). */

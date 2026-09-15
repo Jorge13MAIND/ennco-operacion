@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       return { quote: await saveQuote(c, payload) };
     } catch (e) {
       const code = e instanceof Error ? e.message : "SOLAR_STORAGE_UNAVAILABLE";
-      throw new ProjectApiError(code, code === "SOLAR_FORBIDDEN" ? 403 : code === "SOLAR_QUOTE_VERSION_CONFLICT" ? 409 : code === "SOLAR_QUOTE_NOT_FOUND" ? 404 : 503);
+      throw new ProjectApiError(code, code === "SOLAR_FORBIDDEN" ? 403 : code === "SOLAR_QUOTE_VERSION_CONFLICT" ? 409 : code === "SOLAR_QUOTE_NOT_FOUND" ? 404 : code === "SOLAR_INPUT_NOT_FOUND" ? 422 : 503);
     }
   });
 }

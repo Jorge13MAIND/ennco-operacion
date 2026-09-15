@@ -30,6 +30,7 @@ export function sum(values: number[]): number {
 /** IRR de Excel (Newton con respaldo por bisección). Devuelve 0 si no converge, como IFERROR(IRR(...),0). */
 export function irr(cashFlows: number[], guess = 0.1): number {
   const npv = (rate: number) => cashFlows.reduce((acc, cf, t) => acc + cf / (1 + rate) ** t, 0);
+  if (cashFlows.every((cf) => cf === 0) || !cashFlows.some((cf) => cf > 0) || !cashFlows.some((cf) => cf < 0)) return 0;
   let rate = guess;
   for (let i = 0; i < 100; i += 1) {
     const value = npv(rate);
@@ -43,7 +44,7 @@ export function irr(cashFlows: number[], guess = 0.1): number {
   let low = -0.99;
   let high = 10;
   let fLow = npv(low);
-  if (fLow * npv(high) > 0) return 0;
+  if (fLow * npv(high) >= 0) return 0;
   for (let i = 0; i < 300; i += 1) {
     const mid = (low + high) / 2;
     const fMid = npv(mid);

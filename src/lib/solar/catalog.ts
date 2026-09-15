@@ -1,34 +1,6 @@
-import citiesJson from "../../../data/solar/cities.json";
-import factorKJson from "../../../data/solar/factor-k.json";
-import generationJson from "../../../data/solar/generation-defaults.json";
-import invertersJson from "../../../data/solar/inverters.json";
-import modulesJson from "../../../data/solar/modules.json";
-import mountingJson from "../../../data/solar/mounting.json";
-import pricesJson from "../../../data/solar/prices.json";
-import tariffsJson from "../../../data/solar/tariffs.json";
+import type { DacRow, LowVoltageTariffRow, MediumVoltageTariffRow, ResidentialTariffRow, SolarCatalog, SolarCity, SolarInverter, SolarModule } from "@/lib/solar/types";
 
-import type {
-  DacRow, FactorKTable, GenerationDefaults, LowVoltageTariffRow, MediumVoltageTariffRow, Prices, ResidentialTariffRow, SolarCatalog, SolarCity, SolarInverter, SolarModule, Tariffs,
-} from "@/lib/solar/types";
-
-/**
- * Catálogos del libro (data/solar/*.json, generados con scripts/build-solar-catalogs.py). Son la
- * versión de respaldo; en producción se sobreponen las versiones aprobadas en Catálogos
- * (ennco_project_catalogs) cuando existan.
- */
-export function workbookCatalog(): SolarCatalog {
-  return {
-    modules: modulesJson as SolarModule[],
-    inverters: invertersJson as SolarInverter[],
-    cities: citiesJson as SolarCity[],
-    factorK: factorKJson as FactorKTable,
-    tariffs: tariffsJson as unknown as Tariffs,
-    prices: pricesJson as unknown as Prices,
-    generation: generationJson as unknown as GenerationDefaults,
-    mounting: mountingJson as SolarCatalog["mounting"],
-  };
-}
-
+/** Búsquedas sobre un catálogo ya resuelto (libro o versiones aprobadas). Sin datos embebidos: apto para el navegador. */
 const norm = (value: string | null | undefined) => (value ?? "").trim().toLowerCase();
 
 export function findModule(catalog: SolarCatalog, model: string): SolarModule | null {

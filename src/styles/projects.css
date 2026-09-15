@@ -652,6 +652,7 @@
 .solar-months { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 .solar-month { display: grid; gap: 4px; }
 .solar-month span { font-size: 0.74rem; color: var(--cr-muted); }
+.solar-month-skipped { opacity: 0.45; }
 .solar-month input { width: 100%; padding: 6px 8px; border: 1px solid var(--cr-line-strong); border-radius: 8px; font: inherit; }
 .solar-sub > summary { cursor: pointer; font-size: 0.82rem; color: var(--cr-muted); }
 .solar-suggested { display: flex; align-items: center; gap: 10px; }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import golden from "@/lib/solar/__fixtures__/golden-v101.json";
-import { workbookCatalog } from "@/lib/solar/catalog";
+import { workbookCatalog } from "@/lib/solar/workbook";
 import { computeQuote } from "@/lib/solar/quote";
 import type { QuoteInput, Segment } from "@/lib/solar/types";
 

@@ -1,4 +1,9 @@
-import type { QuoteInput, Segment, SolarCatalog } from "@/lib/solar/types";
+import type { Period, QuoteInput, Segment, SolarCatalog } from "@/lib/solar/types";
+
+/** El bloque industrial del libro es mensual siempre; comercial y residencial siguen la captura. */
+export function effectivePeriod(input: Pick<QuoteInput, "segment" | "period">): Period {
+  return input.segment === "INDUSTRIAL" ? "Mensual" : input.period;
+}
 
 /** Serial de Excel (días desde 1899-12-30) ↔ fecha ISO, para los campos de periodo. */
 export function serialToIso(serial: number | null | undefined): string {
@@ -34,7 +39,7 @@ export function defaultQuoteInput(segment: Segment, catalog: SolarCatalog): Quot
     summerTariff: false,
     currentTariff: segment === "RESIDENTIAL" ? "1" : segment === "COMMERCIAL" ? "PDBT" : "GDMTH",
     baseTariff: segment === "RESIDENTIAL" ? "1" : null,
-    contractedDemandKw: segment === "RESIDENTIAL" ? null : 0,
+    contractedDemandKw: null,
     periodStartSerial: segment === "RESIDENTIAL" ? null : end - (bimonthly ? 60 : 30),
     periodEndSerial: segment === "RESIDENTIAL" ? null : end,
     billedMonth: today.getMonth() + 1,

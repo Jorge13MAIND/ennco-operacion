@@ -7,7 +7,7 @@ import { useMemo, useState, type ReactNode } from "react";
 
 import { money } from "@/components/projects/ui";
 import { MONTH_NAMES } from "@/lib/solar/catalog";
-import { DEFAULT_SERVICES, isoToSerial, SEGMENT_TARIFFS, serialToIso } from "@/lib/solar/defaults";
+import { isoToSerial, SEGMENT_TARIFFS, serialToIso } from "@/lib/solar/defaults";
 import { computeQuote } from "@/lib/solar/quote";
 import type { CatalogVersions, StoredQuote } from "@/lib/solar/server";
 import type { QuoteInput, QuoteResult, SolarCatalog } from "@/lib/solar/types";
@@ -61,6 +61,14 @@ function Metric({ label, value, note, tone }: { label: string; value: string; no
   return <div className="projects-metric" data-tone={tone}><span>{label}</span><strong>{value}</strong>{note ? <small>{note}</small> : null}</div>;
 }
 
+function paybackLabel(result: QuoteResult): string {
+  const p = result.projection;
+  if (!p.recovers) return "no se recupera en 30 años con estos datos";
+  const years = Math.floor(p.paybackTotal);
+  const months = Math.round((p.paybackTotal - years) * 12);
+  return `retorno ${years} año${years === 1 ? "" : "s"}${months > 0 ? ` y ${months} mes${months === 1 ? "" : "es"}` : ""}`;
+}
+
 function monthLabel(billedMonth: number, offset: number): string {
   return MONTH_NAMES[(((billedMonth - 1 - offset) % 12) + 12) % 12] ?? "";
 }
@@ -82,10 +90,11 @@ export function SolarQuoteWorkspace({ catalog, versions, initial, defaults, exam
   }, [input, catalog]);
   const result = computed.result;
   const patch = (p: Partial<QuoteInput>) => setInput((prev) => ({ ...prev, ...p }));
-  const setArray = <K extends "consumptionKwh" | "demandKw" | "advances">(key: K, i: number, v: number) => setInput((prev) => {
+  const setArray = <K extends "consumptionKwh" | "advances">(key: K, i: number, v: number) => setInput((prev) => {
     const arr = [...((prev[key] as number[] | null | undefined) ?? Array(12).fill(0))]; arr[i] = v; return { ...prev, [key]: arr };
   });
   const isRes = input.segment === "RESIDENTIAL"; const isInd = input.segment === "INDUSTRIAL";
+  const bimonthly = !isInd && input.period === "Bimestral";
 
   async function save(status?: string) {
     if (!name.trim()) { setMessage({ tone: "danger", text: "Ponle nombre a la cotización antes de guardar." }); return; }
@@ -93,7 +102,10 @@ export function SolarQuoteWorkspace({ catalog, versions, initial, defaults, exam
     try {
       const res = await fetch("/api/v1/solar/quotes", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: quoteId, name: name.trim(), expectedVersion: version, status, input }) });
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.message ?? data?.error ?? "No se pudo guardar");
+      if (!res.ok) {
+        const issues = Array.isArray(data?.issues) ? data.issues.map((i: { path?: string; message?: string }) => `${i.path ?? ""}: ${i.message ?? ""}`).join(" · ") : "";
+        throw new Error(`${data?.message ?? data?.error ?? "No se pudo guardar"}${issues ? ` (${issues})` : ""}`);
+      }
       setQuoteId(data.quote.id); setVersion(data.quote.version);
       setMessage({ tone: "success", text: `Guardada como versión ${data.quote.version}.` });
       if (!quoteId) router.replace(`/operacion/proyectos/cotizar?cotizacion=${data.quote.id}` as Route);
@@ -137,28 +149,30 @@ export function SolarQuoteWorkspace({ catalog, versions, initial, defaults, exam
             <Select label="Idioma del estudio" value={input.language ?? "Español"} onChange={(v) => patch({ language: v })} options={[{ value: "Español", label: "Español" }, { value: "Inglés", label: "Inglés" }]} />
           </Section>
           <Section title="Centro de carga" hint="Tarifa, periodo y último recibo">
-            <Select label="Periodo" value={input.period} onChange={(v) => patch({ period: v as QuoteInput["period"] })} options={[{ value: "Bimestral", label: "Bimestral" }, { value: "Mensual", label: "Mensual" }]} />
+            {isInd ? <div className="projects-field"><span>Periodo</span><div className="solar-suggested"><strong>Mensual</strong><small className="projects-help">el recibo industrial siempre es mensual</small></div></div> : <Select label="Periodo" value={input.period} onChange={(v) => patch({ period: v as QuoteInput["period"] })} options={[{ value: "Bimestral", label: "Bimestral" }, { value: "Mensual", label: "Mensual" }]} />}
             <Select label="Tarifa actual" value={input.currentTariff} onChange={(v) => patch({ currentTariff: v })} options={tariffOptions} />
             {isRes ? <Select label="Tarifa base" value={input.baseTariff ?? "1"} onChange={(v) => patch({ baseTariff: v })} options={SEGMENT_TARIFFS.RESIDENTIAL.filter((t) => t !== "DAC").map((t) => ({ value: t, label: t }))} /> : <Num label="Demanda contratada" suffix="kW" value={input.contractedDemandKw} onChange={(v) => patch({ contractedDemandKw: v })} />}
             {isRes ? <Toggle label="Tarifa de verano" value={input.summerTariff} onChange={(v) => patch({ summerTariff: v })} /> : null}
             {!isRes ? <label className="projects-field"><span>Inicio del último periodo</span><input type="date" value={serialToIso(input.periodStartSerial)} onChange={(e) => patch({ periodStartSerial: isoToSerial(e.currentTarget.value) })} /></label> : null}
             {!isRes ? <label className="projects-field"><span>Fin del último periodo</span><input type="date" value={serialToIso(input.periodEndSerial)} onChange={(e) => patch({ periodEndSerial: isoToSerial(e.currentTarget.value) })} /></label> : null}
             <Select label="Mes del último recibo" value={String(input.billedMonth)} onChange={(v) => patch({ billedMonth: Number(v) })} options={MONTH_NAMES.map((m, i) => ({ value: String(i + 1), label: m }))} />
-            <Num label="Incremento anual de tarifa" suffix="(0.07 = 7 %)" value={input.annualIncrease} onChange={(v) => patch({ annualIncrease: v })} step={0.01} />
+            <Num label="Incremento anual de tarifa" suffix="(0.07 = 7 %)" min={0} max={1} value={input.annualIncrease} onChange={(v) => patch({ annualIncrease: v })} step={0.01} />
             <Select label="Tipo de medidor" value={input.meterType ?? "Digital"} onChange={(v) => patch({ meterType: v })} options={[{ value: "Digital", label: "Digital" }, { value: "Analógico", label: "Analógico" }]} />
             <Num label="Fases" value={input.phases} onChange={(v) => patch({ phases: v })} />
             <Num label="Tensión F-F" suffix="V" value={input.voltage} onChange={(v) => patch({ voltage: v })} />
             <Text label="Configuración eléctrica" value={input.electricalConfig} onChange={(v) => patch({ electricalConfig: v })} />
           </Section>
-          <Section title="Historial de consumo" hint={`12 periodos, el más reciente (${monthLabel(input.billedMonth, 0)}) primero`}>
+          <Section title="Historial de consumo" hint={bimonthly ? `6 recibos bimestrales; el más reciente (${monthLabel(input.billedMonth, 0)}) primero. Los meses intermedios van en cero, como en el libro` : `12 recibos mensuales, el más reciente (${monthLabel(input.billedMonth, 0)}) primero`}>
             <div className="solar-months solar-wide">
-              {input.consumptionKwh.map((kwh, i) => (
-                <div className="solar-month" key={i}>
-                  <span>{monthLabel(input.billedMonth, i)}</span>
-                  <input aria-label={`kWh periodo ${i + 1}`} type="number" inputMode="decimal" value={kwh} onChange={(e) => setArray("consumptionKwh", i, Number(e.currentTarget.value || 0))} />
-                  {isInd ? <input aria-label={`kW periodo ${i + 1}`} type="number" inputMode="decimal" placeholder="kW" value={input.demandKw?.[i] ?? 0} onChange={(e) => setArray("demandKw", i, Number(e.currentTarget.value || 0))} /> : null}
-                </div>
-              ))}
+              {input.consumptionKwh.map((kwh, i) => {
+                const skipped = bimonthly && i % 2 === 1;
+                return (
+                  <div className={`solar-month ${skipped ? "solar-month-skipped" : ""}`} key={i}>
+                    <span>{monthLabel(input.billedMonth, i)}{skipped ? " · no facturado" : ""}</span>
+                    <input aria-label={`kWh ${monthLabel(input.billedMonth, i)}`} disabled={skipped} min={0} type="number" inputMode="decimal" value={skipped ? 0 : kwh} onChange={(e) => setArray("consumptionKwh", i, Number(e.currentTarget.value || 0))} />
+                  </div>
+                );
+              })}
             </div>
             {isInd ? (
               <>
@@ -171,7 +185,7 @@ export function SolarQuoteWorkspace({ catalog, versions, initial, defaults, exam
                 <Num label="kW punta" value={input.kwPeak} onChange={(v) => patch({ kwPeak: v })} />
                 <Num label="kW semipunta" value={input.kwSemiPeak} onChange={(v) => patch({ kwSemiPeak: v })} />
                 <Num label="kVArh del último recibo" value={input.kvarh} onChange={(v) => patch({ kvarh: v })} />
-                <Num label="Factor de potencia objetivo" value={input.targetPowerFactor ?? 0.96} onChange={(v) => patch({ targetPowerFactor: v })} step={0.01} />
+                <Num label="Factor de potencia objetivo" min={0.5} max={1} value={input.targetPowerFactor ?? 0.96} onChange={(v) => patch({ targetPowerFactor: v })} step={0.01} />
               </>
             ) : null}
           </Section>
@@ -187,15 +201,15 @@ export function SolarQuoteWorkspace({ catalog, versions, initial, defaults, exam
                 <Num label="Inclinación" suffix="° (múltiplos de 5)" value={o.inclination} onChange={(v) => { const arr = [...input.orientations]; arr[i] = { ...o, inclination: v }; patch({ orientations: arr }); }} step={5} />
               </div>
             ))}
-            <Num label="Degradación anual" suffix="(0.0042 = 0.42 %)" value={input.degradation} onChange={(v) => patch({ degradation: v })} step={0.0001} />
+            <Num label="Degradación anual" suffix="(0.0042 = 0.42 %)" min={0} max={0.2} value={input.degradation} onChange={(v) => patch({ degradation: v })} step={0.0001} />
             {[0, 1, 2, 3, 4].map((i) => {
               const sel = input.inverters[i];
               if (i > 0 && !input.inverters[i - 1]?.model) return null;
               return (
                 <div className="solar-inline solar-wide" key={i}>
                   <strong>Inversor {i + 1}</strong>
-                  <Select label="Modelo" value={sel?.model ?? ""} onChange={(v) => { const arr = [...input.inverters]; arr[i] = { model: v, quantity: sel?.quantity || 1 }; patch({ inverters: arr.filter((x, k) => x.model || k === 0) }); }} options={inverterOptions} wide />
-                  <Num label="Cantidad" value={sel?.quantity ?? 0} onChange={(v) => { const arr = [...input.inverters]; arr[i] = { model: sel?.model ?? "", quantity: v }; patch({ inverters: arr }); }} />
+                  <Select label="Modelo" value={sel?.model ?? ""} onChange={(v) => { const arr = [...input.inverters]; arr[i] = { model: v, quantity: sel?.quantity || 1 }; patch({ inverters: arr.filter((x) => x.model) }); }} options={inverterOptions} wide />
+                  <Num label="Cantidad" min={1} value={sel?.quantity ?? 0} onChange={(v) => { const arr = [...input.inverters]; arr[i] = { model: sel?.model ?? "", quantity: v }; patch({ inverters: arr }); }} />
                 </div>
               );
             })}
@@ -211,15 +225,15 @@ export function SolarQuoteWorkspace({ catalog, versions, initial, defaults, exam
           <Section title="Servicios adicionales" open={false}>
             {input.services.map((s, i) => (
               <div className="solar-inline solar-wide" key={i}>
-                <Toggle label="" value={s.enabled} onChange={(v) => { const arr = [...input.services]; arr[i] = { ...s, enabled: v }; patch({ services: arr }); }} />
-                <Text label="Concepto" value={s.concept || DEFAULT_SERVICES[i] || ""} onChange={(v) => { const arr = [...input.services]; arr[i] = { ...s, concept: v }; patch({ services: arr }); }} wide />
+                <Toggle label={`Incluir servicio ${i + 1}`} value={s.enabled} onChange={(v) => { const arr = [...input.services]; arr[i] = { ...s, enabled: v }; patch({ services: arr }); }} />
+                <Text label="Concepto" value={s.concept} onChange={(v) => { const arr = [...input.services]; arr[i] = { ...s, concept: v }; patch({ services: arr }); }} wide />
                 <Num label="Costo" suffix="MXN" value={s.costMxn} onChange={(v) => { const arr = [...input.services]; arr[i] = { ...s, costMxn: v }; patch({ services: arr }); }} />
               </div>
             ))}
           </Section>
           <Section title="Precio y condiciones">
             <Select label="Moneda de la oferta" value={input.currency ?? "MXN"} onChange={(v) => patch({ currency: v })} options={[{ value: "MXN", label: "MXN" }, { value: "USD", label: "USD" }]} />
-            <Num label="Tipo de cambio" suffix="MXN/USD" value={input.exchangeRate} onChange={(v) => patch({ exchangeRate: v })} step={0.01} />
+            <Num label="Tipo de cambio" suffix="MXN/USD" min={0.01} value={input.exchangeRate} onChange={(v) => patch({ exchangeRate: v })} step={0.01} />
             <Num label="Costo sin IVA por watt" suffix="MXN/W" value={input.pricePerWatt} onChange={(v) => patch({ pricePerWatt: v })} step={0.01} />
             <div className="projects-field"><span>Precio sugerido</span><div className="solar-suggested"><strong>{result ? `${n2(result.pricing.suggestedPricePerWatt)} MXN/W` : "—"}</strong>{result ? <button className="projects-button secondary" type="button" onClick={() => patch({ pricePerWatt: Math.round(result.pricing.suggestedPricePerWatt * 100) / 100 })}>Usar</button> : null}</div></div>
             <Num label="Factor de utilidad" suffix="(0.5 = 50 %)" value={input.utilityFactor} onChange={(v) => patch({ utilityFactor: v })} step={0.05} />
@@ -255,19 +269,19 @@ export function SolarQuoteWorkspace({ catalog, versions, initial, defaults, exam
                     <Metric label="Sistema" value={`${n2(result.systemKw)} kW`} note={`${result.modulesTotal} módulos de ${result.modulePowerW} W`} />
                     <Metric label="Generación anual" value={`${n0(result.annualGeneration)} kWh`} note={`cobertura ${pct(result.coverage)} de ${n0(result.annualConsumption)} kWh`} />
                     <Metric label="Recibo anual sin FV" value={money(result.bill.annualWithout)} note={`tarifa ${result.bill.tariff}`} />
-                    <Metric label="Recibo anual con FV" value={money(result.bill.annualWith)} note={`ahorro ${pct(result.bill.savingsShare)}`} tone="good" />
+                    <Metric label="Recibo anual con FV" value={money(result.bill.annualWith)} note={result.bill.annualWith > result.bill.annualWithout ? "sin ahorro con estos datos" : `ahorro ${pct(result.bill.savingsShare)}`} tone={result.bill.annualWith > result.bill.annualWithout ? "bad" : "good"} />
                     <Metric label="Precio de contado" value={money(result.pricing.cashPrice)} note={`${n2(input.pricePerWatt)} MXN/W · sugerido ${n2(result.pricing.suggestedPricePerWatt)}`} />
-                    <Metric label="TIR" value={pct(result.projection.irr)} note={`retorno ${result.projection.paybackTotal.toFixed(2)} años`} tone="good" />
+                    <Metric label="TIR" value={result.projection.recovers ? pct(result.projection.irr) : "—"} note={paybackLabel(result)} tone={result.projection.recovers && result.projection.irr > 0 ? "good" : "bad"} />
                     <Metric label="Módulos para cubrir el consumo" value={String(result.modulesNeeded)} note={`${n2(result.systemNeededKw)} kW necesarios`} />
                     <Metric label="Deducción fiscal" value={money(result.projection.deduction)} note={input.taxDeduction ? "ISR sobre costo sin IVA" : "no aplicada"} />
                     {result.powerFactor != null ? <Metric label="Factor de potencia" value={`${result.powerFactor.toFixed(2)} %`} note={result.powerFactor < 90 ? "penalización CFE" : "bonificación CFE"} tone={result.powerFactor < 90 ? "bad" : "good"} /> : null}
                   </div>
                   {result.demandWarning ? <div className="projects-notice" data-tone="warning">{result.demandWarning}</div> : null}
-                  {inverterWarnings.map((w) => <div className="projects-notice" data-tone="warning" key={w}>{w}</div>)}
+                  {[...result.warnings, ...inverterWarnings].map((w) => <div className="projects-notice" data-tone="warning" key={w}>{w}</div>)}
                   <div className="projects-table-wrap">
                     <table className="projects-table">
-                      <thead><tr><th>Inversor</th><th className="num">Cantidad</th><th className="num">Mín. módulos</th><th className="num">Máx. módulos</th><th className="num">Pmax FV</th></tr></thead>
-                      <tbody>{result.inverters.map((i) => <tr key={i.model}><td>{i.model}</td><td className="num">{i.quantity}</td><td className="num">{i.minModules}</td><td className="num">{i.maxModules}</td><td className="num">{i.inverter ? `${n0(i.inverter.pmaxFvW)} W` : "—"}</td></tr>)}</tbody>
+                      <thead><tr><th scope="col">Inversor</th><th className="num" scope="col">Cantidad</th><th className="num" scope="col">Mín. módulos</th><th className="num" scope="col">Máx. módulos</th><th className="num" scope="col">Pmax FV</th></tr></thead>
+                      <tbody>{result.inverters.map((i, idx) => <tr key={`${i.model}-${idx}`}><td>{i.model}</td><td className="num">{i.quantity}</td><td className="num">{i.minModules}</td><td className="num">{i.maxModules}</td><td className="num">{i.inverter ? `${n0(i.inverter.pmaxFvW)} W` : "—"}</td></tr>)}</tbody>
                     </table>
                   </div>
                   <p className="projects-help">Catálogos: {Object.entries(versions).map(([k, v]) => `${k.replace("solar_", "")} ${v.source === "catalog" ? `${v.name} v${v.version}` : "libro"}`).join(" · ")}</p>
@@ -311,7 +325,7 @@ export function SolarQuoteWorkspace({ catalog, versions, initial, defaults, exam
                     <thead><tr><th>Año</th><th className="num">Pago sin FV</th><th className="num">Producción</th><th className="num">Pago con FV</th><th className="num">Ahorro</th><th className="num">Acumulado</th><th className="num">Flujo</th></tr></thead>
                     <tbody>{result.projection.years.map((y) => <tr key={y.year}><td>{y.year}</td><td className="num">{money(y.payment)}</td><td className="num">{n0(y.production)} kWh</td><td className="num">{money(y.paymentWithPv)}</td><td className="num">{money(y.savings)}</td><td className="num">{money(y.cumulative)}</td><td className="num">{money(y.cashFlow)}</td></tr>)}</tbody>
                   </table>
-                  <p className="projects-help">TIR {pct(result.projection.irr)} · retorno {result.projection.paybackYears} años + {result.projection.paybackMonths.toFixed(1)} meses · deducción {money(result.projection.deduction)} en el año 1.</p>
+                  <p className="projects-help">TIR {result.projection.recovers ? pct(result.projection.irr) : "no aplica"} · {paybackLabel(result)} · deducción {money(result.projection.deduction)} en el año 1.</p>
                 </div>
               ) : null}
             </>

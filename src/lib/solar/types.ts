@@ -150,7 +150,10 @@ export type GenerationResult = {
   consumptionByMonth: number[];
   /** P49:P60: generación del periodo facturado por mes calendario (bimestral suma dos meses). */
   periodGeneration: number[];
-  annual: number; annualConsumption: number; coverage: number;
+  annual: number; annualConsumption: number;
+  /** S45: cobertura topada a 1. */
+  coverageCapped: number;
+  warnings: string[];
   parameters: { performanceRatio: number; safetyMargin: number; loss1: number; loss2: number };
 };
 
@@ -173,6 +176,8 @@ export type ProjectionYear = { year: number; consumption: number; payment: numbe
 export type ProjectionResult = {
   cost: number; deduction: number; irr: number; years: ProjectionYear[];
   paybackYears: number; paybackFraction: number; paybackTotal: number; paybackMonths: number;
+  /** false cuando el ahorro acumulado no alcanza el costo en 30 años o el ahorro es nulo o negativo. */
+  recovers: boolean;
 };
 
 export type BomLine = { concept: string; brand: string | null; powerW: number | null; quantity: number; unitUsd: number; totalUsd: number };
@@ -194,4 +199,6 @@ export type QuoteResult = {
   pricing: PricingResult;
   projection: ProjectionResult;
   powerFactor?: number | null;
+  /** Avisos de captura (bimestral con meses de más, inclinación sin Factor K, inversor desconocido, fechas). */
+  warnings: string[];
 };
