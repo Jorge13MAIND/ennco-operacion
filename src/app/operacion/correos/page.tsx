@@ -26,6 +26,9 @@ import { operationalLabel } from "@/lib/operations/presentation";
 
 export const dynamic = "force-dynamic";
 
+/** La pantalla Correos solo asoma la actividad; la tabla completa vive en /operacion/correos/actividad. */
+const RECENT_ACTIVITY_ROWS = 12;
+
 const stamp = new Intl.DateTimeFormat("es-MX", { dateStyle: "short", timeStyle: "short", timeZone: "America/Mexico_City" });
 const dayStamp = new Intl.DateTimeFormat("es-MX", { weekday: "short", day: "numeric", month: "short", timeZone: "America/Mexico_City" });
 
@@ -269,10 +272,10 @@ export default async function CorreosPage() {
       <section className="panel">
         <div className="panel-head portal-panel-head">
           <div>
-            <h2>Actividad</h2>
-            <p>Lo que salió, lo que entró y lo que falló. Último tick: {overview.last_tick ? `${overview.last_tick.outcome} · ${stamp.format(new Date(overview.last_tick.created_at))}` : "sin ticks"}.</p>
+            <h2>Actividad reciente</h2>
+            <p>Los últimos movimientos del motor. Último tick: {overview.last_tick ? `${overview.last_tick.outcome} · ${stamp.format(new Date(overview.last_tick.created_at))}` : "sin ticks"}. La lista completa, con filtros por buzón, toque, estado y campaña, está en <Link href={"/operacion/correos/actividad" as Route}>Actividad</Link>.</p>
           </div>
-          <span className="badge">{overview.recent_messages.length} registros</span>
+          <Link className="button secondary" href={"/operacion/correos/actividad" as Route}>Ver toda la actividad</Link>
         </div>
         {overview.recent_messages.length === 0 ? (
           <div className="empty-state"><strong>Sin actividad</strong><p>El motor no ha reclamado ningún correo todavía.</p></div>
@@ -281,7 +284,7 @@ export default async function CorreosPage() {
             <table>
               <thead><tr><th>Cuándo</th><th>Tipo</th><th>Buzón</th><th>Contraparte</th><th>Asunto</th><th>Estado</th></tr></thead>
               <tbody>
-                {overview.recent_messages.map((message) => (
+                {overview.recent_messages.slice(0, RECENT_ACTIVITY_ROWS).map((message) => (
                   <tr key={message.message_id}>
                     <td data-label="Cuándo">{stamp.format(new Date(message.sent_at ?? message.created_at))}</td>
                     <td data-label="Tipo">{message.kind === "INBOUND" ? "Respuesta recibida" : message.kind === "REPLY" ? `Respuesta enviada${message.cc && message.cc.length > 0 ? ` · cc ${message.cc.join(", ")}` : ""}` : `Toque ${message.touch_number ?? "?"}`}</td>

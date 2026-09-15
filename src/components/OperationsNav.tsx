@@ -28,6 +28,7 @@ type NavKey =
   | "home"
   | "correos"
   | "estadisticas"
+  | "actividad"
   | "inteligencia"
   | "projects-master"
   | "projects-list"
@@ -53,6 +54,7 @@ const groups: Array<{
     items: [
       { key: "correos", href: "/operacion/correos" },
       { key: "estadisticas", href: "/operacion/correos/estadisticas" },
+      { key: "actividad", href: "/operacion/correos/actividad" },
       { key: "respuestas", href: "/operacion/respuestas" },
       { key: "leads", href: "/operacion/leads" },
       { key: "empresas", href: "/operacion/empresas" },
@@ -85,6 +87,7 @@ function itemLabel(key: NavKey): string {
   if (key === "home") return "Hoy";
   if (key === "correos") return "Correos";
   if (key === "estadisticas") return "Estadísticas";
+  if (key === "actividad") return "Actividad";
   if (key === "inteligencia") return "Inteligencia";
   if (key === "projects-master") return "Control Maestro";
   if (key === "projects-list") return "Proyectos";

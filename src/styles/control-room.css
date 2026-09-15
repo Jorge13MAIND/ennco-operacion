@@ -1148,3 +1148,40 @@ main.auth-shell .mfa-secret { border-radius: 10px; background: #f5f5f7; font-fam
 @media (max-width: 900px) {
   .cr-root .cr-replies { grid-template-columns: 1fr; padding-inline: 16px; }
 }
+
+/* Actividad del carril (/operacion/correos/actividad) */
+.cr-root .cr-activity-search input {
+  min-width: 240px;
+  padding: 8px 10px;
+  border: 1px solid var(--cr-line);
+  border-radius: 8px;
+  font: inherit;
+  color: var(--cr-ink);
+  background: #fff;
+}
+.cr-root .cr-activity-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+.cr-root .cr-activity-count {
+  padding: 12px 14px;
+  border: 1px solid var(--cr-line);
+  border-radius: 12px;
+  background: #fff;
+}
+.cr-root .cr-activity-count h3 { margin: 0 0 6px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cr-muted); }
+.cr-root .cr-activity-count ul { margin: 0; padding: 0; list-style: none; }
+.cr-root .cr-activity-count li { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; font-size: 0.82rem; border-top: 1px solid var(--cr-line); }
+.cr-root .cr-activity-count li:first-child { border-top: 0; }
+.cr-root .cr-activity-count li strong { font-variant-numeric: tabular-nums; }
+.cr-root .cr-activity-table { width: 100%; }
+.cr-root .cr-activity-table th, .cr-root .cr-activity-table td { vertical-align: top; }
+.cr-root .cr-activity-table .num { text-align: right; white-space: nowrap; }
+.cr-root .cr-activity-table th:nth-child(1), .cr-root .cr-activity-table td:nth-child(1) { white-space: nowrap; }
+.cr-root .cr-activity-table th:nth-child(6), .cr-root .cr-activity-table td:nth-child(6) { max-width: 320px; }
+@media (max-width: 720px) {
+  .cr-root .cr-activity-search input { min-width: 0; width: 100%; }
+  .cr-root .cr-activity-table .num { text-align: left; }
+}
