@@ -1,0 +1,139 @@
+{
+ "city": "Querétaro",
+ "kvarh": 0,
+ "addIva": true,
+ "kwBase": 0,
+ "kwPeak": 0,
+ "period": "Bimestral",
+ "phases": 2,
+ "kwhBase": 0,
+ "kwhPeak": 0,
+ "segment": "RESIDENTIAL",
+ "voltage": 220,
+ "advances": [
+  0.6,
+  0.2,
+  0.15,
+  0.05
+ ],
+ "currency": "MXN",
+ "customer": {
+  "name": "Grant Keegan",
+  "subtitle": "Servicio",
+  "supplier": "Comisión Federal de Electricidad"
+ },
+ "demandKw": null,
+ "discount": 0,
+ "language": "Español",
+ "services": [
+  {
+   "concept": "Gestión de Contrato de Interconexión (GE)",
+   "costMxn": 1200,
+   "enabled": true
+  },
+  {
+   "concept": "Medidor Bidireccional",
+   "costMxn": 0,
+   "enabled": false
+  },
+  {
+   "concept": "",
+   "costMxn": 0,
+   "enabled": false
+  },
+  {
+   "concept": "",
+   "costMxn": 0,
+   "enabled": false
+  },
+  {
+   "concept": "",
+   "costMxn": 0,
+   "enabled": false
+  },
+  {
+   "concept": "",
+   "costMxn": 0,
+   "enabled": false
+  },
+  {
+   "concept": "",
+   "costMxn": 0,
+   "enabled": false
+  }
+ ],
+ "financing": [
+  {
+   "share": 0.15,
+   "months": 4
+  },
+  {
+   "share": 0.2,
+   "months": 2
+  },
+  {
+   "share": 0.15,
+   "months": 4
+  }
+ ],
+ "inverters": [
+  {
+   "model": "Growatt (MIN 4600TL-X2)",
+   "quantity": 1
+  },
+  {
+   "model": "Growatt (MIN 10000TL-X2)",
+   "quantity": 1
+  }
+ ],
+ "meterType": "Digital",
+ "startTime": "2 a 3 semanas",
+ "baseTariff": "1C",
+ "generation": null,
+ "kwSemiPeak": 0,
+ "billedMonth": 9,
+ "degradation": 0.0042,
+ "kwhSemiPeak": 0,
+ "moduleModel": "Longi - LR5-72HTH-585M (585W)",
+ "deliveryTime": "2 a 3 semanas",
+ "exchangeRate": 20,
+ "orientations": [
+  {
+   "azimuth": 0,
+   "modules": 4,
+   "inclination": 15
+  }
+ ],
+ "pricePerWatt": 18.25,
+ "summerTariff": true,
+ "taxDeduction": false,
+ "validityDays": 30,
+ "currentTariff": "1",
+ "financingBase": 0,
+ "utilityFactor": 0.5,
+ "annualIncrease": 0.07,
+ "consumptionKwh": [
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "kwIntermediate": 0,
+ "mountingSystem": "Lámina Acanalada",
+ "kwhIntermediate": 0,
+ "periodEndSerial": null,
+ "electricalConfig": "2F-3H@220/127 V 60 Hz",
+ "orientationCount": 1,
+ "periodStartSerial": null,
+ "targetPowerFactor": 0.96,
+ "contractedDemandKw": null,
+ "structureWarrantyYears": 20
+}

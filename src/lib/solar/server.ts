@@ -34,9 +34,14 @@ export const SOLAR_CATALOG_CATEGORIES = {
 export type SolarCatalogCategory = keyof typeof SOLAR_CATALOG_CATEGORIES;
 export type CatalogVersions = Record<string, { name: string; version: number; source: "workbook" | "catalog" }>;
 
+/** Versiones cuando todo viene del libro. Sirve de respaldo si Catálogos no responde. */
+export function workbookVersions(): CatalogVersions {
+  return Object.fromEntries(Object.keys(SOLAR_CATALOG_CATEGORIES).map((c) => [c, { name: "Libro v1.0.1", version: 0, source: "workbook" as const }]));
+}
+
 export async function loadSolarCatalog(access: OperationsAccessContext): Promise<{ catalog: SolarCatalog; versions: CatalogVersions }> {
   const catalog = workbookCatalog();
-  const versions: CatalogVersions = Object.fromEntries(Object.keys(SOLAR_CATALOG_CATEGORIES).map((c) => [c, { name: "Libro v1.0.1", version: 0, source: "workbook" }]));
+  const versions: CatalogVersions = workbookVersions();
   if (access.evidenceClass !== "live" || !access.organizationId) return { catalog, versions };
   try {
     const entries = await listCatalogs(access);
