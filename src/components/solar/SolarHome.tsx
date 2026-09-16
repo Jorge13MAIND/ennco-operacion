@@ -1,7 +1,7 @@
 import type { Route } from "next";
 import Link from "next/link";
 
-import { PageHeader, Panel, money } from "@/components/projects/ui";
+import { PageHeader, Panel } from "@/components/projects/ui";
 import type { CatalogVersions, StoredQuote } from "@/lib/solar/server";
 import type { Segment } from "@/lib/solar/types";
 
@@ -23,7 +23,12 @@ function fecha(value: string | null | undefined): string {
 const pct = (v: number | null | undefined) => (typeof v === "number" && Number.isFinite(v) ? `${(v * 100).toFixed(1)} %` : "—");
 const num = (v: number | null | undefined, suf = "") => (typeof v === "number" && Number.isFinite(v) ? `${Math.round(v).toLocaleString("es-MX")}${suf}` : "—");
 const dec = (v: number | null | undefined, d = 2, suf = "") => (typeof v === "number" && Number.isFinite(v) ? `${v.toFixed(d)}${suf}` : "—");
-const mxn = (v: number | null | undefined) => (typeof v === "number" && Number.isFinite(v) ? money(v) : "—");
+/** Moneda formateada aquí mismo: `money` de projects/ui vive en un módulo de navegador y no
+ *  puede llamarse desde este componente de servidor (era la causa del fallo con cotizaciones guardadas). */
+const mxn = (v: number | null | undefined) =>
+  typeof v === "number" && Number.isFinite(v)
+    ? new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(v)
+    : "—";
 
 /**
  * Íconos de los tres segmentos: casa, local comercial y planta, cada uno con sus paneles
