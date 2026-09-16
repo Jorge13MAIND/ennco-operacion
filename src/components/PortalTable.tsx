@@ -7,7 +7,6 @@ import {
   CompleteTaskButton,
   IncidentTransitionAction,
   LeadQualificationAction,
-  OpportunityTransitionAction,
   ReplyReviewAction,
 } from "@/components/OperationsActions";
 import { operationalLabel } from "@/lib/operations/presentation";
@@ -23,7 +22,7 @@ export function PortalRowsTable({ module, actionKind, evidenceClass }: {
   evidenceClass?: "synthetic_demo" | "live";
 }) {
   const tableId = `portal-table-${(actionKind ?? module.title).toLocaleLowerCase("es-MX").replace(/[^a-z0-9]+/gu, "-")}`;
-  const showsAction = evidenceClass === "live" && ["alertas", "respuestas", "leads", "pipeline", "aprobaciones"].includes(actionKind ?? "");
+  const showsAction = evidenceClass === "live" && ["alertas", "respuestas", "leads", "aprobaciones"].includes(actionKind ?? "");
   return (
     <section className="panel">
       <div className="panel-head portal-panel-head">
@@ -60,7 +59,6 @@ export function PortalRowsTable({ module, actionKind, evidenceClass }: {
                   {showsAction ? (
                     <td data-label="Acción">
                       {actionKind === "leads" ? <LeadQualificationAction leadId={item.id} qualified={item.values.qualified === "true"} /> : null}
-                      {actionKind === "pipeline" ? <OpportunityTransitionAction meetingId={item.values.meeting_id} opportunityId={item.id} opportunityStage={item.status} /> : null}
                       {actionKind === "respuestas" && item.values.reviewable === "true" ? <ReplyReviewAction providerEventId={item.id} /> : null}
                       {actionKind === "aprobaciones" && item.values.actionable === "true"
                         ? <ApprovalDecisionAction requestId={item.id} subjectSha256={item.values.subject_sha256 ?? ""} />

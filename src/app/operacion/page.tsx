@@ -64,7 +64,6 @@ export default async function OperationsPage() {
               <Link href={"/operacion/alertas" as Route}><strong>Atender incidente</strong><span>Acusar, contener y documentar recuperación</span></Link>
               <Link href={"/operacion/respuestas" as Route}><strong>Responder interés</strong><span>Revisar bandeja y detener secuencias</span></Link>
               <Link href={"/operacion/leads" as Route}><strong>Calificar lead</strong><span>Aplicar la definición contractual</span></Link>
-              <Link href={"/operacion/pipeline" as Route}><strong>Actualizar oportunidad</strong><span>Registrar valor y siguiente acción</span></Link>
               <Link href={"/operacion/infraestructura" as Route}><strong>Revisar infraestructura</strong><span>Dominios, buzones, warmup y presupuesto</span></Link>
             </div>
           </section>

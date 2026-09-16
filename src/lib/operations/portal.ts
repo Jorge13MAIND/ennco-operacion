@@ -17,7 +17,7 @@ import {
   type ControlCadenceCode,
   type ControlCadenceHealth,
 } from "@/lib/operations/cadence";
-import { civilDateValue, parseCapacityReadModel } from "@/lib/operations/capacity";
+import { parseCapacityReadModel } from "@/lib/operations/capacity";
 import { operationsHealthResultSchema } from "@/lib/operations/sla";
 import { parseResearchPortalReadModel } from "@/lib/research/portal";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -28,10 +28,8 @@ export const OPERATION_MODULE_KEYS = [
   "respuestas",
   "leads",
   "empresas",
-  "precotizaciones",
   "infraestructura",
   "campanas",
-  "pipeline",
   "roadmap",
   "aprobaciones",
   "reportes",
@@ -47,10 +45,8 @@ export const OPERATION_MODULE_LABELS: Record<OperationModuleKey, string> = {
   respuestas: "Respuestas",
   leads: "Leads",
   empresas: "Empresas",
-  precotizaciones: "Precotizaciones",
   infraestructura: "Infraestructura",
   campanas: "Campañas",
-  pipeline: "Pipeline",
   roadmap: "Roadmap",
   aprobaciones: "Aprobaciones",
   reportes: "Reportes",
@@ -264,23 +260,6 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         elegibilidad: "RESEARCH_ONLY_HOLD",
       })],
     },
-    precotizaciones: {
-      title: "Precotizaciones",
-      description: "Folios, versión del modelo y estado de revisión. Ningún rango es precio contractual.",
-      emptyState: "No hay precotizaciones reales.",
-      columns: [
-        { key: "folio", label: "Folio" },
-        { key: "necesidad", label: "Necesidad" },
-        { key: "modelo", label: "Modelo" },
-        { key: "estado", label: "Estado" },
-      ],
-      rows: [row("prequote-synthetic-1", sampleBadge, {
-        folio: "ENN-PRE-DEMO0001",
-        necesidad: "Solar nuevo",
-        modelo: "ENNCO-PREQ-2026-08-PACO-01",
-        estado: "Modelo validado. Resultado preliminar",
-      })],
-    },
     infraestructura: {
       title: "Infraestructura comercial",
       description: "Propiedad, presupuesto, dominios, buzones y evidencia live. Un activo configurado no equivale a autorización.",
@@ -322,20 +301,6 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         t0: "0/100 entregas válidas",
         envio: "HOLD",
       })],
-    },
-    pipeline: {
-      title: "Pipeline operativo",
-      description: "Muestra todas las oportunidades. Sólo las que tienen comprador, dolor, impacto, plazo, valor y siguiente acción cuentan como pipeline estricto.",
-      emptyState: "No hay oportunidades reales.",
-      columns: [
-        { key: "cuenta", label: "Cuenta" },
-        { key: "etapa", label: "Etapa" },
-        { key: "criterios", label: "Criterios" },
-        { key: "valor", label: "Valor" },
-        { key: "capacidad", label: "Capacidad" },
-        { key: "siguiente", label: "Siguiente acción" },
-      ],
-      rows: [],
     },
     roadmap: {
       title: "Roadmap E2E",
@@ -723,7 +688,6 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     client.from("messages").select("id,contact_id,status,subject,body_text,created_at", { count: "exact" }).eq("organization_id", organizationId).eq("direction", "INBOUND").order("created_at", { ascending: false }).limit(100),
     client.from("provider_events").select("id,message_id,event_kind,reply_classification,processing_status,observed_at").eq("organization_id", organizationId).order("observed_at", { ascending: false }).limit(100),
     client.from("leads").select("id,account_id,contact_id,status,contractual_qualified,qualification_reason,created_at", { count: "exact" }).eq("organization_id", organizationId).order("created_at", { ascending: false }).limit(100),
-    client.from("prequotes").select("id,folio,account_name,need_type,evidence_class,created_at").eq("organization_id", organizationId).order("created_at", { ascending: false }).limit(100),
     client.from("campaigns").select("id,name,status,manifest_sha256,shadow_canary_decision,updated_at").eq("organization_id", organizationId).order("updated_at", { ascending: false }).limit(100),
     client.from("opportunities").select("id,account_id,stage,value_mxn,next_action,next_action_at,economic_buyer,active_pain,business_impact,timing_under_90_days").eq("organization_id", organizationId).order("updated_at", { ascending: false }).limit(100),
     client.from("meetings").select("id,opportunity_id,scheduled_at,held_at,attendance_verified").eq("organization_id", organizationId).order("scheduled_at", { ascending: true }).limit(100),
@@ -750,7 +714,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const failed = results.find((result) => result.error);
   if (failed?.error) throw new Error(`PORTAL_QUERY_FAILED:${failed.error.code ?? "UNKNOWN"}`);
 
-  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, prequotesResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult, monthlyReportsResult, reportIssuancesResult, recoveryExperimentsResult, handoffPackagesResult, handoffArtifactsResult, handoffChecksResult, handoffTrainingResult, finalAcceptancesResult, paymentsResult] = results;
+  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult, monthlyReportsResult, reportIssuancesResult, recoveryExperimentsResult, handoffPackagesResult, handoffArtifactsResult, handoffChecksResult, handoffTrainingResult, finalAcceptancesResult, paymentsResult] = results;
   const [capacitySchedulesSettled, capacityEvaluationSettled] = await capacityPromise;
   const [researchAccountsSettled, researchCandidatesSettled, researchDedupeSettled, researchAssessmentSettled] = await researchPromise;
   const [approvalRequestsSettled, operationalSlaSettled, operationsIncidentsSettled, operationsHealthSettled] = await operationsPromise;
@@ -842,8 +806,6 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     evaluationAvailable: capacityEvaluationResult !== null,
     evaluationData: capacityEvaluationResult?.data,
   });
-  const capacitySchedules = capacityReadModel.schedules;
-  const capacityInventoryReady = capacityReadModel.inventoryReady;
   const capacityEvaluation = capacityReadModel.evaluation;
   const researchReadModel = parseResearchPortalReadModel({
     accountsAvailable: researchAccountsResult !== null,
@@ -874,8 +836,6 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const accountById = new Map(accounts.map((item) => [textValue(item.id), item]));
   const contactById = new Map(contacts.map((item) => [textValue(item.id), item]));
   const eventByMessageId = new Map(events.map((item) => [textValue(item.message_id), item]));
-  const meetingByOpportunityId = new Map(meetings.map((item) => [textValue(item.opportunity_id), item]));
-  const capacityByOpportunityId = new Map(capacitySchedules.map((item) => [textValue(item.opportunity_id), item]));
   const accountName = (accountId: unknown) => textValue(accountById.get(textValue(accountId))?.legal_name);
   const contactName = (contactId: unknown) => textValue(contactById.get(textValue(contactId))?.full_name);
   const today = new Date();
@@ -919,12 +879,6 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       elegibilidad: "RESEARCH_ONLY_HOLD. 0 autorizados",
     });
   });
-  const prequoteRows = asRows(prequotesResult.data).map((prequote) => row(textValue(prequote.id), textValue(prequote.evidence_class), {
-    folio: textValue(prequote.folio),
-    necesidad: textValue(prequote.need_type),
-    modelo: "Ver resultado versionado",
-    estado: `Creada ${dateValue(prequote.created_at)}`,
-  }));
   const campaignRows = asRows(campaignsResult.data).map((campaign) => {
     const campaignId = textValue(campaign.id);
     const gates = releaseGates.filter((gate) => textValue(gate.campaign_id) === campaignId);
@@ -956,25 +910,6 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     });
   });
   const strictQualifiedOpportunities = opportunities.filter(isStrictQualifiedOpportunity);
-  const strictOpportunityIds = new Set(strictQualifiedOpportunities.map((opportunity) => textValue(opportunity.id)));
-  const pipelineRows = opportunities.map((opportunity) => {
-    const capacity = capacityByOpportunityId.get(textValue(opportunity.id));
-    return row(textValue(opportunity.id), textValue(opportunity.stage), {
-      cuenta: accountName(opportunity.account_id),
-      etapa: textValue(opportunity.stage),
-      criterios: strictOpportunityIds.has(textValue(opportunity.id)) ? "Estrictos completos" : "No cuenta todavía",
-      valor: Number(opportunity.value_mxn ?? 0) > 0
-        ? new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(Number(opportunity.value_mxn))
-        : "Sin valor verificado",
-      capacidad: !capacityInventoryReady
-        ? "Reserva no disponible"
-        : capacity ? `${civilDateValue(capacity.execution_date)}. Config v${capacity.config_version}` : "Sin reserva operativa",
-      siguiente: opportunity.next_action
-        ? `${textValue(opportunity.next_action)}. ${dateValue(opportunity.next_action_at)}`
-        : "Pendiente de registrar",
-      meeting_id: textValue(meetingByOpportunityId.get(textValue(opportunity.id))?.id, ""),
-    });
-  });
   const roadmapRows = asRows(roadmapResult.data).map((milestone) => row(textValue(milestone.id), textValue(milestone.status), {
     milestone: `${textValue(milestone.code)}. ${textValue(milestone.name)}`,
     gate: "Ver evidencia",
@@ -1240,10 +1175,8 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       respuestas: { ...base.modules.respuestas, rows: replyRows },
       leads: { ...base.modules.leads, rows: leadRows },
       empresas: { ...base.modules.empresas, rows: accountRows },
-      precotizaciones: { ...base.modules.precotizaciones, rows: prequoteRows },
       infraestructura: { ...base.modules.infraestructura, rows: providerInfrastructureRows },
       campanas: { ...base.modules.campanas, rows: campaignRows },
-      pipeline: { ...base.modules.pipeline, rows: pipelineRows },
       roadmap: { ...base.modules.roadmap, rows: roadmapRows },
       aprobaciones: { ...base.modules.aprobaciones, rows: approvalRows },
       reportes: {
