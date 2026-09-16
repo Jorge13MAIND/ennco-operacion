@@ -664,3 +664,25 @@
 .solar-bill td:first-child { white-space: nowrap; }
 @media (max-width: 1100px) { .solar-layout { grid-template-columns: 1fr; } .solar-results { position: static; } }
 @media (max-width: 720px) { .solar-grid { grid-template-columns: 1fr; } .solar-months { grid-template-columns: repeat(2, minmax(0, 1fr)); } .solar-inline { grid-template-columns: 1fr 1fr; } .solar-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+
+/* Tarjetas de segmento del cotizador: ícono, antetítulo y nombre en tamaño de tarjeta.
+   El h3 no hereda el tamaño de titular de la marca, que aquí se leía enorme. */
+.solar-segment-card { gap: 14px; }
+.solar-segment-head { display: flex; align-items: center; gap: 12px; }
+.solar-segment-head > div { min-width: 0; }
+.solar-segment-card .projects-eyebrow { display: block; margin-bottom: 2px; }
+.solar-segment-card h3 { margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+.solar-segment-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid var(--cr-line-strong);
+  background: var(--cr-accent-soft, rgba(14, 116, 144, 0.1));
+  color: var(--cr-accent, #0e7490);
+}
+.solar-segment-card:hover .solar-segment-icon { border-color: var(--cr-accent); }
