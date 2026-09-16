@@ -1266,3 +1266,123 @@ main.auth-shell .mfa-secret { border-radius: 10px; background: #f5f5f7; font-fam
   .cr-root .cr-activity-count:hover,
   .cr-root .projects-metric:hover { transform: none; }
 }
+
+
+/* ---------- 15. Columna "Acción" de Buzones (15-sep-2026) ----------
+   Antes: motivo, dos botones y dos desplegables sueltos, apilados sin jerarquía y con el
+   campo desbordando la celda. Ahora: una sola pila con el motivo arriba, la pareja de
+   botones en su renglón (pausar en primario, apagar en tono de alerta) y los dos ajustes
+   avanzados como filas plegables separadas por una línea. Solo presentación: mismos
+   formularios, mismos campos y mismos envíos. */
+.cr-root td[data-label="Acción"] { min-width: 244px; }
+.cr-root .cr-mailbox-actions { display: grid; gap: 12px; align-content: start; min-width: 0; }
+
+.cr-root .cr-mailbox-actions .inline-operation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+.cr-root .cr-mailbox-actions .inline-operation > label {
+  display: grid;
+  gap: 5px;
+  flex: 1 0 100%;
+  min-width: 0;
+  color: var(--cr-muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.cr-root .cr-mailbox-actions .inline-operation > label input {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 11px;
+  border: 1px solid var(--cr-line-strong);
+  border-radius: 10px;
+  background: var(--cr-surface);
+  color: var(--cr-ink);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+}
+.cr-root .cr-mailbox-actions .inline-operation > label input:focus-visible {
+  border-color: var(--cr-accent);
+  outline: 2px solid var(--cr-accent-soft);
+  outline-offset: 1px;
+}
+.cr-root .cr-mailbox-actions .inline-operation > .text-button { flex: 1 1 auto; justify-content: center; min-width: 96px; }
+.cr-root .cr-mailbox-actions .inline-operation > .status,
+.cr-root .cr-mailbox-actions .inline-operation > .fine { flex: 1 0 100%; }
+
+/* "Apagar" (el único botón no-submit del formulario de estado) baja a tono de alerta discreto. */
+.cr-root .cr-mailbox-actions form > .text-button[type="button"] {
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  background-color: var(--cr-critical-bg);
+  background-image: none;
+  box-shadow: none;
+  color: var(--cr-critical-fg);
+}
+.cr-root .cr-mailbox-actions form > .text-button[type="button"]:hover,
+.cr-root .cr-mailbox-actions form > .text-button[type="button"]:focus-visible {
+  border-color: rgba(239, 68, 68, 0.45);
+  background-color: rgba(239, 68, 68, 0.18);
+  background-image: none;
+  box-shadow: none;
+  color: var(--cr-critical-fg);
+  filter: none;
+}
+
+.cr-root .cr-mailbox-more { display: grid; border-top: 1px solid var(--cr-line); }
+.cr-root .cr-mailbox-more > details { border-bottom: 1px solid var(--cr-line); }
+.cr-root .cr-mailbox-more > details:last-child { border-bottom: 0; }
+.cr-root .cr-mailbox-more > details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 2px;
+  border-radius: 8px;
+  color: var(--cr-body);
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-weight: 600;
+  list-style: none;
+  transition: color var(--transition);
+}
+.cr-root .cr-mailbox-more > details > summary::-webkit-details-marker { display: none; }
+.cr-root .cr-mailbox-more > details > summary::after {
+  color: var(--cr-muted);
+  content: "+";
+  font-family: var(--font-data, inherit);
+  font-size: 1rem;
+  line-height: 1;
+}
+.cr-root .cr-mailbox-more > details[open] > summary::after { content: "−"; }
+.cr-root .cr-mailbox-more > details > summary:hover { color: var(--cr-accent); }
+.cr-root .cr-mailbox-more > details.cr-mailbox-danger > summary:hover { color: var(--cr-critical-fg); }
+.cr-root .cr-mailbox-more > details[open] > summary { color: var(--cr-ink); }
+.cr-root .cr-mailbox-more .compact-operation-form,
+.cr-root .cr-mailbox-actions .compact-operation-form { min-width: 0; margin-top: 0; margin-bottom: 12px; }
+.cr-root .cr-mailbox-more .inline-operation { margin-bottom: 12px; }
+.cr-root .cr-mailbox-more details.cr-mailbox-danger .text-button[type="submit"] {
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  background-color: var(--cr-critical-bg);
+  background-image: none;
+  box-shadow: none;
+  color: var(--cr-critical-fg);
+}
+.cr-root .cr-mailbox-more details.cr-mailbox-danger .text-button[type="submit"]:hover,
+.cr-root .cr-mailbox-more details.cr-mailbox-danger .text-button[type="submit"]:focus-visible {
+  border-color: rgba(239, 68, 68, 0.45);
+  background-color: rgba(239, 68, 68, 0.18);
+  background-image: none;
+  box-shadow: none;
+  filter: none;
+}
+@media (max-width: 900px) {
+  .cr-root td[data-label="Acción"] { min-width: 0; }
+}

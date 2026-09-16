@@ -182,10 +182,16 @@ export default async function CorreosPage() {
                     <td data-label="Última actividad">{mailbox.last_error ? <span className="status blocked">{mailbox.last_error}</span> : `${mailbox.sent_total} enviados`}</td>
                     {canOperate ? (
                       <td data-label="Acción">
-                        {mailbox.status !== "KILLED" && !mailbox.credential_active ? <ConnectMailboxAction email={mailbox.normalized_email} mailboxId={mailbox.mailbox_id} /> : null}
-                        {mailbox.credential_active ? <MailboxStateAction canUnkill={screen.canApprove} mailboxId={mailbox.mailbox_id} status={mailbox.status} /> : null}
-                        {mailbox.credential_active ? <details><summary className="fine">Tope y rampa</summary><MailboxCapAction capMax={mailbox.cap_max} fixedCap={mailbox.fixed_cap} isClientPrimary={mailbox.is_client_primary} mailboxId={mailbox.mailbox_id} rampAnchorAt={mailbox.ramp_anchor_at ?? null} rampMode={mailbox.ramp_mode} rampSchedule={mailbox.ramp_schedule ?? null} /></details> : null}
-                        {mailbox.credential_active ? <details><summary className="fine">Desconectar</summary><RevokeMailboxAction mailboxId={mailbox.mailbox_id} /></details> : null}
+                        <div className="cr-mailbox-actions">
+                          {mailbox.status !== "KILLED" && !mailbox.credential_active ? <ConnectMailboxAction email={mailbox.normalized_email} mailboxId={mailbox.mailbox_id} /> : null}
+                          {mailbox.credential_active ? <MailboxStateAction canUnkill={screen.canApprove} mailboxId={mailbox.mailbox_id} status={mailbox.status} /> : null}
+                          {mailbox.credential_active ? (
+                            <div className="cr-mailbox-more">
+                              <details><summary>Tope y rampa</summary><MailboxCapAction capMax={mailbox.cap_max} fixedCap={mailbox.fixed_cap} isClientPrimary={mailbox.is_client_primary} mailboxId={mailbox.mailbox_id} rampAnchorAt={mailbox.ramp_anchor_at ?? null} rampMode={mailbox.ramp_mode} rampSchedule={mailbox.ramp_schedule ?? null} /></details>
+                              <details className="cr-mailbox-danger"><summary>Desconectar</summary><RevokeMailboxAction mailboxId={mailbox.mailbox_id} /></details>
+                            </div>
+                          ) : null}
+                        </div>
                       </td>
                     ) : null}
                   </tr>
