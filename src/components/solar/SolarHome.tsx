@@ -11,8 +11,19 @@ const SEGMENTS: Array<{ key: Segment; title: string; detail: string }> = [
   { key: "INDUSTRIAL", title: "Industrial", detail: "GDMTO, GDMTH y DIST en media tensión: base, intermedia y punta, demanda facturable y banco de capacitores." },
 ];
 const segmentLabel: Record<string, string> = { RESIDENTIAL: "Residencial", COMMERCIAL: "Comercial", INDUSTRIAL: "Industrial" };
-const stamp = new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeZone: "America/Mexico_City" });
-const pct = (v: number | undefined) => (typeof v === "number" ? `${(v * 100).toFixed(1)} %` : "—");
+const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+/** Fecha corta sin depender de la tabla de idiomas del servidor: una fila con un dato raro no debe tumbar la pantalla. */
+function fecha(value: string | null | undefined): string {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "—";
+  const p = new Date(d.getTime() - 6 * 3600_000); // hora del centro de México
+  return `${p.getUTCDate()} ${MESES[p.getUTCMonth()] ?? ""} ${p.getUTCFullYear()}`;
+}
+const pct = (v: number | null | undefined) => (typeof v === "number" && Number.isFinite(v) ? `${(v * 100).toFixed(1)} %` : "—");
+const num = (v: number | null | undefined, suf = "") => (typeof v === "number" && Number.isFinite(v) ? `${Math.round(v).toLocaleString("es-MX")}${suf}` : "—");
+const dec = (v: number | null | undefined, d = 2, suf = "") => (typeof v === "number" && Number.isFinite(v) ? `${v.toFixed(d)}${suf}` : "—");
+const mxn = (v: number | null | undefined) => (typeof v === "number" && Number.isFinite(v) ? money(v) : "—");
 
 /**
  * Íconos de los tres segmentos: casa, local comercial y planta, cada uno con sus paneles
@@ -92,19 +103,19 @@ export function SolarHome({ quotes, versions, live, storageError }: { quotes: St
                 <tr><th>Cotización</th><th>Segmento</th><th>Ciudad · tarifa</th><th className="num">Sistema</th><th className="num">Generación</th><th className="num">Recibo sin / con FV</th><th className="num">Precio</th><th className="num">TIR · retorno</th><th>Actualizada</th></tr>
               </thead>
               <tbody>
-                {quotes.map((q) => (
+                {quotes.map((raw) => { const q = { ...raw, summary: raw.summary ?? {} }; return (
                   <tr key={q.id}>
                     <td><Link href={`/operacion/proyectos/cotizar?cotizacion=${q.id}` as Route}><strong>{q.name}</strong></Link><br /><span className="projects-help">v{q.version} · {q.status}</span></td>
                     <td>{segmentLabel[q.segment] ?? q.segment}</td>
-                    <td>{q.summary.city ?? "—"}<br /><span className="projects-help">{q.summary.tariff ?? ""}</span></td>
-                    <td className="num">{q.summary.systemKw != null ? `${q.summary.systemKw.toFixed(2)} kW` : "—"}<br /><span className="projects-help">{q.summary.modules ?? "—"} módulos</span></td>
-                    <td className="num">{q.summary.annualGeneration != null ? `${Math.round(q.summary.annualGeneration).toLocaleString("es-MX")} kWh` : "—"}<br /><span className="projects-help">cobertura {pct(q.summary.coverage)}</span></td>
-                    <td className="num">{q.summary.annualWithout != null ? money(q.summary.annualWithout) : "—"}<br /><span className="projects-help">{q.summary.annualWith != null ? money(q.summary.annualWith) : "—"}</span></td>
-                    <td className="num">{q.summary.cashPrice != null ? money(q.summary.cashPrice) : "—"}</td>
-                    <td className="num">{pct(q.summary.irr)}<br /><span className="projects-help">{q.summary.paybackTotal != null ? `${q.summary.paybackTotal.toFixed(2)} años` : "—"}</span></td>
-                    <td>{stamp.format(new Date(q.updatedAt))}</td>
+                    <td>{q.summary?.city ?? "—"}<br /><span className="projects-help">{q.summary?.tariff ?? ""}</span></td>
+                    <td className="num">{dec(q.summary.systemKw, 2, " kW")}<br /><span className="projects-help">{q.summary?.modules ?? "—"} módulos</span></td>
+                    <td className="num">{num(q.summary.annualGeneration, " kWh")}<br /><span className="projects-help">cobertura {pct(q.summary?.coverage)}</span></td>
+                    <td className="num">{mxn(q.summary.annualWithout)}<br /><span className="projects-help">{mxn(q.summary.annualWith)}</span></td>
+                    <td className="num">{mxn(q.summary.cashPrice)}</td>
+                    <td className="num">{pct(q.summary?.irr)}<br /><span className="projects-help">{dec(q.summary.paybackTotal, 2, " años")}</span></td>
+                    <td>{fecha(q.updatedAt)}</td>
                   </tr>
-                ))}
+                ); })}
               </tbody>
             </table>
           </div>

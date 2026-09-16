@@ -43,3 +43,20 @@ describe("pantallas del cotizador con la cotización real de producción", () =>
     expect(html).toContain("Nueva cotización");
   });
 });
+
+describe("la lista tolera cotizaciones con datos incompletos", () => {
+  const versionsFallback = {} as unknown as CatalogVersions;
+  const roto = {
+    id: "00000000-0000-4000-8000-000000000000", projectId: null, segment: "COMMERCIAL", name: "Sin resumen",
+    status: "DRAFT", version: 1, catalogVersions: versionsFallback, summary: {},
+    createdAt: "fecha inválida", updatedAt: "fecha inválida",
+  } as unknown as StoredQuote;
+  it("una cotización sin resumen ni fecha válida no rompe la pantalla", () => {
+    const html = renderToStaticMarkup(<SolarHome live quotes={[roto]} versions={versionsFallback} />);
+    expect(html).toContain("Sin resumen");
+  });
+  it("sin catálogos ni cotizaciones se avisa del fallo de lectura", () => {
+    const html = renderToStaticMarkup(<SolarHome live quotes={[]} storageError versions={versionsFallback} />);
+    expect(html).toContain("No se pudieron leer las cotizaciones guardadas");
+  });
+});

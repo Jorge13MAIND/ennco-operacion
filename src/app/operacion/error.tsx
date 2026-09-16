@@ -23,6 +23,7 @@ export default function OperationsError({ error, reset }: { error: Error & { dig
           <button className="button" onClick={reset} type="button">Reintentar</button>
           <Link className="button secondary" href={"/operacion" as Route}>Ir a Hoy</Link>
         </div>
+        {error.message && !/^An error occurred in the Server Components render/u.test(error.message) ? <p className="cr-error-ref">Detalle: {error.message.slice(0, 220)}</p> : null}
         {error.digest ? <p className="cr-error-ref">Referencia: {error.digest}</p> : null}
       </section>
     </main>
