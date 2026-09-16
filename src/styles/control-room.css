@@ -36,8 +36,10 @@ main.auth-shell {
   --cr-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --cr-radius-card: 16px;
   --cr-radius-pill: 980px;
-  --cr-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
-  --cr-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.06), 0 12px 32px -8px rgba(0, 0, 0, 0.1);
+  /* Borde difuminado gris (15-sep-2026, pedido por Grant): tarjetas blancas que flotan sobre el lienzo,
+     como en el hub de ILT. Tres capas: contacto, cuerpo y halo amplio. */
+  --cr-shadow-card: 0 1px 2px rgba(15, 23, 42, 0.05), 0 6px 14px -2px rgba(15, 23, 42, 0.07), 0 18px 40px -10px rgba(15, 23, 42, 0.16);
+  --cr-shadow-hover: 0 2px 4px rgba(15, 23, 42, 0.06), 0 12px 28px -6px rgba(15, 23, 42, 0.14), 0 30px 60px -14px rgba(15, 23, 42, 0.22);
   --cr-critical-bg: rgba(239, 68, 68, 0.12);
   --cr-critical-fg: #b91c1c;
   --cr-critical-dot: #ef4444;
@@ -1214,4 +1216,53 @@ main.auth-shell .mfa-secret { border-radius: 10px; background: #f5f5f7; font-fam
 @media (max-width: 720px) {
   .cr-root .cr-leads-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cr-root .cr-leads-table .num { text-align: left; }
+}
+
+
+/* ---------- 14. Elevación uniforme de tarjetas (15-sep-2026) ----------
+   Todas las superficies tipo tarjeta comparten el mismo borde difuminado gris y el mismo
+   radio, incluidas las que antes solo tenían línea (filtros, conteos, métricas y paneles de
+   Proyectos, secciones del cotizador). El hover levanta un poco las que son interactivas. */
+.cr-root .panel,
+.cr-root .card,
+.cr-root .hero-card,
+.cr-root .operations-metrics .metric,
+.cr-root .cr-stats-kpis .metric,
+.cr-root .cr-stats-filters,
+.cr-root .cr-stats-verdict,
+.cr-root .cr-activity-count,
+.cr-root .cr-leads-kpis .metric,
+.cr-root .compact-operation-form,
+.cr-root .operations-technical-details,
+.cr-root .projects-panel,
+.cr-root .projects-card,
+.cr-root .projects-metric,
+.cr-root .solar-section,
+.cr-root .solar-inline {
+  border-color: rgba(15, 23, 42, 0.05);
+  box-shadow: var(--cr-shadow-card);
+}
+.cr-root .projects-panel,
+.cr-root .projects-card,
+.cr-root .projects-metric,
+.cr-root .solar-section,
+.cr-root .compact-operation-form { border-radius: var(--cr-radius-card); }
+.cr-root .solar-inline { border-style: solid; background: var(--cr-surface); }
+.cr-root .projects-card,
+.cr-root .cr-stats-kpis .metric,
+.cr-root .cr-leads-kpis .metric,
+.cr-root .cr-activity-count,
+.cr-root .projects-metric { transition: transform var(--transition), box-shadow var(--transition); }
+.cr-root .projects-card:hover,
+.cr-root .cr-stats-kpis .metric:hover,
+.cr-root .cr-leads-kpis .metric:hover,
+.cr-root .cr-activity-count:hover,
+.cr-root .projects-metric:hover { box-shadow: var(--cr-shadow-hover); transform: translateY(-2px); }
+.cr-root .cr-leads-kpis .metric-total { box-shadow: var(--cr-shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.08); }
+@media (prefers-reduced-motion: reduce) {
+  .cr-root .projects-card:hover,
+  .cr-root .cr-stats-kpis .metric:hover,
+  .cr-root .cr-leads-kpis .metric:hover,
+  .cr-root .cr-activity-count:hover,
+  .cr-root .projects-metric:hover { transform: none; }
 }
