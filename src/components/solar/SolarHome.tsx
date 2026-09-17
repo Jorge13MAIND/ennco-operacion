@@ -6,12 +6,13 @@ import { PageHeader, Panel } from "@/components/projects/ui";
 import type { CatalogVersions, StoredQuote } from "@/lib/solar/server";
 import type { Segment } from "@/lib/solar/types";
 
-const SEGMENTS: Array<{ key: Segment; title: string; detail: string }> = [
-  { key: "RESIDENTIAL", title: "Residencial", detail: "Tarifas 1 a 1F y DAC. Recibo bimestral o mensual, historial de 12 periodos, ventana DAC de 12 meses." },
-  { key: "COMMERCIAL", title: "Comercial", detail: "PDBT, GDBT, APBT y RABT en baja tensión, por división CFE. Cargo fijo, energía, capacidad y factor de potencia." },
-  { key: "INDUSTRIAL", title: "Industrial", detail: "GDMTO, GDMTH y DIST en media tensión: base, intermedia y punta, demanda facturable y banco de capacitores." },
+const SEGMENTS: Array<{ key: Segment; title: string; short: string; detail: string }> = [
+  { key: "RESIDENTIAL", title: "Sistema PV Residencial", short: "residencial", detail: "Tarifas 1 a 1F y DAC. Recibo bimestral o mensual, historial de 12 periodos, ventana DAC de 12 meses." },
+  { key: "COMMERCIAL", title: "Sistema PV Comercial", short: "comercial", detail: "PDBT, GDBT, APBT y RABT en baja tensión, por división CFE. Cargo fijo, energía, capacidad y factor de potencia." },
+  { key: "INDUSTRIAL", title: "Sistema PV Industrial", short: "industrial", detail: "GDMTO, GDMTH y DIST en media tensión: base, intermedia y punta, demanda facturable y banco de capacitores." },
 ];
-const segmentLabel: Record<string, string> = { RESIDENTIAL: "Residencial", COMMERCIAL: "Comercial", INDUSTRIAL: "Industrial" };
+const segmentLabel: Record<string, string> = { RESIDENTIAL: "Sistema PV Residencial", COMMERCIAL: "Sistema PV Comercial", INDUSTRIAL: "Sistema PV Industrial" };
+const segmentShort: Record<string, string> = { RESIDENTIAL: "Residencial", COMMERCIAL: "Comercial", INDUSTRIAL: "Industrial" };
 const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 /** Fecha corta sin depender de la tabla de idiomas del servidor: una fila con un dato raro no debe tumbar la pantalla. */
 function fecha(value: string | null | undefined): string {
@@ -101,7 +102,7 @@ export function SolarHome({ quotes, versions, live, storageError, archived = fal
             </div>
             <p>{s.detail}</p>
             <div className="projects-card-foot">
-              <Link className="projects-button" href={`/operacion/proyectos/cotizar?segmento=${s.key}` as Route}>Cotizar {s.title.toLowerCase()}</Link>
+              <Link className="projects-button" href={`/operacion/proyectos/cotizar?segmento=${s.key}` as Route}>Cotizar {s.short}</Link>
             </div>
           </article>
         ))}
@@ -138,7 +139,7 @@ export function SolarHome({ quotes, versions, live, storageError, archived = fal
                       </span>
                     </td>
                     <td>
-                      {segmentLabel[q.segment] ?? q.segment}{q.summary?.city ? ` · ${q.summary.city}` : ""}
+                      {segmentShort[q.segment] ?? q.segment}{q.summary?.city ? ` · ${q.summary.city}` : ""}
                       <span className="solar-meta">
                         {q.summary?.tariff ? <span>Tarifa {q.summary.tariff}</span> : null}
                         <span>{dec(q.summary.systemKw, 2, " kW")}</span>

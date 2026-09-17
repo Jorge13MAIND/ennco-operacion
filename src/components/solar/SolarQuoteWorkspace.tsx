@@ -22,7 +22,7 @@ type Tab = "resumen" | "generacion" | "recibo" | "precio" | "proyeccion";
 const TABS: Array<{ key: Tab; label: string }> = [
   { key: "resumen", label: "Resumen" }, { key: "generacion", label: "Generación" }, { key: "recibo", label: "Recibo CFE" }, { key: "precio", label: "Precio" }, { key: "proyeccion", label: "Proyección" },
 ];
-const segmentLabel: Record<string, string> = { RESIDENTIAL: "Residencial", COMMERCIAL: "Comercial", INDUSTRIAL: "Industrial" };
+const segmentLabel: Record<string, string> = { RESIDENTIAL: "Sistema PV Residencial", COMMERCIAL: "Sistema PV Comercial", INDUSTRIAL: "Sistema PV Industrial" };
 const n0 = (v: number) => Math.round(v).toLocaleString("es-MX");
 const n2 = (v: number) => v.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const pct = (v: number) => `${(v * 100).toFixed(1)} %`;
