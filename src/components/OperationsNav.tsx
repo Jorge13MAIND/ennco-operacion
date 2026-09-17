@@ -30,6 +30,7 @@ type NavKey =
   | "inteligencia"
   | "projects-master"
   | "projects-consumption"
+  | "projects-engineering"
   | "projects-list"
   | "projects-catalogs"
   | OperationModuleKey;
@@ -74,6 +75,7 @@ const groups: Array<{
     items: [
       { key: "projects-master", href: "/operacion/proyectos" },
       { key: "projects-consumption", href: "/operacion/proyectos/consumo" },
+      { key: "projects-engineering", href: "/operacion/proyectos/ingenieria" },
       { key: "projects-list", href: "/operacion/proyectos/lista" },
       { key: "projects-catalogs", href: "/operacion/proyectos/catalogos" },
     ],
@@ -88,6 +90,7 @@ function itemLabel(key: NavKey): string {
   if (key === "inteligencia") return "Inteligencia";
   if (key === "projects-master") return "Cotizador";
   if (key === "projects-consumption") return "Calculadora de consumo";
+  if (key === "projects-engineering") return "Ingeniería básica";
   if (key === "projects-list") return "Proyectos";
   if (key === "projects-catalogs") return "Catálogos";
   return moduleLabels[key];
@@ -123,7 +126,8 @@ export function OperationsNav({ variant }: { variant: "desktop" | "mobile" }) {
             item.key === "projects-list"
               ? pathname.startsWith("/operacion/proyectos/") &&
                 !pathname.startsWith("/operacion/proyectos/catalogos") &&
-                !pathname.startsWith("/operacion/proyectos/consumo")
+                !pathname.startsWith("/operacion/proyectos/consumo") &&
+                !pathname.startsWith("/operacion/proyectos/ingenieria")
               : item.key === "projects-catalogs"
                 ? pathname === item.href || pathname.startsWith(`${item.href}/`)
                 : pathname === item.href;
