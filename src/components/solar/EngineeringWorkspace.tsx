@@ -216,10 +216,10 @@ export function EngineeringWorkspace({ catalog, quotes, initialProject, quoteId,
         <div className="eng-grid">
           <Panel title="Información de instalación" description="Distancia mínima entre filas para que no se hagan sombra en el solsticio de invierno durante la ventana de horas sin sombra.">
             <div className="eng-form">
-              <Num label="Altura del obstáculo frontal (m)" min={0} onChange={(v) => setSh({ ...sh, obstacleHeightM: v })} step={0.1} value={sh.obstacleHeightM} />
+              <Num hint="Árbol, muro o edificio frente a la primera fila. Su distancia se ajusta en el simulador." label="Altura del obstáculo frontal (m)" min={0} onChange={(v) => setSh({ ...sh, obstacleHeightM: v })} step={0.1} value={sh.obstacleHeightM} />
               <Num label="Inclinación del panel (°)" min={0} onChange={(v) => setSh({ ...sh, inclinationDeg: v })} value={sh.inclinationDeg} />
               <Sel label="¿Inclinación en la superficie?" onChange={(v) => setSh({ ...sh, slopedSurface: v === "SI" })} options={[{ value: "NO", label: "No" }, { value: "SI", label: "Sí" }]} value={sh.slopedSurface ? "SI" : "NO"} />
-              <Num label="Ángulo de la pendiente (°)" min={0} onChange={(v) => setSh({ ...sh, slopeDeg: v })} value={sh.slopeDeg} />
+              <Num hint="Positiva si el terreno sube hacia atrás." label="Ángulo de la pendiente (°)" min={-30} onChange={(v) => setSh({ ...sh, slopeDeg: v })} value={sh.slopeDeg} />
               <Num label="Módulos por panel" min={0} onChange={(v) => setSh({ ...sh, modulesPerPanel: v })} value={sh.modulesPerPanel} />
               <Sel label="Orientación del módulo" onChange={(v) => setSh({ ...sh, orientation: v })} options={[{ value: "VERTICAL", label: "Vertical" }, { value: "HORIZONTAL", label: "Horizontal" }]} value={sh.orientation} />
               <Num hint="El libro usa 9.25 h centradas al mediodía solar." label="Horas sin sombra" min={1} onChange={(v) => setSh({ ...sh, hoursWithoutShade: v })} step={0.25} value={sh.hoursWithoutShade ?? DEFAULT_HOURS_WITHOUT_SHADE} />
@@ -246,7 +246,7 @@ export function EngineeringWorkspace({ catalog, quotes, initialProject, quoteId,
           {shading.r ? (
             <div className="eng-span">
               <Panel title="Simulador de sombra" description="El 21 de diciembre el sol va más bajo que cualquier otro día: si las filas no se hacen sombra ese día, no se la hacen nunca. Mueve la hora para ver la sombra y prueba otra distancia entre filas.">
-                <ShadowScene inclinationDeg={sh.inclinationDeg} obstacleHeightM={sh.obstacleHeightM} result={shading.r} slopeDeg={sh.slopedSurface ? sh.slopeDeg : 0} />
+                <ShadowScene inclinationDeg={sh.inclinationDeg} obstacleHeightM={sh.obstacleHeightM} result={shading.r} site={{ city: project.city, moduleModel: project.moduleModel, orientation: sh.orientation, modulesPerPanel: sh.modulesPerPanel }} slopeDeg={sh.slopedSurface ? sh.slopeDeg : 0} />
               </Panel>
             </div>
           ) : null}

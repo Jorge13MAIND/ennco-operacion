@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { computeArray } from "@/lib/solar/engineering/array";
 import { computePowerFactor, defaultPowerFactorInput } from "@/lib/solar/engineering/power-factor";
-import { computeShading, shadowAt, shadowDay, sunAt } from "@/lib/solar/engineering/shading";
+import { computeShading, declinationFor, shadowAt, shadowDay, sunAt } from "@/lib/solar/engineering/shading";
 import { workbookCatalog } from "@/lib/solar/workbook";
 
 const catalog = workbookCatalog();
@@ -130,24 +130,37 @@ describe("arreglos en inversor (Cal_Inv_St)", () => {
 });
 
 describe("simulación de sombra hora por hora", () => {
+  const sc = { latitude: 19, panelLengthM: 4.804, inclinationDeg: 20, slopeDeg: 0, obstacleHeightM: 0 };
   it("a 4.625 h del mediodía reproduce la altura y el azimut del libro (Puebla, 19°)", () => {
     const s = sunAt(19, 12 - 4.625);
     expect(s.altitudeDeg).toBeCloseTo(10.145558653600476, 9);
     expect(Math.abs(s.azimuthDeg)).toBeCloseTo(60.73697014266839, 9);
   });
-  it("a esa misma hora la distancia necesaria es la del libro (9.0025 m plana, 7.9407 m con pendiente 2°)", () => {
-    expect(shadowAt(19, 12 - 4.625, 4.804, 20, 0, 0).requiredDistanceM).toBeCloseTo(9.002537058593985, 9);
-    expect(shadowAt(19, 12 - 4.625, 4.804, 20, 2, 0).requiredDistanceM).toBeCloseTo(7.9407002285529042, 9);
+  it("a esa hora la distancia necesaria es la del libro (9.0025 m plana, 7.9407 m con pendiente 2°)", () => {
+    expect(shadowAt(sc, 12 - 4.625).requiredDistanceM).toBeCloseTo(9.002537058593985, 9);
+    expect(shadowAt({ ...sc, slopeDeg: 2 }, 12 - 4.625).requiredDistanceM).toBeCloseTo(7.9407002285529042, 9);
   });
-  it("al mediodía la sombra es la más corta y de noche es infinita", () => {
-    const noon = shadowAt(19, 12, 4.804, 20, 0, 0); const morning = shadowAt(19, 8, 4.804, 20, 0, 0); const night = shadowAt(19, 21, 4.804, 20, 0, 0);
-    expect(noon.rowShadowM).toBeLessThan(morning.rowShadowM);
-    expect(night.up).toBe(false); expect(night.requiredDistanceM).toBe(Infinity);
+  it("al mediodía la sombra es la más corta; de noche es infinita; el equinoccio pide menos distancia que el invierno", () => {
+    expect(shadowAt(sc, 12).rowShadowM).toBeLessThan(shadowAt(sc, 8).rowShadowM);
+    expect(shadowAt(sc, 21).up).toBe(false);
+    expect(shadowAt({ ...sc, declinationDeg: declinationFor(80) }, 9).requiredDistanceM).toBeLessThan(shadowAt(sc, 9).requiredDistanceM);
+    expect(declinationFor(355)).toBeCloseTo(-23.45, 0.5);
   });
   it("con la distancia mínima del libro la ventana libre dura 9.25 h centradas al mediodía", () => {
-    const d = shadowDay(19, 4.804, 20, 0, 0, 9.002537058593985, 5);
-    expect(d.clearFrom).toBeCloseTo(12 - 4.625, 1); expect(d.clearTo).toBeCloseTo(12 + 4.625, 1);
-    const tight = shadowDay(19, 4.804, 20, 0, 0, 6, 5);
-    expect((tight.clearTo ?? 0) - (tight.clearFrom ?? 0)).toBeLessThan(9);
+    const d = shadowDay(sc, 9.002537058593985, 0, 5);
+    expect(d.rows!.from).toBeCloseTo(12 - 4.625, 1); expect(d.rows!.to).toBeCloseTo(12 + 4.625, 1);
+    expect(shadowDay(sc, 6, 0, 5).rows).toBeNull(); // con 6 m ni al mediodía alcanza (hacen falta 6.01 m)
+    expect(shadowDay(sc, 6.5, 0, 5).rows!.to - shadowDay(sc, 6.5, 0, 5).rows!.from).toBeLessThan(9);
+  });
+  it("un obstáculo de 3 m a 5 m de la primera fila la sombrea temprano y la libera después", () => {
+    const d = shadowDay({ ...sc, obstacleHeightM: 3 }, 9.1, 5, 5);
+    expect(d.obstacle).not.toBeNull(); expect(d.obstacle!.from).toBeGreaterThan(d.rows!.from);
+    expect(d.clear!.from).toBe(d.obstacle!.from);
+    expect(shadowAt({ ...sc, obstacleHeightM: 3 }, 12 - 4.625).obstacleShadowM).toBeCloseTo(3 * 0.48881964658994914 / 0.17894762454900073, 9);
+  });
+  it("paneles girados al oeste: por la mañana el sol les pega de lado (menos sombra útil) y por la tarde de frente (más)", () => {
+    const west = { ...sc, panelAzimuthDeg: 30 };
+    expect(shadowAt(west, 9).rowShadowM).toBeLessThan(shadowAt(sc, 9).rowShadowM);
+    expect(shadowAt(west, 15).rowShadowM).toBeGreaterThan(shadowAt(sc, 15).rowShadowM);
   });
 });

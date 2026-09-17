@@ -101,7 +101,15 @@ export function computeShading(input: ShadingInput, catalog: SolarCatalog): Shad
 /* ---------- simulacion hora por hora (mismas formulas, evaluadas a lo largo del dia) ---------- */
 export type SunPosition = { hour: number; altitudeDeg: number; azimuthDeg: number; up: boolean };
 
-/** Posicion del sol en el solsticio de invierno a una hora solar (12 = mediodia). */
+/** Declinacion solar por dia del ano (Cooper). El libro usa la del solsticio de invierno. */
+export function declinationFor(dayOfYear: number): number { return 23.45 * Math.sin(rad((360 / 365) * (284 + dayOfYear))); }
+export const DAY_PRESETS = [
+  { key: "invierno", label: "21 de diciembre (solsticio de invierno, el peor día)", dayOfYear: 355 },
+  { key: "equinoccio", label: "21 de marzo / 21 de septiembre (equinoccio)", dayOfYear: 80 },
+  { key: "verano", label: "21 de junio (solsticio de verano)", dayOfYear: 172 },
+] as const;
+
+/** Posicion del sol a una hora solar (12 = mediodia) para una latitud y una declinacion. */
 export function sunAt(latitude: number, hour: number, declinationDeg = WINTER_DECLINATION_DEG): SunPosition {
   const w = 15 * (hour - 12);
   const sinH = Math.sin(rad(latitude)) * Math.sin(rad(declinationDeg)) + Math.cos(rad(latitude)) * Math.cos(rad(declinationDeg)) * Math.cos(rad(w));
@@ -111,33 +119,43 @@ export function sunAt(latitude: number, hour: number, declinationDeg = WINTER_DE
   return { hour, altitudeDeg: h, azimuthDeg: deg(Math.asin(Math.max(-1, Math.min(1, sinPsi)))), up: h > 0 };
 }
 
+export type ShadowScenario = {
+  latitude: number; panelLengthM: number; inclinationDeg: number; slopeDeg: number; obstacleHeightM: number;
+  /** Azimut de los paneles: 0 = sur, negativo al este, positivo al oeste (misma convencion que el cotizador). */
+  panelAzimuthDeg?: number;
+  declinationDeg?: number;
+};
 export type ShadowAtHour = SunPosition & {
-  /** Sombra de la primera fila medida desde su pie, en la direccion de la fila de atras (m). */
+  /** Sombra de la primera fila medida desde el pie de su borde alto, en la direccion de la fila de atras (m). */
   rowShadowM: number;
   /** Distancia pie a pie que haria falta a esa hora (m). */
   requiredDistanceM: number;
-  /** Sombra que proyecta el obstaculo (m). */
+  /** Sombra que proyecta el obstaculo hacia las filas (m). */
   obstacleShadowM: number;
 };
 
-/** Sombras a una hora dada para un panel de longitud L a inclinacion a (grados), con pendiente theta. */
-export function shadowAt(latitude: number, hour: number, panelLengthM: number, inclinationDeg: number, slopeDeg: number, obstacleHeightM: number): ShadowAtHour {
-  const sun = sunAt(latitude, hour);
-  const cosPsi = Math.cos(rad(sun.azimuthDeg));
-  const a = inclinationDeg - slopeDeg; const hEff = sun.altitudeDeg + slopeDeg;
+/** Sombras a una hora dada. La proyeccion util es la componente normal a la fila: cos(azimut solar − azimut del panel). */
+export function shadowAt(sc: ShadowScenario, hour: number): ShadowAtHour {
+  const sun = sunAt(sc.latitude, hour, sc.declinationDeg ?? WINTER_DECLINATION_DEG);
+  const cosRel = Math.cos(rad(sun.azimuthDeg - (sc.panelAzimuthDeg ?? 0)));
+  const a = sc.inclinationDeg - sc.slopeDeg; const hEff = sun.altitudeDeg + sc.slopeDeg;
   const tanH = Math.tan(rad(hEff));
   if (!sun.up || tanH <= 0) return { ...sun, rowShadowM: Infinity, requiredDistanceM: Infinity, obstacleShadowM: Infinity };
-  const rise = panelLengthM * Math.sin(rad(a));                     // altura del borde alto del panel
-  const rowShadowM = (rise * cosPsi) / tanH;
-  return { ...sun, rowShadowM, requiredDistanceM: panelLengthM * Math.cos(rad(a)) + rowShadowM, obstacleShadowM: (obstacleHeightM * cosPsi) / Math.tan(rad(sun.altitudeDeg)) };
+  const rise = sc.panelLengthM * Math.sin(rad(a));
+  const rowShadowM = Math.max(0, (rise * cosRel) / tanH);
+  const tanH0 = Math.tan(rad(sun.altitudeDeg));
+  return { ...sun, rowShadowM, requiredDistanceM: sc.panelLengthM * Math.cos(rad(a)) + rowShadowM, obstacleShadowM: tanH0 > 0 ? Math.max(0, (sc.obstacleHeightM * cosRel) / tanH0) : Infinity };
 }
 
-/** Horas del dia (paso en minutos) y la ventana en que las filas quedan libres con una distancia dada. */
-export function shadowDay(latitude: number, panelLengthM: number, inclinationDeg: number, slopeDeg: number, obstacleHeightM: number, distanceM: number, stepMin = 10) {
+/** Horas del dia (paso en minutos) y la ventana en que filas y obstaculo dejan libre la instalacion. */
+export function shadowDay(sc: ShadowScenario, distanceM: number, obstacleGapM: number, stepMin = 10) {
   const hours: ShadowAtHour[] = [];
-  for (let m = 5 * 60; m <= 19 * 60; m += stepMin) hours.push(shadowAt(latitude, m / 60, panelLengthM, inclinationDeg, slopeDeg, obstacleHeightM));
-  const clear = hours.filter((x) => x.up && x.requiredDistanceM <= distanceM).map((x) => x.hour);
-  return { hours, clearFrom: clear.length ? Math.min(...clear) : null, clearTo: clear.length ? Math.max(...clear) : null };
+  for (let m = 5 * 60; m <= 19 * 60; m += stepMin) hours.push(shadowAt(sc, m / 60));
+  const rowsClear = hours.filter((x) => x.up && x.requiredDistanceM <= distanceM).map((x) => x.hour);
+  const obstacleClear = hours.filter((x) => x.up && (sc.obstacleHeightM <= 0 || x.obstacleShadowM <= obstacleGapM)).map((x) => x.hour);
+  const both = hours.filter((x) => x.up && x.requiredDistanceM <= distanceM && (sc.obstacleHeightM <= 0 || x.obstacleShadowM <= obstacleGapM)).map((x) => x.hour);
+  const win = (xs: number[]) => (xs.length ? { from: Math.min(...xs), to: Math.max(...xs) } : null);
+  return { hours, rows: win(rowsClear), obstacle: win(obstacleClear), clear: win(both), sunrise: hours.find((x) => x.up)?.hour ?? null, sunset: [...hours].reverse().find((x) => x.up)?.hour ?? null };
 }
 
 export function hourLabel(h: number): string { const m = Math.round(h * 60); return `${Math.floor(m / 60)}:${String(m % 60).padStart(2, "0")}`; }

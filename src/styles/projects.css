@@ -862,9 +862,16 @@
 
 /* ---------- Simulador de sombra ---------- */
 .eng-span { grid-column: 1 / -1; }
-.shadow-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 10px; }
+.shadow-controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 18px; margin-bottom: 12px; }
+.shadow-controls select { font: inherit; font-size: 0.82rem; padding: 5px 8px; border: 1px solid #cbd5e1; border-radius: 7px; }
+.shadow-site { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 14px; padding: 12px 14px; border-radius: 12px; background: #0f172a; color: #fff; }
+.shadow-site span { display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #94a3b8; }
+.shadow-site strong { display: block; font-size: 0.9rem; }
+.shadow-site small { font-weight: 500; color: #cbd5e1; }
+.shadow-lat { width: 70px; font: inherit; font-size: 0.9rem; font-weight: 700; padding: 2px 6px; border: 1px solid #334155; border-radius: 6px; background: #1e293b; color: #fff; text-align: right; }
 .shadow-controls input[type="range"] { width: 100%; accent-color: #0e7490; }
 .shadow-svg { width: 100%; height: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; }
 .shadow-chart { width: 100%; height: auto; margin-top: 10px; }
-@media (max-width: 720px) { .shadow-controls { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .shadow-controls { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .shadow-controls { grid-template-columns: 1fr; } }
 @media print { .shadow-controls { display: none; } }
