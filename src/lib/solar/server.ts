@@ -42,8 +42,7 @@ export function workbookVersions(): CatalogVersions {
 export async function loadSolarCatalog(access: OperationsAccessContext): Promise<{ catalog: SolarCatalog; versions: CatalogVersions }> {
   const catalog = workbookCatalog();
   const versions: CatalogVersions = workbookVersions();
-  if (access.evidenceClass !== "live" || !access.organizationId) catalog.modules = withModuleFuses(catalog.modules);
-  return { catalog, versions };
+  if (access.evidenceClass !== "live" || !access.organizationId) return { catalog, versions };
   try {
     const entries = await listCatalogs(access);
     for (const [category, field] of Object.entries(SOLAR_CATALOG_CATEGORIES)) {
