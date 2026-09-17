@@ -1,0 +1,110 @@
+/* Hoja de cotización imprimible: calca la hoja de captura del libro.
+   Medidas en pulgadas para que el PDF salga en carta sin reescalar. */
+
+.hj-wrap { background: #f3f4f6; padding: 24px 0 64px; }
+.hj-bar { position: sticky; top: 0; z-index: 5; display: flex; gap: 10px; align-items: center; justify-content: center; padding: 12px; background: #fff; border-bottom: 1px solid #e5e7eb; }
+.hj-bar p { margin: 0; font-size: 13px; color: #4b5563; }
+
+.hj-page {
+  width: 8.5in; min-height: 11in; margin: 0 auto 24px; padding: 0.28in 0.3in 0.3in; box-sizing: border-box;
+  background: #fff; color: #000; box-shadow: 0 6px 24px rgba(15, 23, 42, 0.14);
+  font-family: Calibri, Carlito, "Segoe UI", system-ui, sans-serif; font-size: 9.5px; line-height: 1.25;
+  border: 2px solid #000;
+}
+
+.hj-head { display: flex; align-items: center; gap: 12px; padding: 6px 10px; margin: -0.28in -0.3in 0; background: linear-gradient(90deg, #12313d 0%, #2b6377 45%, #12313d 100%); border-bottom: 2px solid #000; }
+.hj-logo { flex: none; width: 118px; height: 58px; object-fit: contain; }
+.hj-head h1 { flex: 1; margin: 0; text-align: center; color: #fff; font-size: 17px; font-weight: 800; letter-spacing: 0.02em; }
+.hj-head h1 span { display: block; }
+
+.hj-band { padding: 3px 8px; margin: 0 -0.3in; border-top: 2px solid #000; border-bottom: 1px solid #000; background: #fff; font-weight: 700; color: #1f3864; font-size: 10px; }
+.hj-body { padding: 7px 4px 9px; }
+
+.hj-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+.hj-row-top { align-items: flex-start; }
+.hj-row-tight { margin-bottom: 2px; }
+.hj-gap { margin-top: 9px; }
+.hj-spacer { width: 178px; }
+.hj-pair { display: flex; align-items: center; gap: 6px; }
+.hj-right { margin-left: auto; text-align: right; }
+
+.hj-lb { font-weight: 700; color: #1f3864; }
+.hj-in, .hj-calc, .hj-pick { display: inline-block; min-height: 15px; padding: 1px 5px; box-sizing: border-box; font-size: 9.5px; text-align: center; }
+.hj-in { background: #fff; border: 1px solid #7f7f7f; }
+.hj-calc { background: #d9d9d9; border: 1px dotted #7f7f7f; font-weight: 600; }
+.hj-calc.is-strong { font-weight: 700; color: #1f4e79; font-size: 11px; padding: 3px 5px; }
+.hj-calc.is-empty { display: block; min-width: 90px; }
+.hj-pick { background: #ddebf7; border: 1px solid #2e75b6; color: #1f4e79; font-weight: 700; }
+
+.hj-stack { display: inline-flex; flex-direction: column; align-items: center; }
+.hj-stack.is-top { align-items: flex-start; gap: 3px; }
+.hj-stack em { font-size: 8.5px; font-style: italic; color: #404040; }
+.hj-stack.is-top .hj-lb { font-size: 9px; }
+
+.hj-cols { display: flex; gap: 18px; align-items: flex-start; margin-top: 6px; }
+.hj-history { width: 330px; }
+.hj-hhead { display: flex; font-weight: 700; color: #1f3864; font-size: 9.5px; margin-bottom: 2px; }
+.hj-hhead span:first-child { width: 150px; text-align: center; }
+.hj-hhead span:last-child { flex: 1; text-align: center; }
+.hj-hrow { display: flex; }
+.hj-hm { width: 150px; text-align: right; padding-right: 10px; color: #808080; font-style: italic; }
+.hj-hv { flex: 1; text-align: right; padding: 0 12px 0 4px; background: #d9d9d9; border-left: 1px solid #bfbfbf; border-right: 1px solid #bfbfbf; }
+.hj-hrow.is-total .hj-hm { color: #1f3864; font-weight: 700; font-style: normal; }
+.hj-hrow.is-total .hj-hv { background: transparent; border: 0; font-weight: 700; }
+.hj-side { flex: 1; display: flex; flex-direction: column; gap: 10px; padding-top: 4px; }
+.hj-sider { display: flex; align-items: center; gap: 8px; }
+.hj-sider .hj-lb { font-size: 9px; text-align: right; }
+
+.hj-orients { display: flex; flex-direction: column; gap: 3px; }
+.hj-orow { display: flex; align-items: center; gap: 8px; }
+.hj-orow .hj-lb { text-align: right; }
+
+.hj-inv { width: 100%; border-collapse: collapse; margin: 8px 0; }
+.hj-inv th { font-size: 9px; font-weight: 700; color: #1f3864; padding: 2px 4px; text-align: center; }
+.hj-inv td { padding: 2px 4px; text-align: center; vertical-align: middle; }
+.hj-inv td .hj-in, .hj-inv td .hj-pick, .hj-inv td .hj-calc { min-width: 92px; }
+.hj-inv .hj-kwp { color: #1f4e79; font-weight: 700; }
+.hj-inv tr.is-total td { font-weight: 700; border-top: 1px solid #bfbfbf; }
+
+.hj-chart { width: 100%; height: 190px; margin-top: 8px; }
+.hj-foot { margin: 6px 0 0; font-size: 8.5px; color: #808080; text-align: right; }
+
+.hj-services { display: flex; gap: 20px; align-items: flex-start; }
+.hj-svc-list { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.hj-srow { display: flex; align-items: center; gap: 10px; }
+.hj-chk { display: inline-flex; align-items: center; gap: 5px; font-size: 9px; }
+.hj-chk i { width: 9px; height: 9px; border: 1px solid #000; display: inline-block; }
+.hj-chk i.on { background: #000; }
+.hj-usd { width: 90px; text-align: right; font-weight: 600; }
+.hj-svc-side { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+
+.hj-note { margin: 8px 0 0; text-align: center; font-style: italic; font-weight: 700; color: #c00000; font-size: 9.5px; text-decoration: underline; }
+
+.hj-adv { display: flex; gap: 24px; align-items: flex-start; margin: 8px 0; }
+.hj-advcol { display: flex; flex-direction: column; gap: 3px; }
+.hj-arow { display: flex; align-items: center; gap: 8px; }
+.hj-arow .hj-lb { text-align: left; font-weight: 400; color: #000; }
+.hj-arow.is-sum { font-weight: 700; font-style: italic; }
+.hj-arow.is-sum span { text-align: center; }
+.hj-advside { display: flex; flex-direction: column; gap: 12px; margin-left: auto; }
+
+.hj-finhead { display: flex; gap: 8px; margin-top: 10px; font-weight: 700; color: #1f3864; font-size: 9px; }
+.hj-finhead span:nth-child(1) { width: 288px; }
+.hj-finhead span:nth-child(2) { width: 150px; text-align: center; }
+.hj-finhead span:nth-child(3) { width: 90px; text-align: center; }
+.hj-finhead span:nth-child(4) { width: 140px; text-align: center; }
+.hj-finrow { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
+.hj-finrow .hj-lb { font-weight: 400; color: #000; }
+
+.hj-wrow { display: flex; gap: 10px; align-items: baseline; margin-bottom: 4px; }
+.hj-wtext { flex: 1; font-style: italic; text-align: center; border: 1px solid #7f7f7f; padding: 1px 6px; }
+.hj-trow { display: flex; gap: 8px; align-items: baseline; margin-bottom: 3px; }
+.hj-tn { width: 26px; text-align: right; font-weight: 600; }
+
+@media print {
+  .hj-wrap { background: #fff; padding: 0; }
+  .hj-bar { display: none !important; }
+  .hj-page { margin: 0; box-shadow: none; border: 0; page-break-after: always; break-after: page; }
+  .hj-page:last-child { page-break-after: auto; break-after: auto; }
+}
+@page { size: letter portrait; margin: 0.25in; }

@@ -1,6 +1,7 @@
 import type { Route } from "next";
 import Link from "next/link";
 
+import { SolarQuoteActions } from "@/components/solar/SolarQuoteActions";
 import { PageHeader, Panel } from "@/components/projects/ui";
 import type { CatalogVersions, StoredQuote } from "@/lib/solar/server";
 import type { Segment } from "@/lib/solar/types";
@@ -74,7 +75,7 @@ function SegmentIcon({ segment }: { segment: Segment }) {
   );
 }
 
-export function SolarHome({ quotes, versions, live, storageError }: { quotes: StoredQuote[]; versions: CatalogVersions; live: boolean; storageError?: boolean }) {
+export function SolarHome({ quotes, versions, live, storageError, archived = false }: { quotes: StoredQuote[]; versions: CatalogVersions; live: boolean; storageError?: boolean; archived?: boolean }) {
   const overridden = Object.values(versions).filter((v) => v.source === "catalog").length;
   return (
     <main className="shell section operations-main projects-page" id="main-content" tabIndex={-1}>
@@ -100,12 +101,18 @@ export function SolarHome({ quotes, versions, live, storageError }: { quotes: St
           </article>
         ))}
       </section>
-      <Panel title="Cotizaciones guardadas" description={quotes.length === 0 ? "Aún no hay cotizaciones. La primera que guardes aparece aquí." : "Las más recientes primero. Abre una para editarla; cada guardado crea una versión nueva."}>
+      <Panel
+        title={archived ? "Cotizaciones archivadas" : "Cotizaciones guardadas"}
+        description={quotes.length === 0
+          ? (archived ? "No hay cotizaciones archivadas." : "Aún no hay cotizaciones. La primera que guardes aparece aquí.")
+          : (archived ? "Restaurar una la devuelve a la lista principal. Nada se borra." : "Las más recientes primero. Editar abre el cotizador y cada guardado crea una versión nueva; PDF abre la hoja para imprimir.")}
+        action={<Link className="projects-button" href={(archived ? "/operacion/proyectos" : "/operacion/proyectos?archivadas=1") as Route}>{archived ? "Ver activas" : "Ver archivadas"}</Link>}
+      >
         {quotes.length === 0 ? null : (
           <div className="projects-table-wrap">
             <table className="projects-table">
               <thead>
-                <tr><th>Cotización</th><th>Segmento</th><th>Ciudad · tarifa</th><th className="num">Sistema</th><th className="num">Generación</th><th className="num">Recibo sin / con FV</th><th className="num">Precio</th><th className="num">TIR · retorno</th><th>Actualizada</th></tr>
+                <tr><th>Cotización</th><th>Segmento</th><th>Ciudad · tarifa</th><th className="num">Sistema</th><th className="num">Generación</th><th className="num">Recibo sin / con FV</th><th className="num">Precio</th><th className="num">TIR · retorno</th><th>Actualizada</th><th></th></tr>
               </thead>
               <tbody>
                 {quotes.map((raw) => { const q = { ...raw, summary: raw.summary ?? {} }; return (
@@ -119,6 +126,7 @@ export function SolarHome({ quotes, versions, live, storageError }: { quotes: St
                     <td className="num">{mxn(q.summary.cashPrice)}</td>
                     <td className="num">{pct(q.summary?.irr)}<br /><span className="projects-help">{dec(q.summary.paybackTotal, 2, " años")}</span></td>
                     <td>{fecha(q.updatedAt)}</td>
+                    <td><SolarQuoteActions id={q.id} archived={q.status === "ARCHIVED"} /></td>
                   </tr>
                 ); })}
               </tbody>

@@ -686,3 +686,9 @@
   color: var(--cr-accent, #0e7490);
 }
 .solar-segment-card:hover .solar-segment-icon { border-color: var(--cr-accent); }
+
+/* Acción por renglón en Cotizaciones guardadas: el botón no estira el renglón. */
+.solar-row-actions { white-space: nowrap; text-align: right; }
+.solar-row-actions .projects-button { padding: 4px 12px; font-size: 13px; }
+.solar-row-actions { display: flex; gap: 6px; align-items: center; justify-content: flex-end; flex-wrap: wrap; white-space: nowrap; }
+.solar-row-error { flex-basis: 100%; text-align: right; color: #b42318; font-size: 12px; }

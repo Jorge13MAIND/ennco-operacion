@@ -7,9 +7,12 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(),
 }));
 
+import golden from "@/lib/solar/__fixtures__/golden-v101.json";
 import grantInput from "@/lib/solar/__fixtures__/quote-grant.json";
 import { SolarHome } from "@/components/solar/SolarHome";
+import { SolarQuoteSheet } from "@/components/solar/SolarQuoteSheet";
 import { SolarQuoteWorkspace } from "@/components/solar/SolarQuoteWorkspace";
+import { computeQuote } from "@/lib/solar/quote";
 import { workbookCatalog } from "@/lib/solar/workbook";
 import { defaultQuoteInput } from "@/lib/solar/defaults";
 import type { CatalogVersions, StoredQuote } from "@/lib/solar/server";
@@ -58,5 +61,47 @@ describe("la lista tolera cotizaciones con datos incompletos", () => {
   it("sin catálogos ni cotizaciones se avisa del fallo de lectura", () => {
     const html = renderToStaticMarkup(<SolarHome live quotes={[]} storageError versions={versionsFallback} />);
     expect(html).toContain("No se pudieron leer las cotizaciones guardadas");
+  });
+});
+
+describe("hoja imprimible de la cotización", () => {
+  const catalog = workbookCatalog();
+  it("dibuja la hoja del libro con los datos de la cotización guardada de Grant", () => {
+    const result = computeQuote(grantInput as unknown as QuoteInput, catalog);
+    const html = renderToStaticMarkup(<SolarQuoteSheet result={result} />);
+    expect(html).toContain("Datos Generales del Proyecto:");
+    expect(html).toContain("Información del Centro de Carga:");
+    expect(html).toContain("Información del Sistema Fotovoltaico:");
+    expect(html).toContain("Servicios Adicionales Al Sistema Fotovoltaico:");
+    expect(html).toContain("Condiciones de Proyecto:");
+    expect(html).toContain("Garantías del Proyecto:");
+    expect(html).toContain("Términos generales:");
+    expect(html).toContain("Cobertura Energética:");
+  });
+  it("el ejemplo del libro (Saltillo) sale con su precio de contado y su cobertura", () => {
+    const result = computeQuote((golden as Record<string, { inputs: QuoteInput }>).RESIDENTIAL!.inputs, catalog);
+    const html = renderToStaticMarkup(<SolarQuoteSheet result={result} />);
+    expect(html).toContain("92,528.85");
+    expect(html).toContain("117%");
+  });
+});
+
+describe("la hoja sirve para los tres segmentos", () => {
+  const catalog = workbookCatalog();
+  const cases = (golden as Record<string, { inputs: QuoteInput }>);
+  for (const segment of ["RESIDENTIAL", "COMMERCIAL", "INDUSTRIAL"]) {
+    it(`${segment} se dibuja completa`, () => {
+      const html = renderToStaticMarkup(<SolarQuoteSheet result={computeQuote(cases[segment]!.inputs, catalog)} />);
+      expect(html).toContain("Términos generales:");
+      expect(html).toContain("Garantías del Proyecto:");
+      expect(html).not.toContain("NaN");
+      expect(html).not.toContain("Infinity");
+    });
+  }
+  it("una cotización sin servicios ni financiamiento no rompe la hoja", () => {
+    const base = cases.RESIDENTIAL!.inputs;
+    const input: QuoteInput = { ...base, services: [], financing: [], advances: [], orientationCount: 1 };
+    const html = renderToStaticMarkup(<SolarQuoteSheet result={computeQuote(input, catalog)} />);
+    expect(html).toContain("Servicios Adicionales Al Sistema Fotovoltaico:");
   });
 });

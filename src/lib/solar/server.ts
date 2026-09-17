@@ -64,6 +64,8 @@ export async function loadSolarCatalog(access: OperationsAccessContext): Promise
   return { catalog, versions };
 }
 
+export type QuoteStatus = "DRAFT" | "SENT" | "ACCEPTED" | "ARCHIVED";
+
 export type StoredQuote = {
   id: string; projectId: string | null; segment: QuoteInput["segment"]; name: string; status: string; version: number;
   summary: Partial<QuoteSummary>; catalogVersions: CatalogVersions; createdAt: string; updatedAt: string; input?: QuoteInput; result?: Record<string, unknown>;
@@ -74,12 +76,31 @@ function organization(access: OperationsAccessContext): string {
   return access.organizationId;
 }
 
-export async function listQuotes(access: OperationsAccessContext): Promise<StoredQuote[]> {
+export async function listQuotes(access: OperationsAccessContext, includeArchived = false): Promise<StoredQuote[]> {
   if (access.evidenceClass !== "live" || !access.organizationId) return [];
   const client = await createSupabaseServerClient();
-  const { data, error } = await client.rpc("solar_quotes_list", { target_organization_id: access.organizationId });
+  const { data, error } = await client.rpc("solar_quotes_list", { target_organization_id: access.organizationId, include_archived: includeArchived });
   if (error) throw new Error("SOLAR_STORAGE_UNAVAILABLE");
   return (data ?? []) as StoredQuote[];
+}
+
+/** Archivar y desarchivar: solo cambia el estado, no toca los datos ni sube la version. */
+export async function setQuoteStatus(access: OperationsAccessContext, id: string, status: QuoteStatus): Promise<StoredQuote> {
+  if (access.role === "auditor_readonly") throw new Error("SOLAR_FORBIDDEN");
+  if (!z.uuid().safeParse(id).success) throw new Error("SOLAR_QUOTE_NOT_FOUND");
+  const client = await createSupabaseServerClient();
+  const { data, error } = await client.rpc("solar_quote_set_status", { target_organization_id: organization(access), target_quote_id: id, target_status: status });
+  if (error) throw new Error(/SOLAR_QUOTE_NOT_FOUND/u.test(error.message) ? "SOLAR_QUOTE_NOT_FOUND" : "SOLAR_STORAGE_UNAVAILABLE");
+  return data as StoredQuote;
+}
+
+/** Duplicar: copia el input tal cual en una cotizacion nueva (v1, borrador). El original no se toca. */
+export async function duplicateQuote(access: OperationsAccessContext, id: string): Promise<StoredQuote> {
+  if (access.role === "auditor_readonly") throw new Error("SOLAR_FORBIDDEN");
+  const source = await getQuote(access, id);
+  if (!source.input) throw new Error("SOLAR_QUOTE_NOT_FOUND");
+  const name = `Copia de ${source.name}`.slice(0, 200);
+  return saveQuote(access, { id: null, projectId: null, name, status: "DRAFT", expectedVersion: null, input: source.input });
 }
 
 export async function getQuote(access: OperationsAccessContext, id: string): Promise<StoredQuote> {

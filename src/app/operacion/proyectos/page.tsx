@@ -4,7 +4,8 @@ import { listQuotes, loadSolarCatalog, workbookVersions, type CatalogVersions, t
 
 export const dynamic = "force-dynamic";
 
-export default async function ProjectsMasterPage() {
+export default async function ProjectsMasterPage({ searchParams }: { searchParams: Promise<{ archivadas?: string }> }) {
+  const archived = (await searchParams).archivadas === "1";
   const access = await requireOperationsAccess();
   let versions: CatalogVersions = workbookVersions();
   let quotes: StoredQuote[] = [];
@@ -16,9 +17,11 @@ export default async function ProjectsMasterPage() {
     storageError = true;
   }
   try {
-    quotes = await listQuotes(access);
+    quotes = await listQuotes(access, archived);
   } catch {
     storageError = true;
   }
-  return <SolarHome live={access.evidenceClass === "live"} quotes={quotes} storageError={storageError} versions={versions} />;
+  // En la vista de archivadas solo se muestran esas; la lista activa ya las excluye.
+  const shown = archived ? quotes.filter((q) => q.status === "ARCHIVED") : quotes;
+  return <SolarHome live={access.evidenceClass === "live"} quotes={shown} storageError={storageError} versions={versions} archived={archived} />;
 }
