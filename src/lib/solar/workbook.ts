@@ -2,6 +2,7 @@ import citiesJson from "../../../data/solar/cities.json";
 import factorKJson from "../../../data/solar/factor-k.json";
 import generationJson from "../../../data/solar/generation-defaults.json";
 import invertersJson from "../../../data/solar/inverters.json";
+import fusesJson from "../../../data/solar/module-fuses.json";
 import modulesJson from "../../../data/solar/modules.json";
 import mountingJson from "../../../data/solar/mounting.json";
 import pricesJson from "../../../data/solar/prices.json";
@@ -15,9 +16,22 @@ import type { FactorKTable, GenerationDefaults, Prices, SolarCatalog, SolarCity,
  * (ennco_project_catalogs, categorías solar_*). Solo se importa en servidor y en pruebas: el
  * navegador recibe el catálogo ya resuelto como prop.
  */
+type FuseEntry = { maxSeriesFuseA: number | null; source: string };
+const FUSES = fusesJson as unknown as Record<string, FuseEntry | string>;
+
+/** Añade el fusible máximo de serie de la ficha técnica a cada módulo (capa module-fuses.json).
+    Se aplica también a los módulos que vengan de Catálogos, para no perder el dato al sobreescribir. */
+export function withModuleFuses(modules: SolarModule[]): SolarModule[] {
+  return modules.map((m) => {
+    const f = FUSES[m.model];
+    const entry = f && typeof f === "object" ? f : null;
+    return { ...m, maxSeriesFuseA: m.maxSeriesFuseA ?? entry?.maxSeriesFuseA ?? null, fuseSource: m.fuseSource ?? entry?.source ?? null };
+  });
+}
+
 export function workbookCatalog(): SolarCatalog {
   return {
-    modules: modulesJson as SolarModule[],
+    modules: withModuleFuses(modulesJson as SolarModule[]),
     inverters: invertersJson as SolarInverter[],
     cities: citiesJson as SolarCity[],
     factorK: factorKJson as FactorKTable,

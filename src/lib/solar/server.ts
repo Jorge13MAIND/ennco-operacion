@@ -2,7 +2,7 @@ import "server-only";
 
 import type { OperationsAccessContext } from "@/lib/auth/authorization";
 import { listCatalogs } from "@/lib/projects/repository";
-import { workbookCatalog } from "@/lib/solar/workbook";
+import { withModuleFuses, workbookCatalog } from "@/lib/solar/workbook";
 import { computeQuote } from "@/lib/solar/quote";
 import type { QuoteSaveInput } from "@/lib/solar/schema";
 import { quoteSummary, type QuoteSummary } from "@/lib/solar/summary";
@@ -42,7 +42,8 @@ export function workbookVersions(): CatalogVersions {
 export async function loadSolarCatalog(access: OperationsAccessContext): Promise<{ catalog: SolarCatalog; versions: CatalogVersions }> {
   const catalog = workbookCatalog();
   const versions: CatalogVersions = workbookVersions();
-  if (access.evidenceClass !== "live" || !access.organizationId) return { catalog, versions };
+  if (access.evidenceClass !== "live" || !access.organizationId) catalog.modules = withModuleFuses(catalog.modules);
+  return { catalog, versions };
   try {
     const entries = await listCatalogs(access);
     for (const [category, field] of Object.entries(SOLAR_CATALOG_CATEGORIES)) {
@@ -61,6 +62,7 @@ export async function loadSolarCatalog(access: OperationsAccessContext): Promise
   } catch {
     versions.solar_modules = { ...versions.solar_modules!, name: "Libro v1.0.1 (Catálogos no disponible)" };
   }
+  catalog.modules = withModuleFuses(catalog.modules);
   return { catalog, versions };
 }
 

@@ -1,0 +1,21 @@
+{
+  "_nota": "Fusible máximo de serie por módulo (A), de la ficha técnica del fabricante. Capa aparte del catálogo que se regenera del libro: build-solar-catalogs.py no la toca. Consultado el 2026-09-17.",
+  "Longi - LR5-72HTH-585M (585W)": { "maxSeriesFuseA": 25, "source": "LONGi, ficha LR5-72HTH 565~585M (static.longi.com), 'Maximum Series Fuse Rating 25A'" },
+  "Longi - LR5-72HTH-590M (590W)": { "maxSeriesFuseA": 25, "source": "LONGi, ficha LR5-72HTH 590~600M, 'Maximum Series Fuse Rating 25A'" },
+  "Longi - LR5-72HTH-595M (595W)": { "maxSeriesFuseA": 25, "source": "LONGi, ficha LR5-72HTH 590~600M, 'Maximum Series Fuse Rating 25A'" },
+  "Longi - LR5-72HTH-600M (600W)": { "maxSeriesFuseA": 25, "source": "LONGi, ficha LR5-72HTH 590~600M, 'Maximum Series Fuse Rating 25A'" },
+  "Longi - LR7-72HTHF-605M (605W)": { "maxSeriesFuseA": 25, "source": "LONGi, ficha LR7-72HTHF 605~630M Anti-dust (static.longi.com, 2024-04-30), 'Maximum Series Fuse Rating 25A'" },
+  "Longi - LR7-72HTHF-610M (610W)": { "maxSeriesFuseA": 25, "source": "LONGi, ficha LR7-72HTHF 605~630M Anti-dust, 'Maximum Series Fuse Rating 25A'" },
+  "Longi - LR7-72HTHF-615M (615W)": { "maxSeriesFuseA": 25, "source": "LONGi, ficha LR7-72HTHF 605~630M Anti-dust, 'Maximum Series Fuse Rating 25A'" },
+  "Longi - LR7-72HTHF-620M (620W)": { "maxSeriesFuseA": 25, "source": "LONGi, ficha LR7-72HTHF 605~630M Anti-dust, 'Maximum Series Fuse Rating 25A'" },
+  "Longi - LR7-72HTHF-625M (625W)": { "maxSeriesFuseA": 25, "source": "LONGi, ficha LR7-72HTHF 605~630M Anti-dust, 'Maximum Series Fuse Rating 25A'" },
+  "Longi - LR7-72HTHF-630M (630W)": { "maxSeriesFuseA": 25, "source": "LONGi, ficha LR7-72HTHF 605~630M Anti-dust, 'Maximum Series Fuse Rating 25A'" },
+  "Trina - TSM-NE21-710 (710W)": { "maxSeriesFuseA": 35, "source": "Trina Solar, ficha Vertex N TSM-NEG21C.20 685~710W (static.trinasolar.com, 2023D), 'Max Series Fuse Rating 35A'" },
+  "Best Solar - MGL585N-144BM10 (585W)": { "maxSeriesFuseA": null, "source": "Sin ficha pública encontrada; capturar de la ficha del proveedor" },
+  "Best Solar - MGL610N-144BM10 (610W)": { "maxSeriesFuseA": null, "source": "Sin ficha pública encontrada; capturar de la ficha del proveedor" },
+  "Best Solar - MGL615N-144BM10 (615W)": { "maxSeriesFuseA": null, "source": "Sin ficha pública encontrada; capturar de la ficha del proveedor" },
+  "Best Solar - MGL620N-144BM10 (620W)": { "maxSeriesFuseA": null, "source": "Sin ficha pública encontrada; capturar de la ficha del proveedor" },
+  "Best Solar - MGL625N-144BM10 (625W)": { "maxSeriesFuseA": null, "source": "Sin ficha pública encontrada; capturar de la ficha del proveedor" },
+  "Best Solar - MGL630N-144BM10 (630W)": { "maxSeriesFuseA": null, "source": "Sin ficha pública encontrada; capturar de la ficha del proveedor" },
+  "Best Solar - MGL630N-144BM10 (635W)": { "maxSeriesFuseA": null, "source": "Sin ficha pública encontrada; capturar de la ficha del proveedor" }
+}

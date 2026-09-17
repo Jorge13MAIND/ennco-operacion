@@ -92,11 +92,14 @@ export function EngineeringWorkspace({ catalog, quotes, initialProject, quoteId,
   // ---- Corriente directa (toma el MPPT 1 de Arreglos y el ambiente de Alterna)
   const [dc, setDc] = useState<{ installation: DcCircuitInput["installation"]; awg: DcCircuitInput["awg"]; circuitsInRaceway: number; lengthM: number; combinedStrings: boolean; moduleMaxFuseA: number | null }>({ installation: "Tubería", awg: 10, circuitsInRaceway: 1, lengthM: 20, combinedStrings: false, moduleMaxFuseA: null });
   const mppt1 = array.r?.mppts[0] ?? null;
+  const panel = catalog.modules.find((m) => m.model === project.moduleModel) ?? null;
+  // Fusible máximo: el capturado manda; si no, el de la ficha del módulo en el catálogo.
+  const effectiveFuse = dc.moduleMaxFuseA ?? panel?.maxSeriesFuseA ?? null;
   const dcr = useMemo(() => {
     if (!array.r) return { r: null, e: array.e };
     const series = mppt1 && mppt1.strings > 0 ? mppt1.modulesPerString : array.r.maxSeries;
-    return { r: computeDcCircuit({ modulesInSeries: series, strings: Math.max(mppt1?.strings ?? 0, 1), iscStcA: array.r.stc.isc, impStcA: array.r.stc.imp, vocColdV: array.r.cold.voc, vmpHotV: array.r.hot.vmp, inverterMaxV: array.r.inverter.maxDcInputV, installation: dc.installation, awg: dc.awg, circuitsInRaceway: dc.circuitsInRaceway, insulationC: 90, ambientC: ac.ambientC, onRooftop: ac.onRooftop, roofSeparationMm: ac.roofSeparationMm, lengthM: dc.lengthM, combinedStrings: dc.combinedStrings, moduleMaxFuseA: dc.moduleMaxFuseA }), e: null, series };
-  }, [array, mppt1, dc, ac.ambientC, ac.onRooftop, ac.roofSeparationMm]);
+    return { r: computeDcCircuit({ modulesInSeries: series, strings: Math.max(mppt1?.strings ?? 0, 1), iscStcA: array.r.stc.isc, impStcA: array.r.stc.imp, vocColdV: array.r.cold.voc, vmpHotV: array.r.hot.vmp, inverterMaxV: array.r.inverter.maxDcInputV, installation: dc.installation, awg: dc.awg, circuitsInRaceway: dc.circuitsInRaceway, insulationC: 90, ambientC: ac.ambientC, onRooftop: ac.onRooftop, roofSeparationMm: ac.roofSeparationMm, lengthM: dc.lengthM, combinedStrings: dc.combinedStrings, moduleMaxFuseA: effectiveFuse }), e: null, series };
+  }, [array, mppt1, dc, effectiveFuse, ac.ambientC, ac.onRooftop, ac.roofSeparationMm]);
 
   // ---- Tableros
   const [tb, setTb] = useState({ busbarA: 250, mainBreakerA: 200, interconnection: "Barras" as "Barras" | "Lado de línea" });
@@ -290,7 +293,7 @@ export function EngineeringWorkspace({ catalog, quotes, initialProject, quoteId,
               <Num label="Circuitos DC en la misma canalización" min={1} onChange={(v) => setDc({ ...dc, circuitsInRaceway: v })} value={dc.circuitsInRaceway} />
               <Num label="Longitud de ida del circuito (m)" min={0} onChange={(v) => setDc({ ...dc, lengthM: v })} value={dc.lengthM} />
               <Sel label="¿Las cadenas se combinan en un solo conductor?" onChange={(v) => setDc({ ...dc, combinedStrings: v === "Si" })} options={[{ value: "No", label: "No" }, { value: "Si", label: "Sí" }]} value={dc.combinedStrings ? "Si" : "No"} />
-              <Num hint="De la ficha técnica del módulo; 0 si no se conoce." label="Fusible máximo de serie del módulo (A)" min={0} onChange={(v) => setDc({ ...dc, moduleMaxFuseA: v || null })} value={dc.moduleMaxFuseA ?? 0} />
+              <Num hint={panel?.maxSeriesFuseA != null ? `Ficha: ${panel.maxSeriesFuseA} A · ${panel.fuseSource ?? ""}. Cambia el valor solo si tu ficha dice otra cosa.` : `${panel?.fuseSource ?? "Sin ficha pública"}; captura el de la ficha del proveedor.`} label="Fusible máximo de serie del módulo (A)" min={0} onChange={(v) => setDc({ ...dc, moduleMaxFuseA: v || null })} value={effectiveFuse ?? 0} />
             </div>
           </Panel>
           <Panel title="Resultados conforme a NOM-001-SEDE-2012" description="690-7, 690-8, 690-9, 690-31, 310-15, 240-6 y Capítulo 10.">

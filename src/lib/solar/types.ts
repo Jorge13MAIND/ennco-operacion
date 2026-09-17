@@ -15,6 +15,8 @@ export type SolarModule = {
   coefP: number; coefV: number; coefI: number; toncC: number;
   brand2?: string | null; weightKg?: number | null; efficiency?: number | null; cellType?: string | null;
   warrantyProductYears?: number | null; warrantyPerformanceYears?: number | null; priceUsd: number | null;
+  /** Fusible máximo de serie de la ficha técnica (A); null cuando no hay ficha pública. Capa data/solar/module-fuses.json. */
+  maxSeriesFuseA?: number | null; fuseSource?: string | null;
 };
 
 export type SolarInverter = {

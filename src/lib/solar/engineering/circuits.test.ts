@@ -165,3 +165,22 @@ describe("tableros (Cal_Cir_Ele_Tab)", () => {
     expect(na.busbarRule).toBe("na");
   });
 });
+
+describe("fusible máximo de serie en el catálogo", () => {
+  it("Longi 25 A y Trina 35 A vienen de ficha; Best Solar queda sin dato", () => {
+    const by = (model: string) => catalog.modules.find((m) => m.model === model)!;
+    expect(by("Longi - LR5-72HTH-585M (585W)").maxSeriesFuseA).toBe(25);
+    expect(by("Longi - LR7-72HTHF-630M (630W)").maxSeriesFuseA).toBe(25);
+    expect(by("Trina - TSM-NE21-710 (710W)").maxSeriesFuseA).toBe(35);
+    expect(by("Best Solar - MGL630N-144BM10 (635W)").maxSeriesFuseA).toBeNull();
+    expect(by("Trina - TSM-NE21-710 (710W)").fuseSource).toMatch(/Trina/);
+  });
+  it("con el fusible de ficha, Trina y Longi validan su protección por cadena", () => {
+    const trina = computeDcCircuit({ ...DC, strings: 3, moduleMaxFuseA: 35 });
+    expect(trina.fuseA).toBe(30);
+    expect(trina.fuseCheck).toBe("ok");
+    const longi = computeDcCircuit({ ...DC, iscStcA: 15.07, impStcA: 14.3, strings: 3, moduleMaxFuseA: 25 });
+    expect(longi.fuseA).toBe(25);
+    expect(longi.fuseCheck).toBe("ok");
+  });
+});
