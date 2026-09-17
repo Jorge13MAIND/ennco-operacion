@@ -15,14 +15,14 @@ const rad = (d: number) => (d * Math.PI) / 180;
 
 export type ShadowSite = { city: string; moduleModel: string; orientation: string; modulesPerPanel: number };
 
-export function ShadowScene({ result, site, inclinationDeg, slopeDeg, obstacleHeightM }: { result: ShadingResult; site: ShadowSite; inclinationDeg: number; slopeDeg: number; obstacleHeightM: number }) {
-  const [hour, setHour] = useState(8);
+export function ShadowScene({ result, site, inclinationDeg, slopeDeg, obstacleHeightM, initial }: { result: ShadingResult; site: ShadowSite; inclinationDeg: number; slopeDeg: number; obstacleHeightM: number; initial?: { hour?: number; azimuth?: number; rows?: number } }) {
+  const [hour, setHour] = useState(initial?.hour ?? 8);
   const [dayKey, setDayKey] = useState<(typeof DAY_PRESETS)[number]["key"]>("invierno");
   const [distance, setDistance] = useState<number | null>(null);
   const [gap, setGap] = useState<number | null>(null);
   const [latOverride, setLatOverride] = useState<number | null>(null);
-  const [azimuth, setAzimuth] = useState(0);
-  const [rowsCount, setRowsCount] = useState(2);
+  const [azimuth, setAzimuth] = useState(initial?.azimuth ?? 0);
+  const [rowsCount, setRowsCount] = useState(initial?.rows ?? 2);
   const [obstacleKind, setObstacleKind] = useState<"arbol" | "muro">("arbol");
 
   const latitude = latOverride ?? result.latitude;
@@ -88,6 +88,51 @@ export function ShadowScene({ result, site, inclinationDeg, slopeDeg, obstacleHe
     </g>
   );
 
+
+  /** Vista en planta: brujula, filas giradas segun el azimut de los paneles, sol y direccion de la sombra. */
+  const renderPlan = () => {
+    const PW = 320, PH = 320, cx = PW / 2, cy = PH / 2 + 8, R = 118;
+    // En planta: norte arriba, sur abajo, este a la derecha. Azimut 0 = el panel mira al sur (abajo).
+    const g = rad(azimuth);
+    const facing = { x: -Math.sin(g), y: Math.cos(g) };          // hacia donde mira la fila: sur = abajo; oeste = izquierda
+    const along = { x: Math.cos(g), y: Math.sin(g) };             // direccion de la fila (perpendicular)
+    const rowLen = R * 1.25, depth = Math.max(10, Math.min(28, run * 6));
+    const rows = Array.from({ length: Math.min(rowsCount, 4) }, (_, i) => i);
+    const spacing = Math.min(46, 1.9 * depth + 8);
+    const rect = (i: number) => {
+      const c = { x: cx - facing.x * (i - (rows.length - 1) / 2) * spacing, y: cy - facing.y * (i - (rows.length - 1) / 2) * spacing };
+      const hx = along.x * rowLen / 2, hy = along.y * rowLen / 2, dx = facing.x * depth / 2, dy = facing.y * depth / 2;
+      return `${c.x - hx - dx},${c.y - hy - dy} ${c.x + hx - dx},${c.y + hy - dy} ${c.x + hx + dx},${c.y + hy + dy} ${c.x - hx + dx},${c.y - hy + dy}`;
+    };
+    const sunA = rad(now.azimuthDeg);                             // azimut solar: 0 sur, negativo este
+    const sun = { x: cx - Math.sin(sunA) * R, y: cy + Math.cos(sunA) * R };   // este a la derecha
+    return (
+      <svg className="shadow-plan" viewBox={`0 0 ${PW} ${PH}`} role="img" aria-label="Vista en planta: orientación de las filas y posición del sol">
+        <rect fill="#ffffff" height={PH} rx="12" width={PW} x="0" y="0" />
+        <circle cx={cx} cy={cy} fill="none" r={R} stroke="#e2e8f0" />
+        <line stroke="#e2e8f0" x1={cx} x2={cx} y1={cy - R} y2={cy + R} /><line stroke="#e2e8f0" x1={cx - R} x2={cx + R} y1={cy} y2={cy} />
+        <text fill="#334155" fontSize="12" fontWeight="700" textAnchor="middle" x={cx} y={cy - R - 6}>N</text>
+        <text fill="#334155" fontSize="12" fontWeight="700" textAnchor="middle" x={cx} y={cy + R + 15}>S</text>
+        <text fill="#334155" fontSize="12" fontWeight="700" textAnchor="start" x={cx + R + 5} y={cy + 4}>E</text>
+        <text fill="#334155" fontSize="12" fontWeight="700" textAnchor="end" x={cx - R - 5} y={cy + 4}>O</text>
+        {rows.map((i) => <polygon fill={i === 0 ? "#0e7490" : "#38bdf8"} key={i} points={rect(i)} stroke="#0f172a" strokeWidth="1" />)}
+        {/* hacia donde miran */}
+        <line markerEnd="url(#arrow)" stroke="#0e7490" strokeWidth="2.5" x1={cx + facing.x * (depth / 2 + 6)} x2={cx + facing.x * (R - 14)} y1={cy + facing.y * (depth / 2 + 6)} y2={cy + facing.y * (R - 14)} />
+        {azimuth !== 0 ? <path d={`M ${cx} ${cy + 44} A 44 44 0 0 ${azimuth > 0 ? 1 : 0} ${cx + facing.x * 44} ${cy + facing.y * 44}`} fill="none" stroke="#b91c1c" strokeWidth="1.5" /> : null}
+        <text fill="#0e7490" fontSize="11" fontWeight="700" x="10" y="16">{azimuth === 0 ? "Miran al sur" : `Miran ${nf(0).format(Math.abs(azimuth))}° al ${azimuth < 0 ? "este" : "oeste"}`}</text>
+        {/* sol y sombra */}
+        {now.up ? (<g>
+          <circle cx={sun.x} cy={sun.y} fill="#fbbf24" r="9" stroke="#f59e0b" />
+          <line stroke="#f59e0b" strokeDasharray="4 3" x1={sun.x} x2={cx} y1={sun.y} y2={cy} />
+          <line stroke="#0f172a" strokeOpacity="0.35" strokeWidth="6" x1={cx} x2={cx + Math.sin(sunA) * 70} y1={cy} y2={cy - Math.cos(sunA) * 70} />
+          <text fill="#92400e" fontSize="10" textAnchor="middle" x={sun.x} y={sun.y - 13}>sol {hourLabel(hour)}</text>
+        </g>) : null}
+        <text fill="#64748b" fontSize="10" textAnchor="middle" x={cx} y={PH - 6}>Planta · la barra oscura es hacia dónde cae la sombra</text>
+        <defs><marker id="arrow" markerHeight="6" markerWidth="6" orient="auto" refX="5" refY="3"><path d="M0,0 L6,3 L0,6 z" fill="#0e7490" /></marker></defs>
+      </svg>
+    );
+  };
+
   const firstRowShaded = obstacleHeightM > 0 && now.up && now.obstacleShadowM > G;
   return (
     <div className="shadow-scene">
@@ -104,10 +149,11 @@ export function ShadowScene({ result, site, inclinationDeg, slopeDeg, obstacleHe
         <label className="eng-field"><span>Obstáculo frontal · {obstacleHeightM > 0 ? `${m2(obstacleHeightM)} de alto a ${m2(G)} de la primera fila` : "sin obstáculo (captúralo arriba)"}</span>
           <input disabled={obstacleHeightM <= 0} max={Math.max(30, Math.ceil(minGap * 2))} min={0.5} onChange={(e) => setGap(Number(e.target.value))} step={0.1} type="range" value={G} />
           <small>{obstacleHeightM > 0 ? <>mínimo calculado {m2(minGap)} · <button className="cons-reset" onClick={() => setGap(null)} type="button">volver al mínimo</button> · <select aria-label="Tipo de obstáculo" onChange={(e) => setObstacleKind(e.target.value as "arbol" | "muro")} value={obstacleKind}><option value="arbol">árbol</option><option value="muro">muro o edificio</option></select></> : "La altura del obstáculo se captura en Información de instalación."}</small></label>
-        <label className="eng-field"><span>Azimut de los paneles · {azimuth === 0 ? "sur" : `${nf(0).format(Math.abs(azimuth))}° al ${azimuth < 0 ? "este" : "oeste"}`}</span><input max={90} min={-90} onChange={(e) => setAzimuth(Number(e.target.value))} step={5} type="range" value={azimuth} /></label>
+        <label className="eng-field"><span>Hacia dónde miran los paneles (azimut) · {azimuth === 0 ? "al sur" : `${nf(0).format(Math.abs(azimuth))}° al ${azimuth < 0 ? "este" : "oeste"}`}</span><input max={90} min={-90} onChange={(e) => setAzimuth(Number(e.target.value))} step={5} type="range" value={azimuth} /><small>Es el giro en la brújula, no la inclinación. Se ve en la vista en planta.</small></label>
         <label className="eng-field"><span>Filas dibujadas · {rowsCount} · fondo total {m2((rowsCount - 1) * D + run)}</span><input max={6} min={1} onChange={(e) => setRowsCount(Number(e.target.value))} step={1} type="range" value={rowsCount} /></label>
       </div>
 
+      <div className="shadow-views">
       <svg className="shadow-svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Plano lateral de las filas de paneles, el obstáculo frontal y sus sombras a la hora elegida">
         <defs>
           <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#dbeafe" /><stop offset="1" stopColor="#ffffff" /></linearGradient>
@@ -141,8 +187,10 @@ export function ShadowScene({ result, site, inclinationDeg, slopeDeg, obstacleHe
           {[0, 45, 90, 135, 180, 225, 270, 315].map((a) => <line key={a} stroke="#f59e0b" strokeWidth="1.5" x1={sunX + Math.cos(rad(a)) * 18} x2={sunX + Math.cos(rad(a)) * 24} y1={sunY + Math.sin(rad(a)) * 18} y2={sunY + Math.sin(rad(a)) * 24} />)}
           <text fill="#92400e" fontSize="12" fontWeight="700" textAnchor="middle" x={sunX} y={sunY - 30}>{nf(1).format(now.altitudeDeg)}° · {hourLabel(hour)}</text>
         </g>) : <text fill="#64748b" fontSize="13" x={padX} y="34">El sol está bajo el horizonte a esta hora.</text>}
-        <text fill="#64748b" fontSize="11" textAnchor="end" x={W - padX} y={H - 8}>{preset.label.split(" (")[0]} · latitud {nf(1).format(latitude)}° · azimut solar {nf(0).format(now.azimuthDeg)}° · sombra de fila {m2(now.rowShadowM)}</text>
+        <text fill="#64748b" fontSize="11" textAnchor="end" x={W - 46} y={H - 8}>{preset.label.split(" (")[0]} · latitud {nf(1).format(latitude)}° · azimut solar {nf(0).format(now.azimuthDeg)}° · sombra de fila {m2(now.rowShadowM)}</text>
       </svg>
+      {renderPlan()}
+      </div>
 
       <div className="eng-rows is-compact">
         <div className={`eng-row ${rowsClearNow ? "is-ok" : "is-bad"}`}><span>Filas a las {hourLabel(hour)}</span><strong>{now.up ? `sombra de ${m2(now.rowShadowM)} · hacen falta ${m2(now.requiredDistanceM)} pie a pie` : "sin sol"}</strong></div>

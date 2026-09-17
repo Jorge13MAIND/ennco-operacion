@@ -870,7 +870,10 @@
 .shadow-site small { font-weight: 500; color: #cbd5e1; }
 .shadow-lat { width: 70px; font: inherit; font-size: 0.9rem; font-weight: 700; padding: 2px 6px; border: 1px solid #334155; border-radius: 6px; background: #1e293b; color: #fff; text-align: right; }
 .shadow-controls input[type="range"] { width: 100%; accent-color: #0e7490; }
+.shadow-views { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 12px; align-items: stretch; }
 .shadow-svg { width: 100%; height: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; }
+.shadow-plan { width: 100%; height: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; }
+@media (max-width: 900px) { .shadow-views { grid-template-columns: 1fr; } .shadow-plan { max-width: 360px; } }
 .shadow-chart { width: 100%; height: auto; margin-top: 10px; }
 @media (max-width: 900px) { .shadow-controls { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 640px) { .shadow-controls { grid-template-columns: 1fr; } }
