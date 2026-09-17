@@ -2,7 +2,6 @@ import type { PortalModule, PortalRow } from "@/lib/operations/portal";
 import type { OperationModuleKey } from "@/lib/operations/portal";
 import { PortalTableFilter } from "@/components/PortalTableFilter";
 import {
-  ApprovalDecisionAction,
   AssignTaskButton,
   CompleteTaskButton,
   IncidentTransitionAction,
@@ -22,7 +21,7 @@ export function PortalRowsTable({ module, actionKind, evidenceClass }: {
   evidenceClass?: "synthetic_demo" | "live";
 }) {
   const tableId = `portal-table-${(actionKind ?? module.title).toLocaleLowerCase("es-MX").replace(/[^a-z0-9]+/gu, "-")}`;
-  const showsAction = evidenceClass === "live" && ["alertas", "respuestas", "leads", "aprobaciones"].includes(actionKind ?? "");
+  const showsAction = evidenceClass === "live" && ["alertas", "respuestas", "leads"].includes(actionKind ?? "");
   return (
     <section className="panel">
       <div className="panel-head portal-panel-head">
@@ -60,9 +59,6 @@ export function PortalRowsTable({ module, actionKind, evidenceClass }: {
                     <td data-label="Acción">
                       {actionKind === "leads" ? <LeadQualificationAction leadId={item.id} qualified={item.values.qualified === "true"} /> : null}
                       {actionKind === "respuestas" && item.values.reviewable === "true" ? <ReplyReviewAction providerEventId={item.id} /> : null}
-                      {actionKind === "aprobaciones" && item.values.actionable === "true"
-                        ? <ApprovalDecisionAction requestId={item.id} subjectSha256={item.values.subject_sha256 ?? ""} />
-                        : null}
                       {actionKind === "alertas" && item.values.actionable === "true"
                         ? <IncidentTransitionAction action={item.values.action ?? ""} incidentId={item.id} />
                         : null}

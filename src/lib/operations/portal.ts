@@ -1,5 +1,4 @@
 import type { OperationsAccessContext } from "@/lib/auth/authorization";
-import { INITIAL_MILESTONES } from "@/lib/control-room/snapshot";
 import {
   parseOutboundProviderReadiness,
   providerBlockerLabel,
@@ -30,11 +29,6 @@ export const OPERATION_MODULE_KEYS = [
   "empresas",
   "infraestructura",
   "campanas",
-  "roadmap",
-  "aprobaciones",
-  "reportes",
-  "exportaciones",
-  "entrega",
 ] as const;
 
 export type OperationModuleKey = (typeof OPERATION_MODULE_KEYS)[number];
@@ -47,11 +41,6 @@ export const OPERATION_MODULE_LABELS: Record<OperationModuleKey, string> = {
   empresas: "Empresas",
   infraestructura: "Infraestructura",
   campanas: "Campañas",
-  roadmap: "Roadmap",
-  aprobaciones: "Aprobaciones",
-  reportes: "Reportes",
-  exportaciones: "Exportaciones",
-  entrega: "Entrega",
 };
 
 export type PortalColumn = { key: string; label: string };
@@ -301,105 +290,6 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
         t0: "0/100 entregas válidas",
         envio: "HOLD",
       })],
-    },
-    roadmap: {
-      title: "Roadmap E2E",
-      description: "Estado, gate, bloqueador y próxima acción con evidencia verificable.",
-      emptyState: "No hay milestones.",
-      columns: [
-        { key: "milestone", label: "Milestone" },
-        { key: "gate", label: "Gate" },
-        { key: "bloqueador", label: "Bloqueador" },
-        { key: "siguiente", label: "Siguiente acción" },
-      ],
-      rows: INITIAL_MILESTONES.map((milestone) => row(milestone.id, milestone.status, {
-        milestone: `${milestone.id}. ${milestone.name}`,
-        gate: milestone.gate ?? "Pendiente",
-        bloqueador: milestone.blocker ?? "Sin bloqueo",
-        siguiente: milestone.nextAction,
-      })),
-    },
-    aprobaciones: {
-      title: "Aprobaciones",
-      description: "Nada público, comercial o pagado avanza sin una decisión registrada.",
-      emptyState: "No hay decisiones live registradas.",
-      columns: [
-        { key: "decision", label: "Decisión" },
-        { key: "responsable", label: "Responsable" },
-        { key: "estado", label: "Estado" },
-        { key: "impacto", label: "Impacto" },
-      ],
-      rows: [
-        row("approval-annex-a", "IN_PROGRESS", {
-          decision: "Anexo A vigente",
-          responsable: "ENNCO",
-          estado: "POSCO MPPC, MPE PLASTIC y TEJAS EL AGUILA",
-          impacto: "3 razones sociales, 12 alias y 6 dominios verificados. Falta binding transaccional en base",
-        }),
-        row("approval-model", "EVIDENCE_READY", {
-          decision: "Modelo de precotización",
-          responsable: "Paco",
-          estado: "Aprobado 20 ago 2026",
-          impacto: "Habilita el demo validado. Publicación real conserva gates legales y técnicos",
-        }),
-        row("approval-privacy", "BLOCKED_EXTERNAL", {
-          decision: "Aviso de privacidad 2026-08-11-v1",
-          responsable: "ENNCO + revisión legal",
-          estado: "Paquete exacto listo para aprobación",
-          impacto: "Sin aprobación ligada al SHA256 no se publica ni se habilita captura real",
-        }),
-      ],
-    },
-    reportes: {
-      title: "Reportes",
-      description: "Sistema, actividad y resultados se muestran por separado con denominadores.",
-      emptyState: "No existe T0 porque todavía no hay 100 entregas válidas.",
-      columns: [
-        { key: "capa", label: "Capa" },
-        { key: "metrica", label: "Métrica" },
-        { key: "valor", label: "Valor real" },
-        { key: "limite", label: "Límite" },
-      ],
-      rows: [
-        row("report-system", "LOCAL_PASS", { capa: "Sistema", metrica: "Gates locales M0 a M9", valor: "PASS local", limite: "No equivale a producción ni aceptación" }),
-        row("report-activity", "ZERO", { capa: "Actividad", metrica: "Entregas válidas", valor: "0", limite: "T0 no calculado" }),
-        row("report-t0", "UNKNOWN", { capa: "Baseline", metrica: "T0", valor: "No existe", limite: "Requiere exactamente 100 primeras entregas válidas" }),
-        row("report-contractual", "UNKNOWN", { capa: "Contrato", metrica: "Primer mes completo", valor: "No iniciado", limite: "Requiere todos los días operativos con evidencia live" }),
-        row("report-recovery", "HOLD", { capa: "Recuperación", metrica: "Experimento activo", valor: "Ninguno", limite: "Una variable por vez, sólo después del diagnóstico" }),
-        row("report-outcome", "ZERO", { capa: "Resultado", metrica: "Leads contractuales", valor: "0", limite: "Sin campaña real" }),
-      ],
-    },
-    exportaciones: {
-      title: "Exportaciones",
-      description: "Paquetes versionados y auditables. La descarga live se habilita con el almacenamiento dedicado.",
-      emptyState: "No hay exportaciones live disponibles.",
-      columns: [
-        { key: "paquete", label: "Paquete" },
-        { key: "formato", label: "Formato" },
-        { key: "contenido", label: "Contenido" },
-        { key: "estado", label: "Estado" },
-      ],
-      rows: [
-        row("export-companies", sampleBadge, { paquete: "Empresas y contactos", formato: "CSV", contenido: "Fuentes, confianza y supresión", estado: "Contrato listo, sin datos live" }),
-        row("export-commercial", sampleBadge, { paquete: "Pipeline y atribución", formato: "CSV", contenido: "Etapas, evidencia y pagos", estado: "Contrato listo, sin datos live" }),
-      ],
-    },
-    entrega: {
-      title: "Hardening y entrega",
-      description: "Preparación local, evidencia live y aceptación final permanecen separadas.",
-      emptyState: "No hay un paquete de entrega live.",
-      columns: [
-        { key: "entregable", label: "Entregable" },
-        { key: "evidencia", label: "Evidencia" },
-        { key: "valor", label: "Estado real" },
-        { key: "limite", label: "Límite" },
-      ],
-      rows: [
-        row("handoff-local", "EVIDENCE_READY", { entregable: "Paquete M9 local", evidencia: "6/6 criterios locales", valor: "Preparado", limite: "No equivale a entrega ENNCO" }),
-        row("handoff-live", "EXTEND", { entregable: "Gates live", evidencia: "0/10", valor: "No iniciados", limite: "Requiere infraestructura, UAT y operación autorizada" }),
-        row("handoff-training", "NOT_STARTED", { entregable: "Capacitación ENNCO", evidencia: "0 sesiones live", valor: "Guion listo", limite: "El guion no prueba capacitación" }),
-        row("handoff-acceptance", "BLOCKED", { entregable: "Aceptación final", evidencia: "0 aceptaciones", valor: "No aceptado", limite: "Sólo un ennco_admin puede aceptar un paquete live" }),
-      ],
     },
   };
 
@@ -692,8 +582,6 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     client.from("opportunities").select("id,account_id,stage,value_mxn,next_action,next_action_at,economic_buyer,active_pain,business_impact,timing_under_90_days").eq("organization_id", organizationId).order("updated_at", { ascending: false }).limit(100),
     client.from("meetings").select("id,opportunity_id,scheduled_at,held_at,attendance_verified").eq("organization_id", organizationId).order("scheduled_at", { ascending: true }).limit(100),
     client.from("tasks").select("id,account_id,contact_id,task_type,normalized_objective,owner_user_id,due_at,status").eq("organization_id", organizationId).order("due_at", { ascending: true }).limit(100),
-    client.from("roadmap_milestones").select("id,code,name,status,blocker,next_action,due_date").eq("organization_id", organizationId).order("code", { ascending: true }),
-    client.from("approvals").select("id,subject_type,decision,decided_at").eq("organization_id", organizationId).order("decided_at", { ascending: false }).limit(100),
     client.from("incidents").select("id,severity,status,title,owner_user_id,opened_at").eq("organization_id", organizationId).order("opened_at", { ascending: false }).limit(100),
     client.from("mailbox_sync_cursors").select("mailbox_id,status,last_synced_at,last_error_code,watch_expires_at").eq("organization_id", organizationId),
     client.from("campaign_release_gates").select("id,campaign_id,gate_code,status,evidence_class,observed_at,valid_until").eq("organization_id", organizationId).order("gate_code", { ascending: true }),
@@ -701,20 +589,12 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     client.from("rollout_waves").select("id,campaign_id,wave_number,status,planned_recipient_count,scheduled_for,previous_observation_id,passed_at,extended_at,killed_at").eq("organization_id", organizationId).order("wave_number", { ascending: false }),
     client.from("rollout_health_observations").select("id,campaign_id,source_kind,source_id,decision,evidence_class,delivered_count,hard_bounce_count,spam_complaint_count,unknown_count,observed_at").eq("organization_id", organizationId).order("observed_at", { ascending: false }),
     client.from("commercial_baselines").select("id,campaign_id,valid_first_deliveries,substantive_replies,positive_replies,strict_leads,held_meetings,qualified_opportunities,cutoff_at,evidence_class").eq("organization_id", organizationId).order("cutoff_at", { ascending: false }),
-    client.from("contractual_monthly_reports").select("id,campaign_id,period_start,period_end_exclusive,report_due_on,generated_on,generated_on_time,operational_days,delivered_messages,substantive_replies,positive_replies,email_strict_leads,prequote_strict_leads,total_strict_leads,target_strict_leads,target_met,held_meetings,qualified_opportunities,delivered_proposals,closed_won,first_payments_mxn,client_sla_breaches,snapshot_sha256").eq("organization_id", organizationId).order("period_start", { ascending: false }),
-    client.from("contractual_report_issuances").select("id,report_id,issued_at,issued_by").eq("organization_id", organizationId).order("issued_at", { ascending: false }),
-    client.from("recovery_experiments").select("id,campaign_id,report_id,variable,hypothesis_code,sample_size,status,approved_at,started_at,completed_at,killed_at").eq("organization_id", organizationId).order("created_at", { ascending: false }),
-    client.from("handoff_packages").select("id,source_commit_sha,manifest_sha256,evidence_class,status,created_at,sealed_at,accepted_at").eq("organization_id", organizationId).order("created_at", { ascending: false }),
-    client.from("handoff_artifacts").select("id,package_id,artifact_key,required,evidence_class,verified_at").eq("organization_id", organizationId),
-    client.from("handoff_readiness_checks").select("id,package_id,check_code,status,evidence_class,observed_at").eq("organization_id", organizationId),
-    client.from("handoff_training_records").select("id,package_id,audience_role,status,evidence_class,scheduled_at,held_at").eq("organization_id", organizationId),
-    client.from("final_acceptances").select("id,package_id,accepted_by,accepted_at").eq("organization_id", organizationId),
     client.from("payments").select("id,opportunity_id,amount_mxn,paid_at,is_first_payment").eq("organization_id", organizationId).eq("is_first_payment", true),
   ]);
   const failed = results.find((result) => result.error);
   if (failed?.error) throw new Error(`PORTAL_QUERY_FAILED:${failed.error.code ?? "UNKNOWN"}`);
 
-  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, roadmapResult, approvalsResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult, monthlyReportsResult, reportIssuancesResult, recoveryExperimentsResult, handoffPackagesResult, handoffArtifactsResult, handoffChecksResult, handoffTrainingResult, finalAcceptancesResult, paymentsResult] = results;
+  const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult, paymentsResult] = results;
   const [capacitySchedulesSettled, capacityEvaluationSettled] = await capacityPromise;
   const [researchAccountsSettled, researchCandidatesSettled, researchDedupeSettled, researchAssessmentSettled] = await researchPromise;
   const [approvalRequestsSettled, operationalSlaSettled, operationsIncidentsSettled, operationsHealthSettled] = await operationsPromise;
@@ -791,14 +671,6 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const rolloutWaves = asRows(rolloutWavesResult.data);
   const rolloutHealth = asRows(rolloutHealthResult.data);
   const baselines = asRows(baselinesResult.data);
-  const monthlyReports = asRows(monthlyReportsResult.data);
-  const reportIssuances = asRows(reportIssuancesResult.data);
-  const recoveryExperiments = asRows(recoveryExperimentsResult.data);
-  const handoffPackages = asRows(handoffPackagesResult.data);
-  const handoffArtifacts = asRows(handoffArtifactsResult.data);
-  const handoffChecks = asRows(handoffChecksResult.data);
-  const handoffTraining = asRows(handoffTrainingResult.data);
-  const finalAcceptances = asRows(finalAcceptancesResult.data);
   const firstPayments = asRows(paymentsResult.data);
   const capacityReadModel = parseCapacityReadModel({
     schedulesAvailable: capacitySchedulesResult !== null,
@@ -829,7 +701,6 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const meetings = asRows(meetingsResult.data);
   const tasks = asRows(tasksResult.data);
   const incidents = operationsReadReady ? asRows(operationsIncidentsResult?.data) : asRows(incidentsResult.data);
-  const approvalRequests = operationsReadReady ? asRows(approvalRequestsResult?.data) : [];
   const operationalSlaCases = operationsReadReady ? asRows(operationalSlaResult?.data) : [];
   const operationsHealth = operationsReadReady && operationsHealthParsed.success ? operationsHealthParsed.data : null;
   const controls = controlsResult.data as DbRecord | null;
@@ -910,30 +781,6 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     });
   });
   const strictQualifiedOpportunities = opportunities.filter(isStrictQualifiedOpportunity);
-  const roadmapRows = asRows(roadmapResult.data).map((milestone) => row(textValue(milestone.id), textValue(milestone.status), {
-    milestone: `${textValue(milestone.code)}. ${textValue(milestone.name)}`,
-    gate: "Ver evidencia",
-    bloqueador: textValue(milestone.blocker, "Sin bloqueo"),
-    siguiente: textValue(milestone.next_action),
-  }));
-  const approvalRows = approvalRequests.map((request) => row(textValue(request.id), textValue(request.status), {
-    decision: textValue(request.subject_type),
-    responsable: request.decided_by ? `Decidió ${textValue(request.decided_by).slice(0, 8)}` : "Pendiente de otro administrador",
-    estado: textValue(request.status),
-    impacto: `Vence ${dateValue(request.due_at)}`,
-    subject_sha256: textValue(request.subject_sha256),
-    actionable: request.status === "PENDING" ? "true" : "false",
-  })).concat(asRows(approvalsResult.data).map((approval) => row(textValue(approval.id), textValue(approval.decision), {
-    decision: textValue(approval.subject_type),
-    responsable: "Usuario autenticado",
-    estado: textValue(approval.decision),
-    impacto: dateValue(approval.decided_at),
-  }))).concat(releaseGates.map((gate) => row(textValue(gate.id), textValue(gate.status), {
-    decision: textValue(gate.gate_code),
-    responsable: gate.gate_code === "EXPLICIT_SEND_APPROVAL_JORGE" ? "Jorge" : "Dueño del gate",
-    estado: textValue(gate.status),
-    impacto: gate.status === "PASS" ? `Evidencia ${dateValue(gate.observed_at)}` : "Mantiene el primer envío en HOLD",
-  })));
   const incidentActionByStatus: Record<string, string> = {
     OPEN: "ACKNOWLEDGE",
     ACKNOWLEDGED: "CONTAIN",
@@ -965,20 +812,6 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   const contractualLeads = leads.filter((lead) => lead.contractual_qualified === true).length;
   const wonProjects = opportunities.filter((opportunity) => opportunity.stage === "CLOSED_WON").length;
   const firstPaymentsMxn = sumFirstPaymentsMxn(firstPayments);
-  const latestBaseline = baselines[0];
-  const latestMonthlyReport = monthlyReports[0];
-  const latestMonthlyIssuance = latestMonthlyReport
-    ? reportIssuances.find((issuance) => textValue(issuance.report_id) === textValue(latestMonthlyReport.id))
-    : undefined;
-  const activeRecovery = recoveryExperiments.find((experiment) => experiment.status === "READY" || experiment.status === "RUNNING");
-  const latestHandoff = handoffPackages[0];
-  const latestHandoffId = textValue(latestHandoff?.id, "");
-  const latestHandoffChecks = handoffChecks.filter((check) => textValue(check.package_id) === latestHandoffId);
-  const localHandoffPasses = latestHandoffChecks.filter((check) => check.status === "PASS" && check.evidence_class === "synthetic_demo").length;
-  const liveHandoffPasses = latestHandoffChecks.filter((check) => check.status === "PASS" && check.evidence_class === "live").length;
-  const latestHandoffArtifacts = handoffArtifacts.filter((artifact) => textValue(artifact.package_id) === latestHandoffId).length;
-  const liveTrainingHeld = handoffTraining.filter((training) => textValue(training.package_id) === latestHandoffId && training.status === "HELD" && training.evidence_class === "live").length;
-  const finalAcceptance = finalAcceptances.find((acceptance) => textValue(acceptance.package_id) === latestHandoffId);
   const taskActionRows = tasks.filter((task) => task.status === "OPEN").map((task) => row(textValue(task.id), textValue(task.status), {
     objective: textValue(task.normalized_objective),
     due: dateValue(task.due_at),
@@ -1177,70 +1010,6 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       empresas: { ...base.modules.empresas, rows: accountRows },
       infraestructura: { ...base.modules.infraestructura, rows: providerInfrastructureRows },
       campanas: { ...base.modules.campanas, rows: campaignRows },
-      roadmap: { ...base.modules.roadmap, rows: roadmapRows },
-      aprobaciones: { ...base.modules.aprobaciones, rows: approvalRows },
-      reportes: {
-        ...base.modules.reportes,
-        rows: [
-          row("live-system", "LIVE", { capa: "Sistema", metrica: "Sincronización de respuestas", valor: replySync, limite: `${openP0} P0 y ${openP1} P1 abiertos` }),
-          row("live-activity", "LIVE", { capa: "Actividad", metrica: "Empresas registradas", valor: String(accountsResult.count ?? accountRows.length), limite: "No equivale a pipeline" }),
-          row("live-t0", latestBaseline ? "LIVE" : "UNKNOWN", {
-            capa: "Baseline",
-            metrica: "T0 tras 100 entregas",
-            valor: latestBaseline
-              ? `${textValue(latestBaseline.strict_leads, "0")} leads, ${textValue(latestBaseline.positive_replies, "0")} respuestas positivas`
-              : "No existe",
-            limite: latestBaseline ? `Corte ${dateValue(latestBaseline.cutoff_at)}` : "No calcular antes de 100 entregas válidas",
-          }),
-          row("live-contractual", latestMonthlyReport ? (latestMonthlyIssuance ? "ISSUED" : "EVIDENCE_READY") : "UNKNOWN", {
-            capa: "Contrato",
-            metrica: "Leads estrictos del mes completo",
-            valor: latestMonthlyReport
-              ? `${textValue(latestMonthlyReport.total_strict_leads, "0")}/${textValue(latestMonthlyReport.target_strict_leads, "10")}`
-              : "No existe",
-            limite: latestMonthlyReport
-              ? `${textValue(latestMonthlyReport.operational_days)} días. ${latestMonthlyIssuance ? `Emitido ${dateValue(latestMonthlyIssuance.issued_at)}` : "Pendiente de aprobación"}`
-              : "Requiere mes calendario completo y evidencia diaria live",
-          }),
-          row("live-recovery", activeRecovery ? textValue(activeRecovery.status) : "HOLD", {
-            capa: "Recuperación",
-            metrica: "Experimento activo",
-            valor: activeRecovery ? `${textValue(activeRecovery.variable)}. ${textValue(activeRecovery.hypothesis_code)}` : "Ninguno",
-            limite: activeRecovery ? `${textValue(activeRecovery.sample_size)} observaciones` : "Una variable por vez después del diagnóstico",
-          }),
-          row("live-outcome", "LIVE", { capa: "Resultado", metrica: "Leads contractuales", valor: String(contractualLeads), limite: "Requiere evidencia estricta" }),
-        ],
-      },
-      exportaciones: { ...base.modules.exportaciones, rows: [] },
-      entrega: {
-        ...base.modules.entrega,
-        rows: latestHandoff ? [
-          row("live-handoff-package", textValue(latestHandoff.status), {
-            entregable: "Paquete de entrega",
-            evidencia: `${latestHandoffArtifacts} artefactos. Manifest ${textValue(latestHandoff.manifest_sha256).slice(0, 12)}`,
-            valor: textValue(latestHandoff.status),
-            limite: latestHandoff.evidence_class === "live" ? "Paquete live" : "Paquete sintético. No aceptable",
-          }),
-          row("live-handoff-checks", liveHandoffPasses === 10 ? "PASS" : "EXTEND", {
-            entregable: "Criterios de readiness",
-            evidencia: `${localHandoffPasses}/6 locales y ${liveHandoffPasses}/10 live`,
-            valor: liveHandoffPasses === 10 ? "Listos para aceptación" : "Incompletos",
-            limite: "UNKNOWN nunca cuenta como verde",
-          }),
-          row("live-handoff-training", liveTrainingHeld > 0 ? "PASS" : "NOT_STARTED", {
-            entregable: "Capacitación ENNCO",
-            evidencia: `${liveTrainingHeld} sesiones live realizadas`,
-            valor: liveTrainingHeld > 0 ? "Evidencia disponible" : "No realizada",
-            limite: "Requiere operador ENNCO autenticado",
-          }),
-          row("live-handoff-acceptance", finalAcceptance ? "ACCEPTED" : "BLOCKED", {
-            entregable: "Aceptación final",
-            evidencia: finalAcceptance ? `Aceptada ${dateValue(finalAcceptance.accepted_at)}` : "0 aceptaciones",
-            valor: finalAcceptance ? "Aceptado" : "No aceptado",
-            limite: "Sólo ennco_admin y manifest exacto",
-          }),
-        ] : [],
-      },
     },
   };
 }

@@ -1,5 +1,3 @@
-import type { Route } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { PortalRowsTable } from "@/components/PortalTable";
@@ -24,25 +22,13 @@ export default async function OperationModulePage({ params }: { params: Promise<
         </div>
         {snapshot.evidenceClass === "live" ? null : <span className="badge">{operationalLabel(snapshot.evidenceClass)}</span>}
       </div>
-      {snapshot.evidenceClass === "synthetic_demo" && module !== "roadmap" && module !== "aprobaciones" ? (
+      {snapshot.evidenceClass === "synthetic_demo" ? (
         <div className="notice operations-disclosure">
-          <strong>{module === "entrega"
-            ? "Estado local, sin entrega real."
-            : module === "cadencia"
-              ? "Cadencia live no comprobada."
-              : "Ejemplo operativo."}</strong>
-          <p>{module === "entrega"
-            ? "EVIDENCE_READY sólo describe el paquete local. UAT, capacitación, transferencia y aceptación ENNCO permanecen en cero."
-            : module === "cadencia"
-              ? "Las cinco cadencias permanecen UNKNOWN. No se inventan horarios, responsables, asistencia ni entregas externas."
+          <strong>{module === "cadencia" ? "Cadencia live no comprobada." : "Ejemplo operativo."}</strong>
+          <p>{module === "cadencia"
+            ? "Las cinco cadencias permanecen UNKNOWN. No se inventan horarios, responsables, asistencia ni entregas externas."
             : "Los renglones marcados SIMULACION no son empresas, respuestas, leads ni oportunidades reales."}</p>
         </div>
-      ) : null}
-      {module === "exportaciones" ? (
-        <section className="export-actions" aria-label="Descargas auditables">
-          <Link className="button secondary" href={"/api/v1/exports/companies-contacts" as Route} prefetch={false}>Descargar empresas y contactos</Link>
-          <Link className="button secondary" href={"/api/v1/exports/pipeline-attribution" as Route} prefetch={false}>Descargar pipeline y atribución</Link>
-        </section>
       ) : null}
       <PortalRowsTable actionKind={module} evidenceClass={snapshot.evidenceClass} module={selected} />
     </main>

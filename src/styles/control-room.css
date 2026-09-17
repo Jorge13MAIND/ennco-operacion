@@ -1404,3 +1404,78 @@ main.auth-shell .mfa-secret { border-radius: 10px; background: #f5f5f7; font-fam
 .cr-root .cr-error-simple p { margin: 0; color: var(--cr-body); font-size: 0.9rem; }
 .cr-root .cr-error-actions { display: flex; justify-content: center; gap: 10px; margin-top: 18px; }
 .cr-root .cr-error-ref { margin-top: 14px; color: var(--cr-muted); font-family: var(--font-data, monospace); font-size: 0.72rem; }
+
+/* ---------- 3b. Barra lateral fija a todo lo alto (pedido de Grant, 17-sep) ----------
+   La barra va por encima de la cabecera, como en el hub de ILT: fija desde el borde
+   superior, ancho 272px, sin barra de scroll visible (sigue desplazándose si no cabe),
+   texto e iconos más grandes. La cabecera y el contenido se corren a la derecha. */
+.cr-root { --cr-sidebar-w: 290px; }
+.cr-root .operations-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 40;
+  width: var(--cr-sidebar-w);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 14px 12px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.cr-root .operations-sidebar::-webkit-scrollbar { display: none; }
+.cr-root .operations-sidebar .operations-nav { flex: 1 1 auto; }
+.cr-root .operations-sidebar .cr-sidebar-profile { margin-top: auto; }
+.cr-root .site-header.site-header-operations { margin-left: var(--cr-sidebar-w); }
+.cr-root .operations-shell {
+  grid-template-columns: minmax(0, 1fr);
+  margin-left: var(--cr-sidebar-w);
+  background: var(--cr-canvas);
+}
+.cr-root .operations-sidebar-label { margin: 0 6px 12px; padding-bottom: 10px; gap: 6px; font-size: 0.62rem; }
+.cr-root .cr-sidebar-lockup { width: 128px; }
+.cr-root .operations-nav { gap: 10px; }
+.cr-root .operations-nav-group h2 { margin: 0 12px 5px; font-size: 0.62rem; letter-spacing: 0.22em; }
+.cr-root .operations-nav-group > div { gap: 2px; }
+.cr-root .operations-nav a {
+  position: relative;
+  min-height: 38px;
+  padding: 6px 12px 6px 14px;
+  gap: 12px;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.cr-root .operations-nav a .nav-icon { flex: 0 0 auto; opacity: 0.8; }
+.cr-root .operations-nav a .nav-label { flex: 1 1 auto; min-width: 0; }
+.cr-root .operations-nav a[aria-current="page"] .nav-icon { opacity: 1; }
+/* El indicador pasa de punto a barra vertical al borde izquierdo, como en ILT. */
+.cr-root .nav-indicator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 20px;
+  border-radius: 0 3px 3px 0;
+  background: transparent;
+  transform: translateY(-50%);
+  box-shadow: none;
+}
+.cr-root .operations-nav a[aria-current="page"] .nav-indicator { background: var(--cr-accent-vivid); box-shadow: 0 0 8px rgba(34, 211, 238, 0.8); }
+.cr-root[data-cr-skin="ennco"] .operations-nav a[aria-current="page"] .nav-indicator { box-shadow: 0 0 8px rgba(237, 178, 18, 0.8); }
+.cr-root .cr-sidebar-profile strong { font-size: 0.86rem; }
+.cr-root .operations-sidebar .cr-sidebar-profile { margin: auto 6px 0; padding-top: 10px; }
+.cr-root .operations-sidebar .cr-sidebar-profile-avatar { width: 30px; height: 30px; }
+.cr-root .operations-sidebar .cr-sidebar-profile strong { font-size: 0.8rem; }
+/* El pie legal se queda para el modo impreso y móvil; en la barra fija estorba. */
+.cr-root .operations-sidebar .operations-sidebar-foot { display: none; }
+/* La marca ya vive en la barra lateral: la cabecera se queda con el contexto y las acciones, como en ILT. */
+.cr-root .site-header.site-header-operations .brand { display: none; }
+.cr-root .site-header.site-header-operations .site-brand-cluster { padding-left: 4px; }
+@media (max-width: 860px) {
+  .cr-root .site-header.site-header-operations, .cr-root .operations-shell { margin-left: 0; }
+  .cr-root .operations-sidebar { display: none; }
+}
