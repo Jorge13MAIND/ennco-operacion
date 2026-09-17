@@ -11,7 +11,6 @@ const SEGMENTS: Array<{ key: Segment; title: string; short: string; detail: stri
   { key: "COMMERCIAL", title: "Sistema PV Comercial", short: "comercial", detail: "PDBT, GDBT, APBT y RABT en baja tensión, por división CFE. Cargo fijo, energía, capacidad y factor de potencia." },
   { key: "INDUSTRIAL", title: "Sistema PV Industrial", short: "industrial", detail: "GDMTO, GDMTH y DIST en media tensión: base, intermedia y punta, demanda facturable y banco de capacitores." },
 ];
-const segmentLabel: Record<string, string> = { RESIDENTIAL: "Sistema PV Residencial", COMMERCIAL: "Sistema PV Comercial", INDUSTRIAL: "Sistema PV Industrial" };
 const segmentShort: Record<string, string> = { RESIDENTIAL: "Residencial", COMMERCIAL: "Comercial", INDUSTRIAL: "Industrial" };
 const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 /** Fecha corta sin depender de la tabla de idiomas del servidor: una fila con un dato raro no debe tumbar la pantalla. */
