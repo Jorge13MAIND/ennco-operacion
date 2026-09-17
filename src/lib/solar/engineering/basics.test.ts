@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { computeArray } from "@/lib/solar/engineering/array";
 import { computePowerFactor, defaultPowerFactorInput } from "@/lib/solar/engineering/power-factor";
-import { computeShading } from "@/lib/solar/engineering/shading";
+import { computeShading, shadowAt, shadowDay, sunAt } from "@/lib/solar/engineering/shading";
 import { workbookCatalog } from "@/lib/solar/workbook";
 
 const catalog = workbookCatalog();
@@ -126,5 +126,28 @@ describe("arreglos en inversor (Cal_Inv_St)", () => {
   it("módulo o inversor desconocidos lanzan un error con nombre", () => {
     expect(() => computeArray({ ...base, moduleModel: "nada" }, catalog)).toThrow(/SOLAR_MODULE_NOT_FOUND/);
     expect(() => computeArray({ ...base, inverterModel: "nada" }, catalog)).toThrow(/SOLAR_INVERTER_NOT_FOUND/);
+  });
+});
+
+describe("simulación de sombra hora por hora", () => {
+  it("a 4.625 h del mediodía reproduce la altura y el azimut del libro (Puebla, 19°)", () => {
+    const s = sunAt(19, 12 - 4.625);
+    expect(s.altitudeDeg).toBeCloseTo(10.145558653600476, 9);
+    expect(Math.abs(s.azimuthDeg)).toBeCloseTo(60.73697014266839, 9);
+  });
+  it("a esa misma hora la distancia necesaria es la del libro (9.0025 m plana, 7.9407 m con pendiente 2°)", () => {
+    expect(shadowAt(19, 12 - 4.625, 4.804, 20, 0, 0).requiredDistanceM).toBeCloseTo(9.002537058593985, 9);
+    expect(shadowAt(19, 12 - 4.625, 4.804, 20, 2, 0).requiredDistanceM).toBeCloseTo(7.9407002285529042, 9);
+  });
+  it("al mediodía la sombra es la más corta y de noche es infinita", () => {
+    const noon = shadowAt(19, 12, 4.804, 20, 0, 0); const morning = shadowAt(19, 8, 4.804, 20, 0, 0); const night = shadowAt(19, 21, 4.804, 20, 0, 0);
+    expect(noon.rowShadowM).toBeLessThan(morning.rowShadowM);
+    expect(night.up).toBe(false); expect(night.requiredDistanceM).toBe(Infinity);
+  });
+  it("con la distancia mínima del libro la ventana libre dura 9.25 h centradas al mediodía", () => {
+    const d = shadowDay(19, 4.804, 20, 0, 0, 9.002537058593985, 5);
+    expect(d.clearFrom).toBeCloseTo(12 - 4.625, 1); expect(d.clearTo).toBeCloseTo(12 + 4.625, 1);
+    const tight = shadowDay(19, 4.804, 20, 0, 0, 6, 5);
+    expect((tight.clearTo ?? 0) - (tight.clearFrom ?? 0)).toBeLessThan(9);
   });
 });

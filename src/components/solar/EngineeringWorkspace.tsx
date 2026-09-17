@@ -12,6 +12,7 @@ import { computeDcCircuit, type DcCircuitInput } from "@/lib/solar/engineering/d
 import { computePanelBoard } from "@/lib/solar/engineering/panel-board";
 import { computePowerFactor, defaultPowerFactorInput, type PowerFactorInput } from "@/lib/solar/engineering/power-factor";
 import { computeShading, DEFAULT_HOURS_WITHOUT_SHADE, type ShadingInput } from "@/lib/solar/engineering/shading";
+import { ShadowScene } from "@/components/solar/ShadowScene";
 import type { SolarCatalog } from "@/lib/solar/types";
 
 /* Cálculos de ingeniería básicos: las seis herramientas del libro en una sola pantalla.
@@ -242,6 +243,13 @@ export function EngineeringWorkspace({ catalog, quotes, initialProject, quoteId,
               </>
             ) : null}
           </Panel>
+          {shading.r ? (
+            <div className="eng-span">
+              <Panel title="Simulador de sombra" description="El 21 de diciembre el sol va más bajo que cualquier otro día: si las filas no se hacen sombra ese día, no se la hacen nunca. Mueve la hora para ver la sombra y prueba otra distancia entre filas.">
+                <ShadowScene inclinationDeg={sh.inclinationDeg} obstacleHeightM={sh.obstacleHeightM} result={shading.r} slopeDeg={sh.slopedSurface ? sh.slopeDeg : 0} />
+              </Panel>
+            </div>
+          ) : null}
         </div>
       ) : null}
 
