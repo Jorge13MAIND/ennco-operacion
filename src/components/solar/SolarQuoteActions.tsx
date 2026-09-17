@@ -39,18 +39,18 @@ export function SolarQuoteActions({ id, archived }: { id: string; archived: bool
 
   const working = busy !== null || pending;
   return (
-    <div className="solar-row-actions">
+    <div className="solar-actions">
       {archived ? null : (
         <>
-          <Link className="projects-button" href={`/operacion/proyectos/cotizar?cotizacion=${id}` as Route}>Editar</Link>
-          <Link className="projects-button" href={`/operacion/proyectos/cotizar/hoja?cotizacion=${id}` as Route} target="_blank">PDF</Link>
-          <button type="button" className="projects-button" disabled={working} onClick={() => void run("duplicar", "duplicar")}>{busy === "duplicar" ? "Duplicando…" : "Duplicar"}</button>
+          <Link className="solar-act is-primary" href={`/operacion/proyectos/cotizar?cotizacion=${id}` as Route}>Editar</Link>
+          <Link className="solar-act" href={`/operacion/proyectos/cotizar/hoja?cotizacion=${id}` as Route} target="_blank" rel="noopener">PDF</Link>
+          <button type="button" className="solar-act" disabled={working} onClick={() => void run("duplicar", "duplicar")}>{busy === "duplicar" ? "Duplicando…" : "Duplicar"}</button>
         </>
       )}
-      <button type="button" className="projects-button" disabled={working} onClick={() => void run("archivar", "archivar")}>
+      <button type="button" className="solar-act" disabled={working} onClick={() => void run("archivar", "archivar")}>
         {busy === "archivar" ? "Guardando…" : archived ? "Restaurar" : "Archivar"}
       </button>
-      {error ? <span className="solar-row-error">{error}</span> : null}
+      {error ? <span className="solar-act-error">{error}</span> : null}
     </div>
   );
 }

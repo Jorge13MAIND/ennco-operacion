@@ -21,7 +21,12 @@ function fecha(value: string | null | undefined): string {
   const p = new Date(d.getTime() - 6 * 3600_000); // hora del centro de México
   return `${p.getUTCDate()} ${MESES[p.getUTCMonth()] ?? ""} ${p.getUTCFullYear()}`;
 }
-const pct = (v: number | null | undefined) => (typeof v === "number" && Number.isFinite(v) ? `${(v * 100).toFixed(1)} %` : "—");
+const pct = (v: number | null | undefined) => {
+  if (typeof v !== "number" || !Number.isFinite(v)) return "—";
+  const p = v * 100;
+  return Math.abs(p) >= 1000 ? `${Math.round(p).toLocaleString("es-MX")} %` : `${p.toFixed(1)} %`;
+};
+const ESTADOS: Record<string, string> = { DRAFT: "Borrador", SENT: "Enviada", ACCEPTED: "Aceptada", ARCHIVED: "Archivada" };
 const num = (v: number | null | undefined, suf = "") => (typeof v === "number" && Number.isFinite(v) ? `${Math.round(v).toLocaleString("es-MX")}${suf}` : "—");
 const dec = (v: number | null | undefined, d = 2, suf = "") => (typeof v === "number" && Number.isFinite(v) ? `${v.toFixed(d)}${suf}` : "—");
 /** Moneda formateada aquí mismo: `money` de projects/ui vive en un módulo de navegador y no
@@ -110,22 +115,39 @@ export function SolarHome({ quotes, versions, live, storageError, archived = fal
       >
         {quotes.length === 0 ? null : (
           <div className="projects-table-wrap">
-            <table className="projects-table">
+            <table className="projects-table solar-quotes">
               <thead>
-                <tr><th>Cotización</th><th>Segmento</th><th>Ciudad · tarifa</th><th className="num">Sistema</th><th className="num">Generación</th><th className="num">Recibo sin / con FV</th><th className="num">Precio</th><th className="num">TIR · retorno</th><th>Actualizada</th><th></th></tr>
+                <tr>
+                  <th>Cotización</th>
+                  <th>Proyecto</th>
+                  <th className="num">Generación</th>
+                  <th className="num">Recibo anual</th>
+                  <th className="num">Precio</th>
+                  <th className="solar-th-actions"><span className="sr-only">Acciones</span></th>
+                </tr>
               </thead>
               <tbody>
                 {quotes.map((raw) => { const q = { ...raw, summary: raw.summary ?? {} }; return (
                   <tr key={q.id}>
-                    <td><Link href={`/operacion/proyectos/cotizar?cotizacion=${q.id}` as Route}><strong>{q.name}</strong></Link><br /><span className="projects-help">v{q.version} · {q.status}</span></td>
-                    <td>{segmentLabel[q.segment] ?? q.segment}</td>
-                    <td>{q.summary?.city ?? "—"}<br /><span className="projects-help">{q.summary?.tariff ?? ""}</span></td>
-                    <td className="num">{dec(q.summary.systemKw, 2, " kW")}<br /><span className="projects-help">{q.summary?.modules ?? "—"} módulos</span></td>
-                    <td className="num">{num(q.summary.annualGeneration, " kWh")}<br /><span className="projects-help">cobertura {pct(q.summary?.coverage)}</span></td>
-                    <td className="num">{mxn(q.summary.annualWithout)}<br /><span className="projects-help">{mxn(q.summary.annualWith)}</span></td>
-                    <td className="num">{mxn(q.summary.cashPrice)}</td>
-                    <td className="num">{pct(q.summary?.irr)}<br /><span className="projects-help">{dec(q.summary.paybackTotal, 2, " años")}</span></td>
-                    <td>{fecha(q.updatedAt)}</td>
+                    <td>
+                      <Link className="solar-quote-name" href={`/operacion/proyectos/cotizar?cotizacion=${q.id}` as Route}>{q.name}</Link>
+                      <span className="solar-meta">
+                        <span className={`solar-chip is-${q.status.toLowerCase()}`}>{ESTADOS[q.status] ?? q.status}</span>
+                        <span>v{q.version}</span>
+                        <span>{fecha(q.updatedAt)}</span>
+                      </span>
+                    </td>
+                    <td>
+                      {segmentLabel[q.segment] ?? q.segment}{q.summary?.city ? ` · ${q.summary.city}` : ""}
+                      <span className="solar-meta">
+                        {q.summary?.tariff ? <span>Tarifa {q.summary.tariff}</span> : null}
+                        <span>{dec(q.summary.systemKw, 2, " kW")}</span>
+                        <span>{q.summary?.modules ?? "—"} módulos</span>
+                      </span>
+                    </td>
+                    <td className="num">{num(q.summary.annualGeneration, " kWh")}<span className="solar-sub">cobertura {pct(q.summary?.coverage)}</span></td>
+                    <td className="num">{mxn(q.summary.annualWithout)}<span className="solar-sub">con FV {mxn(q.summary.annualWith)}</span></td>
+                    <td className="num">{mxn(q.summary.cashPrice)}<span className="solar-sub">TIR {pct(q.summary?.irr)} · {dec(q.summary.paybackTotal, 1, " años")}</span></td>
                     <td><SolarQuoteActions id={q.id} archived={q.status === "ARCHIVED"} /></td>
                   </tr>
                 ); })}
