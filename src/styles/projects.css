@@ -732,3 +732,24 @@
 @media (max-width: 900px) {
   .solar-actions { flex-wrap: wrap; justify-content: flex-start; }
 }
+
+/* ---------- Calculadora de consumo ---------- */
+.cons-summary { display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; margin-bottom: 18px; }
+.cons-total { flex: 0 0 auto; min-width: 190px; padding: 16px 20px; border-radius: 14px; background: #fff; border: 1px solid #e3e8ef; box-shadow: var(--cr-shadow-card, 0 1px 2px rgba(15, 23, 42, 0.06)); }
+.cons-total span { display: block; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #64748b; }
+.cons-total strong { display: block; margin-top: 6px; font-size: 1.7rem; font-weight: 800; color: #0f172a; font-variant-numeric: tabular-nums; }
+.cons-total strong small { font-size: 0.9rem; font-weight: 600; color: #64748b; }
+.cons-total.is-main { background: #ecfeff; border-color: #a5f3fc; }
+.cons-total.is-main strong { color: #0e7490; }
+.cons-cta { flex: 1 1 260px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 6px; }
+.cons-cta .projects-help { margin: 0; }
+
+.cons-table td { padding-block: 6px; }
+.cons-table th.is-calc, .cons-table td.is-calc { background: #f6faf7; }
+.cons-table td.is-calc { font-variant-numeric: tabular-nums; color: #334155; font-weight: 600; }
+.cons-table .cons-group { font-weight: 700; color: #334155; background: #f8fafc; vertical-align: middle; }
+.cons-table .cons-total-row td { font-weight: 700; color: #0f172a; border-top: 2px solid #e2e8f0; text-align: right; }
+.cons-input { width: 82px; padding: 5px 8px; border: 1px solid #cbd5e1; border-radius: 7px; font: inherit; font-size: 0.82rem; text-align: right; background: #fff; color: #0f172a; }
+.cons-input:focus-visible { outline: 3px solid #0891b2; outline-offset: 1px; }
+.cons-foot { margin-top: 14px; }
+.cons-reset { border: 0; background: none; padding: 0; color: #0e7490; font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
