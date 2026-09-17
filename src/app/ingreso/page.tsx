@@ -9,6 +9,7 @@ type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 const reasonMessages: Record<string, string> = {
   auth: "Inicia sesión para entrar al Control Room.",
+  expirada: "Tu sesión expiró. Vuelve a entrar con tu correo y contraseña.",
   forbidden: "La cuenta no tiene acceso activo a esta organización.",
   invalid: "No pudimos validar esas credenciales.",
   signed_out: "La sesión se cerró correctamente.",
