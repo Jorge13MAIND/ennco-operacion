@@ -764,9 +764,13 @@
 .eng-field input:focus-visible, .eng-field select:focus-visible { outline: 3px solid #0891b2; outline-offset: 1px; }
 .eng-field small { font-weight: 500; color: #64748b; }
 .eng-tabs { margin-block: 18px 6px; }
-.eng-tabs .projects-button { background: #fff; border-color: #d5dce5; color: #334155; min-height: 38px; padding: 8px 14px; }
-.eng-tabs .projects-button:hover { background: #f1f5f9; border-color: #94a3b8; }
-.eng-tabs .projects-button[aria-current="page"] { background: #0e7490; border-color: #0e7490; color: #fff; }
+.eng-tabs { gap: 10px; padding: 10px; }
+.eng-tabs .eng-tab { background: #fff; border-color: #d5dce5; color: #334155; min-height: 58px; padding: 10px 20px 10px 14px; gap: 12px; font-size: 0.95rem; border-radius: 14px; }
+.eng-tabs .eng-tab:hover { background: #f1f5f9; border-color: #94a3b8; color: #0f172a; }
+.eng-tabs .eng-tab[aria-current="page"] { background: #0e7490; border-color: #0e7490; color: #fff; box-shadow: 0 6px 16px rgba(14, 116, 144, 0.28); }
+.eng-tab-icon { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 11px; background: #ecfeff; color: #0e7490; flex: none; }
+.eng-tab[aria-current="page"] .eng-tab-icon { background: rgba(255, 255, 255, 0.18); color: #fff; }
+@media (max-width: 720px) { .eng-tabs .eng-tab { min-height: 48px; padding: 8px 14px 8px 10px; font-size: 0.85rem; } .eng-tab-icon { width: 32px; height: 32px; } }
 .eng-details { margin-top: 10px; }
 .eng-details summary { cursor: pointer; font-size: 0.78rem; font-weight: 700; color: #0e7490; }
 .eng-details[open] summary { margin-bottom: 6px; }

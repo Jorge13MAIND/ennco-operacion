@@ -65,6 +65,68 @@ function Big({ label, value, note }: { label: string; value: string; note?: stri
 function Warnings({ items }: { items: string[] }) {
   return items.length ? <ul className="eng-warnings">{items.map((w) => <li key={w}>{w}</li>)}</ul> : null;
 }
+
+/** Icono de cada herramienta, a trazo, con el mismo estilo que las tarjetas del cotizador. */
+function ToolIcon({ tool }: { tool: Tool }) {
+  const c = { fill: "none", stroke: "currentColor", strokeWidth: 1.7, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  return (
+    <span aria-hidden="true" className="eng-tab-icon">
+      <svg height="26" viewBox="0 0 48 48" width="26" xmlns="http://www.w3.org/2000/svg">
+        {tool === "sombras" ? (
+          <g {...c}>
+            <circle cx="14" cy="13" r="4.5" />
+            <path d="M14 4v3M14 19v3M5 13h3M20 13h3M7.6 6.6l2.1 2.1M18.3 17.4l2.1 2.1M20.4 6.6l-2.1 2.1M9.7 17.4l-2.1 2.1" />
+            <path d="M22 36l10-11 12 0-10 11z" fill="currentColor" fillOpacity="0.18" />
+            <path d="M27 36v6M39 36v6" />
+            <path d="M6 42h38" />
+            <path d="M8 42l10-5" strokeDasharray="2 3" />
+          </g>
+        ) : null}
+        {tool === "arreglos" ? (
+          <g {...c}>
+            <path d="M6 10h36v22H6z" />
+            <path d="M18 10v22M30 10v22M6 21h36" />
+            <path d="M6 10h12v11H6z" fill="currentColor" fillOpacity="0.18" />
+            <path d="M24 32v6M16 38h16" />
+          </g>
+        ) : null}
+        {tool === "dc" ? (
+          <g {...c}>
+            <path d="M8 21h32" />
+            <path d="M8 28h5M16 28h5M24 28h5M32 28h5" />
+            <path d="M14 10h20v5H14z" fill="currentColor" fillOpacity="0.18" />
+            <path d="M12 15h24v22H12z" />
+            <path d="M19 26h10M24 21v10" />
+          </g>
+        ) : null}
+        {tool === "ac" ? (
+          <g {...c}>
+            <path d="M6 24c4-12 8-12 12 0s8 12 12 0 8-12 12 0" />
+            <path d="M6 36h36" strokeDasharray="3 3" />
+            <path d="M6 12h36" strokeDasharray="3 3" />
+          </g>
+        ) : null}
+        {tool === "tableros" ? (
+          <g {...c}>
+            <path d="M10 6h28v36H10z" />
+            <path d="M15 12h8v6h-8zM25 12h8v6h-8zM15 21h8v6h-8zM25 21h8v6h-8zM15 30h8v6h-8z" />
+            <path d="M25 30h8v6h-8z" fill="currentColor" fillOpacity="0.25" />
+            <path d="M24 2v4" />
+          </g>
+        ) : null}
+        {tool === "capacitores" ? (
+          <g {...c}>
+            <path d="M6 24h13M29 24h13" />
+            <path d="M19 12v24M29 12v24" strokeWidth="2.4" />
+            <path d="M12 10v6M9 13h6M36 13h6" />
+            <path d="M6 24a18 18 0 0 1 36 0" strokeDasharray="3 3" />
+          </g>
+        ) : null}
+      </svg>
+    </span>
+  );
+}
+
 const errText = (e: unknown) => (e instanceof Error ? e.message.replace(/SOLAR_CITY_NOT_FOUND.*/u, "Ciudad no encontrada en el catálogo.").replace(/SOLAR_MODULE_NOT_FOUND.*/u, "Módulo no encontrado en el catálogo.").replace(/SOLAR_INVERTER_NOT_FOUND.*/u, "Inversor no encontrado en el catálogo.") : "No se pudo calcular.");
 
 export function EngineeringWorkspace({ catalog, quotes, initialProject, quoteId, initialTool }: { catalog: SolarCatalog; quotes: QuoteRef[]; initialProject: EngineeringProject | null; quoteId: string | null; initialTool?: string | null }) {
@@ -140,7 +202,12 @@ export function EngineeringWorkspace({ catalog, quotes, initialProject, quoteId,
       </section>
 
       <nav className="projects-tabs eng-tabs" aria-label="Herramientas">
-        {TOOLS.map((t) => <button aria-current={tool === t.key ? "page" : undefined} className="projects-button secondary" key={t.key} onClick={() => setTool(t.key)} type="button">{t.label}</button>)}
+        {TOOLS.map((t) => (
+          <button aria-current={tool === t.key ? "page" : undefined} className="projects-button secondary eng-tab" key={t.key} onClick={() => setTool(t.key)} type="button">
+            <ToolIcon tool={t.key} />
+            <span>{t.label}</span>
+          </button>
+        ))}
       </nav>
       <h2 className="eng-print-title">{active.title}{project.name ? ` · ${project.name}` : ""}</h2>
 
