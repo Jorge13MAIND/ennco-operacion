@@ -43,7 +43,8 @@ export function SolarQuoteActions({ id, archived }: { id: string; archived: bool
       {archived ? null : (
         <>
           <Link className="solar-act is-primary" href={`/operacion/proyectos/cotizar?cotizacion=${id}` as Route}>Editar</Link>
-          <Link className="solar-act" href={`/operacion/proyectos/cotizar/hoja?cotizacion=${id}` as Route} target="_blank" rel="noopener">PDF</Link>
+          <a className="solar-act" href={`/api/v1/solar/quotes/${id}/pdf`}>PDF</a>
+          <Link className="solar-act" href={`/operacion/proyectos/cotizar/hoja?cotizacion=${id}` as Route} target="_blank" rel="noopener">Hoja</Link>
           <button type="button" className="solar-act" disabled={working} onClick={() => void run("duplicar", "duplicar")}>{busy === "duplicar" ? "Duplicando…" : "Duplicar"}</button>
         </>
       )}

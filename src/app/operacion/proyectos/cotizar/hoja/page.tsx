@@ -28,7 +28,7 @@ export default async function SolarSheetPage({ searchParams }: { searchParams: P
 
   return (
     <div className="hj-wrap">
-      <SolarSheetBar name={quote.name} auto={params.imprimir === "1"} />
+      <SolarSheetBar auto={params.imprimir === "1"} name={quote.name} quoteId={quote.id} />
       <SolarQuoteSheet result={result} />
     </div>
   );
