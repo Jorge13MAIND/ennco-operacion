@@ -1,8 +1,10 @@
 import "server-only";
 
 import type { OperationsAccessContext } from "@/lib/auth/authorization";
-import { listCatalogs } from "@/lib/projects/repository";
+import { listCatalogs } from "@/lib/solar/catalog-store";
 import { withModuleFuses, workbookCatalog } from "@/lib/solar/workbook";
+import { readPriceCatalog } from "@/lib/precios/server";
+import { priceAll } from "@/lib/precios/pricing";
 import { computeQuote } from "@/lib/solar/quote";
 import type { QuoteSaveInput } from "@/lib/solar/schema";
 import { quoteSummary, type QuoteSummary } from "@/lib/solar/summary";
@@ -62,6 +64,17 @@ export async function loadSolarCatalog(access: OperationsAccessContext): Promise
     versions.solar_modules = { ...versions.solar_modules!, name: "Libro v1.0.1 (Catálogos no disponible)" };
   }
   catalog.modules = withModuleFuses(catalog.modules);
+  // Precios de equipo desde Precios y proveedores: el costo vigente (sin margen) sustituye el
+  // priceUsd del libro para los modulos e inversores ligados. El cotizador aplica su propio margen.
+  try {
+    const prices = await readPriceCatalog(access);
+    const linked = priceAll(prices).filter((p) => p.item.equipment && p.cost != null && p.item.currency === "USD");
+    if (linked.length) {
+      catalog.modules = catalog.modules.map((m) => { const hit = linked.find((p) => p.item.equipment!.kind === "module" && p.item.equipment!.model === m.model); return hit ? { ...m, priceUsd: hit.cost } : m; });
+      catalog.inverters = catalog.inverters.map((i) => { const hit = linked.find((p) => p.item.equipment!.kind === "inverter" && p.item.equipment!.model === i.model); return hit ? { ...i, priceUsd: hit.cost } : i; });
+      versions.solar_prices = { name: `Precios y proveedores (${linked.length} equipos)`, version: 1, source: "catalog" };
+    }
+  } catch { /* sin precios propios se cotiza con los del libro */ }
   return { catalog, versions };
 }
 

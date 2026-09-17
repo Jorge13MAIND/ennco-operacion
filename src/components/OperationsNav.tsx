@@ -88,7 +88,7 @@ function NavIcon({ id }: { id: NavKey }) {
     "projects-consumption": <><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" /></>,
     "projects-engineering": <><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.1-2.1 2.5-2.4z" /></>,
     "projects-list": <><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></>,
-    "projects-catalogs": <><path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4z" /><path d="M20 4h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7z" /></>,
+    "projects-catalogs": <><path d="M12 3v18" /><path d="M16.5 7.5c0-1.7-2-3-4.5-3S7.5 5.8 7.5 7.5 9.5 10 12 10s4.5 1.3 4.5 3-2 3-4.5 3-4.5-1.3-4.5-3" /></>,
   };
   return <svg aria-hidden="true" className="nav-icon" {...c}>{paths[id] ?? paths.home}</svg>;
 }
@@ -103,7 +103,7 @@ function itemLabel(key: NavKey): string {
   if (key === "projects-consumption") return "Calculadora de consumo";
   if (key === "projects-engineering") return "Ingeniería básica";
   if (key === "projects-list") return "Proyectos";
-  if (key === "projects-catalogs") return "Catálogos";
+  if (key === "projects-catalogs") return "Precios y proveedores";
   return moduleLabels[key];
 }
 

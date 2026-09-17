@@ -1,17 +1,15 @@
 import { notFound } from "next/navigation";
-import { ProjectWorkspace } from "@/components/projects/ProjectWorkspace";
+import { ProjectWorkspace } from "@/components/solar/ProjectWorkspace";
+import { requireOperationsAccess } from "@/lib/auth/authorization";
+import { getProject, readPriceCatalog } from "@/lib/precios/server";
+import { getQuote } from "@/lib/solar/server";
 export const dynamic = "force-dynamic";
-export default async function ProjectPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ tab?: string }>;
-}) {
+export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
+  const access = await requireOperationsAccess();
   const { id } = await params;
-  if (
-    !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(id)
-  )
-    notFound();
-  return <ProjectWorkspace id={id} tab={(await searchParams).tab ?? "datos"} />;
+  let project; try { project = await getProject(access, id); } catch { notFound(); }
+  const catalog = await readPriceCatalog(access).catch(() => ({ suppliers: [], items: [], quotes: [], settings: { iva: 0.16, margin: 0.3, marginByCategory: {}, fxByPeriod: {}, priceRule: "MAX" as const } }));
+  let quote = null;
+  if (project.quoteId) { try { const q = await getQuote(access, project.quoteId); quote = { id: q.id, name: q.name, cashPrice: q.summary?.cashPrice ?? null, systemKw: q.summary?.systemKw ?? null, modules: q.summary?.modules ?? null }; } catch { quote = null; } }
+  return <ProjectWorkspace catalog={catalog} project={project} quote={quote} />;
 }

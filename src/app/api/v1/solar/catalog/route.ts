@@ -1,4 +1,4 @@
-import { api, context } from "@/lib/projects/server";
+import { api, context } from "@/lib/solar/api";
 import { loadSolarCatalog } from "@/lib/solar/server";
 
 export const dynamic = "force-dynamic";

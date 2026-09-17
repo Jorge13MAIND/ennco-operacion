@@ -817,3 +817,45 @@
   .eng-field input, .eng-field select { border: 1px solid #cbd5e1; -webkit-appearance: none; appearance: none; }
   @page { size: letter portrait; margin: 0.5in; }
 }
+
+/* ---------- Precios y proveedores ---------- */
+.px-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+.px-toolbar select, .px-search, .px-new input, .px-new select { font: inherit; font-size: 0.86rem; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; }
+.px-search { min-width: 240px; flex: 1 1 240px; }
+.px-inline { display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 600; color: #475569; }
+.px-new { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 6px 0 12px; }
+.px-wrap { max-height: 70vh; overflow: auto; }
+.px-table th { position: sticky; top: 0; background: #f8fafc; z-index: 1; }
+.px-table th small { display: block; font-weight: 500; color: #94a3b8; text-transform: none; letter-spacing: 0; }
+.px-table td { vertical-align: top; padding-block: 8px; }
+.px-table td small, .px-muted { display: block; font-size: 0.72rem; color: #64748b; font-weight: 500; }
+.px-link { display: block; font-size: 0.72rem; color: #0e7490; font-weight: 600; }
+.px-group td { background: #eef2f7; color: #334155; font-weight: 800; font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 10px; }
+.px-prices { min-width: 420px; }
+.px-cell::placeholder { color: #94a3b8; font-size: 0.74rem; }
+.px-sup { display: grid; grid-template-columns: 190px 100px 1fr; align-items: center; gap: 8px; padding: 2px 6px; border-radius: 6px; }
+.px-sup.is-chosen { background: #f0fdf4; }
+.px-sup.is-chosen .px-sup-name::after { content: " · costo"; color: #166534; font-weight: 700; }
+.px-sup-name { font-size: 0.8rem; font-weight: 600; color: #334155; }
+.px-sup select { font: inherit; font-size: 0.8rem; padding: 3px 6px; border: 1px solid #cbd5e1; border-radius: 6px; }
+.px-sup.is-new { grid-template-columns: 190px 100px auto auto; }
+.px-add { border: 0; background: none; padding: 2px 6px; color: #0e7490; font: inherit; font-size: 0.76rem; font-weight: 700; cursor: pointer; }
+.px-cell { width: 96px; text-align: right; font: inherit; font-size: 0.84rem; padding: 4px 6px; border: 1px solid transparent; border-radius: 6px; background: transparent; }
+.px-cell:hover { border-color: #cbd5e1; background: #fff; }
+.px-cell:focus-visible { outline: 3px solid #0891b2; outline-offset: 1px; background: #fff; }
+.px-cell.is-busy { opacity: 0.5; } .px-cell.is-bad { border-color: #ef4444; }
+/* ---------- Proyectos ---------- */
+.proj-matches { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 4px; }
+.proj-matches button { width: 100%; display: flex; justify-content: space-between; gap: 12px; text-align: left; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; font: inherit; cursor: pointer; }
+.proj-matches button:hover { background: #f0f9ff; border-color: #0e7490; }
+.proj-matches span { color: #64748b; font-size: 0.78rem; white-space: nowrap; }
+.proj-table td { vertical-align: top; }
+.proj-table input[type="text"] { font: inherit; font-size: 0.86rem; padding: 5px 8px; border: 1px solid #cbd5e1; border-radius: 7px; width: 100%; }
+.proj-table select { font: inherit; font-size: 0.82rem; padding: 5px 8px; border: 1px solid #cbd5e1; border-radius: 7px; max-width: 220px; }
+.proj-table tfoot td { font-weight: 700; border-top: 2px solid #e2e8f0; }
+.proj-po-table td, .proj-po-table th { text-align: left; }
+.proj-po-table tr.is-done td { color: #94a3b8; text-decoration: line-through; }
+.proj-po-table tfoot td { font-weight: 700; }
+.solar-chip.is-cotizado { background: #f1f5f9; color: #475569; } .solar-chip.is-aprobado { background: #e0f2fe; color: #075985; } .solar-chip.is-en_compra { background: #fef3c7; color: #92400e; }
+.solar-chip.is-instalado { background: #dcfce7; color: #166534; } .solar-chip.is-cerrado { background: #e2e8f0; color: #334155; } .solar-chip.is-cancelado { background: #fee2e2; color: #991b1b; }
+@media print { .px-toolbar, .proj-matches, .proj-table, .projects-page-head .projects-button, .cons-reset { display: none !important; } }

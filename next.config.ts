@@ -2,25 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  serverExternalPackages: [
-    "pdfjs-dist",
-    "tesseract.js",
-    "tesseract.js-core",
-    "@tesseract.js-data/spa",
-    "@napi-rs/canvas",
-  ],
   reactStrictMode: true,
   typedRoutes: true,
   // Los archivos de data/ se leen en tiempo de ejecucion con rutas construidas
   // (process.cwd() + string), que el trazado de Next no puede seguir, asi que
   // no viajaban al paquete serverless. Se incluyen explicitamente.
   outputFileTracingIncludes: {
-    "/api/v1/projects/*/documents": [
-      "./node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs",
-      "./node_modules/tesseract.js/**",
-      "./node_modules/tesseract.js-core/**",
-      "./node_modules/@tesseract.js-data/spa/4.0.0_best_int/**",
-    ],
     "/operacion/correos": ["./data/campaigns/**"],
     "/operacion": ["./data/campaigns/**"],
     "/api/v1/operations/correos/campaigns": ["./data/campaigns/**"],

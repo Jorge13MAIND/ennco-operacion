@@ -1,4 +1,4 @@
-import { api, body, context, ProjectApiError } from "@/lib/projects/server";
+import { api, body, context, ProjectApiError } from "@/lib/solar/api";
 import { quoteSaveSchema } from "@/lib/solar/schema";
 import { listQuotes, saveQuote } from "@/lib/solar/server";
 

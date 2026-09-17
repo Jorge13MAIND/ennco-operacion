@@ -2,7 +2,7 @@ import type { Route } from "next";
 import Link from "next/link";
 
 import { SolarQuoteActions } from "@/components/solar/SolarQuoteActions";
-import { PageHeader, Panel } from "@/components/projects/ui";
+import { PageHeader, Panel } from "@/components/solar/ui";
 import type { CatalogVersions, StoredQuote } from "@/lib/solar/server";
 import type { Segment } from "@/lib/solar/types";
 

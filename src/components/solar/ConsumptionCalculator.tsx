@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Route } from "next";
 
-import { PageHeader, Panel } from "@/components/projects/ui";
+import { PageHeader, Panel } from "@/components/solar/ui";
 import { computeConsumption, defaultConsumptionInput, type ConsumptionInput } from "@/lib/solar/consumption";
 
 const nf = (d: number) => new Intl.NumberFormat("es-MX", { minimumFractionDigits: d, maximumFractionDigits: d });

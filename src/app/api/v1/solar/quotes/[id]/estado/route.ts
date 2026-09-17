@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { api, body, context, ProjectApiError } from "@/lib/projects/server";
+import { api, body, context, ProjectApiError } from "@/lib/solar/api";
 import { setQuoteStatus } from "@/lib/solar/server";
 
 export const dynamic = "force-dynamic";

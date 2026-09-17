@@ -116,8 +116,6 @@
     "verify:m7": "npm run verify:m6 && npm run verify:m7-readiness && npm run verify:scaling-db",
     "verify:m8": "npm run verify:m7 && npm run verify:m8-readiness && npm run verify:monthly-reporting-db",
     "verify:m9": "node scripts/security-evidence-gate.mjs snapshot --repo . --expected-commit \"$(git rev-parse HEAD)\" --evidence evidence/m23-frontend/source.json --context local && npm run verify:m8 && npm run verify:scope && npm run verify:security-consistency-db && npm run verify:unsubscribe-db && npm run verify:commercial-integrity-db && npm run verify:suppression-privacy-db && npm run verify:commercial-operations-db && npm run verify:strict-lead-suppression-db && npm run verify:enterprise-security && npm run verify:a11y && M23_SOURCE_SNAPSHOT=evidence/m23-frontend/source.json npm run verify:m23:frontend && npm run verify:m9-restore && npm run verify:m9-readiness && npm run verify:handoff-db",
-    "test:projects": "vitest run src/lib/projects",
-    "test:projects:e2e": "playwright test --config playwright.projects.config.ts",
     "verify:projects:db": "bash supabase/tests/run-ennco-projects-gate.sh",
     "verify:projects:historical": "python3 scripts/projects-import-historical.py --check"
   },

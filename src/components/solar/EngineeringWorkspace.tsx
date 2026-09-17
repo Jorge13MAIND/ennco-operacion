@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { Route } from "next";
 
-import { PageHeader, Panel } from "@/components/projects/ui";
+import { PageHeader, Panel } from "@/components/solar/ui";
 import { computeAcCircuit, type AcCircuitInput } from "@/lib/solar/engineering/ac-circuit";
 import { computeArray, MAX_MPPT, type ArrayInput } from "@/lib/solar/engineering/array";
 import { computeDcCircuit, type DcCircuitInput } from "@/lib/solar/engineering/dc-circuit";

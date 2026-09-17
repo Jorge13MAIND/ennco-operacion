@@ -1,5 +1,9 @@
-import { CatalogWorkspace } from "@/components/projects/CatalogWorkspace";
+import { PriceWorkspace } from "@/components/solar/PriceWorkspace";
+import { requireOperationsAccess } from "@/lib/auth/authorization";
+import { workbookCatalog } from "@/lib/solar/workbook";
 export const dynamic = "force-dynamic";
-export default function CatalogsPage() {
-  return <CatalogWorkspace />;
+export default async function PreciosPage() {
+  await requireOperationsAccess();
+  const c = workbookCatalog();
+  return <PriceWorkspace catalogModels={{ modules: c.modules.map((m) => m.model), inverters: c.inverters.map((i) => i.model) }} />;
 }

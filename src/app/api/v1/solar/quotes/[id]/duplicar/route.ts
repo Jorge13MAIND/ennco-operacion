@@ -1,4 +1,4 @@
-import { api, context, ProjectApiError } from "@/lib/projects/server";
+import { api, context, ProjectApiError } from "@/lib/solar/api";
 import { duplicateQuote } from "@/lib/solar/server";
 
 export const dynamic = "force-dynamic";

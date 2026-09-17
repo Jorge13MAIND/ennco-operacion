@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, type ReactNode } from "react";
 
-import { money } from "@/components/projects/ui";
+import { money } from "@/components/solar/ui";
 import { MONTH_NAMES } from "@/lib/solar/catalog";
 import { isoToSerial, SEGMENT_TARIFFS, serialToIso } from "@/lib/solar/defaults";
 import { computeQuote } from "@/lib/solar/quote";
