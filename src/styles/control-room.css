@@ -1420,12 +1420,14 @@ main.auth-shell .mfa-secret { border-radius: 10px; background: #f5f5f7; font-fam
   height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 16px 14px 12px;
+  padding: 10px 14px 10px;
   overflow-y: auto;
   scrollbar-width: none;
 }
 .cr-root .operations-sidebar::-webkit-scrollbar { display: none; }
-.cr-root .operations-sidebar .operations-nav { flex: 1 1 auto; }
+/* La rejilla estiraba sus filas para llenar el alto sobrante y los grupos quedaban
+   separados por huecos enormes: se anclan arriba y el espacio libre queda al final. */
+.cr-root .operations-sidebar .operations-nav { flex: 0 0 auto; align-content: start; }
 .cr-root .operations-sidebar .cr-sidebar-profile { margin-top: auto; }
 .cr-root .site-header.site-header-operations { margin-left: var(--cr-sidebar-w); }
 .cr-root .operations-shell {
@@ -1433,9 +1435,9 @@ main.auth-shell .mfa-secret { border-radius: 10px; background: #f5f5f7; font-fam
   margin-left: var(--cr-sidebar-w);
   background: var(--cr-canvas);
 }
-.cr-root .operations-sidebar-label { margin: 0 6px 12px; padding-bottom: 10px; gap: 6px; font-size: 0.62rem; }
-.cr-root .cr-sidebar-lockup { width: 128px; }
-.cr-root .operations-nav { gap: 10px; }
+.cr-root .operations-sidebar-label { justify-items: center; margin: 0 4px 10px; padding: 0 0 10px; gap: 7px; font-size: 0.62rem; text-align: center; }
+.cr-root .cr-sidebar-lockup { width: 100%; max-width: 184px; }
+.cr-root .operations-nav { gap: 12px; }
 .cr-root .operations-nav-group h2 { margin: 0 12px 5px; font-size: 0.62rem; letter-spacing: 0.22em; }
 .cr-root .operations-nav-group > div { gap: 2px; }
 .cr-root .operations-nav a {
@@ -1467,8 +1469,8 @@ main.auth-shell .mfa-secret { border-radius: 10px; background: #f5f5f7; font-fam
 .cr-root .operations-nav a[aria-current="page"] .nav-indicator { background: var(--cr-accent-vivid); box-shadow: 0 0 8px rgba(34, 211, 238, 0.8); }
 .cr-root[data-cr-skin="ennco"] .operations-nav a[aria-current="page"] .nav-indicator { box-shadow: 0 0 8px rgba(237, 178, 18, 0.8); }
 .cr-root .cr-sidebar-profile strong { font-size: 0.86rem; }
-.cr-root .operations-sidebar .cr-sidebar-profile { margin: auto 6px 0; padding-top: 10px; }
-.cr-root .operations-sidebar .cr-sidebar-profile-avatar { width: 30px; height: 30px; }
+.cr-root .operations-sidebar .cr-sidebar-profile { margin: auto 6px 0; padding-top: 6px; gap: 9px; }
+.cr-root .operations-sidebar .cr-sidebar-profile-avatar { width: 26px; height: 26px; font-size: 0.68rem; }
 .cr-root .operations-sidebar .cr-sidebar-profile strong { font-size: 0.8rem; }
 /* El pie legal se queda para el modo impreso y móvil; en la barra fija estorba. */
 .cr-root .operations-sidebar .operations-sidebar-foot { display: none; }
