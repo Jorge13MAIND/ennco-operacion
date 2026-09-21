@@ -254,12 +254,14 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
       columns: [
         { key: "cuenta", label: "Cuenta" },
         { key: "contacto", label: "Contacto" },
+        { key: "correo", label: "Correo" },
         { key: "clasificacion", label: "Clasificación" },
         { key: "siguiente", label: "Siguiente acción" },
       ],
       rows: [row("reply-synthetic-1", sampleBadge, {
         cuenta: "Planta Alfa, ejemplo anónimo",
         contacto: "Dirección de planta",
+        correo: "mantenimiento@ejemplo.mx → contacto@ennco.com.mx",
         clasificacion: "Positiva, pendiente de calificación estricta",
         siguiente: "Responder y registrar contexto en menos de 4 horas",
       })],
@@ -631,7 +633,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext, opti
     runtime_controls: () => client.from("runtime_controls").select("global_kill_switch,external_send_allowed").eq("organization_id", organizationId).maybeSingle(),
     accounts: () => client.from("accounts").select("id,legal_name,state,sector,source_confidence,updated_at", { count: "exact" }).eq("organization_id", organizationId).eq("is_deleted", false).limit(200),
     contacts: () => client.from("contacts").select("id,account_id,full_name,role_title,verified,updated_at", { count: "exact" }).eq("organization_id", organizationId).eq("is_deleted", false).limit(300),
-    messages: () => client.from("messages").select("id,contact_id,status,subject,body_text,created_at", { count: "exact" }).eq("organization_id", organizationId).eq("direction", "INBOUND").order("created_at", { ascending: false }).limit(100),
+    messages: () => client.from("messages").select("id,contact_id,status,subject,body_text,created_at,normalized_from,normalized_to", { count: "exact" }).eq("organization_id", organizationId).eq("direction", "INBOUND").order("created_at", { ascending: false }).limit(100),
     provider_events: () => client.from("provider_events").select("id,message_id,event_kind,reply_classification,processing_status,observed_at").eq("organization_id", organizationId).order("observed_at", { ascending: false }).limit(100),
     leads: () => client.from("leads").select("id,account_id,contact_id,status,contractual_qualified,qualification_reason,created_at", { count: "exact" }).eq("organization_id", organizationId).order("created_at", { ascending: false }).limit(100),
     campaigns: () => client.from("campaigns").select("id,name,status,manifest_sha256,shadow_canary_decision,updated_at").eq("organization_id", organizationId).order("updated_at", { ascending: false }).limit(100),
@@ -785,6 +787,8 @@ export async function loadOperationsPortal(access: OperationsAccessContext, opti
     return row(textValue(event?.id, textValue(message.id)), textValue(event?.processing_status, textValue(message.status)), {
       cuenta: accountName(contact?.account_id),
       contacto: contactName(message.contact_id),
+      // De qué dirección llegó y a cuál de nuestros buzones: es lo que permite verificar la respuesta en el correo.
+      correo: `${textValue(message.normalized_from, "sin remitente")} → ${textValue(message.normalized_to, "sin buzón")}`,
       clasificacion: textValue(event?.reply_classification, "Sin revisar"),
       siguiente: `Recibida ${dateValue(message.created_at)}. ${textValue(message.subject, "Sin asunto")}`,
       reviewable: event?.event_kind === "REPLY" && event?.reply_classification === "UNREVIEWED" ? "true" : "false",
