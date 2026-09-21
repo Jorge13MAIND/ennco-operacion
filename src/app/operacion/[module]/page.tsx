@@ -11,7 +11,8 @@ export default async function OperationModulePage({ params }: { params: Promise<
   const { module } = await params;
   if (!isOperationModuleKey(module)) notFound();
   const access = await requireOperationsAccess();
-  const snapshot = await loadOperationsPortal(access);
+  const snapshot = await loadOperationsPortal(access, { scope: module });
+  const missing = snapshot.degraded.filter((item) => !item.includes("no aplica"));
   const selected = snapshot.modules[module];
   return (
     <main className="shell section operations-main" id="main-content" tabIndex={-1}>
@@ -28,6 +29,12 @@ export default async function OperationModulePage({ params }: { params: Promise<
           <p>{module === "cadencia"
             ? "Las cinco cadencias permanecen UNKNOWN. No se inventan horarios, responsables, asistencia ni entregas externas."
             : "Los renglones marcados SIMULACION no son empresas, respuestas, leads ni oportunidades reales."}</p>
+        </div>
+      ) : null}
+      {missing.length > 0 ? (
+        <div className="notice operations-disclosure">
+          <strong>Parte de la información no cargó.</strong>
+          <p>La base tardó demasiado en {missing.join(", ")}. La tabla se muestra con lo que sí llegó; recarga para completarla.</p>
         </div>
       ) : null}
       <PortalRowsTable actionKind={module} evidenceClass={snapshot.evidenceClass} module={selected} />

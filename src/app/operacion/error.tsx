@@ -16,9 +16,9 @@ export default function OperationsError({ error, reset }: { error: Error & { dig
   return (
     <main className="shell section operations-main" id="main-content" tabIndex={-1}>
       <section className="cr-error-simple">
-        <p className="cr-error-code">404</p>
+        <p className="cr-error-code">Error</p>
         <h1>No pudimos mostrar esta pantalla.</h1>
-        <p>Vuelve a intentarlo. Si sigue igual, avisa a Teckel con el código de referencia.</p>
+        <p>{/57014/u.test(error.message) ? "La base de datos tardó demasiado en responder. Suele resolverse al reintentar." : "Vuelve a intentarlo. Si sigue igual, avisa a Teckel con el código de referencia."}</p>
         <div className="cr-error-actions">
           <button className="button" onClick={reset} type="button">Reintentar</button>
           <Link className="button secondary" href={"/operacion" as Route}>Ir a Hoy</Link>

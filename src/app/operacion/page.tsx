@@ -26,7 +26,8 @@ function longDate(): string {
 
 export default async function OperationsPage() {
   const access = await requireOperationsAccess();
-  const snapshot = await loadOperationsPortal(access);
+  const snapshot = await loadOperationsPortal(access, { scope: "hoy" });
+  const missing = snapshot.degraded.filter((item) => !item.includes("no aplica"));
   const capacityLabels = { HEALTHY: "Disponible", WARNING: "Atención", FULL: "Lleno", UNKNOWN: "Bloqueado" } as const;
   return (
     <main className="shell section operations-main" id="main-content" tabIndex={-1}>
@@ -39,6 +40,12 @@ export default async function OperationsPage() {
         {snapshot.evidenceClass === "live" ? null : <span className="badge">{operationalLabel(snapshot.evidenceClass)}</span>}
       </header>
 
+      {missing.length > 0 ? (
+        <div className="notice operations-disclosure">
+          <strong>Parte de la información no cargó.</strong>
+          <p>La base tardó demasiado en {missing.join(", ")}. Los indicadores afectados pueden verse en cero; recarga para completarlos.</p>
+        </div>
+      ) : null}
       {snapshot.evidenceClass === "synthetic_demo" ? (
         <div className="notice operations-disclosure">
           <strong>Modo sintético. Tráfico externo en cero.</strong>

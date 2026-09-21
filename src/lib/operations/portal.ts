@@ -43,6 +43,57 @@ export const OPERATION_MODULE_LABELS: Record<OperationModuleKey, string> = {
   campanas: "Campañas",
 };
 
+/** Desde qué pantalla se carga el portal: decide qué consultas se disparan y cuáles son imprescindibles. */
+export type PortalScope = "hoy" | OperationModuleKey;
+
+const CORE_QUERY_NAMES = [
+  "runtime_controls", "accounts", "contacts", "messages", "provider_events", "leads", "campaigns", "opportunities", "meetings",
+  "tasks", "incidents", "mailbox_sync_cursors", "campaign_release_gates", "first_send_batches", "rollout_waves",
+  "rollout_health_observations", "commercial_baselines", "payments",
+] as const;
+type CoreQueryName = (typeof CORE_QUERY_NAMES)[number];
+type CoreResultLike = { data: unknown; count?: number | null; error: { code?: string; message?: string } | null };
+const EMPTY_CORE: CoreResultLike = { data: null, count: null, error: null };
+
+/**
+ * Qué consultas necesita cada pantalla. Antes, cualquier pantalla disparaba las 18 consultas base más
+ * 13 laterales a la vez contra una instancia Micro; si una sola tardaba más de 8 s (statement_timeout),
+ * toda la pantalla caía con PORTAL_QUERY_FAILED:57014. Ahora cada pantalla pide solo lo suyo, y de eso
+ * solo lo imprescindible tumba la pantalla; lo demás se degrada con aviso.
+ */
+const CORE_BY_SCOPE: Record<PortalScope, readonly CoreQueryName[]> = {
+  hoy: CORE_QUERY_NAMES,
+  alertas: ["incidents", "accounts", "contacts"],
+  cadencia: [],
+  respuestas: ["messages", "provider_events", "contacts", "accounts"],
+  leads: ["leads", "accounts", "contacts"],
+  empresas: ["accounts", "contacts"],
+  infraestructura: ["runtime_controls", "mailbox_sync_cursors", "campaigns"],
+  campanas: ["campaigns", "campaign_release_gates", "first_send_batches", "rollout_waves", "rollout_health_observations", "commercial_baselines", "runtime_controls"],
+};
+const ESSENTIAL_BY_SCOPE: Record<PortalScope, readonly CoreQueryName[]> = {
+  hoy: ["runtime_controls", "messages", "leads", "meetings", "tasks", "opportunities", "payments"],
+  alertas: ["incidents"],
+  cadencia: [],
+  respuestas: ["messages"],
+  leads: ["leads"],
+  empresas: ["accounts"],
+  infraestructura: ["runtime_controls", "mailbox_sync_cursors"],
+  campanas: ["campaigns"],
+};
+type SideGroup = "capacity" | "research" | "operations" | "cadence" | "provider";
+const SIDE_BY_SCOPE: Record<PortalScope, readonly SideGroup[]> = {
+  hoy: ["capacity", "research", "operations", "cadence", "provider"],
+  alertas: ["operations"],
+  cadencia: ["cadence"],
+  respuestas: [],
+  leads: [],
+  empresas: ["research"],
+  infraestructura: ["research", "provider", "operations"],
+  campanas: ["operations", "provider"],
+};
+const SKIPPED: PromiseRejectedResult = { status: "rejected", reason: new Error("SKIPPED_FOR_SCOPE") };
+
 export type PortalColumn = { key: string; label: string };
 export type PortalRow = { id: string; values: Record<string, string>; status: string };
 
@@ -57,6 +108,8 @@ export type PortalModule = {
 export type OperationsPortalSnapshot = {
   evidenceClass: "synthetic_demo" | "live";
   generatedAt: string;
+  /** Consultas no imprescindibles que fallaron o se saltaron; la pantalla se muestra con aviso. */
+  degraded: string[];
   realTruth: {
     newLeads: number;
     pendingReplies: number;
@@ -296,6 +349,7 @@ export function getSyntheticOperationsPortal(): OperationsPortalSnapshot {
   return {
     evidenceClass: "synthetic_demo",
     generatedAt,
+    degraded: [],
     realTruth: {
       newLeads: 0,
       pendingReplies: 0,
@@ -496,7 +550,9 @@ export function evaluateReplySync(
   }) ? "HEALTHY" : "DEGRADED";
 }
 
-export async function loadOperationsPortal(access: OperationsAccessContext): Promise<OperationsPortalSnapshot> {
+export async function loadOperationsPortal(access: OperationsAccessContext, options: { scope?: PortalScope } = {}): Promise<OperationsPortalSnapshot> {
+  const scope: PortalScope = options.scope ?? "hoy";
+  const sideWanted = new Set<SideGroup>(SIDE_BY_SCOPE[scope]);
   if (access.evidenceClass === "synthetic_demo") return getSyntheticOperationsPortal();
   if (!access.organizationId) throw new Error("PORTAL_ORGANIZATION_REQUIRED");
 
@@ -509,14 +565,14 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
     month: "2-digit",
   }).formatToParts(new Date());
   const capacityMonth = `${monthParts.find((part) => part.type === "year")?.value ?? "0000"}-${monthParts.find((part) => part.type === "month")?.value ?? "00"}-01`;
-  const capacityPromise = Promise.allSettled([
+  const capacityPromise = !sideWanted.has("capacity") ? Promise.resolve([SKIPPED, SKIPPED] as const) : Promise.allSettled([
     client.from("opportunity_capacity_schedules").select("id,opportunity_id,execution_date,capacity_month,config_version").eq("organization_id", organizationId),
     client.rpc("evaluate_monthly_operational_capacity", {
       target_organization_id: organizationId,
       target_capacity_month: capacityMonth,
     }),
   ]);
-  const researchPromise = Promise.allSettled([
+  const researchPromise = !sideWanted.has("research") ? Promise.resolve([SKIPPED, SKIPPED, SKIPPED, SKIPPED] as const) : Promise.allSettled([
     client.from("accounts")
       .select("id,research_status,priority_market,research_state,research_coverage_exception_approved", { count: "exact" })
       .eq("organization_id", organizationId)
@@ -534,7 +590,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       target_organization_id: organizationId,
     }),
   ]);
-  const operationsPromise = Promise.allSettled([
+  const operationsPromise = !sideWanted.has("operations") ? Promise.resolve([SKIPPED, SKIPPED, SKIPPED, SKIPPED] as const) : Promise.allSettled([
     client.from("approval_requests")
       .select("id,subject_type,subject_sha256,status,requested_by,requested_at,due_at,decided_by,decided_at")
       .eq("organization_id", organizationId)
@@ -555,13 +611,13 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       target_evaluated_at: evaluatedAt,
     }),
   ]);
-  const cadencePromise = Promise.allSettled([
+  const cadencePromise = !sideWanted.has("cadence") ? Promise.resolve([SKIPPED] as const) : Promise.allSettled([
     client.rpc("evaluate_control_cadence_health", {
       target_organization_id: organizationId,
       target_evaluated_at: evaluatedAt,
     }),
   ]);
-  const providerPromise = Promise.allSettled([
+  const providerPromise = !sideWanted.has("provider") ? Promise.resolve([SKIPPED, SKIPPED] as const) : Promise.allSettled([
     client.rpc("evaluate_outbound_provider_readiness", {
       target_organization_id: organizationId,
       target_evaluated_at: evaluatedAt,
@@ -571,31 +627,42 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
       target_evaluated_at: evaluatedAt,
     }),
   ]);
-  const results = await Promise.all([
-    client.from("runtime_controls").select("global_kill_switch,external_send_allowed").eq("organization_id", organizationId).maybeSingle(),
-    client.from("accounts").select("id,legal_name,state,sector,source_confidence,updated_at", { count: "exact" }).eq("organization_id", organizationId).eq("is_deleted", false).limit(200),
-    client.from("contacts").select("id,account_id,full_name,role_title,verified,updated_at", { count: "exact" }).eq("organization_id", organizationId).eq("is_deleted", false).limit(300),
-    client.from("messages").select("id,contact_id,status,subject,body_text,created_at", { count: "exact" }).eq("organization_id", organizationId).eq("direction", "INBOUND").order("created_at", { ascending: false }).limit(100),
-    client.from("provider_events").select("id,message_id,event_kind,reply_classification,processing_status,observed_at").eq("organization_id", organizationId).order("observed_at", { ascending: false }).limit(100),
-    client.from("leads").select("id,account_id,contact_id,status,contractual_qualified,qualification_reason,created_at", { count: "exact" }).eq("organization_id", organizationId).order("created_at", { ascending: false }).limit(100),
-    client.from("campaigns").select("id,name,status,manifest_sha256,shadow_canary_decision,updated_at").eq("organization_id", organizationId).order("updated_at", { ascending: false }).limit(100),
-    client.from("opportunities").select("id,account_id,stage,value_mxn,next_action,next_action_at,economic_buyer,active_pain,business_impact,timing_under_90_days").eq("organization_id", organizationId).order("updated_at", { ascending: false }).limit(100),
-    client.from("meetings").select("id,opportunity_id,scheduled_at,held_at,attendance_verified").eq("organization_id", organizationId).order("scheduled_at", { ascending: true }).limit(100),
-    client.from("tasks").select("id,account_id,contact_id,task_type,normalized_objective,owner_user_id,due_at,status").eq("organization_id", organizationId).order("due_at", { ascending: true }).limit(100),
-    client.from("incidents").select("id,severity,status,title,owner_user_id,opened_at").eq("organization_id", organizationId).order("opened_at", { ascending: false }).limit(100),
-    client.from("mailbox_sync_cursors").select("mailbox_id,status,last_synced_at,last_error_code,watch_expires_at").eq("organization_id", organizationId),
-    client.from("campaign_release_gates").select("id,campaign_id,gate_code,status,evidence_class,observed_at,valid_until").eq("organization_id", organizationId).order("gate_code", { ascending: true }),
-    client.from("first_send_batches").select("id,campaign_id,status,recipient_count,account_count,scheduled_for,approved_at,released_at,killed_at,kill_reason_code").eq("organization_id", organizationId).order("created_at", { ascending: false }),
-    client.from("rollout_waves").select("id,campaign_id,wave_number,status,planned_recipient_count,scheduled_for,previous_observation_id,passed_at,extended_at,killed_at").eq("organization_id", organizationId).order("wave_number", { ascending: false }),
-    client.from("rollout_health_observations").select("id,campaign_id,source_kind,source_id,decision,evidence_class,delivered_count,hard_bounce_count,spam_complaint_count,unknown_count,observed_at").eq("organization_id", organizationId).order("observed_at", { ascending: false }),
-    client.from("commercial_baselines").select("id,campaign_id,valid_first_deliveries,substantive_replies,positive_replies,strict_leads,held_meetings,qualified_opportunities,cutoff_at,evidence_class").eq("organization_id", organizationId).order("cutoff_at", { ascending: false }),
-    client.from("payments").select("id,opportunity_id,amount_mxn,paid_at,is_first_payment").eq("organization_id", organizationId).eq("is_first_payment", true),
-  ]);
-  const failed = results.find((result) => result.error);
-  if (failed?.error) throw new Error(`PORTAL_QUERY_FAILED:${failed.error.code ?? "UNKNOWN"}`);
+  const coreThunks: Record<CoreQueryName, () => PromiseLike<CoreResultLike>> = {
+    runtime_controls: () => client.from("runtime_controls").select("global_kill_switch,external_send_allowed").eq("organization_id", organizationId).maybeSingle(),
+    accounts: () => client.from("accounts").select("id,legal_name,state,sector,source_confidence,updated_at", { count: "exact" }).eq("organization_id", organizationId).eq("is_deleted", false).limit(200),
+    contacts: () => client.from("contacts").select("id,account_id,full_name,role_title,verified,updated_at", { count: "exact" }).eq("organization_id", organizationId).eq("is_deleted", false).limit(300),
+    messages: () => client.from("messages").select("id,contact_id,status,subject,body_text,created_at", { count: "exact" }).eq("organization_id", organizationId).eq("direction", "INBOUND").order("created_at", { ascending: false }).limit(100),
+    provider_events: () => client.from("provider_events").select("id,message_id,event_kind,reply_classification,processing_status,observed_at").eq("organization_id", organizationId).order("observed_at", { ascending: false }).limit(100),
+    leads: () => client.from("leads").select("id,account_id,contact_id,status,contractual_qualified,qualification_reason,created_at", { count: "exact" }).eq("organization_id", organizationId).order("created_at", { ascending: false }).limit(100),
+    campaigns: () => client.from("campaigns").select("id,name,status,manifest_sha256,shadow_canary_decision,updated_at").eq("organization_id", organizationId).order("updated_at", { ascending: false }).limit(100),
+    opportunities: () => client.from("opportunities").select("id,account_id,stage,value_mxn,next_action,next_action_at,economic_buyer,active_pain,business_impact,timing_under_90_days").eq("organization_id", organizationId).order("updated_at", { ascending: false }).limit(100),
+    meetings: () => client.from("meetings").select("id,opportunity_id,scheduled_at,held_at,attendance_verified").eq("organization_id", organizationId).order("scheduled_at", { ascending: true }).limit(100),
+    tasks: () => client.from("tasks").select("id,account_id,contact_id,task_type,normalized_objective,owner_user_id,due_at,status").eq("organization_id", organizationId).order("due_at", { ascending: true }).limit(100),
+    incidents: () => client.from("incidents").select("id,severity,status,title,owner_user_id,opened_at").eq("organization_id", organizationId).order("opened_at", { ascending: false }).limit(100),
+    mailbox_sync_cursors: () => client.from("mailbox_sync_cursors").select("mailbox_id,status,last_synced_at,last_error_code,watch_expires_at").eq("organization_id", organizationId),
+    campaign_release_gates: () => client.from("campaign_release_gates").select("id,campaign_id,gate_code,status,evidence_class,observed_at,valid_until").eq("organization_id", organizationId).order("gate_code", { ascending: true }),
+    first_send_batches: () => client.from("first_send_batches").select("id,campaign_id,status,recipient_count,account_count,scheduled_for,approved_at,released_at,killed_at,kill_reason_code").eq("organization_id", organizationId).order("created_at", { ascending: false }),
+    rollout_waves: () => client.from("rollout_waves").select("id,campaign_id,wave_number,status,planned_recipient_count,scheduled_for,previous_observation_id,passed_at,extended_at,killed_at").eq("organization_id", organizationId).order("wave_number", { ascending: false }),
+    rollout_health_observations: () => client.from("rollout_health_observations").select("id,campaign_id,source_kind,source_id,decision,evidence_class,delivered_count,hard_bounce_count,spam_complaint_count,unknown_count,observed_at").eq("organization_id", organizationId).order("observed_at", { ascending: false }),
+    commercial_baselines: () => client.from("commercial_baselines").select("id,campaign_id,valid_first_deliveries,substantive_replies,positive_replies,strict_leads,held_meetings,qualified_opportunities,cutoff_at,evidence_class").eq("organization_id", organizationId).order("cutoff_at", { ascending: false }),
+    payments: () => client.from("payments").select("id,opportunity_id,amount_mxn,paid_at,is_first_payment").eq("organization_id", organizationId).eq("is_first_payment", true),
+  };
+  const coreWanted = new Set<CoreQueryName>(CORE_BY_SCOPE[scope]);
+  const coreEssential = new Set<CoreQueryName>(ESSENTIAL_BY_SCOPE[scope]);
+  const settledCore = await Promise.allSettled(CORE_QUERY_NAMES.map((name) => (coreWanted.has(name) ? coreThunks[name]() : Promise.resolve(EMPTY_CORE))));
+  const degraded: string[] = [];
+  const results = CORE_QUERY_NAMES.map((name, index): CoreResultLike => {
+    const entry = settledCore[index];
+    if (entry && entry.status === "fulfilled" && !entry.value.error) return entry.value;
+    const code = entry?.status === "fulfilled" ? entry.value.error?.code ?? "UNKNOWN" : "EXCEPTION";
+    if (coreEssential.has(name)) throw new Error(`PORTAL_QUERY_FAILED:${code}:${name}`);
+    degraded.push(name);
+    return EMPTY_CORE;
+  }) as unknown as readonly [CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike, CoreResultLike];
 
   const [controlsResult, accountsResult, contactsResult, messagesResult, eventsResult, leadsResult, campaignsResult, opportunitiesResult, meetingsResult, tasksResult, incidentsResult, cursorsResult, releaseGatesResult, firstSendBatchesResult, rolloutWavesResult, rolloutHealthResult, baselinesResult, paymentsResult] = results;
   const [capacitySchedulesSettled, capacityEvaluationSettled] = await capacityPromise;
+  for (const group of ["capacity", "research", "operations", "cadence", "provider"] as const) if (!sideWanted.has(group)) degraded.push(`${group} (no aplica a esta pantalla)`);
   const [researchAccountsSettled, researchCandidatesSettled, researchDedupeSettled, researchAssessmentSettled] = await researchPromise;
   const [approvalRequestsSettled, operationalSlaSettled, operationsIncidentsSettled, operationsHealthSettled] = await operationsPromise;
   const [cadenceHealthSettled] = await cadencePromise;
@@ -912,6 +979,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext): Pro
   return {
     evidenceClass: "live",
     generatedAt: new Date().toISOString(),
+    degraded,
     realTruth: {
       newLeads: leads.filter((lead) => new Date(textValue(lead.created_at, "1970-01-01")).getTime() >= dayStart.getTime()).length,
       pendingReplies: replyRows.filter((reply) => reply.values.reviewable === "true").length,
