@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { Icons, ProductTypeIcon } from "@/components/solar/ProductIcons";
 import { categoryOf, priceLabel, ratingLabel } from "@/components/solar/productos-format";
-import { LoadError, LoadingState, PageHeader, useMutation, useResource } from "@/components/solar/ui";
+import { LoadError, LoadingState, useMutation, useResource } from "@/components/solar/ui";
 import { PRICING_MODE_LABEL, PRODUCT_KINDS, UNIT_BASIS_LABEL, type Product, type ProductCatalog, type ProductCategory, type ProductKind } from "@/lib/productos/types";
 
 /* Productos: la lista de SunOne. Tipos a la izquierda, buscador, vista de lista o cuadrícula,
@@ -54,7 +54,8 @@ function RowActions({ product, onChanged }: { product: Product; onChanged: () =>
     <>
       <button aria-label={product.favorite ? "Quitar de favoritos" : "Marcar favorito"} className="pr-icon-btn" data-on={product.favorite ? "true" : "false"} disabled={m.pending} onClick={favorite} type="button">{Icons.star(product.favorite)}</button>
       {product.datasheetPath
-        ? <a aria-label="Descargar ficha técnica" className="pr-icon-btn" href={`/api/v1/productos/producto/${product.id}/ficha`} onClick={(e) => e.stopPropagation()} rel="noopener" target="_blank">{Icons.download}</a>
+        // Botón y no enlace: el renglón entero ya es un enlace a la ficha, y un <a> dentro de otro es HTML inválido.
+        ? <button aria-label="Descargar ficha técnica" className="pr-icon-btn" data-file="" onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(`/api/v1/productos/producto/${product.id}/ficha`, "_blank", "noopener"); }} type="button">{Icons.download}</button>
         : <button aria-label="Sin ficha técnica" className="pr-icon-btn" disabled type="button">{Icons.download}</button>}
       {product.active
         ? <button aria-label="Quitar del catálogo" className="pr-icon-btn" data-danger="" disabled={m.pending} onClick={archive} type="button">{Icons.trash}</button>
@@ -101,8 +102,8 @@ export function ProductsWorkspace() {
     void runSeed("/api/v1/productos/categoria/defaults", {});
   }, [needsSeed, runSeed]);
 
-  if (resource.error) return <main className="shell section operations-main projects-page" id="main-content" tabIndex={-1}><LoadError message={resource.error} retry={() => void resource.reload()} /></main>;
-  if (!catalog) return <main className="shell section operations-main projects-page" id="main-content" tabIndex={-1}><LoadingState title="Cargando productos…" /></main>;
+  if (resource.error) return <main className="shell section operations-main projects-page pr-page" id="main-content" tabIndex={-1}><LoadError message={resource.error} retry={() => void resource.reload()} /></main>;
+  if (!catalog) return <main className="shell section operations-main projects-page pr-page" id="main-content" tabIndex={-1}><LoadingState title="Cargando productos…" /></main>;
 
   const categories = catalog.categories.filter((c) => c.active);
   const current = selected === "todos" ? null : categories.find((c) => c.slug === selected) ?? null;
@@ -112,10 +113,22 @@ export function ProductsWorkspace() {
   const newHref = `/operacion/proyectos/productos/nuevo${current ? `?tipo=${current.slug}` : ""}` as Route;
 
   return (
-    <main className="shell section operations-main projects-page" id="main-content" tabIndex={-1}>
-      <PageHeader title="Productos" description="Catálogo de paneles, inversores y accesorios. Es el mismo esquema de SunOne: cada producto tiene tipo, precio base, utilidad y precio final, se cobra por unidad o por panel, y lleva su foto y su ficha técnica. Los precios de aquí alimentan las cotizaciones.">
-        <Link className="projects-button" href={newHref}>{Icons.plus} Agregar producto</Link>
-      </PageHeader>
+    <main className="shell section operations-main projects-page pr-page" id="main-content" tabIndex={-1}>
+      {/* Encabezado de SunOne: título chico con su subtítulo, y a la derecha buscador, vista y "Agregar producto". */}
+      <header className="pr-head">
+        <div>
+          <h1>Productos</h1>
+          <p>Catálogo de paneles, inversores y accesorios</p>
+        </div>
+        <div className="pr-tools">
+          <label className="pr-search">{Icons.search}<span className="sr-only">Buscar producto</span><input onChange={(e) => setSearch(e.target.value)} placeholder="Buscar producto…" type="search" value={search} /></label>
+          <div aria-label="Vista" className="pr-view" role="group">
+            <button aria-label="Cuadrícula" aria-pressed={view === "grid"} onClick={() => setView("grid")} type="button">{Icons.grid}</button>
+            <button aria-label="Lista" aria-pressed={view === "list"} onClick={() => setView("list")} type="button">{Icons.list}</button>
+          </div>
+          <Link className="pr-add" href={newHref}>{Icons.plus} Agregar producto</Link>
+        </div>
+      </header>
 
       <div className="pr-layout">
         <nav aria-label="Tipos de producto" className="pr-types">
@@ -125,14 +138,6 @@ export function ProductsWorkspace() {
         </nav>
 
         <section>
-          <div className="pr-toolbar">
-            <label className="pr-search"><span className="sr-only">Buscar producto</span><input onChange={(e) => setSearch(e.target.value)} placeholder="Buscar producto…" type="search" value={search} /></label>
-            <div aria-label="Vista" className="pr-view" role="group">
-              <button aria-label="Cuadrícula" aria-pressed={view === "grid"} onClick={() => setView("grid")} type="button">{Icons.grid}</button>
-              <button aria-label="Lista" aria-pressed={view === "list"} onClick={() => setView("list")} type="button">{Icons.list}</button>
-            </div>
-          </div>
-
           {visible.length === 0 ? (
             <div className="pr-empty">{showArchived ? "No hay productos archivados aquí." : q ? "Ningún producto coincide con la búsqueda." : current ? `Todavía no hay productos de tipo ${current.name}.` : "Todavía no hay productos. Agrega el primero."}</div>
           ) : view === "list" ? (
@@ -170,7 +175,7 @@ export function ProductsWorkspace() {
                       <p className="pr-name">{p.name}</p>
                       <p className="pr-sub">{[p.brand, p.code].filter(Boolean).join(" · ") || (cat?.name ?? "")}</p>
                     </div>
-                    <div className="pr-right" style={{ justifyContent: "space-between" }}>
+                    <div className="pr-card-foot">
                       <PriceCell product={p} />
                       <RowActions onChanged={resource.reload} product={p} />
                     </div>

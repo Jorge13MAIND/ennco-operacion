@@ -8,7 +8,9 @@ export function buildContentSecurityPolicy(nonce: string, development: boolean):
     "default-src 'self'",
     `script-src 'self' 'nonce-${safeNonce}' 'strict-dynamic'${development ? " 'unsafe-eval'" : ""}`,
     `style-src 'self' 'nonce-${safeNonce}'`,
-    "img-src 'self' blob: data:",
+    // Las fotos del catálogo de productos viven en el bucket privado de Supabase y se sirven
+    // con URL firmada; sin este origen el navegador las bloqueaba y la lista salía sin imágenes.
+    "img-src 'self' blob: data: https://*.supabase.co",
     "font-src 'self'",
     "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
     "object-src 'none'",

@@ -27,6 +27,7 @@ export const Icons = {
   list: <svg {...base}><path d="M4 6h16M4 12h16M4 18h16" /></svg>,
   grid: <svg {...base}><rect x="4" y="4" width="7" height="7" rx="1.5" /><rect x="13" y="4" width="7" height="7" rx="1.5" /><rect x="4" y="13" width="7" height="7" rx="1.5" /><rect x="13" y="13" width="7" height="7" rx="1.5" /></svg>,
   plus: <svg {...base}><path d="M12 5v14M5 12h14" /></svg>,
+  search: <svg {...base}><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>,
   unit: <svg {...base}><rect x="6" y="9" width="12" height="11" rx="2" /><path d="M9 9V6a3 3 0 0 1 6 0v3" /></svg>,
   range: <svg {...base}><path d="M4 20V10M10 20V4M16 20v-8M22 20H2" /></svg>,
 };

@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Icons, ProductTypeIcon } from "@/components/solar/ProductIcons";
-import { priceLabel } from "@/components/solar/productos-format";
 import { LoadError, LoadingState, useMutation, useResource } from "@/components/solar/ui";
 import { finalPrice, isEquipmentKind, type PriceTier, type Product, type ProductCatalog, type ProductCategory } from "@/lib/productos/types";
 
@@ -52,12 +51,13 @@ function FileCard({ product, kind, canWrite, onDone }: { product: Product | null
   };
   const accept = isPhoto ? "image/png,image/jpeg,image/webp" : "application/pdf";
   return (
-    <div className="pr-box">
-      {isPhoto ? null : <h3>{Icons.doc} Ficha técnica</h3>}
+    <div className={isPhoto ? "pr-photo-actions" : "pr-box"}>
+      {isPhoto ? null : <h3 className="pr-box-title"><span className="pr-box-icon">{Icons.doc}</span>Ficha técnica</h3>}
       {isPhoto ? null : <p>{has ? "Especificaciones y documentación del producto." : "Agrega la documentación técnica de este producto."}</p>}
+      {!isPhoto && has && product?.source === "sunone" ? <span className="pr-chip pr-chip-src">Del catálogo</span> : null}
       {!isPhoto && has && product ? <a className="pr-file-btn" data-primary="" href={`/api/v1/productos/producto/${product.id}/ficha`} rel="noopener" target="_blank">{Icons.download} Descargar ficha técnica</a> : null}
       {canWrite && product ? (
-        <label className="pr-file-btn">
+        <label className="pr-file-btn" data-kind={kind}>
           <input accept={accept} disabled={state.pending} onChange={(e) => void upload(e.target.files?.[0])} type="file" />
           {isPhoto ? Icons.camera : Icons.upload} {state.pending ? "Subiendo…" : isPhoto ? (has ? "Cambiar foto" : "Subir foto") : (has ? "Cambiar ficha" : "Subir ficha técnica")}
         </label>
@@ -107,7 +107,7 @@ function Form({ product, categories, initialCategoryId, canWrite, reload }: { pr
       <h2>Precio y utilidad</h2>
       <p>Define el precio base y la utilidad sobre el costo.</p>
       <div className="pr-fields" data-cols="3">
-        <label className="pr-field"><span>Moneda<b>*</b></span><select disabled={!canWrite} onChange={(e) => patch({ currency: e.target.value as Draft["currency"] })} value={d.currency}><option value="USD">USD</option><option value="MXN">MXN</option></select></label>
+        <label className="pr-field" data-select=""><span>Moneda<b>*</b></span><select disabled={!canWrite} onChange={(e) => patch({ currency: e.target.value as Draft["currency"] })} value={d.currency}><option value="USD">USD</option><option value="MXN">MXN</option></select></label>
         <label className="pr-field"><span>Precio base<b>*</b></span><input disabled={!canWrite} inputMode="decimal" onChange={(e) => patch({ basePrice: e.target.value })} value={d.basePrice} /></label>
         <label className="pr-field"><span>Utilidad sobre costo %</span><input disabled={!canWrite} inputMode="decimal" onChange={(e) => patch({ utilityPct: e.target.value })} placeholder="Utilidad %" value={d.utilityPct} /></label>
       </div>
@@ -148,16 +148,16 @@ function Form({ product, categories, initialCategoryId, canWrite, reload }: { pr
       <section className="pr-section">
         <h2>Información del producto</h2>
         <p>Administra los datos y precios de tu catálogo.</p>
-        <div className="pr-fields" data-cols="2">
+        <div className="pr-fields" data-cols="2" data-even="">
           <label className="pr-field"><span>Nombre<b>*</b></span><input disabled={!canWrite} maxLength={160} onChange={(e) => patch({ name: e.target.value })} value={d.name} /></label>
           <label className="pr-field"><span>Código</span><input disabled={!canWrite} maxLength={80} onChange={(e) => patch({ code: e.target.value })} value={d.code} /></label>
         </div>
-        <div className="pr-fields" data-cols={equipment ? "3" : "2"} style={{ marginTop: 14 }}>
+        <label className="pr-field" style={{ marginTop: 18 }}><span>Descripción</span><textarea disabled={!canWrite} maxLength={2000} onChange={(e) => patch({ description: e.target.value })} placeholder="Describe las características del producto" value={d.description} /></label>
+        <div className="pr-fields" data-cols={equipment ? "3" : "2"} style={{ marginTop: 18 }}>
           <label className="pr-field"><span>Tipo<b>*</b></span><select disabled={!canWrite} onChange={(e) => patch({ categoryId: e.target.value })} value={d.categoryId}>{categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></label>
           <label className="pr-field"><span>Marca</span><input disabled={!canWrite} maxLength={80} onChange={(e) => patch({ brand: e.target.value })} value={d.brand} /></label>
           {equipment ? <label className="pr-field"><span>Potencia ({category?.kind === "module" ? "W" : "kW"})</span><input disabled={!canWrite} inputMode="decimal" onChange={(e) => patch({ rating: e.target.value })} value={d.rating} /><small>Es el número que se ve en la lista y el que usa el cotizador.</small></label> : null}
         </div>
-        <label className="pr-field" style={{ marginTop: 14 }}><span>Descripción</span><textarea disabled={!canWrite} maxLength={2000} onChange={(e) => patch({ description: e.target.value })} placeholder="Describe las características del producto" value={d.description} /></label>
       </section>
       {priceBlock}
       <div className="pr-actions">
@@ -171,7 +171,7 @@ function Form({ product, categories, initialCategoryId, canWrite, reload }: { pr
 export function ProductEditor({ id, initialCategorySlug }: { id: string; initialCategorySlug?: string | null }) {
   const resource = useResource<{ catalog: ProductCatalog }>("/api/v1/productos/catalogo");
   const catalog = resource.data?.catalog ?? null;
-  const shell = (children: React.ReactNode) => <main className="shell section operations-main projects-page" id="main-content" tabIndex={-1}>{children}</main>;
+  const shell = (children: React.ReactNode) => <main className="shell section operations-main projects-page pr-page" id="main-content" tabIndex={-1}>{children}</main>;
   if (resource.error) return shell(<LoadError message={resource.error} retry={() => void resource.reload()} />);
   if (!catalog) return shell(<LoadingState title="Cargando producto…" />);
   const categories = catalog.categories.filter((c) => c.active);
@@ -183,16 +183,18 @@ export function ProductEditor({ id, initialCategorySlug }: { id: string; initial
 
   return shell(
     <>
-      <Link className="pr-back" href={"/operacion/proyectos/productos" as Route}>{Icons.back} Productos</Link>
       <div className="pr-editor-head">
-        <h1>{product?.name ?? "Nuevo producto"}</h1>
+        <div>
+          <Link className="pr-back" href={"/operacion/proyectos/productos" as Route}>{Icons.back} Productos</Link>
+          <h1>{product?.name ?? "Nuevo producto"}</h1>
+        </div>
         {category ? <span className="pr-chip" data-tone="type">{category.name}</span> : null}
       </div>
       {categories.length === 0 ? <p className="pr-readonly">Primero crea un tipo de producto en la lista.</p> : null}
       <div className="pr-editor">
         <aside className="pr-aside">
           <div className="pr-box">
-            <div className="pr-thumb pr-thumb-lg">
+            <div className="pr-photo">
               {/* URL firmada del bucket privado, cambia cada hora: no pasa por el optimizador de next/image. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               {product?.photoUrl ? <img alt="" src={product.photoUrl} /> : <ProductTypeIcon icon={category?.icon ?? "box"} />}
@@ -205,7 +207,6 @@ export function ProductEditor({ id, initialCategorySlug }: { id: string; initial
         </aside>
         <Form canWrite={canWrite} categories={categories} initialCategoryId={initialCategoryId} key={product ? `${product.id}:${product.updatedAt}` : `nuevo:${initialCategoryId}`} product={product} reload={resource.reload} />
       </div>
-      {product ? <p className="pr-archived">Precio final registrado: {priceLabel(product.finalPrice, product.currency)}{product.unitBasis === "por_panel" ? " por panel" : ""}.</p> : null}
     </>,
   );
 }

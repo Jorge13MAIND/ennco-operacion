@@ -7,6 +7,7 @@ describe("request security", () => {
     const policy = buildContentSecurityPolicy("YWJjZGVmZ2hpamtsbW5vcA==", false);
     expect(policy).toContain("script-src 'self' 'nonce-YWJjZGVmZ2hpamtsbW5vcA==' 'strict-dynamic'");
     expect(policy).toContain("frame-ancestors 'none'");
+    expect(policy).toContain("img-src 'self' blob: data: https://*.supabase.co");
     expect(policy).not.toContain("unsafe-eval");
     expect(policy).not.toContain("unsafe-inline");
   });
