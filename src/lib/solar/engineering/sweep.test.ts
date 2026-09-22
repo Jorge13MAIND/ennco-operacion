@@ -19,7 +19,9 @@ const finite = (o: unknown): string[] => {
 };
 
 /* Todo módulo × todo inversor × varias ciudades: ningún motor debe lanzar ni producir NaN o infinito. */
-describe("barrido del catálogo completo", () => {
+// Es un barrido de robustez (18 módulos × 40 inversores × 5 ciudades), no una prueba de velocidad:
+// con la máquina cargada pasa de los 5 s por defecto sin que nada esté mal.
+describe("barrido del catálogo completo", { timeout: 60_000 }, () => {
   const cities = ["Puebla", "León", "Mexicali", "Cancún", "Toluca"].filter((c) => catalog.cities.some((x) => x.city === c));
   it("arreglos, DC, AC y tableros son finitos para todas las combinaciones", () => {
     let combos = 0;
