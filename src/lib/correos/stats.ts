@@ -31,6 +31,8 @@ export const directLaneStatsSchema = z.object({
     variant: z.array(rowSchema).optional(),
     state: z.array(rowSchema).optional(),
     week: z.array(rowSchema).optional(),
+    touch: z.array(rowSchema).optional(),
+    round: z.array(rowSchema).optional(),
   }).partial(),
 });
 export type DirectLaneStats = z.infer<typeof directLaneStatsSchema>;

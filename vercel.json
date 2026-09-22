@@ -37,6 +37,10 @@
     {
       "path": "/api/v1/internal/cron/correos-weekly",
       "schedule": "0 20 * * 5"
+    },
+    {
+      "path": "/api/v1/internal/cron/correos-supervisor",
+      "schedule": "45 19 * * 1-5"
     }
   ]
 }

@@ -166,6 +166,9 @@ export function CorreosEstadisticas({ page }: { page: DirectLaneStatsPage }) {
     { key: "variant", label: "Por perfil", rows: labelRows(page.current.by.variant, (k) => variantLabel[k] ?? k) },
     { key: "mailbox", label: "Por buzón", rows: labelRows(page.current.by.mailbox, (k) => k) },
     { key: "state", label: "Por estado", rows: labelRows(page.current.by.state, (k) => (k === "?" ? "Sin estado" : k)) },
+    // Junta #6: en qué correo se abre (el primero o un seguimiento) y qué ronda de rotación contesta.
+    { key: "touch", label: "Por toque", rows: labelRows(page.current.by.touch, (k) => `Toque ${k.slice(1)}`) },
+    { key: "round", label: "Por ronda", rows: labelRows(page.current.by.round, (k) => `Ronda ${k.slice(1)}${k === "R1" ? " (primer buzón)" : ""}`) },
   ];
   const replyRate = rate(f.replied, f.reached);
   const summary = summaryText(page);

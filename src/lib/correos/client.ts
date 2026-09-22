@@ -286,6 +286,12 @@ export async function autoenrollDirectLane(config: RuntimeConfig, mailboxId: str
   return autoenrollResultSchema.parse(await callRpc(config, "autoenroll_direct_lane", [config.organizationId, mailboxId], { target_mailbox_id: mailboxId }));
 }
 
+/** Revisión diaria del supervisor; con applyPause pausa el buzón que rebote de más. */
+export async function superviseDirectLane(config: RuntimeConfig, applyPause: boolean): Promise<unknown> {
+  requireConfig(config);
+  return callRpc(config, "supervise_direct_lane", [config.organizationId, applyPause ? "true" : "false"], { apply_pause: applyPause });
+}
+
 export async function annotateDirectLaneInbound(config: RuntimeConfig, input: {
   providerEventId: string;
   rfcMessageId: string | null;
