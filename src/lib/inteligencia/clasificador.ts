@@ -20,11 +20,12 @@
 
 export const CLASSIFIER_VERSION = "clasificador-v1-2026-09-02";
 
-/** Los nueve intents del response playbook v1. */
+/** Los diez intents del response playbook. */
 export type ReplyIntent =
   | "POSITIVE"
   | "REFERRAL"
   | "NOT_NOW"
+  | "NOT_INTERESTED"
   | "WHAT_IS_THIS"
   | "PRICE_OBJECTION"
   | "CHEAPER_VENDOR"
@@ -169,6 +170,22 @@ const RULES: readonly Rule[] = [
     ],
   },
   {
+    // "No me interesa" no es "ahora no": va antes para que no se lo lleve NOT_NOW.
+    // Nunca es baja: quien se quiere ir escribe "baja" y esa regla manda.
+    intent: "NOT_INTERESTED",
+    classification: "NEGATIVE",
+    weight: 0.8,
+    patterns: [
+      /\bno (me|nos) interesa\b/i,
+      /\bno estamos interesad/i,
+      /\bno (me|nos) interesan?\b/i,
+      /\bno es (algo )?que (necesitemos|busquemos|requiramos)\b/i,
+      /\bno (requerimos|necesitamos) (el |ese |este )?servicio\b/i,
+      /\bgracias,? pero no\b/i,
+      /\bno,? gracias\b/i,
+    ],
+  },
+  {
     intent: "NOT_NOW",
     classification: "NEUTRAL",
     weight: 0.7,
@@ -263,11 +280,13 @@ export function classifyReply(input: { subject: string | null; body: string | nu
     if (hits.length === 0) continue;
 
     // Un rechazo explícito cancela una lectura positiva: "me mandas info pero
-    // no nos interesa" no es un lead.
+    // no nos interesa" no es un lead. Antes esto se etiquetaba NOT_NOW, que es
+    // "ahora no" y se retoma; un rechazo expreso es desinterés y tiene su propio
+    // guion, que valida y deja la puerta abierta sin volver a insistir.
     const hardNo = HARD_NO.filter((pattern) => pattern.test(text));
     if (rule.classification === "POSITIVE" && hardNo.length > 0) {
       return {
-        intent: "NOT_NOW",
+        intent: "NOT_INTERESTED",
         classification: "NEGATIVE",
         confidence: 0.7,
         signals: ["señal positiva contradicha por rechazo explícito", ...hardNo.map((p) => describe(text, p))],
@@ -325,6 +344,7 @@ export const INTENT_LABELS: Record<ReplyIntent, string> = {
   POSITIVE: "Interés expreso",
   REFERRAL: "Referido a otra persona",
   NOT_NOW: "Ahora no",
+  NOT_INTERESTED: "No me interesa",
   WHAT_IS_THIS: "Pide contexto",
   PRICE_OBJECTION: "Objeción de precio",
   CHEAPER_VENDOR: "Ya tiene proveedor",

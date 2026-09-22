@@ -58,6 +58,7 @@ const intentLabels: Record<string, string> = {
   POSITIVE: "Positiva: sí me interesa",
   REFERRAL: "Referido: habla con…",
   NOT_NOW: "Ahora no",
+  NOT_INTERESTED: "No me interesa",
   WHAT_IS_THIS: "¿Qué es esto?",
   PRICE_OBJECTION: "Objeción de precio",
   CHEAPER_VENDOR: "Tienen uno más barato",

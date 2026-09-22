@@ -9,7 +9,9 @@
     "detener la secuencia antes de responder",
     "no confirmar garantías, descuentos, precio final o fecha",
     "registrar siguiente acción y fecha",
-    "una baja se confirma sin agregar otro pitch"
+    "una baja se confirma sin agregar otro pitch",
+    "un desinterés se valida sin discutir, se deja una sola razón por la que importa, y se cierra con la puerta abierta",
+    "un desinterés no es una baja: no entra a supresión, se reactiva a los seis meses"
   ],
   "responses": [
     {
@@ -23,6 +25,10 @@
     {
       "intent": "NOT_NOW",
       "body": "Entiendo, {{first_name}}. Lo dejo en pausa y no sigo con la secuencia. Si te parece, registro el mes que tenga sentido para retomarlo. ¿Cuándo sería menos inoportuno?\n\nFrancisco"
+    },
+    {
+      "intent": "NOT_INTERESTED",
+      "body": "Entendido, {{first_name}}, y gracias por contestar: la mayoría no lo hace.\n\nLo único que te dejo, por si sirve después: lo que revisamos con el dron no es si les conviene poner paneles, es si lo que ya tienen instalado está trabajando como debe. En la última planta que vimos, la mitad de lo que se veía bien desde el piso salía en rojo desde arriba.\n\nNo te escribo más. Cuando necesites agendar tu mantenimiento eléctrico, búscame: se agenda sin más trámite.\n\nFrancisco Cuellar\nDirector General, ENNCO"
     },
     {
       "intent": "WHAT_IS_THIS",
