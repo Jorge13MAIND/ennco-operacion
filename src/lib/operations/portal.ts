@@ -16,10 +16,14 @@ import {
   type ControlCadenceCode,
   type ControlCadenceHealth,
 } from "@/lib/operations/cadence";
+import { classifyReply, INTENT_LABELS } from "@/lib/inteligencia/clasificador";
 import { parseCapacityReadModel } from "@/lib/operations/capacity";
 import { operationsHealthResultSchema } from "@/lib/operations/sla";
 import { parseResearchPortalReadModel } from "@/lib/research/portal";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+
+
+const REVIEWED_LABELS: Record<string, string> = { POSITIVE: "Positiva", NEUTRAL: "Neutral", NEGATIVE: "Negativa" };
 
 export const OPERATION_MODULE_KEYS = [
   "alertas",
@@ -781,6 +785,17 @@ export async function loadOperationsPortal(access: OperationsAccessContext, opti
   const today = new Date();
   const dayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
+  // Lo que ve el operador: la clasificación humana si ya la hay; si no, "Sin revisar" y lo que
+  // sugiere el clasificador. Sin el texto de la respuesta no se sugiere nada: el asunto solo
+  // ("Re: …") no dice si es un sí o un no, y adivinar fue lo que confundió el caso Hershey.
+  const replyClassificationLabel = (classification: unknown, subject: unknown, body: unknown): string => {
+    const current = textValue(classification, "UNREVIEWED");
+    if (current !== "UNREVIEWED") return REVIEWED_LABELS[current] ?? current;
+    const text = typeof body === "string" ? body.trim() : "";
+    if (!text) return "Sin revisar · sin texto para sugerir";
+    const suggestion = classifyReply({ subject: typeof subject === "string" ? subject : null, body: text });
+    return `Sin revisar · sugerida: ${INTENT_LABELS[suggestion.intent] ?? suggestion.intent}`;
+  };
   const replyRows = messages.map((message) => {
     const event = eventByMessageId.get(textValue(message.id));
     const contact = contactById.get(textValue(message.contact_id));
@@ -789,7 +804,7 @@ export async function loadOperationsPortal(access: OperationsAccessContext, opti
       contacto: contactName(message.contact_id),
       // De qué dirección llegó y a cuál de nuestros buzones: es lo que permite verificar la respuesta en el correo.
       correo: `${textValue(message.normalized_from, "sin remitente")} → ${textValue(message.normalized_to, "sin buzón")}`,
-      clasificacion: textValue(event?.reply_classification, "Sin revisar"),
+      clasificacion: replyClassificationLabel(event?.reply_classification, message.subject, message.body_text),
       siguiente: `Recibida ${dateValue(message.created_at)}. ${textValue(message.subject, "Sin asunto")}`,
       reviewable: event?.event_kind === "REPLY" && event?.reply_classification === "UNREVIEWED" ? "true" : "false",
     });

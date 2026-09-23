@@ -4,6 +4,7 @@ import { annotateDirectLaneInbound, readDirectLaneCredential, readDirectLaneHeal
 import { openDirectLaneSecret } from "@/lib/correos/vault";
 import { applyDispatchProviderEvent, updateDispatchSyncCursor } from "@/lib/dispatch/client";
 import { getGmailAccessToken } from "@/lib/dispatch/gmail-token";
+import { extractReplyText } from "@/lib/gmail/body";
 import { classifyGmailMessage, collectGmailHistory, extractGmailEventContext, GmailHistoryResetRequiredError, type GmailHistoryTransport, type GmailMessageMetadata } from "@/lib/gmail/history";
 import type { RuntimeConfig } from "@/lib/runtime/config";
 
@@ -25,7 +26,11 @@ export type DirectLaneSyncSummary = {
   appliedReplyEvents: number;
 };
 
-type SyncTransport = GmailHistoryTransport & { getProfile(): Promise<{ status: number; body: unknown }> };
+type SyncTransport = GmailHistoryTransport & {
+  getProfile(): Promise<{ status: number; body: unknown }>;
+  /** El mensaje completo, para guardar el texto de las respuestas (gmail.readonly ya lo permite). */
+  getMessageFull?(messageId: string): Promise<{ status: number; body: unknown }>;
+};
 
 function gmailTransport(accessToken: string, fetchImpl: typeof fetch = fetch): SyncTransport {
   const call = async (url: string) => {
@@ -39,6 +44,7 @@ function gmailTransport(accessToken: string, fetchImpl: typeof fetch = fetch): S
       `https://gmail.googleapis.com/gmail/v1/users/me/history?startHistoryId=${encodeURIComponent(startHistoryId)}&historyTypes=messageAdded&labelId=INBOX${pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ""}`,
     ),
     getMessage: (messageId) => call(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(messageId)}?format=metadata`),
+    getMessageFull: (messageId) => call(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(messageId)}?format=full`),
   };
 }
 
@@ -120,6 +126,12 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
         }
         // Sin enlace por encabezado NI por hilo no es respuesta a algo nuestro.
         if (!relatedOutbound) continue;
+        // El texto solo de respuestas humanas y automáticas; si Gmail falla, la respuesta entra igual sin texto.
+        let bodyText: string | null = null;
+        if ((kind === "REPLY" || kind === "AUTO_REPLY") && transport.getMessageFull) {
+          const full = await transport.getMessageFull(message.id).catch(() => null);
+          bodyText = full && full.status === 200 ? extractReplyText(full.body) : null;
+        }
         const applied = await applyEvent(config, {
           mailboxId: mailbox.mailbox_id,
           externalEventId: message.id,
@@ -128,7 +140,7 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
           eventKind: kind,
           normalizedFrom: kind === "HARD_BOUNCE" ? context.failedRecipient ?? context.normalizedFrom : context.normalizedFrom,
           subject: context.subject,
-          bodyText: null,
+          bodyText,
           observedAtEpoch: context.internalDateEpoch,
         });
         entry.events += 1;

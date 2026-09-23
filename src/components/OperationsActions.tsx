@@ -130,7 +130,9 @@ export function ReplyReviewAction({ providerEventId }: { providerEventId: string
   }
   return (
     <form action={(data) => void submit(data)} className="inline-review-form">
-      <select aria-label="Clasificar respuesta" name="classification">
+      {/* Sin opción preseleccionada: antes "Positiva" aparecía elegida y parecía que el hub ya la había clasificado. */}
+      <select aria-label="Clasificar respuesta" defaultValue="" name="classification" required>
+        <option disabled value="">Clasificar…</option>
         <option value="POSITIVE">Positiva</option>
         <option value="NEUTRAL">Neutral</option>
         <option value="NEGATIVE">Negativa</option>
