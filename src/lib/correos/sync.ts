@@ -1,9 +1,10 @@
 import { z } from "zod";
 
-import { annotateDirectLaneInbound, readDirectLaneCredential, readDirectLaneHealth, resolveDirectLaneOutbound, type DirectLaneMailboxHealth } from "@/lib/correos/client";
+import { recordEmailRecovery, annotateDirectLaneInbound, readDirectLaneCredential, readDirectLaneHealth, resolveDirectLaneOutbound, type DirectLaneMailboxHealth } from "@/lib/correos/client";
 import { openDirectLaneSecret } from "@/lib/correos/vault";
 import { applyDispatchProviderEvent, updateDispatchSyncCursor } from "@/lib/dispatch/client";
 import { getGmailAccessToken } from "@/lib/dispatch/gmail-token";
+import { deliveryDiagnostic } from "@/lib/correos/delivery-diagnostic";
 import { extractReplyText } from "@/lib/gmail/body";
 import { classifyGmailMessage, collectGmailHistory, extractGmailEventContext, GmailHistoryResetRequiredError, type GmailHistoryTransport, type GmailMessageMetadata } from "@/lib/gmail/history";
 import type { RuntimeConfig } from "@/lib/runtime/config";
@@ -65,6 +66,7 @@ type SyncDependencies = {
   updateCursor?: typeof updateDispatchSyncCursor;
   annotate?: typeof annotateDirectLaneInbound;
   resolveOutbound?: typeof resolveDirectLaneOutbound;
+  recordRecovery?: typeof recordEmailRecovery;
 };
 
 export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDependencies = {}): Promise<DirectLaneSyncSummary> {
@@ -76,6 +78,7 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
   const updateCursor = deps.updateCursor ?? updateDispatchSyncCursor;
   const annotate = deps.annotate ?? annotateDirectLaneInbound;
   const resolveOutbound = deps.resolveOutbound ?? resolveDirectLaneOutbound;
+  const recordRecovery = deps.recordRecovery ?? recordEmailRecovery;
   const summary: DirectLaneSyncSummary = { mailboxes: [], appliedReplyEvents: 0 };
   if (!config.directLaneVaultKey || !config.googleOauthClientId || !config.googleOauthClientSecret) return summary;
 
@@ -114,7 +117,6 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
       for (const message of collected.messages) {
         if (message.labelIds?.some(label => label === "SENT" || label === "DRAFT")) continue;
         const kind = classifyGmailMessage(message);
-        if (kind === "UNKNOWN") continue;
         const context = extractGmailEventContext(message);
         // Gmail reescribe el Message-ID al enviar (emite <CA...@mail.gmail.com>
         // en lugar del <msg-uuid@dominio> nuestro), asi que el In-Reply-To de
@@ -126,14 +128,28 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
           relatedOutbound = await resolveOutbound(config, { mailboxId: mailbox.mailbox_id, providerThreadId: message.threadId });
         }
         // Sin enlace por encabezado NI por hilo no es respuesta a algo nuestro.
-        if (!relatedOutbound) continue;
-        let bodyText: string | null = null;
-        if (kind === "REPLY" || kind === "AUTO_REPLY") {
+        if (!relatedOutbound || kind === "UNKNOWN") {
           if (!transport.getMessageFull) throw new Error("GMAIL_FULL_MESSAGE_REQUIRED");
           const full = await transport.getMessageFull(message.id);
           if (full.status !== 200) throw new Error("GMAIL_FULL_MESSAGE_UNAVAILABLE");
+          await recordRecovery(config, mailbox.mailbox_id, { kind: "UNMATCHED", provider_message_id: message.id,
+            provider_thread_id: message.threadId, from_email: context.normalizedFrom, subject: context.subject, body_text: extractReplyText(full.body) });
+          continue;
+        }
+        let bodyText: string | null = null;
+        if (kind === "REPLY" || kind === "AUTO_REPLY" || kind === "HARD_BOUNCE") {
+          if (!transport.getMessageFull) throw new Error("GMAIL_FULL_MESSAGE_REQUIRED");
+          const full = await transport.getMessageFull(message.id);
+          if (full.status !== 200) throw new Error("GMAIL_FULL_MESSAGE_UNAVAILABLE");
+          if (kind === "HARD_BOUNCE") {
+            const diagnostic = deliveryDiagnostic(full.body);
+            await recordRecovery(config, mailbox.mailbox_id, { kind: "DELIVERY", outbound_id: relatedOutbound,
+              provider_message_id: message.id, provider_thread_id: message.threadId, category: diagnostic.category,
+              smtp_status: diagnostic.status, body_text: diagnostic.text });
+            if (!diagnostic.permanent) continue;
+          }
           bodyText = extractReplyText(full.body);
-          if (!bodyText) throw new Error("GMAIL_REPLY_BODY_MISSING");
+          if (!bodyText && kind !== "HARD_BOUNCE") throw new Error("GMAIL_REPLY_BODY_MISSING");
         }
         const applied = await applyEvent(config, {
           mailboxId: mailbox.mailbox_id,

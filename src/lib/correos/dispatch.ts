@@ -2,6 +2,7 @@ import { readDirectLaneCredential, claimDirectLaneDispatch, markDirectLaneOpenTr
 import { buildOpenPixelUrl, createOpenPixelToken, openPixelAllowed } from "@/lib/correos/open-pixel";
 import { DirectLaneGmailSender, DirectLaneSendError } from "@/lib/correos/gmail-send";
 import { openDirectLaneSecret } from "@/lib/correos/vault";
+import { preflightSdrSend } from "@/lib/correos/sdr/preflight";
 import { getGmailAccessToken, GmailTokenError, invalidateGmailAccessToken } from "@/lib/dispatch/gmail-token";
 import { sendDispatchAlert } from "@/lib/dispatch/telegram";
 import type { RuntimeConfig } from "@/lib/runtime/config";
@@ -51,6 +52,7 @@ type TickDependencies = {
   accessToken?: typeof getGmailAccessToken;
   createSender?: (accessToken: string) => Pick<DirectLaneGmailSender, "send">;
   alert?: typeof sendDispatchAlert;
+  sdrPreflight?: typeof preflightSdrSend;
 };
 
 function unsubscribeUrlFor(config: RuntimeConfig, claim: DirectLaneClaim): string | null {
@@ -130,6 +132,10 @@ export async function runDirectLaneTick(config: RuntimeConfig, deps: TickDepende
       continue;
     }
 
+    if (claimed.sdr_case_id) {
+      try { await (deps.sdrPreflight ?? preflightSdrSend)(config, claimed.sdr_case_id, messageId, accessToken, claimed); }
+      catch { await fail("SDR_PREFLIGHT_HOLD"); continue; }
+    }
     const envelope = {
       message_id: messageId,
       from_name: claimed.from_name ?? mailbox.sender_name,
@@ -153,6 +159,10 @@ export async function runDirectLaneTick(config: RuntimeConfig, deps: TickDepende
         if (error instanceof DirectLaneSendError && error.code === "GMAIL_API_UNAUTHORIZED") {
           invalidateGmailAccessToken(credentialSha256);
           const fresh = await issueToken({ refreshToken, credentialSha256, clientId: config.googleOauthClientId, clientSecret: config.googleOauthClientSecret });
+          if (claimed.sdr_case_id) {
+            try { await (deps.sdrPreflight ?? preflightSdrSend)(config, claimed.sdr_case_id, messageId, fresh, claimed); }
+            catch { await fail("SDR_PREFLIGHT_HOLD"); continue; }
+          }
           sent = await createSender(fresh).send(envelope);
         } else {
           throw error;

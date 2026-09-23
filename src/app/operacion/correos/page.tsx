@@ -17,6 +17,8 @@ import {
   MailboxStateAction,
   RevokeMailboxAction,
 } from "@/components/CorreosActions";
+import { CorreosSdr } from "@/components/CorreosSdr";
+import { loadSdrScreen } from "@/lib/correos/sdr/overview";
 import { CorreosReplies } from "@/components/CorreosReplies";
 import { MetricValue } from "@/components/MetricValue";
 import { requireOperationsAccess } from "@/lib/auth/authorization";
@@ -90,7 +92,7 @@ function sumEnrollments(overview: DirectLaneOverview, statuses: string[]): numbe
 
 export default async function CorreosPage() {
   const access = await requireOperationsAccess();
-  const [screen, templates, stats] = await Promise.all([loadDirectLaneScreen(access), loadPlaybookTemplates(), loadDirectLaneStats(access)]);
+  const [screen, templates, stats, sdr] = await Promise.all([loadDirectLaneScreen(access), loadPlaybookTemplates(), loadDirectLaneStats(access), loadSdrScreen(access)]);
   const { overview } = screen;
   const live = screen.evidenceClass === "live";
   const canOperate = live && access.role !== "auditor_readonly";
@@ -147,6 +149,8 @@ export default async function CorreosPage() {
         <div className="metric"><span>Enviados en total</span><strong><MetricValue value={overview.totals.sent_total} /></strong></div>
         <div className="metric"><span>Secuencias activas</span><strong><MetricValue value={sumEnrollments(overview, ["PENDING", "ACTIVE"])} /></strong></div>
       </section>
+
+      <CorreosSdr screen={sdr} canOperate={canOperate} canAdmin={canOperate && screen.canApprove} userId={access.userId} />
 
       <section className="panel">
         <div className="panel-head portal-panel-head">

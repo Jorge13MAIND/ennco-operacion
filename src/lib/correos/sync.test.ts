@@ -116,9 +116,11 @@ describe("direct lane sync", () => {
     }));
   });
 
-  it("still skips inbox mail that matches no thread of ours", async () => {
+  it("routes unlinked mail to a contact-matched review instead of inventing a campaign reply", async () => {
     const applyEvent = vi.fn();
     const resolveOutbound = vi.fn(async () => null);
+    const recordRecovery = vi.fn(async () => ({ status: "UNRELATED" }));
+    const advance = vi.fn(async () => ({ status: "ADVANCED" }));
     const summary = await runDirectLaneSync(config, {
       ...baseDeps,
       readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: { last_history_id: "5000" } })], totals: {}, flags: {} }) as never),
@@ -135,9 +137,12 @@ describe("direct lane sync", () => {
           ] },
         } }),
       }),
-      applyEvent: applyEvent as never, updateCursor: vi.fn(async () => ({ status: "ADVANCED" }) as never), resolveOutbound,
+      applyEvent: applyEvent as never, updateCursor: advance as never, resolveOutbound, recordRecovery,
     });
     expect(summary.appliedReplyEvents).toBe(0);
+    expect(summary.mailboxes[0]?.result).toBe("OK");
+    expect(recordRecovery).toHaveBeenCalledWith(config, expect.any(String), expect.objectContaining({ kind: "UNMATCHED", from_email: "hilo@ajeno.test" }));
+    expect(advance).toHaveBeenCalledOnce();
     expect(applyEvent).not.toHaveBeenCalled();
   });
 

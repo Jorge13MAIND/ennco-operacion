@@ -66,7 +66,8 @@ export function evaluateConversation(context: ConversationContext): { gates: str
   const from = inbound?.payload.headers.find(h => h.name.toLowerCase() === "from")?.value ?? "";
   if (email(from) !== context.contactEmail.toLowerCase()) gates.push("SENDER_IDENTITY_UNCERTAIN");
   const recipients = inbound?.payload.headers.filter(h => ["to", "cc", "delivered-to"].includes(h.name.toLowerCase())).map(h => h.value.toLowerCase()).join(" ") ?? "";
-  if (!recipients.includes(context.mailboxEmail.toLowerCase())) gates.push("MAILBOX_IDENTITY_UNCERTAIN");
+  const recipientAddresses: string[] = recipients.match(/[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9.-]+/g) ?? [];
+  if (!recipientAddresses.includes(context.mailboxEmail.toLowerCase())) gates.push("MAILBOX_IDENTITY_UNCERTAIN");
   const latestText = inbound ? extractReplyText(inbound) : null;
   if (!latestText || !context.body) gates.push("BODY_MISSING");
   if (latestText !== context.body) gates.push("BODY_CHANGED");
@@ -82,7 +83,7 @@ export function evaluateConversation(context: ConversationContext): { gates: str
       manualReply = true; gates.push("HUMAN_INTERVENED");
     } else gates.push("NEWER_REPLY");
   }
-  return { gates: [...new Set(gates)], threadHash: createHash("sha256").update(JSON.stringify(thread)).digest("hex"), latestText, manualReply };
+  return { gates: [...new Set(gates)], threadHash: createHash("sha256").update(JSON.stringify({ id: thread.id, messages: thread.messages.map(m => ({ id: m.id, date: m.internalDate, headers: m.payload.headers.filter(h => ["from", "to", "cc", "message-id"].includes(h.name.toLowerCase())), text: extractReplyText(m) })) })).digest("hex"), latestText, manualReply };
 }
 export function evaluateProposal(proposal: Proposal, body: string): { eligible: boolean; draft: string; gates: string[] } {
   const gates: string[] = [];

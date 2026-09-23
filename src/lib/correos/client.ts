@@ -36,6 +36,7 @@ export const directLaneClaimSchema = z.object({
     references: z.array(z.string()).default([]),
   }).nullable().optional(),
   enrollment_id: z.uuid().optional(),
+  sdr_case_id: z.uuid().nullable().optional(),
   sent_today: z.number().optional(),
   daily_cap: z.number().optional(),
   detail: z.unknown().optional(),

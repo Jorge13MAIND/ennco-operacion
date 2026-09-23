@@ -229,7 +229,9 @@ export class DirectLaneGmailSender {
     const body: unknown = await response.json().catch(() => null);
     const result = sendResponseSchema.safeParse(body);
     if (!result.success) throw new DirectLaneSendError("GMAIL_API_RESPONSE_INVALID");
+    if (parsed.data.thread && result.data.threadId !== parsed.data.thread.provider_thread_id) throw new DirectLaneSendError("GMAIL_REPLY_THREAD_UNCONFIRMED");
     const realMessageId = await this.readRealMessageId(result.data.id);
+    if (parsed.data.kind === "REPLY" && !realMessageId) throw new DirectLaneSendError("GMAIL_REPLY_RECEIPT_UNCONFIRMED");
     return {
       provider: "GMAIL_API",
       provider_message_id: result.data.id,
@@ -249,7 +251,7 @@ export class DirectLaneGmailSender {
     try {
       const response = await this.fetchImpl(
         `https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(providerMessageId)}?format=metadata&metadataHeaders=Message-ID`,
-        { headers: { accept: "application/json", authorization: `Bearer ${this.accessToken}` }, cache: "no-store" },
+        { headers: { accept: "application/json", authorization: `Bearer ${this.accessToken}` }, cache: "no-store", signal: AbortSignal.timeout(this.timeoutMs) },
       );
       if (!response.ok) return null;
       const body: unknown = await response.json().catch(() => null);

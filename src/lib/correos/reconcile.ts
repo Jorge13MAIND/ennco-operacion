@@ -5,6 +5,7 @@ import { gmailTransport } from "@/lib/correos/sync";
 import { openDirectLaneSecret } from "@/lib/correos/vault";
 import { getGmailAccessToken } from "@/lib/dispatch/gmail-token";
 import { applyDispatchProviderEvent, updateDispatchSyncCursor } from "@/lib/dispatch/client";
+import { deliveryDiagnostic } from "@/lib/correos/delivery-diagnostic";
 import { extractReplyText } from "@/lib/gmail/body";
 import { collectGmailHistory, classifyGmailMessage, extractGmailEventContext, type GmailMessageMetadata } from "@/lib/gmail/history";
 import type { RuntimeConfig } from "@/lib/runtime/config";
@@ -22,16 +23,28 @@ export async function reconcileDirectMailbox(config: RuntimeConfig, mailboxId: s
   const token = await getGmailAccessToken({ refreshToken, credentialSha256: credential.credential_sha256, clientId: config.googleOauthClientId, clientSecret: config.googleOauthClientSecret });
   const transport = gmailRecoveryTransport(token);
   const recovered = await collectGmailRecovery({ tenantId: config.organizationId, mailboxId, expectedEmail: mailbox.normalized_email, fromEpochMs: Date.parse(since), transport });
-  const counts = { listed: recovered.listedCount, inbound: recovered.messages.length, linked: 0, replies: 0, newEvents: 0, duplicates: 0 };
+  const counts = { listed: recovered.listedCount, inbound: recovered.messages.length, linked: 0, replies: 0, newEvents: 0, duplicates: 0, deliveryReview: 0, unmatchedReview: 0 };
   const seen = new Set<string>();
   async function apply(message: GmailMessageMetadata) {
     if (seen.has(message.id) || message.labelIds?.some(l => l === "SENT" || l === "DRAFT")) return;
     seen.add(message.id);
     const context = extractGmailEventContext(message);
     const outbound = await resolveDirectLaneOutbound(config, { mailboxId, providerThreadId: message.threadId });
-    if (!outbound) return;
+    if (!outbound || classifyGmailMessage(message) === "UNKNOWN") {
+      const unmatched = await recordEmailRecovery(config, mailboxId, { kind: "UNMATCHED", provider_message_id: message.id,
+        provider_thread_id: message.threadId, from_email: context.normalizedFrom, subject: context.subject, body_text: extractReplyText(message) });
+      if (unmatched.status === "UNMATCHED_REVIEW_REQUIRED") counts.unmatchedReview++;
+      return;
+    }
     const kind = classifyGmailMessage(message);
     if (kind === "UNKNOWN") return;
+    if (kind === "HARD_BOUNCE") {
+      const diagnostic = deliveryDiagnostic(message);
+      await recordEmailRecovery(config, mailboxId, { kind: "DELIVERY", outbound_id: outbound,
+        provider_message_id: message.id, provider_thread_id: message.threadId, category: diagnostic.category,
+        smtp_status: diagnostic.status, body_text: diagnostic.text });
+      if (!diagnostic.permanent) { counts.deliveryReview++; return; }
+    }
     const body = extractReplyText(message);
     if ((kind === "REPLY" || kind === "AUTO_REPLY") && !body) throw new Error("RECOVERY_BODY_MISSING");
     const event = await applyDispatchProviderEvent(config, { mailboxId, externalEventId: message.id, providerMessageId: message.id,

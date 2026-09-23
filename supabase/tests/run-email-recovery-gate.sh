@@ -67,4 +67,5 @@ while IFS= read -r migration; do
 done < <(find "$REPO_ROOT/supabase/migrations" -maxdepth 1 -name '*.sql' | sort | tail -n +2)
 
 run_sql -f "$REPO_ROOT/supabase/tests/068_email_recovery.sql"
+run_sql -f "$REPO_ROOT/supabase/tests/071_email_sdr.sql"
 printf "%s\n" "EMAIL_RECOVERY_SQL_PASS"
