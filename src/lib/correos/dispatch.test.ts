@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 
 import type { DirectLaneMailboxHealth } from "@/lib/correos/client";
-import { mailboxesEligibleForTick, runDirectLaneTick } from "@/lib/correos/dispatch";
+import { directLaneSendIsAmbiguous, directLaneSyncIsFresh, mailboxesEligibleForTick, runDirectLaneTick } from "@/lib/correos/dispatch";
+import { DirectLaneSendError } from "@/lib/correos/gmail-send";
 import { sealDirectLaneSecret } from "@/lib/correos/vault";
 import type { RuntimeConfig } from "@/lib/runtime/config";
 
@@ -23,6 +24,7 @@ function mailbox(overrides: Partial<DirectLaneMailboxHealth>): DirectLaneMailbox
     queued: 0,
     sent_total: 0,
     is_client_primary: false,
+    sync: { status: "READY", last_history_id: "100", last_synced_at: new Date().toISOString() },
     ...overrides,
   };
 }
@@ -44,6 +46,58 @@ function config(overrides: Partial<RuntimeConfig>): RuntimeConfig {
 }
 
 describe("direct lane tick", () => {
+  it("fails closed for missing, stale, future or unhealthy sync", () => {
+    const now = Date.now();
+    expect(directLaneSyncIsFresh(mailbox({}), now + 1)).toBe(true);
+    for (const sync of [
+      null,
+      { status: "READY", last_history_id: "1", last_synced_at: new Date(now - 300_000).toISOString() },
+      { status: "READY", last_history_id: "1", last_synced_at: new Date(now + 1000).toISOString() },
+      { status: "ERROR", last_history_id: "1", last_synced_at: new Date(now).toISOString() },
+    ]) expect(directLaneSyncIsFresh(mailbox({ sync }), now)).toBe(false);
+  });
+
+  it.each(["GMAIL_API_TIMEOUT", "GMAIL_API_UNAVAILABLE", "GMAIL_API_PROVIDER_ERROR", "GMAIL_API_RESPONSE_INVALID"])("treats %s as uncertain", (code) => {
+    expect(directLaneSendIsAmbiguous(new DirectLaneSendError(code))).toBe(true);
+  });
+
+  it.each(["timeout", "settlement"])("never marks FAILED after an uncertain %s", async (scenario) => {
+    const encrypted = sealDirectLaneSecret("1//refresh-token-synthetic-0123456789", vaultKey);
+    const settle = vi.fn(async (_config, input) => {
+      if (scenario === "settlement" && input.outcome === "SENT") throw new Error("database unavailable");
+      return { status: "SETTLED" };
+    });
+    const send = vi.fn(async () => {
+      if (scenario === "timeout") throw new DirectLaneSendError("GMAIL_API_TIMEOUT");
+      return { provider: "GMAIL_API" as const, provider_message_id: "p1", provider_thread_id: "t1", rfc_message_id: "<p1@example.test>", envelope_sha256: "a".repeat(64) };
+    });
+    const claim = vi.fn(async () => ({
+      status: "CLAIMED" as const, kind: "TOUCH" as const, message_id: "41000000-0000-4000-8000-000000000301",
+      from_email: "francisco@enncoindustrial.com", to_email: "buyer@example.test", subject: "Asunto", body_text: "Consulta.", touch_number: 1,
+    }));
+    const result = await runDirectLaneTick(config({}), {
+      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({}), mailbox({ mailbox_id: "41000000-0000-4000-8000-000000000202" })], totals: {}, flags: { global_kill_switch: false, external_send_allowed: true } }) as never),
+      claim, settle, createSender: () => ({ send }),
+      readCredential: vi.fn(async () => ({ ciphertext: encrypted.ciphertext, key_id: encrypted.keyId, credential_sha256: "b".repeat(64), normalized_email: "francisco@enncoindustrial.com", granted_scopes: [] })),
+      accessToken: vi.fn(async () => "synthetic-access-token"), alert: vi.fn(async () => true),
+    });
+    expect(result.mailboxes[0]?.result).toBe("AMBIGUOUS");
+    expect(send).toHaveBeenCalledTimes(1);
+    expect(claim).toHaveBeenCalledTimes(1);
+    expect(settle.mock.calls.some(([, input]) => input.outcome === "FAILED")).toBe(false);
+    expect(settle.mock.calls.some(([, input]) => input.outcome === "AMBIGUOUS")).toBe(true);
+  });
+
+  it("does not claim when kill switch is on or sync is stale", async () => {
+    for (const killed of [true, false]) {
+      const claim = vi.fn();
+      await runDirectLaneTick(config({}), {
+        readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: null })], totals: {}, flags: { global_kill_switch: killed, external_send_allowed: true } }) as never),
+        claim,
+      });
+      expect(claim).not.toHaveBeenCalled();
+    }
+  });
   it("only ticks mailboxes that are connected with an active credential", () => {
     const eligible = mailboxesEligibleForTick([
       mailbox({}),
@@ -57,7 +111,7 @@ describe("direct lane tick", () => {
     const readCredential = vi.fn();
     const send = vi.fn();
     const result = await runDirectLaneTick(config({ directLaneMode: "shadow" }), {
-      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({})], totals: {}, flags: {} }) as never),
+      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({})], totals: {}, flags: { global_kill_switch: false, external_send_allowed: true } }) as never),
       claim: vi.fn(async () => ({ status: "SHADOW_CLAIMED" as const, message_id: "41000000-0000-4000-8000-000000000301" })),
       readCredential,
       createSender: () => ({ send }),
@@ -79,7 +133,7 @@ describe("direct lane tick", () => {
       envelope_sha256: "a".repeat(64),
     }));
     const result = await runDirectLaneTick(config({}), {
-      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({})], totals: {}, flags: {} }) as never),
+      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({})], totals: {}, flags: { global_kill_switch: false, external_send_allowed: true } }) as never),
       claim: vi.fn(async () => ({
         status: "CLAIMED" as const,
         kind: "TOUCH" as const,
@@ -112,12 +166,12 @@ describe("direct lane tick", () => {
     const alert = vi.fn(async () => true);
     const { DirectLaneSendError } = await import("@/lib/correos/gmail-send");
     const result = await runDirectLaneTick(config({}), {
-      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({})], totals: {}, flags: {} }) as never),
+      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({})], totals: {}, flags: { global_kill_switch: false, external_send_allowed: true } }) as never),
       claim: vi.fn(async () => ({
         status: "CLAIMED" as const, kind: "TOUCH" as const, message_id: "41000000-0000-4000-8000-000000000301",
         from_email: "francisco@enncoindustrial.com", to_email: "compras@planta.test", subject: "Asunto", body_text: "Cuerpo corto.", touch_number: 1, thread: null,
       })),
-      readCredential: vi.fn(async () => ({ ciphertext: envelope.ciphertext, key_id: envelope.keyId, credential_sha256: "b".repeat(64), normalized_email: "x", granted_scopes: [] })),
+      readCredential: vi.fn(async () => ({ ciphertext: envelope.ciphertext, key_id: envelope.keyId, credential_sha256: "b".repeat(64), normalized_email: "francisco@enncoindustrial.com", granted_scopes: [] })),
       accessToken: vi.fn(async () => "access-token-synthetic-long"),
       createSender: () => ({ send: vi.fn(async () => { throw new DirectLaneSendError("GMAIL_API_RATE_LIMITED"); }) }),
       settle,

@@ -25,6 +25,23 @@ export function mailboxesEligibleForTick(mailboxes: DirectLaneMailboxHealth[]): 
   return mailboxes.filter((mailbox) => mailbox.status === "CONNECTED" && mailbox.credential_active);
 }
 
+export function directLaneSyncIsFresh(mailbox: DirectLaneMailboxHealth, now = Date.now()): boolean {
+  const observed = Date.parse(mailbox.sync?.last_synced_at ?? "");
+  return mailbox.sync?.status === "READY"
+    && Boolean(mailbox.sync?.last_history_id) && Number.isFinite(observed)
+    && now >= observed && now - observed < 5 * 60_000;
+}
+
+// Sólo un rechazo explícito permite FAILED. Timeout, 5xx o respuesta ilegible
+// pueden ocurrir DESPUÉS de la aceptación y requieren reconciliación.
+export function directLaneSendIsAmbiguous(error: unknown): boolean {
+  if (error instanceof GmailTokenError) return false;
+  return !(error instanceof DirectLaneSendError && [
+    "GMAIL_API_UNAUTHORIZED", "GMAIL_API_SCOPE_FORBIDDEN", "GMAIL_API_RATE_LIMITED",
+    "GMAIL_API_REQUEST_REJECTED", "DIRECT_LANE_SEND_INPUT_INVALID", "GMAIL_ACCESS_TOKEN_INVALID",
+  ].includes(error.code));
+}
+
 type TickDependencies = {
   claim?: typeof claimDirectLaneDispatch;
   settle?: typeof settleDirectLaneDispatch;
@@ -64,6 +81,14 @@ export async function runDirectLaneTick(config: RuntimeConfig, deps: TickDepende
   for (const mailbox of mailboxesEligibleForTick(health.mailboxes)) {
     const entry: DirectLaneTickResult["mailboxes"][number] = { mailbox_id: mailbox.mailbox_id, email: mailbox.normalized_email, result: "NOOP" };
     result.mailboxes.push(entry);
+    if (!dryRun && (health.flags.global_kill_switch !== false || health.flags.external_send_allowed !== true)) {
+      entry.result = "NOOP:RUNTIME_HOLD";
+      continue;
+    }
+    if (!dryRun && !directLaneSyncIsFresh(mailbox)) {
+      entry.result = "NOOP:SYNC_STALE";
+      continue;
+    }
     let claimed: DirectLaneClaim;
     try {
       claimed = await claim(config, mailbox.mailbox_id, dryRun);
@@ -96,6 +121,7 @@ export async function runDirectLaneTick(config: RuntimeConfig, deps: TickDepende
     let refreshToken = "";
     try {
       const credential = await readCredential(config, mailbox.mailbox_id);
+      if (credential.normalized_email !== mailbox.normalized_email || claimed.from_email !== mailbox.normalized_email) throw new Error("CREDENTIAL_IDENTITY_MISMATCH");
       credentialSha256 = credential.credential_sha256;
       refreshToken = openDirectLaneSecret({ ciphertext: credential.ciphertext, keyId: credential.key_id }, config.directLaneVaultKey);
       accessToken = await issueToken({ refreshToken, credentialSha256, clientId: config.googleOauthClientId, clientSecret: config.googleOauthClientSecret });
@@ -118,6 +144,7 @@ export async function runDirectLaneTick(config: RuntimeConfig, deps: TickDepende
       list_unsubscribe_url: claimed.kind === "TOUCH" ? unsubscribeUrlFor(config, claimed) : null,
       open_pixel_url: openPixelUrlFor(config, claimed, messageId),
     };
+    let accepted = false;
     try {
       let sent;
       try {
@@ -131,17 +158,26 @@ export async function runDirectLaneTick(config: RuntimeConfig, deps: TickDepende
           throw error;
         }
       }
-      await settle(config, {
+      accepted = true;
+      const settled = await settle(config, {
         messageId,
         outcome: "SENT",
         providerMessageId: sent.provider_message_id,
         providerThreadId: sent.provider_thread_id,
         rfcMessageId: sent.rfc_message_id,
       });
+      if (!["SETTLED", "DUPLICATE"].includes(settled.status)) throw new Error("DIRECT_LANE_SETTLEMENT_UNCONFIRMED");
       if (envelope.open_pixel_url) await markTracked(config, messageId).catch(() => undefined);
       entry.result = `SENT:${claimed.kind}`;
     } catch (error) {
       const code = error instanceof DirectLaneSendError || error instanceof GmailTokenError ? error.code : "DIRECT_LANE_SEND_UNKNOWN_ERROR";
+      if (accepted || directLaneSendIsAmbiguous(error)) {
+        entry.result = "AMBIGUOUS";
+        entry.detail = accepted ? "PROVIDER_ACCEPTED_SETTLEMENT_UNCONFIRMED" : code;
+        await settle(config, { messageId, outcome: "AMBIGUOUS", errorCode: entry.detail }).catch(() => undefined);
+        await alert({ config, level: "WARN", title: "carril directo: reconciliación requerida", lines: [`mensaje ${messageId}`, entry.detail] }).catch(() => undefined);
+        break;
+      }
       await fail(code);
     }
   }

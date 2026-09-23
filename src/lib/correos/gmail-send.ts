@@ -202,8 +202,6 @@ export class DirectLaneGmailSender {
     const payload: { raw: string; threadId?: string } = { raw: Buffer.from(raw, "utf8").toString("base64url") };
     if (parsed.data.thread) payload.threadId = parsed.data.thread.provider_thread_id;
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
     let response: Response;
     try {
       response = await this.fetchImpl("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
@@ -214,18 +212,17 @@ export class DirectLaneGmailSender {
           "content-type": "application/json",
         },
         body: JSON.stringify(payload),
-        signal: controller.signal,
+        signal: AbortSignal.timeout(this.timeoutMs),
         cache: "no-store",
       });
     } catch (error) {
-      if (error instanceof Error && error.name === "AbortError") throw new DirectLaneSendError("GMAIL_API_TIMEOUT");
+      if (error instanceof Error && ["AbortError", "TimeoutError"].includes(error.name)) throw new DirectLaneSendError("GMAIL_API_TIMEOUT");
       throw new DirectLaneSendError("GMAIL_API_UNAVAILABLE");
-    } finally {
-      clearTimeout(timeout);
     }
     if (!response.ok) {
       if (response.status === 401) throw new DirectLaneSendError("GMAIL_API_UNAUTHORIZED");
       if (response.status === 403) throw new DirectLaneSendError("GMAIL_API_SCOPE_FORBIDDEN");
+      if (response.status === 408) throw new DirectLaneSendError("GMAIL_API_TIMEOUT");
       if (response.status === 429) throw new DirectLaneSendError("GMAIL_API_RATE_LIMITED");
       throw new DirectLaneSendError(response.status >= 500 ? "GMAIL_API_PROVIDER_ERROR" : "GMAIL_API_REQUEST_REJECTED");
     }

@@ -16,10 +16,10 @@ import type { RuntimeConfig } from "@/lib/runtime/config";
  * (apply_dispatch_provider_event → REPLY / AUTO_REPLY / HARD_BOUNCE).
  *
  * Primer arranque: sin cursor se toma el historyId actual del perfil y se
- * guarda; lo anterior a ese momento no se procesa (no hay envíos anteriores).
+ * guarda; se permite únicamente si nunca hubo envíos. Un hueco requiere recuperación.
  */
 
-const profileSchema = z.object({ historyId: z.string().regex(/^[0-9]+$/u) }).passthrough();
+const profileSchema = z.object({ emailAddress: z.string().email(), historyId: z.string().regex(/^[0-9]+$/u) }).passthrough();
 
 export type DirectLaneSyncSummary = {
   mailboxes: Array<{ mailbox_id: string; email: string; result: string; replies: number; events: number; detail?: string }>;
@@ -32,16 +32,16 @@ type SyncTransport = GmailHistoryTransport & {
   getMessageFull?(messageId: string): Promise<{ status: number; body: unknown }>;
 };
 
-function gmailTransport(accessToken: string, fetchImpl: typeof fetch = fetch): SyncTransport {
+export function gmailTransport(accessToken: string, fetchImpl: typeof fetch = fetch): SyncTransport {
   const call = async (url: string) => {
-    const response = await fetchImpl(url, { headers: { Authorization: `Bearer ${accessToken}` }, cache: "no-store" });
+    const response = await fetchImpl(url, { headers: { Authorization: `Bearer ${accessToken}` }, cache: "no-store", signal: AbortSignal.timeout(15000) });
     const body: unknown = await response.json().catch(() => null);
     return { status: response.status, body };
   };
   return {
     getProfile: () => call("https://gmail.googleapis.com/gmail/v1/users/me/profile"),
     listHistory: (startHistoryId, pageToken) => call(
-      `https://gmail.googleapis.com/gmail/v1/users/me/history?startHistoryId=${encodeURIComponent(startHistoryId)}&historyTypes=messageAdded&labelId=INBOX${pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ""}`,
+      `https://gmail.googleapis.com/gmail/v1/users/me/history?startHistoryId=${encodeURIComponent(startHistoryId)}&historyTypes=messageAdded${pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ""}`,
     ),
     getMessage: (messageId) => call(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(messageId)}?format=metadata`),
     getMessageFull: (messageId) => call(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(messageId)}?format=full`),
@@ -53,7 +53,7 @@ function headerValue(message: GmailMessageMetadata, name: string): string | null
 }
 
 export function mailboxesEligibleForSync(mailboxes: DirectLaneMailboxHealth[]): DirectLaneMailboxHealth[] {
-  return mailboxes.filter((mailbox) => (mailbox.status === "CONNECTED" || mailbox.status === "PAUSED") && mailbox.credential_active);
+  return mailboxes.filter((mailbox) => mailbox.status !== "DISCONNECTED" && mailbox.credential_active);
 }
 
 type SyncDependencies = {
@@ -85,14 +85,17 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
     summary.mailboxes.push(entry);
     try {
       const credential = await readCredential(config, mailbox.mailbox_id);
+      if (credential.normalized_email.toLowerCase() !== mailbox.normalized_email.toLowerCase()) throw new Error("GMAIL_CREDENTIAL_IDENTITY_MISMATCH");
       const refreshToken = openDirectLaneSecret({ ciphertext: credential.ciphertext, keyId: credential.key_id }, config.directLaneVaultKey);
       const accessToken = await issueToken({ refreshToken, credentialSha256: credential.credential_sha256, clientId: config.googleOauthClientId, clientSecret: config.googleOauthClientSecret });
       const transport = transportFor(accessToken);
       const cursor = mailbox.sync?.last_history_id ?? null;
       if (!cursor) {
+        if (mailbox.sent_total > 0 || mailbox.first_send_at) throw new GmailHistoryResetRequiredError();
         const profile = await transport.getProfile();
         if (profile.status !== 200) throw new Error("GMAIL_PROFILE_UNAVAILABLE");
-        const { historyId } = profileSchema.parse(profile.body);
+        const { historyId, emailAddress } = profileSchema.parse(profile.body);
+        if (emailAddress.toLowerCase() !== mailbox.normalized_email.toLowerCase()) throw new Error("GMAIL_PROFILE_IDENTITY_MISMATCH");
         await updateCursor(config, { mailboxId: mailbox.mailbox_id, historyId, watchExpiresAtEpoch: null });
         entry.result = "CURSOR_BOOTSTRAPPED";
         continue;
@@ -102,16 +105,14 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
         collected = await collectGmailHistory({ transport, startHistoryId: cursor });
       } catch (error) {
         if (error instanceof GmailHistoryResetRequiredError) {
-          const profile = await transport.getProfile();
-          if (profile.status !== 200) throw new Error("GMAIL_PROFILE_UNAVAILABLE");
-          const { historyId } = profileSchema.parse(profile.body);
-          await updateCursor(config, { mailboxId: mailbox.mailbox_id, historyId, watchExpiresAtEpoch: null });
-          entry.result = "CURSOR_RESET";
+          entry.result = "RECOVERY_REQUIRED";
+          entry.detail = "GMAIL_HISTORY_FULL_SYNC_REQUIRED";
           continue;
         }
         throw error;
       }
       for (const message of collected.messages) {
+        if (message.labelIds?.some(label => label === "SENT" || label === "DRAFT")) continue;
         const kind = classifyGmailMessage(message);
         if (kind === "UNKNOWN") continue;
         const context = extractGmailEventContext(message);
@@ -122,15 +123,17 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
         // se busca el ultimo OUTBOUND nuestro con el mismo threadId.
         let relatedOutbound = context.relatedOutboundMessageId;
         if (!relatedOutbound && message.threadId) {
-          relatedOutbound = await resolveOutbound(config, { mailboxId: mailbox.mailbox_id, providerThreadId: message.threadId }).catch(() => null);
+          relatedOutbound = await resolveOutbound(config, { mailboxId: mailbox.mailbox_id, providerThreadId: message.threadId });
         }
         // Sin enlace por encabezado NI por hilo no es respuesta a algo nuestro.
         if (!relatedOutbound) continue;
-        // El texto solo de respuestas humanas y automáticas; si Gmail falla, la respuesta entra igual sin texto.
         let bodyText: string | null = null;
-        if ((kind === "REPLY" || kind === "AUTO_REPLY") && transport.getMessageFull) {
-          const full = await transport.getMessageFull(message.id).catch(() => null);
-          bodyText = full && full.status === 200 ? extractReplyText(full.body) : null;
+        if (kind === "REPLY" || kind === "AUTO_REPLY") {
+          if (!transport.getMessageFull) throw new Error("GMAIL_FULL_MESSAGE_REQUIRED");
+          const full = await transport.getMessageFull(message.id);
+          if (full.status !== 200) throw new Error("GMAIL_FULL_MESSAGE_UNAVAILABLE");
+          bodyText = extractReplyText(full.body);
+          if (!bodyText) throw new Error("GMAIL_REPLY_BODY_MISSING");
         }
         const applied = await applyEvent(config, {
           mailboxId: mailbox.mailbox_id,
@@ -145,17 +148,19 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
         });
         entry.events += 1;
         if (kind === "REPLY") {
-          entry.replies += 1;
-          summary.appliedReplyEvents += 1;
+          if ((applied as { status?: string }).status !== "DUPLICATE") {
+            entry.replies += 1;
+            summary.appliedReplyEvents += 1;
+          }
           const providerEventId = z.object({ provider_event_id: z.uuid().optional() }).passthrough().safeParse(applied).data?.provider_event_id;
           if (providerEventId) {
-            await annotate(config, { providerEventId, rfcMessageId: headerValue(message, "message-id"), providerThreadId: message.threadId }).catch(() => undefined);
+            await annotate(config, { providerEventId, rfcMessageId: headerValue(message, "message-id"), providerThreadId: message.threadId });
           }
         }
       }
       await updateCursor(config, { mailboxId: mailbox.mailbox_id, historyId: collected.historyId, watchExpiresAtEpoch: null });
     } catch (error) {
-      entry.result = "SYNC_FAILED";
+      entry.result = error instanceof GmailHistoryResetRequiredError ? "RECOVERY_REQUIRED" : "SYNC_FAILED";
       entry.detail = error instanceof Error ? error.message.slice(0, 120) : "unknown";
     }
   }
