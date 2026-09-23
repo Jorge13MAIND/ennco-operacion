@@ -51,6 +51,8 @@ export function CorreosSdr({ screen, canOperate, canAdmin, userId }: { screen: S
       {canAdmin ? <div className="inline-operation"><button className="button secondary" disabled={busy || screen.status.mode === "PAUSED"} onClick={() => void mode("PAUSED")}>Pausar SDR</button><button className="button secondary" disabled={busy || screen.status.mode === "REVIEW"} onClick={() => void mode("REVIEW")}>Modo revisión</button><button className="button secondary" disabled={busy || screen.status.reviewed_canaries < 5 || !screen.status.model_calls_enabled} onClick={() => void mode("AUTO")}>Activar clases aprobadas</button></div> : null}</> : null}
     {message ? <p role="status">{message}</p> : null}
     {screen.cases.map(item => <CaseCard key={item.id} item={item} canOperate={canOperate} isOwner={item.owner_user_id === userId} />)}
+    {screen.unmatched.length > 0 ? <h3>Correos recuperados fuera del hilo registrado</h3> : null}
+    {screen.unmatched.map(item => <article key={item.id} className="compact-operation-form" style={{ minWidth: 0, overflowWrap: "anywhere" }}><strong>{item.normalized_from}</strong><p>{item.subject}</p><p>{item.next_action}</p><details><summary>Leer correo recuperado</summary><p style={{ whiteSpace: "pre-wrap" }}>{item.body_text ?? "Cuerpo pendiente de recuperación"}</p></details></article>)}
     {screen.available && screen.cases.length === 0 ? <p>{screen.live ? "Sin casos en la cola del SDR. La conciliación y las respuestas sin vínculo se revisan por separado." : "La demostración no consulta ni modifica conversaciones reales."}</p> : null}
     </div>
   </section>;
