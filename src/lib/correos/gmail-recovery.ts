@@ -74,7 +74,7 @@ export async function collectGmailRecovery(input: {
   // arriving between a caller's cutoff and this fence could be lost by both paths.
   const until = now() + 1;
   if (!Number.isSafeInteger(until) || until <= startedAt) fail('CLOCK_REGRESSION');
-  const query = 'after:' + (Math.floor(from / 1000) - 1) + ' before:' + Math.ceil(until / 1000);
+  const query = 'after:' + (Math.floor(from / 1000) - 1) + ' before:' + Math.ceil(until / 1000) + ' -in:sent -in:drafts';
   const ids = new Set<string>();
   const pageTokens = new Set<string>();
   let pageToken: string | undefined;
@@ -92,7 +92,7 @@ export async function collectGmailRecovery(input: {
   }
   const messages: RecoveryMessage[] = [];
   let excluded = 0;
-  for (const messageId of ids) {
+  const collectMessage = async (messageId: string): Promise<RecoveryMessage | null> => {
     // A disappearance (404) is NOT silently ignored. Reconcile the deletion first.
     const message = parse(messageSchema, await request(() => input.transport.getMessage(messageId)));
     if (message.id !== messageId) fail('MESSAGE_MISMATCH');
@@ -101,9 +101,14 @@ export async function collectGmailRecovery(input: {
     if (timestamp < from || timestamp >= until
       || (message.labelIds ?? []).some(label => label === 'SENT' || label === 'DRAFT')) {
       excluded++;
-      continue;
+      return null;
     }
-    messages.push(message);
+    return message;
+  };
+  const ordered = [...ids];
+  for (let offset = 0; offset < ordered.length; offset += 5) {
+    const batch = await Promise.all(ordered.slice(offset, offset + 5).map(collectMessage));
+    messages.push(...batch.filter((m): m is RecoveryMessage => m !== null));
   }
   return {
     state: 'COLLECTED_NOT_APPLIED' as const,
