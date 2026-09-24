@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 const recoveryOverviewSchema = z.object({
   commercial_event_ids: z.array(z.uuid()),
-  unmatched: z.array(z.object({ id: z.uuid(), normalized_from: z.string(), subject: z.string().nullable(), body_text: z.string().nullable(), next_action: z.string() })),
+  unmatched: z.array(z.object({ id: z.uuid(), normalized_from: z.string(), subject: z.string().nullable(), body_text: z.string().nullable(), next_action: z.string(), decision: z.enum(["PENDING", "NEEDS_CONTEXT"]) })),
 });
 export type RecoveryOverview = z.infer<typeof recoveryOverviewSchema>;
 export const loadRecoveryOverview = cache(async (organizationId: string): Promise<RecoveryOverview> => {

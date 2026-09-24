@@ -6,6 +6,8 @@ import type { RuntimeConfig } from "@/lib/runtime/config";
 export const sdrWorkItemSchema = z.object({
   case_id: z.uuid(), event_id: z.uuid(), event_kind: z.string(), body: z.string().nullable(),
   mailbox_id: z.uuid(), mailbox_email: z.email(), contact_email: z.email(), owner_id: z.uuid().nullable(),
+  campaign_id: z.uuid().optional(), campaign_name: z.string().nullable().optional(), offer_id: z.string().nullable().optional(),
+  account_name: z.string().nullable().optional(), contact_role: z.string().nullable().optional(), plant_state: z.string().nullable().optional(),
   provider_message_id: z.string().nullable(), provider_thread_id: z.string().nullable(), related_outbound_id: z.uuid(),
   suppressed: z.boolean(), followup: z.boolean(), followups_sent: z.number().int().min(0).max(2),
   approved: z.boolean(), decision: z.record(z.string(), z.unknown()).nullable(), own_sdr_message_ids: z.array(z.string()),

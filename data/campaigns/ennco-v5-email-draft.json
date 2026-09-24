@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0.0",
+  "status": "DRAFT_REQUIRES_JORGE_VOICE_AND_PACO_FACT_REVIEW",
+  "channel": "EMAIL_ONLY",
+  "sender": "Francisco Cuellar",
+  "offer_basis": "Ingeniería eléctrica industrial, instalaciones fotovoltaicas y mantenimiento eléctrico; reporte de hallazgos y prioridades",
+  "touches": [0, 3],
+  "business_day_offsets": true,
+  "assignment": "Por empresa, equilibrado por perfil; mismo remitente y horario en A y B",
+  "profiles": {
+    "DIRECCION": {
+      "A": {
+        "subject": "{{first_name}}, una revisión eléctrica en {{company}}",
+        "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO. Trabajamos con plantas industriales en instalaciones fotovoltaicas, mantenimiento e ingeniería eléctrica. Entregamos un reporte de lo que encontramos y de lo que conviene atender primero.\n\n¿Hay algún frente eléctrico que estén revisando hoy en {{company}}?\n\nSaludos,\nFrancisco"
+      },
+      "B": {
+        "subject": "{{first_name}}, qué atender primero en planta",
+        "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO. Cuando una planta tiene varios pendientes eléctricos, conviene ordenar primero qué se revisará y qué puede esperar. En ENNCO trabajamos instalaciones fotovoltaicas, mantenimiento e ingeniería eléctrica y dejamos los hallazgos en un reporte con prioridades.\n\n¿Tienen algún pendiente de este tipo que quieras ubicar por correo?\n\nSaludos,\nFrancisco"
+      },
+      "followup": {
+        "subject": "{{first_name}}, retomo mi correo",
+        "body": "Hola {{first_name}},\n\nRetomo mi correo sobre la instalación eléctrica de {{company}}. Si hoy no es una prioridad, lo dejo aquí.\n\nSi sí hay algo abierto, ¿qué frente te gustaría revisar primero por correo?\n\nSaludos,\nFrancisco"
+      }
+    },
+    "MANTENIMIENTO": {
+      "A": {
+        "subject": "{{first_name}}, mantenimiento eléctrico en {{company}}",
+        "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO. Trabajamos mantenimiento eléctrico industrial, transformadores e instalaciones fotovoltaicas. Al revisar una instalación, entregamos un reporte de hallazgos y prioridades para definir el siguiente paso.\n\n¿Hay algún equipo o instalación que necesiten revisar en {{company}}?\n\nSaludos,\nFrancisco"
+      },
+      "B": {
+        "subject": "{{first_name}}, un pendiente eléctrico en planta",
+        "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO. Un pendiente en un tablero, transformador o instalación fotovoltaica necesita un alcance claro antes de decidir qué trabajo hacer. Podemos revisar el punto de partida y dejar los hallazgos y prioridades por escrito.\n\n¿Qué equipo o instalación te gustaría ubicar primero en {{company}}?\n\nSaludos,\nFrancisco"
+      },
+      "followup": {
+        "subject": "{{first_name}}, sobre el equipo que revisan",
+        "body": "Hola {{first_name}},\n\nRetomo mi nota sobre mantenimiento eléctrico en {{company}}. Si no tienen un frente abierto, lo dejo aquí.\n\nSi hay uno, ¿qué equipo o instalación conviene revisar primero por correo?\n\nSaludos,\nFrancisco"
+      }
+    },
+    "SEGURIDAD": {
+      "A": {
+        "subject": "{{first_name}}, estado de la instalación eléctrica",
+        "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO. Apoyamos a plantas industriales con mantenimiento e ingeniería eléctrica y documentamos lo que encontramos en un reporte con prioridades.\n\n¿Hay alguna instalación eléctrica de {{company}} que estén buscando revisar?\n\nSaludos,\nFrancisco"
+      },
+      "B": {
+        "subject": "{{first_name}}, hallazgos eléctricos por atender",
+        "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO. Cuando aparece un hallazgo eléctrico, ayuda separar lo que se observó del trabajo que aún falta definir. Nuestro equipo revisa instalaciones industriales y entrega un reporte con prioridades para conversar el alcance.\n\n¿Tienen algún hallazgo que quieras ubicar por correo?\n\nSaludos,\nFrancisco"
+      },
+      "followup": {
+        "subject": "{{first_name}}, retomo la revisión eléctrica",
+        "body": "Hola {{first_name}},\n\nRetomo mi correo sobre instalaciones eléctricas en {{company}}. Si no hay un tema abierto, lo dejo aquí.\n\nSi sí lo hay, ¿qué instalación conviene revisar primero por correo?\n\nSaludos,\nFrancisco"
+      }
+    },
+    "COMPRAS": {
+      "A": {
+        "subject": "{{first_name}}, alcance eléctrico para {{company}}",
+        "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO. Trabajamos instalaciones fotovoltaicas, mantenimiento e ingeniería eléctrica industrial. Antes de proponer un trabajo, revisamos la necesidad y documentamos hallazgos y prioridades.\n\n¿Compras está evaluando alguno de esos frentes en {{company}}?\n\nSaludos,\nFrancisco"
+      },
+      "B": {
+        "subject": "{{first_name}}, definir qué se va a cotizar",
+        "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO. Si se van a comparar propuestas para una instalación eléctrica o fotovoltaica, conviene definir primero el alcance. Podemos ayudar a documentar el punto de partida y las prioridades antes de preparar una propuesta.\n\n¿Qué frente está evaluando compras en {{company}}?\n\nSaludos,\nFrancisco"
+      },
+      "followup": {
+        "subject": "{{first_name}}, sobre el alcance pendiente",
+        "body": "Hola {{first_name}},\n\nRetomo mi nota sobre el alcance eléctrico de {{company}}. Si no hay una revisión en curso, lo dejo aquí.\n\nSi la hay, ¿qué frente necesita definir compras primero?\n\nSaludos,\nFrancisco"
+      }
+    }
+  }
+}

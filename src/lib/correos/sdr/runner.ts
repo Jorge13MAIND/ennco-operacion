@@ -80,6 +80,8 @@ export async function runEmailSdr(config: RuntimeConfig) {
         const slot = await sdrCommand(config, { op: "MODEL_SLOT" });
         if (slot.allowed === true) {
           proposal = await proposeWithModel({ latestReply: body, apiKey: environment.apiKey, model: environment.model,
+            commercialContext: { campaignName: item.campaign_name, offerId: item.offer_id,
+              accountName: item.account_name, contactRole: item.contact_role, plantState: item.plant_state },
             conversation: thread.messages.map(m => ({ direction: m.labelIds?.includes("SENT") ? "ENNCO" : "EXTERNAL", text: extractReplyText(m) ?? "[Sin texto: requiere revisión humana]" })) });
           modelSource = "OPENAI"; modelGate = "";
         } else modelGate = "MODEL_BUDGET_HOLD";

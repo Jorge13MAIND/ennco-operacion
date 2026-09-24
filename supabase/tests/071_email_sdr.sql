@@ -41,6 +41,10 @@ begin
  begin perform public.email_sdr_command(org,'{}','x',gen_random_uuid(),now()+interval '1 minute','fake'); raise exception 'UNSIGNED_ACCEPTED'; exception when others then if sqlerrm<>'SDR_UNAUTHORIZED' then raise; end if; end;
  r:=pg_temp.sdr('{"op":"WORK"}');
  if r->>'count'<>'1' then raise exception 'WORK_NOT_SCOPED %',r; end if;
+ if r->'cases'->0->>'campaign_name'<>'Commercial synthetic'
+   or r->'cases'->0->>'account_name'<>'Synthetic plant'
+   or r->'cases'->0->>'contact_role'<>'Maintenance' then
+   raise exception 'SDR_COMMERCIAL_CONTEXT_MISSING'; end if;
  cid:=(r->'cases'->0->>'case_id')::uuid;
  if (select count(*) from public.notification_deliveries where organization_id=org and channel='CONTROL_ROOM' and status='PENDING')<>1 then raise exception 'ALERT_NOT_ROUTED'; end if;
  r:=pg_temp.sdr('{"op":"WORK"}'); if r->>'count'<>'0' then raise exception 'LEASE_REPEATED'; end if;
@@ -64,7 +68,21 @@ begin
  r:=pg_temp.sdr(jsonb_build_object('op','SEND_CONTEXT','case_id',cid,'message_id',mid)); if r->>'status'<>'HOLD' then raise exception 'PAUSE_BEFORE_SEND_IGNORED'; end if;
  perform public.set_email_sdr_mode(org,'REVIEW');
  r:=pg_temp.sdr(jsonb_build_object('op','SEND_CONTEXT','case_id',cid,'message_id',mid)); if r->>'status'<>'SEND_CONTEXT' then raise exception 'RESUME_FAILED'; end if;
- perform public.ack_email_sdr_alert(org,cid); perform public.ack_email_sdr_alert(org,cid);
+ perform public.configure_email_sdr_backup(org,'61000000-0000-4000-8000-000000000006',repeat('d',64));
+ update public.notification_deliveries set created_at=now()-interval '31 minutes'
+   where organization_id=org and channel='CONTROL_ROOM' and status='PENDING';
+ r:=pg_temp.sdr('{"op":"ALERT_WORK"}');
+ if r->'alerts'->0->>'stage'<>'BACKUP' then raise exception 'BACKUP_ALERT_NOT_CLAIMED %',r; end if;
+ perform pg_temp.sdr(jsonb_build_object('op','ALERT_SETTLE','case_id',cid,'stage','BACKUP','accepted',true));
+ r:=pg_temp.sdr('{"op":"ALERT_WORK"}');
+ if jsonb_array_length(r->'alerts')<>0 then raise exception 'PROVIDER_ALERT_DUPLICATED'; end if;
+ if (select status from public.notification_deliveries where organization_id=org and channel='CONTROL_ROOM')<>'PENDING' then
+   raise exception 'PROVIDER_ACCEPTANCE_COUNTED_AS_HUMAN_ACK'; end if;
+ perform set_config('request.jwt.claim.sub','61000000-0000-4000-8000-000000000006',true);
+ if (public.read_email_sdr_cases(org)->0->>'can_ack')<>'true' then raise exception 'BACKUP_CANNOT_SEE_ACK'; end if;
+ perform public.ack_email_sdr_alert(org,cid);
+ perform set_config('request.jwt.claim.sub','61000000-0000-4000-8000-000000000005',true);
+ perform public.ack_email_sdr_alert(org,cid);
  if (select count(*) from public.notification_deliveries where organization_id=org and status='DELIVERED' and attempt_count=1)<>1 then raise exception 'ACK_NOT_IDEMPOTENT'; end if;
  if exists(select 1 from public.leads where organization_id=org) then raise exception 'SDR_CREATED_CONTRACTUAL_LEAD'; end if;
  if app.email_sdr_followup_due(org,'2026-09-23T17:00:00Z',3)<>'2026-09-28T16:00:00Z'::timestamptz or app.email_sdr_followup_due(org,'2026-09-23T17:00:00Z',7)<>'2026-10-02T16:00:00Z'::timestamptz then raise exception 'BUSINESS_DAY_OFFSETS_WRONG'; end if;

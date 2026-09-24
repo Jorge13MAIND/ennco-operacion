@@ -68,4 +68,5 @@ done < <(find "$REPO_ROOT/supabase/migrations" -maxdepth 1 -name '*.sql' | sort 
 
 run_sql -f "$REPO_ROOT/supabase/tests/068_email_recovery.sql"
 run_sql -f "$REPO_ROOT/supabase/tests/071_email_sdr.sql"
+run_sql -f "$REPO_ROOT/supabase/tests/072_email_contact_readiness.sql"
 printf "%s\n" "EMAIL_RECOVERY_SQL_PASS"
