@@ -79,7 +79,7 @@ function ReplyCard({ reply, templates, cc, canOperate }: { reply: PendingReply; 
 
 export function CorreosReplies({ replies, templates, cc, canOperate }: { replies: PendingReply[]; templates: Template[]; cc: string | null; canOperate: boolean }) {
   if (replies.length === 0) {
-    return <div className="empty-state"><strong>Sin respuestas</strong><p>Cuando un prospecto conteste, aparece aquí y llega un aviso por Telegram.</p></div>;
+    return <div className="empty-state"><strong>Sin respuestas</strong><p>Las respuestas recuperadas aparecen aquí. Revisa también los avisos de atención por email en esta pantalla.</p></div>;
   }
   return (
     <div className="cr-replies">

@@ -23,7 +23,7 @@ const config = {
 } as RuntimeConfig;
 
 const baseDeps = {
-  readCredential: vi.fn(async () => ({ ciphertext: envelope.ciphertext, key_id: envelope.keyId, credential_sha256: "b".repeat(64), normalized_email: "x", granted_scopes: [] })),
+  readCredential: vi.fn(async () => ({ ciphertext: envelope.ciphertext, key_id: envelope.keyId, credential_sha256: "b".repeat(64), normalized_email: "francisco@enncoindustrial.com", granted_scopes: [] })),
   accessToken: vi.fn(async () => "access-token-synthetic-long"),
 };
 
@@ -41,8 +41,9 @@ describe("direct lane sync", () => {
       ...baseDeps,
       readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: null })], totals: {}, flags: {} }) as never),
       transport: () => ({
-        getProfile: async () => ({ status: 200, body: { historyId: "5000" } }),
+        getProfile: async () => ({ status: 200, body: { emailAddress: "francisco@enncoindustrial.com", historyId: "5000" } }),
         listHistory: async () => { throw new Error("must not list"); },
+        getMessageFull: async () => ({ status: 200, body: { payload: { mimeType: "text/plain", body: { data: Buffer.from("Quisiera contexto del servicio").toString("base64url") } } } }),
         getMessage: async () => { throw new Error("must not get"); },
       }),
       updateCursor,
@@ -59,8 +60,9 @@ describe("direct lane sync", () => {
       ...baseDeps,
       readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: { last_history_id: "5000" } })], totals: {}, flags: {} }) as never),
       transport: () => ({
-        getProfile: async () => ({ status: 200, body: { historyId: "5000" } }),
+        getProfile: async () => ({ status: 200, body: { emailAddress: "francisco@enncoindustrial.com", historyId: "5000" } }),
         listHistory: async () => ({ status: 200, body: { historyId: "5100", history: [{ id: "5050", messagesAdded: [{ message: { id: "m-1", threadId: "t-1" } }] }] } }),
+        getMessageFull: async () => ({ status: 200, body: { payload: { mimeType: "text/plain", body: { data: Buffer.from("Quisiera contexto del servicio").toString("base64url") } } } }),
         getMessage: async () => ({ status: 200, body: {
           id: "m-1", threadId: "t-1", internalDate: "1756800000000",
           payload: { mimeType: "text/plain", headers: [
@@ -92,8 +94,9 @@ describe("direct lane sync", () => {
       ...baseDeps,
       readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: { last_history_id: "5000" } })], totals: {}, flags: {} }) as never),
       transport: () => ({
-        getProfile: async () => ({ status: 200, body: { historyId: "5000" } }),
+        getProfile: async () => ({ status: 200, body: { emailAddress: "francisco@enncoindustrial.com", historyId: "5000" } }),
         listHistory: async () => ({ status: 200, body: { historyId: "5200", history: [{ id: "5060", messagesAdded: [{ message: { id: "m-2", threadId: "t-real" } }] }] } }),
+        getMessageFull: async () => ({ status: 200, body: { payload: { mimeType: "text/plain", body: { data: Buffer.from("Quisiera contexto del servicio").toString("base64url") } } } }),
         getMessage: async () => ({ status: 200, body: {
           id: "m-2", threadId: "t-real", internalDate: "1756900000000",
           payload: { mimeType: "text/plain", headers: [
@@ -113,15 +116,18 @@ describe("direct lane sync", () => {
     }));
   });
 
-  it("still skips inbox mail that matches no thread of ours", async () => {
+  it("routes unlinked mail to a contact-matched review instead of inventing a campaign reply", async () => {
     const applyEvent = vi.fn();
     const resolveOutbound = vi.fn(async () => null);
+    const recordRecovery = vi.fn(async () => ({ status: "UNRELATED" }));
+    const advance = vi.fn(async () => ({ status: "ADVANCED" }));
     const summary = await runDirectLaneSync(config, {
       ...baseDeps,
       readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: { last_history_id: "5000" } })], totals: {}, flags: {} }) as never),
       transport: () => ({
-        getProfile: async () => ({ status: 200, body: { historyId: "5000" } }),
+        getProfile: async () => ({ status: 200, body: { emailAddress: "francisco@enncoindustrial.com", historyId: "5000" } }),
         listHistory: async () => ({ status: 200, body: { historyId: "5300", history: [{ id: "5070", messagesAdded: [{ message: { id: "m-3", threadId: "t-ajeno" } }] }] } }),
+        getMessageFull: async () => ({ status: 200, body: { payload: { mimeType: "text/plain", body: { data: Buffer.from("Quisiera contexto del servicio").toString("base64url") } } } }),
         getMessage: async () => ({ status: 200, body: {
           id: "m-3", threadId: "t-ajeno", internalDate: "1756900000000",
           payload: { mimeType: "text/plain", headers: [
@@ -131,25 +137,29 @@ describe("direct lane sync", () => {
           ] },
         } }),
       }),
-      applyEvent: applyEvent as never, updateCursor: vi.fn(async () => ({ status: "ADVANCED" }) as never), resolveOutbound,
+      applyEvent: applyEvent as never, updateCursor: advance as never, resolveOutbound, recordRecovery,
     });
     expect(summary.appliedReplyEvents).toBe(0);
+    expect(summary.mailboxes[0]?.result).toBe("OK");
+    expect(recordRecovery).toHaveBeenCalledWith(config, expect.any(String), expect.objectContaining({ kind: "UNMATCHED", from_email: "hilo@ajeno.test" }));
+    expect(advance).toHaveBeenCalledOnce();
     expect(applyEvent).not.toHaveBeenCalled();
   });
 
-  it("resets the cursor when Gmail returns 404 on history", async () => {
+  it("requires reconciliation without resetting a 404 history cursor", async () => {
     const updateCursor = vi.fn(async () => ({ status: "ADVANCED" }) as never);
     const summary = await runDirectLaneSync(config, {
       ...baseDeps,
       readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: { last_history_id: "1" } })], totals: {}, flags: {} }) as never),
       transport: () => ({
-        getProfile: async () => ({ status: 200, body: { historyId: "9000" } }),
+        getProfile: async () => ({ status: 200, body: { emailAddress: "francisco@enncoindustrial.com", historyId: "9000" } }),
         listHistory: async () => ({ status: 404, body: null }),
+        getMessageFull: async () => ({ status: 200, body: { payload: { mimeType: "text/plain", body: { data: Buffer.from("Quisiera contexto del servicio").toString("base64url") } } } }),
         getMessage: async () => ({ status: 404, body: null }),
       }),
       updateCursor,
     });
-    expect(summary.mailboxes[0]?.result).toBe("CURSOR_RESET");
-    expect(updateCursor).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ historyId: "9000" }));
+    expect(summary.mailboxes[0]?.result).toBe("RECOVERY_REQUIRED");
+    expect(updateCursor).not.toHaveBeenCalled();
   });
 });

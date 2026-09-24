@@ -88,7 +88,7 @@ export function getRuntimeConfig(environment: RuntimeEnvironment = process.env):
   const config = runtimeSchema.parse({
     appEnv,
     appUrl: environment.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-    demoMode: envBoolean(environment.ENNCO_DEMO_MODE, appEnv === "development"),
+    demoMode: envBoolean(environment.ENNCO_DEMO_MODE, appEnv !== "production"),
     requireMfa: envBoolean(environment.ENNCO_REQUIRE_MFA, false),
     externalSendAllowed: envBoolean(environment.ENNCO_ALLOW_EXTERNAL_SEND, false),
     globalKillSwitch: envBoolean(environment.ENNCO_GLOBAL_KILL_SWITCH, true),

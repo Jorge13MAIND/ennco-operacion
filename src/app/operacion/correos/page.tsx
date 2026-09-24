@@ -17,6 +17,8 @@ import {
   MailboxStateAction,
   RevokeMailboxAction,
 } from "@/components/CorreosActions";
+import { CorreosSdr } from "@/components/CorreosSdr";
+import { loadSdrScreen } from "@/lib/correos/sdr/overview";
 import { CorreosReplies } from "@/components/CorreosReplies";
 import { MetricValue } from "@/components/MetricValue";
 import { requireOperationsAccess } from "@/lib/auth/authorization";
@@ -90,7 +92,7 @@ function sumEnrollments(overview: DirectLaneOverview, statuses: string[]): numbe
 
 export default async function CorreosPage() {
   const access = await requireOperationsAccess();
-  const [screen, templates, stats] = await Promise.all([loadDirectLaneScreen(access), loadPlaybookTemplates(), loadDirectLaneStats(access)]);
+  const [screen, templates, stats, sdr] = await Promise.all([loadDirectLaneScreen(access), loadPlaybookTemplates(), loadDirectLaneStats(access), loadSdrScreen(access)]);
   const { overview } = screen;
   const live = screen.evidenceClass === "live";
   const canOperate = live && access.role !== "auditor_readonly";
@@ -98,6 +100,7 @@ export default async function CorreosPage() {
   const capTotal = connectedMailboxes.reduce((total, mailbox) => total + mailbox.effective_cap, 0);
   const engineOpen = !overview.flags.global_kill_switch && overview.flags.external_send_allowed && overview.flags.annex_a_ready && screen.released && screen.mode === "live";
   const runningCampaign = overview.campaigns.find((campaign) => campaign.state === "RUNNING") ?? overview.campaigns[0] ?? null;
+  const readyToEnroll = sdr.inventory?.ready ?? null;
 
   return (
     <main className="shell section operations-main" id="main-content" tabIndex={-1}>
@@ -113,13 +116,13 @@ export default async function CorreosPage() {
       <section aria-label="Estado del carril directo" className={`command-status ${engineOpen ? "ready" : "blocked"}`}>
         <div className="command-status-primary">
           <span>Carril directo</span>
-          <strong>{!screen.released ? "NO LIBERADO" : screen.mode === "shadow" ? "MODO SOMBRA" : engineOpen ? "ENVIANDO" : "BLOQUEADO"}</strong>
+          <strong>{!screen.released ? "NO LIBERADO" : screen.mode === "shadow" ? "MODO SOMBRA" : engineOpen ? "OPERATIVO" : "BLOQUEADO"}</strong>
           <p>{!screen.released
             ? "ENNCO_DIRECT_LANE_RELEASED no está en true en este ambiente: los crons responden HOLD y nadie puede conectar buzones."
             : screen.mode === "shadow"
               ? "El motor reclama toques y los deja como Sombra sin tocar Gmail. Cambiar ENNCO_DIRECT_LANE_MODE a live enciende el envío real."
               : engineOpen
-                ? `Un correo por buzón conectado cada 5 minutos, lunes a viernes de 09:30 a 13:30. Tope de hoy: ${capTotal} entre ${connectedMailboxes.length} buzón(es).`
+                ? `El motor revisa correos elegibles cada 5 minutos, lunes a viernes de 09:30 a 13:30. Tope de hoy: ${capTotal} entre ${connectedMailboxes.length} buzón(es). La campaña y el contacto tienen compuertas adicionales.`
                 : "Algún candado global está cerrado. Revisa las banderas de la derecha antes de esperar envíos."}</p>
         </div>
         <div className="command-status-facts">
@@ -148,11 +151,13 @@ export default async function CorreosPage() {
         <div className="metric"><span>Secuencias activas</span><strong><MetricValue value={sumEnrollments(overview, ["PENDING", "ACTIVE"])} /></strong></div>
       </section>
 
+      <CorreosSdr screen={sdr} canOperate={canOperate} canAdmin={canOperate && screen.canApprove} userId={access.userId} />
+
       <section className="panel">
         <div className="panel-head portal-panel-head">
           <div>
             <h2>Buzones</h2>
-            <p>Cada buzón se conecta con una liga de consentimiento que abre su dueño. El de ENNCO queda listo para el día que Paco la abra.</p>
+            <p>Los buzones conectados se sincronizan con Gmail. La aptitud de nuevos contactos se revisa por separado.</p>
           </div>
           <span className="badge">{connectedMailboxes.length}/{overview.mailboxes.length} conectados</span>
         </div>
@@ -209,7 +214,7 @@ export default async function CorreosPage() {
             <h2>Campaña</h2>
             <p>Se aprueba una vez; los toques 2 a 8 salen solos. Una respuesta detiene la secuencia de ese contacto.</p>
           </div>
-          <span className="badge">{overview.enrollable_contacts} contactos listos para inscribir</span>
+          <span className="badge">{readyToEnroll === null ? "Aptitud no disponible" : `${readyToEnroll} contactos aptos para inscribir`}</span>
         </div>
         {overview.campaigns.length === 0 ? (
           <div className="empty-state">
@@ -248,11 +253,11 @@ export default async function CorreosPage() {
             {canOperate && campaign.state === "DRAFT" ? (screen.canApprove ? <ApproveCampaignAction campaignId={campaign.campaign_id} /> : <span className="fine">Pendiente de aprobación por teckel_admin.</span>) : null}
             {canOperate ? <CampaignStateAction campaignId={campaign.campaign_id} state={campaign.state} /> : null}
             {canOperate && campaign.state !== "COMPLETED" ? (
-              <EnrollContactsAction campaignId={campaign.campaign_id} enrollable={overview.enrollable_contacts} mailboxes={connectedMailboxes.map((mailbox) => ({ id: mailbox.mailbox_id, email: mailbox.normalized_email }))} />
+              <EnrollContactsAction campaignId={campaign.campaign_id} enrollable={readyToEnroll} mailboxes={connectedMailboxes.map((mailbox) => ({ id: mailbox.mailbox_id, email: mailbox.normalized_email }))} />
             ) : null}
           </div>
         ))}
-        {overview.unverified_contacts > 0 ? <p className="fine">{overview.unverified_contacts} contactos sin verificar no entran a ninguna secuencia (rebotes &lt; 2%). Verificación: <Link href={"/operacion/leads" as Route}>Leads</Link>.</p> : null}
+        {overview.unverified_contacts > 0 ? <p className="fine">{overview.unverified_contacts} contactos sin verificar no entran a ninguna secuencia. La aptitud exige investigación de empresa y persona, revisión vigente y ausencia de supresión. Verificación: <Link href={"/operacion/leads" as Route}>Leads</Link>.</p> : null}
         {overview.upcoming.length > 0 ? (
           <p className="fine">Próximos toques: {overview.upcoming.map((item) => `${dayStamp.format(new Date(`${item.day}T12:00:00-06:00`))} · ${item.touches}`).join(" — ")}</p>
         ) : null}

@@ -36,6 +36,7 @@ export const directLaneClaimSchema = z.object({
     references: z.array(z.string()).default([]),
   }).nullable().optional(),
   enrollment_id: z.uuid().optional(),
+  sdr_case_id: z.uuid().nullable().optional(),
   sent_today: z.number().optional(),
   daily_cap: z.number().optional(),
   detail: z.unknown().optional(),
@@ -149,7 +150,7 @@ export async function claimDirectLaneDispatch(config: RuntimeConfig, mailboxId: 
 
 export async function settleDirectLaneDispatch(config: RuntimeConfig, input: {
   messageId: string;
-  outcome: "SENT" | "FAILED";
+  outcome: "SENT" | "FAILED" | "AMBIGUOUS";
   providerMessageId?: string | null;
   providerThreadId?: string | null;
   rfcMessageId?: string | null;
@@ -177,6 +178,14 @@ export async function readDirectLaneCredential(config: RuntimeConfig, mailboxId:
   requireConfig(config);
   return directLaneCredentialSchema.parse(await callRpc(config, "read_direct_lane_credential",
     [config.organizationId, mailboxId], { target_mailbox_id: mailboxId }));
+}
+
+export async function recordEmailRecovery(config: RuntimeConfig, mailboxId: string, payload: Record<string, unknown>) {
+  requireConfig(config);
+  const text = JSON.stringify(payload);
+  return z.object({ status: z.string() }).passthrough().parse(await callRpc(config, "record_email_recovery",
+    [config.organizationId, mailboxId, createHash("sha256").update(text).digest("hex")],
+    { target_mailbox_id: mailboxId, target_payload: text }));
 }
 
 export async function readDirectLaneInvitation(config: RuntimeConfig, tokenSha256: string) {

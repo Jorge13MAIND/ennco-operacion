@@ -5,6 +5,7 @@ test("Correos module renders the direct lane in synthetic mode without leaking r
   await expect(page.locator("main#main-content")).toHaveCount(1);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Motor de");
   await expect(page.getByText("Modo sintético.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Atención de respuestas por email" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Buzones" })).toBeVisible();
   await expect(page.getByText("francisco@enncoindustrial.com").first()).toBeVisible();
   await expect(page.getByText("contacto@ennco.com.mx").first()).toBeVisible();

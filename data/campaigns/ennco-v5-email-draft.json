@@ -1,0 +1,57 @@
+{
+  "schema_version": "2.0.0",
+  "status": "DRAFT_BLOCKED_V4_FACT_AND_VOICE_REVIEW",
+  "channel": "EMAIL_ONLY",
+  "sender": "Francisco Cuellar",
+  "source_for_services": "https://ennco.com.mx/",
+  "source_scope": "El sitio público acredita instalación solar, mantenimiento preventivo y correctivo, consultoría y sistemas eléctricos industriales. No acredita oferta gratis, deducciones, ahorros, un caso cuantificado ni reporte fechado.",
+  "control": {
+    "campaign_id": "b0f23483-33ad-4435-a174-ad20a3527d5d",
+    "name": "ENNCO · Bajío industrial v4 (gancho y rotación)",
+    "source": "supabase/migrations/202609220066_v4_rotacion.sql",
+    "first_touch_version_by_profile": {
+      "DIRECCION": 1,
+      "MANTENIMIENTO": 2,
+      "SEGURIDAD": 3,
+      "COMPRAS": 4
+    },
+    "day_offsets": [
+      0,
+      2,
+      4,
+      6
+    ],
+    "unchanged_for_existing_enrollments": true,
+    "new_cohort_release": "HOLD: revisar promesas y seguimiento de V4 antes de usarlo como control"
+  },
+  "experiment": {
+    "assignment": "Por empresa, equilibrado por perfil; 50 contactos nuevos en A y 50 en B, solo después de investigación y revisión",
+    "only_changed_element": "mensaje inicial, incluido asunto; conservar remitente, horario y seguimiento una vez que sean aprobados",
+    "evaluation": "Siete días hábiles completos por grupo; contactos únicos, rebotes, respuestas humanas, contexto, interés explícito y leads aceptados; aperturas no deciden"
+  },
+  "variant_B_initial_by_profile": {
+    "DIRECCION": {
+      "subject": "{{first_name}}, un frente eléctrico en {{company}}",
+      "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO. Trabajamos proyectos eléctricos industriales, mantenimiento y energía solar. Si tienen un frente abierto, podemos entender el alcance por correo antes de proponer algo.\n\n¿Qué instalación o proyecto están evaluando en {{company}}?\n\nSaludos,\nFrancisco"
+    },
+    "MANTENIMIENTO": {
+      "subject": "{{first_name}}, mantenimiento eléctrico en {{company}}",
+      "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO. Hacemos mantenimiento preventivo y correctivo de instalaciones eléctricas industriales. Si hay un equipo o instalación que necesite atención, podemos ubicar el alcance por correo.\n\n¿Qué frente de mantenimiento tienen abierto en {{company}}?\n\nSaludos,\nFrancisco"
+    },
+    "SEGURIDAD": {
+      "subject": "{{first_name}}, instalaciones eléctricas en {{company}}",
+      "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO. Trabajamos mantenimiento y sistemas eléctricos industriales. Si hay una instalación que estén revisando, podemos conocer el contexto por correo y definir si podemos ayudar.\n\n¿Qué instalación tienen en revisión hoy en {{company}}?\n\nSaludos,\nFrancisco"
+    },
+    "COMPRAS": {
+      "subject": "{{first_name}}, alcance eléctrico para {{company}}",
+      "body": "Hola {{first_name}},\n\nSoy Francisco Cuellar, Director General de ENNCO. Trabajamos mantenimiento, sistemas eléctricos industriales e instalaciones solares. Si están evaluando proveedores para alguno de esos frentes, podemos entender el alcance antes de preparar una propuesta.\n\n¿Qué proyecto tiene compras en evaluación en {{company}}?\n\nSaludos,\nFrancisco"
+    }
+  },
+  "release_requirements": [
+    "Jorge valida voz y remitente",
+    "Paco confirma servicios y cualquier promesa no presente en fuente pública",
+    "Revisar claims del control V4 y de sus seguimientos",
+    "Investigar y aprobar individualmente las dos cohortes de 50",
+    "No cambiar secuencias de contactos ya inscritos"
+  ]
+}

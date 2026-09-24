@@ -84,3 +84,17 @@ describe("direct lane gmail sender", () => {
       .rejects.toMatchObject({ code: "GMAIL_API_RATE_LIMITED" });
   });
 });
+
+
+describe("reply provider receipts", () => {
+  it.each(["valid", "wrong-thread", "missing-rfc"])("handles %s without a second POST", async scenario => {
+    const fetchImpl = vi.fn(async (_url, init) => init?.method === "POST"
+      ? Response.json({ id: "gmail-reply", threadId: scenario === "wrong-thread" ? "other" : "original" })
+      : Response.json({ payload: { headers: scenario === "missing-rfc" ? [] : [{ name: "Message-ID", value: "<real@gmail.test>" }] } }));
+    const input = { ...touch, kind: "REPLY" as const, touch_number: null, thread: { provider_thread_id: "original", in_reply_to: "<buyer@example.test>", references: [] } };
+    const run = new DirectLaneGmailSender({ accessToken, fetchImpl }).send(input);
+    if (scenario === "valid") await expect(run).resolves.toMatchObject({ provider_thread_id: "original", rfc_message_id: "<real@gmail.test>" });
+    else await expect(run).rejects.toMatchObject({ code: scenario === "wrong-thread" ? "GMAIL_REPLY_THREAD_UNCONFIRMED" : "GMAIL_REPLY_RECEIPT_UNCONFIRMED" });
+    expect(fetchImpl.mock.calls.filter(([, init]) => init?.method === "POST")).toHaveLength(1);
+  });
+});

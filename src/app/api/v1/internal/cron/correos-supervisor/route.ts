@@ -14,7 +14,7 @@ const privateHeaders = { "Cache-Control": "private, no-store" } as const;
 
 /**
  * Supervisor diario del carril directo (13:45 CDMX, al cerrar la ventana de envío). Revisa cada
- * buzón, pausa el que rebote arriba del 10 % en siete días (con muestra mínima de 30), y avisa por
+ * buzón, reporta rebotes por buzón; el freno a incorporaciones se aplica por cohorte al 2 %, y avisa por
  * Telegram de respuestas sin contestar, fallas, ritmo y reserva de contactos.
  */
 export async function GET(request: Request): Promise<NextResponse> {
@@ -24,7 +24,7 @@ export async function GET(request: Request): Promise<NextResponse> {
   if (auth.status === "UNAUTHORIZED") return NextResponse.json({ error: "UNAUTHORIZED" }, { status: 401, headers: privateHeaders });
   if (!config.directLaneReleased) return NextResponse.json({ state: "HOLD", reason: "DIRECT_LANE_NOT_RELEASED" }, { status: 200, headers: privateHeaders });
   try {
-    const report = supervisorReportSchema.parse(await superviseDirectLane(config, config.directLaneMode === "live"));
+    const report = supervisorReportSchema.parse(await superviseDirectLane(config, false));
     const level = supervisorLevel(report);
     await sendDispatchAlert({ config, level, title: `supervisor del ${report.date}`, lines: supervisorLines(report) }).catch(() => false);
     return NextResponse.json({ state: "OK", level, report }, { status: 200, headers: privateHeaders });

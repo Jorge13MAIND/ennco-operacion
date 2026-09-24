@@ -38,11 +38,11 @@ export async function GET(request: Request): Promise<NextResponse> {
         ],
       });
     }
-    const failed = summary.mailboxes.filter((mailbox) => mailbox.result === "SYNC_FAILED");
+    const failed = summary.mailboxes.filter((mailbox) => !["OK", "CURSOR_BOOTSTRAPPED"].includes(mailbox.result));
     if (failed.length > 0) {
       await sendDispatchAlert({ config, level: "WARN", title: "carril directo: sync con fallas", lines: failed.map((mailbox) => `${mailbox.email}: ${mailbox.detail ?? "?"}`) });
     }
-    return NextResponse.json({ state: "OK", ...summary }, { status: 200, headers: privateHeaders });
+    return NextResponse.json({ state: failed.length ? "PARTIAL" : "OK", ...summary }, { status: failed.length ? 503 : 200, headers: privateHeaders });
   } catch (error) {
     await sendDispatchAlert({ config, level: "CRITICAL", title: "carril directo: sync falló", lines: [error instanceof Error ? error.message.slice(0, 160) : "error desconocido"] });
     return NextResponse.json({ state: "ERROR", reason: "DIRECT_LANE_SYNC_FAILED" }, { status: 200, headers: privateHeaders });

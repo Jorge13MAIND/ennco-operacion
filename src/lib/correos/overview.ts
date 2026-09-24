@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import type { OperationsAccessContext } from "@/lib/auth/authorization";
 import { directLaneHealthSchema } from "@/lib/correos/client";
+import { loadRecoveryOverview } from "@/lib/correos/recovery-overview";
 import { getRuntimeConfig } from "@/lib/runtime/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -163,10 +164,14 @@ export async function loadDirectLaneScreen(access: OperationsAccessContext): Pro
   const client = await createSupabaseServerClient();
   const { data, error } = await client.rpc("read_direct_lane_overview", { target_organization_id: access.organizationId });
   if (error) throw new Error("DIRECT_LANE_OVERVIEW_UNAVAILABLE");
+  const recovery = await loadRecoveryOverview(access.organizationId);
+  const overview = directLaneOverviewSchema.parse(data);
+  overview.pending_replies = overview.pending_replies.filter(reply => recovery.commercial_event_ids.includes(reply.provider_event_id));
+  overview.totals.replies_unreviewed = overview.pending_replies.filter(reply => reply.classification === "UNREVIEWED").length;
   return {
     ...base,
     evidenceClass: "live",
-    overview: sortOverviewMailboxes(directLaneOverviewSchema.parse(data)),
+    overview: sortOverviewMailboxes(overview),
     canApprove: access.role === "teckel_admin",
   };
 }
