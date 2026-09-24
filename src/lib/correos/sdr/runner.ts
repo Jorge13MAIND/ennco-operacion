@@ -15,7 +15,7 @@ export async function readSdrThread(token: string, threadId: string) {
   if (!response.ok) throw new Error("SDR_THREAD_UNAVAILABLE");
   return threadSchema.parse(await response.json());
 }
-export async function sdrMailboxToken(config: RuntimeConfig, item: SdrWorkItem) {
+export async function sdrMailboxToken(config: RuntimeConfig, item: Pick<SdrWorkItem, "mailbox_id" | "mailbox_email">) {
   if (!config.directLaneVaultKey || !config.googleOauthClientId || !config.googleOauthClientSecret) throw new Error("SDR_GMAIL_CONFIG_MISSING");
   const credential = await readDirectLaneCredential(config, item.mailbox_id);
   if (credential.normalized_email !== item.mailbox_email) throw new Error("SDR_MAILBOX_MISMATCH");

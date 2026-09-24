@@ -73,11 +73,25 @@ begin
    where organization_id=org and channel='CONTROL_ROOM' and status='PENDING';
  r:=pg_temp.sdr('{"op":"ALERT_WORK"}');
  if r->'alerts'->0->>'stage'<>'BACKUP' then raise exception 'BACKUP_ALERT_NOT_CLAIMED %',r; end if;
+ if r->'alerts'->0->>'owner_email'<>'operator@example.test' or r->'alerts'->0->>'backup_email'<>'backup@example.test' then
+   raise exception 'ALERT_RECIPIENTS_NOT_ASSIGNED'; end if;
  perform pg_temp.sdr(jsonb_build_object('op','ALERT_SETTLE','case_id',cid,'stage','BACKUP','accepted',true));
  r:=pg_temp.sdr('{"op":"ALERT_WORK"}');
  if jsonb_array_length(r->'alerts')<>0 then raise exception 'PROVIDER_ALERT_DUPLICATED'; end if;
  if (select status from public.notification_deliveries where organization_id=org and channel='CONTROL_ROOM')<>'PENDING' then
    raise exception 'PROVIDER_ACCEPTANCE_COUNTED_AS_HUMAN_ACK'; end if;
+ update public.notification_deliveries set created_at=now()-interval '2 hours 1 minute'
+   where organization_id=org and channel='CONTROL_ROOM' and status='PENDING';
+ r:=pg_temp.sdr('{"op":"ALERT_WORK"}');
+ if r->'alerts'->0->>'stage'<>'OVERDUE' or
+   (select new_contacts_paused from public.campaigns where id='61000000-0000-4000-8000-000000000050') is distinct from true then
+   raise exception 'OVERDUE_ALERT_DID_NOT_PAUSE_NEW_CONTACTS %',r; end if;
+ perform pg_temp.sdr(jsonb_build_object('op','ALERT_SETTLE','case_id',cid,'stage','OVERDUE','accepted',null));
+ if not exists(select 1 from app.email_sdr_alert_dispatch where organization_id=org and case_id=cid
+   and stage='OVERDUE' and uncertain_at is not null and provider_accepted_at is null) then
+   raise exception 'AMBIGUOUS_ALERT_NOT_QUARANTINED'; end if;
+ r:=pg_temp.sdr('{"op":"ALERT_WORK"}');
+ if jsonb_array_length(r->'alerts')<>0 then raise exception 'AMBIGUOUS_ALERT_RETRIED_BLINDLY'; end if;
  perform set_config('request.jwt.claim.sub','61000000-0000-4000-8000-000000000006',true);
  if (public.read_email_sdr_cases(org)->0->>'can_ack')<>'true' then raise exception 'BACKUP_CANNOT_SEE_ACK'; end if;
  perform public.ack_email_sdr_alert(org,cid);
