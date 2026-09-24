@@ -25,9 +25,12 @@ const ICON_FOR_KIND: Record<ProductKind, string> = {
 function Thumb({ product, category, large }: { product: Product; category: ProductCategory | null; large?: boolean }) {
   return (
     <div className={`pr-thumb${large ? " pr-thumb-lg" : ""}`}>
-      {/* URL firmada del bucket privado, cambia cada hora: no pasa por el optimizador de next/image. */}
+      {/* URL firmada del bucket privado, cambia cada hora: no pasa por el optimizador de next/image.
+          crossOrigin es obligatorio: el hub manda Cross-Origin-Embedder-Policy: require-corp y el
+          navegador bloquea una imagen de otro dominio que no se pida en modo CORS (Supabase responde
+          Access-Control-Allow-Origin: *). Sin él, la foto sale rota aunque la CSP la permita. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      {product.photoUrl ? <img alt="" src={product.photoUrl} /> : <ProductTypeIcon icon={category?.icon ?? "box"} />}
+      {product.photoUrl ? <img alt="" crossOrigin="anonymous" loading="lazy" src={product.photoUrl} /> : <ProductTypeIcon icon={category?.icon ?? "box"} />}
     </div>
   );
 }

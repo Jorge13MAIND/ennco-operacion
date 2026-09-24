@@ -24,6 +24,8 @@
 .pr-search svg { width: 15px; height: 15px; flex: none; }
 .pr-search input { border: 0; background: transparent; font: inherit; font-size: 0.85rem; color: var(--pr-ink); width: 150px; padding: 6px 0; outline: none; }
 .pr-search input::placeholder { color: var(--pr-muted); }
+/* Etiqueta solo para lectores de pantalla: el .sr-only del hub vive en otra hoja y aquí no aplicaba. */
+.pr-search .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .pr-view { display: inline-flex; gap: 4px; }
 .pr-view button { border: 0; background: transparent; width: 30px; height: 30px; border-radius: 8px; cursor: pointer; color: var(--pr-ink); display: inline-grid; place-items: center; }
 .pr-view button svg { width: 17px; height: 17px; }

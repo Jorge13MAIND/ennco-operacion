@@ -195,9 +195,10 @@ export function ProductEditor({ id, initialCategorySlug }: { id: string; initial
         <aside className="pr-aside">
           <div className="pr-box">
             <div className="pr-photo">
-              {/* URL firmada del bucket privado, cambia cada hora: no pasa por el optimizador de next/image. */}
+              {/* URL firmada del bucket privado, cambia cada hora: no pasa por el optimizador de next/image.
+                  crossOrigin: ver la nota en ProductsWorkspace (COEP require-corp del hub). */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              {product?.photoUrl ? <img alt="" src={product.photoUrl} /> : <ProductTypeIcon icon={category?.icon ?? "box"} />}
+              {product?.photoUrl ? <img alt="" crossOrigin="anonymous" src={product.photoUrl} /> : <ProductTypeIcon icon={category?.icon ?? "box"} />}
             </div>
             <div className="pr-brand"><span>{product?.brand || category?.name || "Producto"}</span>{product?.source === "sunone" ? <span className="pr-chip">Catálogo</span> : null}</div>
             {product?.code ? <p className="pr-code">{product.code}</p> : null}
