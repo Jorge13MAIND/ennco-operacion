@@ -248,7 +248,7 @@ export function CampaignStateAction({ campaignId, state }: { campaignId: string;
   );
 }
 
-export function EnrollContactsAction({ campaignId, enrollable, mailboxes }: { campaignId: string; enrollable: number; mailboxes: Array<{ id: string; email: string }> }) {
+export function EnrollContactsAction({ campaignId, enrollable, mailboxes }: { campaignId: string; enrollable: number | null; mailboxes: Array<{ id: string; email: string }> }) {
   const { status, error, run } = useMutation();
   const [summary, setSummary] = useState<string | null>(null);
   async function submit(formData: FormData) {
@@ -266,15 +266,15 @@ export function EnrollContactsAction({ campaignId, enrollable, mailboxes }: { ca
   return (
     <form action={(data) => void submit(data)} className="compact-operation-form">
       <strong>Inscribir contactos verificados</strong>
-      <span className="fine">{enrollable} contactos verificados, no suprimidos y sin secuencia activa. La variante se asigna por cargo.</span>
+      <span className="fine">{enrollable === null ? "No se pudo consultar la aptitud. La inscripción queda detenida." : `${enrollable} contactos con investigación y revisión vigentes, sin supresión ni secuencia activa.`} La variante se asigna por cargo.</span>
       <label>Buzón
         <select defaultValue="" name="mailbox_id">
           <option value="">Repartir entre los buzones conectados</option>
           {mailboxes.map((mailbox) => <option key={mailbox.id} value={mailbox.id}>{mailbox.email}</option>)}
         </select>
       </label>
-      <label>Máximo en esta tanda<input defaultValue={Math.min(50, Math.max(1, enrollable || 1))} max={500} min={1} name="max_count" type="number" /></label>
-      <button className="text-button" disabled={status === "pending" || enrollable === 0} type="submit">Inscribir</button>
+      <label>Máximo en esta tanda<input defaultValue={Math.min(50, Math.max(1, enrollable ?? 1))} max={500} min={1} name="max_count" type="number" /></label>
+      <button className="text-button" disabled={status === "pending" || !enrollable} type="submit">Inscribir</button>
       <Result error={error} status={status} />
       {summary ? <span className="fine">{summary}</span> : null}
     </form>
