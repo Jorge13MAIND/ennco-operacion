@@ -58,6 +58,16 @@ describe("runtime configuration", () => {
     );
   });
 
+  it("runs an unconfigured preview as a synthetic, fail-closed review surface", () => {
+    const config = getRuntimeConfig({ VERCEL_ENV: "preview" });
+    expect(config.appEnv).toBe("staging");
+    expect(config.demoMode).toBe(true);
+    expect(config.externalSendAllowed).toBe(false);
+    expect(config.globalKillSwitch).toBe(true);
+    expect(() => getRuntimeConfig({ VERCEL_ENV: "preview", ENNCO_DEMO_MODE: "false" }))
+      .toThrow("DEDICATED_SUPABASE_REQUIRED_OUTSIDE_DEMO");
+  });
+
   it("accepts a complete dedicated configuration without a service role key", () => {
     const config = getRuntimeConfig({
       ...dedicated,
