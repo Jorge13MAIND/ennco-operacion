@@ -25,6 +25,16 @@ export function mailboxesEligibleForTick(mailboxes: DirectLaneMailboxHealth[]): 
   return mailboxes.filter((mailbox) => mailbox.status === "CONNECTED" && mailbox.credential_active);
 }
 
+// Only an explicit provider rejection proves that Gmail did not accept the send.
+// A timeout, 5xx or unreadable response may happen after acceptance.
+export function directLaneSendIsAmbiguous(error: unknown): boolean {
+  if (error instanceof GmailTokenError) return false;
+  return !(error instanceof DirectLaneSendError && [
+    "GMAIL_API_UNAUTHORIZED", "GMAIL_API_SCOPE_FORBIDDEN", "GMAIL_API_RATE_LIMITED",
+    "GMAIL_API_REQUEST_REJECTED", "DIRECT_LANE_SEND_INPUT_INVALID", "GMAIL_ACCESS_TOKEN_INVALID",
+  ].includes(error.code));
+}
+
 type TickDependencies = {
   claim?: typeof claimDirectLaneDispatch;
   settle?: typeof settleDirectLaneDispatch;
@@ -118,6 +128,7 @@ export async function runDirectLaneTick(config: RuntimeConfig, deps: TickDepende
       list_unsubscribe_url: claimed.kind === "TOUCH" ? unsubscribeUrlFor(config, claimed) : null,
       open_pixel_url: openPixelUrlFor(config, claimed, messageId),
     };
+    let accepted = false;
     try {
       let sent;
       try {
@@ -131,17 +142,26 @@ export async function runDirectLaneTick(config: RuntimeConfig, deps: TickDepende
           throw error;
         }
       }
-      await settle(config, {
+      accepted = true;
+      const settled = await settle(config, {
         messageId,
         outcome: "SENT",
         providerMessageId: sent.provider_message_id,
         providerThreadId: sent.provider_thread_id,
         rfcMessageId: sent.rfc_message_id,
       });
+      if (!["SETTLED", "DUPLICATE"].includes(settled.status)) throw new Error("DIRECT_LANE_SETTLEMENT_UNCONFIRMED");
       if (envelope.open_pixel_url) await markTracked(config, messageId).catch(() => undefined);
       entry.result = `SENT:${claimed.kind}`;
     } catch (error) {
       const code = error instanceof DirectLaneSendError || error instanceof GmailTokenError ? error.code : "DIRECT_LANE_SEND_UNKNOWN_ERROR";
+      if (accepted || directLaneSendIsAmbiguous(error)) {
+        entry.result = "AMBIGUOUS";
+        entry.detail = accepted ? "PROVIDER_ACCEPTED_SETTLEMENT_UNCONFIRMED" : code;
+        await settle(config, { messageId, outcome: "AMBIGUOUS", errorCode: entry.detail }).catch(() => undefined);
+        await alert({ config, level: "WARN", title: "carril directo: reconciliación requerida", lines: [`mensaje ${messageId}`, entry.detail] }).catch(() => undefined);
+        break;
+      }
       await fail(code);
     }
   }

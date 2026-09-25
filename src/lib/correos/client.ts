@@ -149,7 +149,7 @@ export async function claimDirectLaneDispatch(config: RuntimeConfig, mailboxId: 
 
 export async function settleDirectLaneDispatch(config: RuntimeConfig, input: {
   messageId: string;
-  outcome: "SENT" | "FAILED";
+  outcome: "SENT" | "FAILED" | "AMBIGUOUS";
   providerMessageId?: string | null;
   providerThreadId?: string | null;
   rfcMessageId?: string | null;
