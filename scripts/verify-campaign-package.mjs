@@ -34,6 +34,11 @@ function check(id, condition, observed) {
 
 const expectedDays = [0, 3, 7, 14, 28, 42, 60, 75];
 const expectedVariants = ["executive", "maintenance", "procurement"];
+const expectedResponseIntents = [
+  "POSITIVE", "REFERRAL", "NOT_NOW", "NOT_INTERESTED", "WHAT_IS_THIS",
+  "PRICE_OBJECTION", "CHEAPER_VENDOR", "INTERNAL_ALIGNMENT", "COMMERCIAL_COMMITMENT", "UNSUBSCRIBE",
+].sort();
+const responseIntents = playbook.responses.map((response) => response.intent).sort();
 const bodies = sequence.touches.flatMap((touch) => Object.entries(touch.variants).map(([variant, value]) => ({
   touch: touch.touch_number,
   variant,
@@ -72,7 +77,8 @@ check("UNKNOWN_NEVER_PASS", manifest.canary.unknown_is_pass === false && manifes
 check("APOLLO_WARMUP_MINIMUM_42_DAYS", manifest.canary.required_real_consecutive_days === 42, manifest.canary.required_real_consecutive_days);
 check("NO_OPEN_PIXEL", manifest.tracking.open_pixel === false, manifest.tracking);
 check("EXTERNAL_SIDE_EFFECT_BUDGET_ZERO", manifest.runtime.max_external_side_effects === 0, manifest.runtime.max_external_side_effects);
-check("RESPONSE_PLAYBOOK_DRAFT_ONLY", playbook.status === "DRAFT_REVIEW_REQUIRED" && playbook.responses.length === 9, { status: playbook.status, responses: playbook.responses.length });
+check("RESPONSE_PLAYBOOK_DRAFT_ONLY", playbook.status === "DRAFT_REVIEW_REQUIRED", playbook.status);
+check("RESPONSE_PLAYBOOK_INTENT_COVERAGE", JSON.stringify(responseIntents) === JSON.stringify(expectedResponseIntents), responseIntents);
 check("RESPONSE_PLAYBOOK_ONE_CTA_MAX", playbook.responses.every((response) => (response.body.match(/\?/g) ?? []).length <= 1), true);
 check("RESPONSE_PLAYBOOK_NO_COMMITMENTS", playbook.responses.every((response) => !/(te garantizo|descuento de|precio final es|queda instalado el|ahorro de \d)/i.test(response.body)), true);
 check("RESPONSE_PLAYBOOK_HAS_REFERRAL", playbook.responses.some((response) => response.intent === "REFERRAL") && typeof playbook.referral_outbound?.body === "string", playbook.responses.map((response) => response.intent));
