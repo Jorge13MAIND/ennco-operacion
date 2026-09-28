@@ -137,7 +137,37 @@ describe("direct lane sync", () => {
     expect(applyEvent).not.toHaveBeenCalled();
   });
 
-  it("resets the cursor when Gmail returns 404 on history", async () => {
+  it.each(["SENT", "DRAFT"])("ignores %s mail even when it also has INBOX and reply headers", async (label) => {
+    const applyEvent = vi.fn();
+    const resolveOutbound = vi.fn();
+    const getMessageFull = vi.fn();
+    const updateCursor = vi.fn(async () => ({ status: "ADVANCED" }) as never);
+    const summary = await runDirectLaneSync(config, {
+      ...baseDeps,
+      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: { last_history_id: "5000" } })], totals: {}, flags: {} }) as never),
+      transport: () => ({
+        getProfile: vi.fn(),
+        listHistory: async () => ({ status: 200, body: { historyId: "5100", history: [{ id: "5050", messagesAdded: [{ message: { id: "own-mail", threadId: "t-1" } }] }] } }),
+        getMessage: async () => ({ status: 200, body: {
+          id: "own-mail", threadId: "t-1", labelIds: [label, "INBOX"], internalDate: "1756800000000",
+          payload: { headers: [
+            { name: "From", value: "operator@ennco.test" },
+            { name: "In-Reply-To", value: "<msg-41000000-0000-4000-8000-000000000301@ennco.test>" },
+          ] },
+        } }),
+        getMessageFull,
+      }),
+      applyEvent, resolveOutbound, updateCursor,
+    });
+    expect(summary.mailboxes[0]?.result).toBe("OK");
+    expect(summary.appliedReplyEvents).toBe(0);
+    expect(applyEvent).not.toHaveBeenCalled();
+    expect(resolveOutbound).not.toHaveBeenCalled();
+    expect(getMessageFull).not.toHaveBeenCalled();
+    expect(updateCursor).toHaveBeenCalledWith(config, expect.objectContaining({ historyId: "5100" }));
+  });
+
+  it("requires reconciliation when Gmail history expires, without resetting the cursor", async () => {
     const updateCursor = vi.fn(async () => ({ status: "ADVANCED" }) as never);
     const summary = await runDirectLaneSync(config, {
       ...baseDeps,
@@ -149,7 +179,22 @@ describe("direct lane sync", () => {
       }),
       updateCursor,
     });
-    expect(summary.mailboxes[0]?.result).toBe("CURSOR_RESET");
-    expect(updateCursor).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ historyId: "9000" }));
+    expect(summary.mailboxes[0]?.result).toBe("SYNC_FAILED");
+    expect(summary.mailboxes[0]?.detail).toBe("GMAIL_HISTORY_FULL_SYNC_REQUIRED");
+    expect(updateCursor).not.toHaveBeenCalled();
+  });
+
+  it("does not bootstrap a missing cursor over an existing send history", async () => {
+    const getProfile = vi.fn();
+    const updateCursor = vi.fn();
+    const summary = await runDirectLaneSync(config, {
+      ...baseDeps,
+      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: null, sent_total: 1 })], totals: {}, flags: {} }) as never),
+      transport: () => ({ getProfile, listHistory: vi.fn(), getMessage: vi.fn() }),
+      updateCursor,
+    });
+    expect(summary.mailboxes[0]?.detail).toBe("GMAIL_HISTORY_FULL_SYNC_REQUIRED");
+    expect(getProfile).not.toHaveBeenCalled();
+    expect(updateCursor).not.toHaveBeenCalled();
   });
 });

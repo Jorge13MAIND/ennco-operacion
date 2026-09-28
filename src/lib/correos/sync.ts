@@ -90,6 +90,7 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
       const transport = transportFor(accessToken);
       const cursor = mailbox.sync?.last_history_id ?? null;
       if (!cursor) {
+        if (mailbox.sent_total > 0 || mailbox.first_send_at) throw new GmailHistoryResetRequiredError();
         const profile = await transport.getProfile();
         if (profile.status !== 200) throw new Error("GMAIL_PROFILE_UNAVAILABLE");
         const { historyId } = profileSchema.parse(profile.body);
@@ -97,21 +98,11 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
         entry.result = "CURSOR_BOOTSTRAPPED";
         continue;
       }
-      let collected;
-      try {
-        collected = await collectGmailHistory({ transport, startHistoryId: cursor });
-      } catch (error) {
-        if (error instanceof GmailHistoryResetRequiredError) {
-          const profile = await transport.getProfile();
-          if (profile.status !== 200) throw new Error("GMAIL_PROFILE_UNAVAILABLE");
-          const { historyId } = profileSchema.parse(profile.body);
-          await updateCursor(config, { mailboxId: mailbox.mailbox_id, historyId, watchExpiresAtEpoch: null });
-          entry.result = "CURSOR_RESET";
-          continue;
-        }
-        throw error;
-      }
+      const collected = await collectGmailHistory({ transport, startHistoryId: cursor });
       for (const message of collected.messages) {
+        // Own sends can also carry INBOX and reply headers. They are not inbound
+        // prospect events; leave contact identity validation to the event RPC.
+        if (message.labelIds?.some((label) => label === "SENT" || label === "DRAFT")) continue;
         const kind = classifyGmailMessage(message);
         if (kind === "UNKNOWN") continue;
         const context = extractGmailEventContext(message);
