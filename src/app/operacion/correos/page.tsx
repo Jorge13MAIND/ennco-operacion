@@ -175,7 +175,7 @@ export default async function CorreosPage() {
                   <tr key={mailbox.mailbox_id}>
                     <td data-label="Buzón">
                       <strong>{mailbox.normalized_email}</strong>
-                      <br /><span className="fine">{mailbox.is_client_primary ? "Buzón del cliente · techo 20/día" : `${mailbox.domain} · Teckel`}</span>
+                      <br /><span className="fine">{mailbox.is_client_primary ? `Buzón del cliente · techo ${mailbox.cap_max}/día` : `${mailbox.domain} · Teckel`}</span>
                     </td>
                     <td data-label="Estado">
                       <span className={`status ${blocked ? "blocked" : ""}`}>{mailboxStatusLabels[mailbox.status] ?? mailbox.status}</span>
