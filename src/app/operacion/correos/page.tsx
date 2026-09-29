@@ -10,14 +10,12 @@ import { z } from "zod";
 import {
   ApproveCampaignAction,
   CampaignStateAction,
-  ConnectMailboxAction,
   CreateCampaignAction,
   EnrollContactsAction,
-  MailboxCapAction,
-  MailboxStateAction,
-  RevokeMailboxAction,
 } from "@/components/CorreosActions";
+import { CorreosBuzones } from "@/components/CorreosBuzones";
 import { CorreosSdr } from "@/components/CorreosSdr";
+import "@/styles/correos-buzones.css";
 import "@/styles/correos-sdr.css";
 import { loadSdrScreen } from "@/lib/correos/sdr/overview";
 import { CorreosReplies } from "@/components/CorreosReplies";
@@ -34,13 +32,6 @@ const RECENT_ACTIVITY_ROWS = 12;
 
 const stamp = new Intl.DateTimeFormat("es-MX", { dateStyle: "short", timeStyle: "short", timeZone: "America/Mexico_City" });
 const dayStamp = new Intl.DateTimeFormat("es-MX", { weekday: "short", day: "numeric", month: "short", timeZone: "America/Mexico_City" });
-
-const mailboxStatusLabels: Record<string, string> = {
-  DISCONNECTED: "Sin conectar",
-  CONNECTED: "Conectado",
-  PAUSED: "En pausa",
-  KILLED: "Apagado",
-};
 
 const messageStatusLabels: Record<string, string> = {
   DRY_RUN: "Sombra",
@@ -152,62 +143,9 @@ export default async function CorreosPage() {
         <div className="metric"><span>Secuencias activas</span><strong><MetricValue value={sumEnrollments(overview, ["PENDING", "ACTIVE"])} /></strong></div>
       </section>
 
-      <CorreosSdr screen={sdr} canOperate={canOperate} canAdmin={canOperate && screen.canApprove} userId={access.userId} />
+      <CorreosBuzones canApprove={screen.canApprove} canOperate={canOperate} mailboxes={overview.mailboxes} />
 
-      <section className="panel">
-        <div className="panel-head portal-panel-head">
-          <div>
-            <h2>Buzones</h2>
-            <p>Los buzones conectados se sincronizan con Gmail. La aptitud de nuevos contactos se revisa por separado.</p>
-          </div>
-          <span className="badge">{connectedMailboxes.length}/{overview.mailboxes.length} conectados</span>
-        </div>
-        <div aria-label="Tabla: Buzones" className="table-wrap" role="region" tabIndex={0}>
-          <table>
-            <thead>
-              <tr>
-                <th>Buzón</th><th>Estado</th><th>Hoy</th><th>Rampa</th><th>Respuestas</th><th>Última actividad</th>{canOperate ? <th>Acción</th> : null}
-              </tr>
-            </thead>
-            <tbody>
-              {overview.mailboxes.map((mailbox) => {
-                const blocked = mailbox.status !== "CONNECTED" || !mailbox.credential_active;
-                return (
-                  <tr key={mailbox.mailbox_id}>
-                    <td data-label="Buzón">
-                      <strong>{mailbox.normalized_email}</strong>
-                      <br /><span className="fine">{mailbox.is_client_primary ? `Buzón del cliente · techo ${mailbox.cap_max}/día` : `${mailbox.domain} · Teckel`}</span>
-                    </td>
-                    <td data-label="Estado">
-                      <span className={`status ${blocked ? "blocked" : ""}`}>{mailboxStatusLabels[mailbox.status] ?? mailbox.status}</span>
-                      {mailbox.pending_invitation ? <><br /><span className="fine">Liga vigente hasta {stamp.format(new Date(mailbox.pending_invitation.expires_at))}</span></> : null}
-                      {mailbox.credential_connected_at ? <><br /><span className="fine">Conectado {stamp.format(new Date(mailbox.credential_connected_at))}</span></> : null}
-                    </td>
-                    <td data-label="Hoy">{typeof mailbox.new_today === "number" ? <>nuevos {mailbox.new_today}/{mailbox.new_cap ?? mailbox.effective_cap}<br /><span className="fine">total {mailbox.sent_today}/{mailbox.ceiling ?? mailbox.cap_max}</span></> : <>{mailbox.sent_today}/{mailbox.effective_cap}</>}{mailbox.queued > 0 ? <><br /><span className="fine">{mailbox.queued} en cola</span></> : null}</td>
-                    <td data-label="Rampa">{mailbox.ramp_mode === "SCHEDULE" ? `Semanal ${(mailbox.ramp_schedule ?? []).join("→")} (semana ${(mailbox.ramp_week ?? 0) + 1})` : mailbox.ramp_mode === "AUTO" ? "Automática" : `Fija ${mailbox.fixed_cap}`} · techo {mailbox.cap_max}{mailbox.first_send_at ? <><br /><span className="fine">Primer envío {stamp.format(new Date(mailbox.first_send_at))}</span></> : null}</td>
-                    <td data-label="Respuestas">{mailbox.sync?.last_synced_at ? `Sync ${stamp.format(new Date(mailbox.sync.last_synced_at))}` : "Sin sync"}{mailbox.sync?.last_error_code ? <><br /><span className="status blocked">{mailbox.sync.last_error_code}</span></> : null}</td>
-                    <td data-label="Última actividad">{mailbox.last_error ? <span className="status blocked">{mailbox.last_error}</span> : `${mailbox.sent_total} enviados`}</td>
-                    {canOperate ? (
-                      <td data-label="Acción">
-                        <div className="cr-mailbox-actions">
-                          {mailbox.status !== "KILLED" && !mailbox.credential_active ? <ConnectMailboxAction email={mailbox.normalized_email} mailboxId={mailbox.mailbox_id} /> : null}
-                          {mailbox.credential_active ? <MailboxStateAction canUnkill={screen.canApprove} mailboxId={mailbox.mailbox_id} status={mailbox.status} /> : null}
-                          {mailbox.credential_active ? (
-                            <div className="cr-mailbox-more">
-                              <details><summary>Tope y rampa</summary><MailboxCapAction capMax={mailbox.cap_max} fixedCap={mailbox.fixed_cap} isClientPrimary={mailbox.is_client_primary} mailboxId={mailbox.mailbox_id} rampAnchorAt={mailbox.ramp_anchor_at ?? null} rampMode={mailbox.ramp_mode} rampSchedule={mailbox.ramp_schedule ?? null} /></details>
-                              <details className="cr-mailbox-danger"><summary>Desconectar</summary><RevokeMailboxAction mailboxId={mailbox.mailbox_id} /></details>
-                            </div>
-                          ) : null}
-                        </div>
-                      </td>
-                    ) : null}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <CorreosSdr screen={sdr} canOperate={canOperate} canAdmin={canOperate && screen.canApprove} userId={access.userId} />
 
       <section className="panel">
         <div className="panel-head portal-panel-head">
