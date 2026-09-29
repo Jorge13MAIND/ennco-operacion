@@ -18,6 +18,7 @@ import {
   RevokeMailboxAction,
 } from "@/components/CorreosActions";
 import { CorreosSdr } from "@/components/CorreosSdr";
+import "@/styles/correos-sdr.css";
 import { loadSdrScreen } from "@/lib/correos/sdr/overview";
 import { CorreosReplies } from "@/components/CorreosReplies";
 import { MetricValue } from "@/components/MetricValue";
