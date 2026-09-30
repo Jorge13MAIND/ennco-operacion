@@ -5,7 +5,7 @@ import { getGmailAccessToken } from "@/lib/dispatch/gmail-token";
 import { extractReplyText } from "@/lib/gmail/body";
 import type { RuntimeConfig } from "@/lib/runtime/config";
 import { sdrCommand, sdrEnvironment, workSchema, type SdrWorkItem } from "@/lib/correos/sdr/client";
-import { POLICY_VERSION, deterministicProposal, evaluateConversation, evaluateProposal, proposalSchema, threadSchema, unsubscribeRequested } from "@/lib/correos/sdr/policy";
+import { POLICY_VERSION, deterministicProposal, evaluateConversation, evaluateProposal, positiveSubtype, proposalSchema, threadSchema, unsubscribeRequested } from "@/lib/correos/sdr/policy";
 import { proposeWithModel } from "@/lib/correos/sdr/model";
 
 export async function readSdrThread(token: string, threadId: string) {
@@ -28,6 +28,7 @@ export async function sdrMailboxToken(config: RuntimeConfig, item: Pick<SdrWorkI
 const nextActions: Record<string, string> = {
   CONTEXT: "Revisar borrador de contexto. No contabilizar como interés explícito ni lead",
   EXPLICIT_INTEREST: "Validar interés documentado y preguntar por la necesidad. Calificación contractual humana",
+  POSITIVE: "Positivo claro: respuesta con plantilla aprobada y copia a Paco (automática con espera, o al aprobarla)",
   WRONG_PERSON: "Corregir identidad y ubicación. Cerrar esta campaña para esta persona; no contactar referidos automáticamente",
   NOT_NOW: "Mantener detenida la secuencia. Revisar respuesta breve y registrar si el contacto indica cuándo retomar",
   REJECTION: "Mantener detenida la secuencia. Revisar respuesta de cierre",
@@ -70,13 +71,15 @@ export async function runEmailSdr(config: RuntimeConfig) {
         results.push({ case_id: item.case_id, state: "SUPPRESSED" }); continue;
       }
       let proposal = deterministicProposal(body);
-      let modelSource = "RULES_REVIEW_ONLY";
-      let modelGate = "MODEL_NOT_CONFIGURED";
+      // Un positivo claro no necesita modelo: sale con plantilla fija aprobada (Grant, 30-sep).
+      const rulesPositive = proposal.intent === "EXPLICIT_INTEREST" && proposal.confidence >= 0.95 && positiveSubtype(body) !== null;
+      let modelSource = rulesPositive ? "RULES_POSITIVE" : "RULES_REVIEW_ONLY";
+      let modelGate = rulesPositive ? "" : "MODEL_NOT_CONFIGURED";
       const previous = proposalSchema.safeParse(item.decision?.proposal);
       if ((item.approved || item.followup) && previous.success) {
         proposal = previous.data; modelSource = String(item.decision?.model_source ?? "RULES_REVIEW_ONLY");
-        modelGate = modelSource === "OPENAI" ? "" : "MODEL_NOT_CONFIGURED";
-      } else if (environment.apiKey && environment.model && work.mode !== "PAUSED" && context.gates.length === 0) {
+        modelGate = modelSource === "OPENAI" || modelSource === "RULES_POSITIVE" ? "" : "MODEL_NOT_CONFIGURED";
+      } else if (!rulesPositive && environment.apiKey && environment.model && work.mode !== "PAUSED" && context.gates.length === 0) {
         const slot = await sdrCommand(config, { op: "MODEL_SLOT" });
         if (slot.allowed === true) {
           proposal = await proposeWithModel({ latestReply: body, apiKey: environment.apiKey, model: environment.model,
@@ -89,10 +92,11 @@ export async function runEmailSdr(config: RuntimeConfig) {
       if (item.event_kind === "AUTO_REPLY") proposal = { ...proposal, intent: "OUT_OF_OFFICE", draft: "", escalation_reason: "Respuesta automática. Revisar fecha de regreso" };
       const evaluated = evaluateProposal(proposal, body);
       const gates = [...context.gates, ...evaluated.gates, ...(modelGate ? [modelGate] : []), ...(work.mode === "PAUSED" ? ["SDR_PAUSED"] : [])];
+      const subtype = proposal.intent === "EXPLICIT_INTEREST" ? positiveSubtype(body) : null;
       const state = context.manualReply ? "MANUAL_HANDLED" : item.suppressed ? "NO_ACTION" : context.gates.length ? "BLOCKED" : "REVIEW";
       await sdrCommand(config, { op: "DECIDE", case_id: item.case_id, policy_version: POLICY_VERSION, state, thread_hash: context.threadHash,
-        next_action: context.manualReply ? "Intervención humana encontrada en Gmail. Evitar respuesta duplicada" : nextActions[proposal.intent] ?? "Revisión humana requerida",
-        decision: { intent: proposal.intent, eligible: gates.length === 0, gates, evidence: proposal.evidence, draft: evaluated.draft || proposal.draft,
+        next_action: context.manualReply ? "Intervención humana encontrada en Gmail. Evitar respuesta duplicada" : nextActions[subtype ? "POSITIVE" : proposal.intent] ?? "Revisión humana requerida",
+        decision: { intent: proposal.intent, ...(subtype ? { subtype } : {}), eligible: gates.length === 0, gates, evidence: proposal.evidence, draft: evaluated.draft || proposal.draft,
           proposal, model_source: modelSource, model: modelSource === "OPENAI" ? environment.model : null, facts_version: POLICY_VERSION } });
       if (gates.length === 0) {
         const queued = await sdrCommand(config, { op: "QUEUE", case_id: item.case_id, thread_hash: context.threadHash, followup: item.followup });
