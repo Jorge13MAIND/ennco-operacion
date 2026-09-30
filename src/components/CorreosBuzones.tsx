@@ -34,7 +34,8 @@ function Card({ m, onOpen }: { m: Mailbox; onOpen: () => void }) {
         <span className="bz-mail"><strong>{user}@</strong><span>{domain}</span></span>
       </span>
       <span className="bz-count"><span>Hoy</span><strong>{m.sent_today}</strong><span>/ {cap}</span></span>
-      <span className="bz-bar" aria-hidden="true"><span style={{ width: `${pct}%` }} /></span>
+      {/* <progress> y no un div con style={{ width }}: la CSP del hub bloquea estilos en línea y la barra salía llena. */}
+      <progress aria-hidden="true" className="bz-bar" max={100} value={pct} />
       <span className="bz-foot">
         {m.status !== "CONNECTED" ? <em>{statusLabels[m.status] ?? m.status}</em> : m.last_error ? <em>Con error</em> : <span>{since(m.sync?.last_synced_at)}</span>}
         <span>{m.sent_total} env.</span>
