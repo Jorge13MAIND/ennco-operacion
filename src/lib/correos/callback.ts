@@ -80,7 +80,8 @@ export async function handleDirectLaneOAuthCallback(request: Request, config: Ru
     if (error instanceof Error && error.message === "GMAIL_OAUTH_IDENTITY_MISMATCH") {
       return finish(config.appUrl, "identidad");
     }
-    const motivo = error instanceof Error ? error.message : "desconocido";
+    // Solo códigos propios (MAYÚSCULAS); nunca el texto interno de un error de la base o de Zod.
+    const motivo = error instanceof Error && /^[A-Z0-9_]{3,60}$/.test(error.message) ? error.message : "DESCONOCIDO";
     return finish(config.appUrl, "rechazada", undefined, motivo);
   }
 }

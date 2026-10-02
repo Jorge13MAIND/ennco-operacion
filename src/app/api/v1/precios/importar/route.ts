@@ -6,6 +6,8 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   return api(async () => {
     const c = await context(request);
+    // El rol se revisa antes de leer el archivo: un auditor no debe poder ni procesar un .xlsx.
+    if (c.role === "auditor_readonly") throw new ProjectApiError("SOLAR_FORBIDDEN", 403);
     const form = await request.formData().catch(() => null);
     const file = form?.get("archivo");
     if (!(file instanceof File)) throw new ProjectApiError("PRICE_FILE_REQUIRED", 400);

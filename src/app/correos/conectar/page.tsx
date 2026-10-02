@@ -45,6 +45,10 @@ export default async function ConectarBuzonPage({ searchParams }: { searchParams
     }
   }
   const shown = estado ?? (problem ? estados[problem] : null);
+  // La URL es pública: solo se muestra un correo bien formado y un código técnico en MAYÚSCULAS,
+  // nunca texto libre (alguien podría armar una liga con un mensaje de phishing con la marca de ENNCO).
+  const buzon = params.buzon && /^[a-z0-9._%+-]{1,64}@[a-z0-9.-]{1,190}\.[a-z]{2,24}$/i.test(params.buzon) ? params.buzon : null;
+  const motivo = params.motivo && /^[A-Z0-9_]{3,60}$/.test(params.motivo) ? params.motivo : null;
 
   return (
     <>
@@ -55,9 +59,9 @@ export default async function ConectarBuzonPage({ searchParams }: { searchParams
         {shown ? (
           <section className="notice">
             <strong>{shown.title}</strong>
-            <p>{shown.body}{params.buzon ? ` (${params.buzon})` : ""}</p>
-            {params.motivo ? (
-              <p className="fine">Código técnico: <code>{params.motivo}</code></p>
+            <p>{shown.body}{buzon ? ` (${buzon})` : ""}</p>
+            {motivo ? (
+              <p className="fine">Código técnico: <code>{motivo}</code></p>
             ) : null}
           </section>
         ) : invitation ? (

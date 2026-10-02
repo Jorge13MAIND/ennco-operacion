@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { requireOperationsAccess } from "@/lib/auth/authorization";
+import { requireOperationsAccess, type OperationsAccessContext } from "@/lib/auth/authorization";
+import { canMutateOperations } from "@/lib/auth/policy";
 import { getRuntimeConfig } from "@/lib/runtime/config";
 import { evaluateMutationRequest } from "@/lib/security/request";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -52,4 +53,27 @@ export function mutationUnavailable(code = "OPERATION_MUTATION_REJECTED"): NextR
     { error: code, correlation_id: crypto.randomUUID() },
     { status: 409, headers: { "Cache-Control": "private, no-store" } },
   );
+}
+
+/**
+ * Compuerta de las rutas POST que no usan getMutationContext: mismo origen, sesión con
+ * pertenencia y un rol que pueda escribir (auditor_readonly no). 2-oct, auditoría de seguridad.
+ */
+export async function requireWritableOperationsRequest(request: Request): Promise<
+  | { ok: true; access: OperationsAccessContext & { organizationId: string } }
+  | { ok: false; response: NextResponse }
+> {
+  const headers = { "Cache-Control": "private, no-store" } as const;
+  const requestDecision = evaluateMutationRequest(request, getRuntimeConfig().appUrl);
+  if (requestDecision.decision !== "ALLOW") {
+    return { ok: false, response: NextResponse.json({ error: requestDecision.code }, { status: 403, headers }) };
+  }
+  const access = await requireOperationsAccess();
+  if (access.evidenceClass !== "live" || !access.organizationId) {
+    return { ok: false, response: NextResponse.json({ error: "LIVE_ACCESS_REQUIRED" }, { status: 403, headers }) };
+  }
+  if (access.role !== "synthetic_admin" && !canMutateOperations(access.role)) {
+    return { ok: false, response: NextResponse.json({ error: "ROLE_CANNOT_MUTATE" }, { status: 403, headers }) };
+  }
+  return { ok: true, access: { ...access, organizationId: access.organizationId } };
 }

@@ -2,17 +2,27 @@ import { z } from "zod";
 
 const nonceSchema = z.string().regex(/^[A-Za-z0-9+/=]{16,128}$/);
 
+/** Solo nuestro proyecto de Supabase: con el comodín de supabase.co un XSS podría mandar datos a un proyecto ajeno. */
+function supabaseHost(): string {
+  try {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (url) return new URL(url).host;
+  } catch { /* cae al comodín */ }
+  return "*.supabase.co";
+}
+
 export function buildContentSecurityPolicy(nonce: string, development: boolean): string {
   const safeNonce = nonceSchema.parse(nonce);
+  const supabase = supabaseHost();
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${safeNonce}' 'strict-dynamic'${development ? " 'unsafe-eval'" : ""}`,
     `style-src 'self' 'nonce-${safeNonce}'`,
     // Las fotos del catálogo de productos viven en el bucket privado de Supabase y se sirven
     // con URL firmada; sin este origen el navegador las bloqueaba y la lista salía sin imágenes.
-    "img-src 'self' blob: data: https://*.supabase.co",
+    `img-src 'self' blob: data: https://${supabase}`,
     "font-src 'self'",
-    "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+    `connect-src 'self' https://${supabase} wss://${supabase}`,
     "object-src 'none'",
     "base-uri 'self'",
     // Chrome aplica form-action tambien a las REDIRECCIONES de un POST de

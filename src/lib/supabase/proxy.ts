@@ -56,6 +56,8 @@ export async function updateSupabaseSession(request: NextRequest, requestHeaders
 
   let response = NextResponse.next({ request: { headers: requestHeaders } });
   const supabase = createServerClient(config.supabaseUrl, config.supabasePublishableKey, {
+    // Cookies de sesión solo por HTTPS en producción (2-oct, auditoría de seguridad).
+    cookieOptions: { secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/" },
     cookies: {
       encode: "tokens-only",
       getAll: () => request.cookies.getAll(),

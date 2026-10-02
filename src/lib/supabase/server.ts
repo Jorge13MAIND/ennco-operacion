@@ -11,6 +11,8 @@ export async function createSupabaseServerClient() {
   const cookieStore = await cookies();
 
   return createServerClient(config.supabaseUrl, config.supabasePublishableKey, {
+    // Cookies de sesión solo por HTTPS en producción (2-oct, auditoría de seguridad).
+    cookieOptions: { secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/" },
     cookies: {
       encode: "tokens-only",
       getAll() {

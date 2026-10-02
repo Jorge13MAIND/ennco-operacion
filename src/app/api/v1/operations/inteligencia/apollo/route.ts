@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { requireOperationsAccess } from "@/lib/auth/authorization";
+import { requireWritableOperationsRequest } from "@/lib/operations/route";
 import { ApolloReadonlyClient, ApolloReadonlyError } from "@/lib/providers/apollo/readonly-client";
 import {
   APOLLO_SENIORITIES,
@@ -34,11 +34,10 @@ const ACCOUNTS_PER_RUN = 12;
  *
  * No decide a quién contactar ni inscribe a nadie en una campaña.
  */
-export async function POST(): Promise<NextResponse> {
-  const access = await requireOperationsAccess();
-  if (access.evidenceClass !== "live" || !access.organizationId) {
-    return NextResponse.json({ error: "LIVE_ACCESS_REQUIRED" }, { status: 403, headers: privateHeaders });
-  }
+export async function POST(request: Request): Promise<NextResponse> {
+  const gate = await requireWritableOperationsRequest(request);
+  if (!gate.ok) return gate.response;
+  const access = gate.access;
 
   const config = getRuntimeConfig();
   const apiKey = process.env.APOLLO_API_KEY?.trim();

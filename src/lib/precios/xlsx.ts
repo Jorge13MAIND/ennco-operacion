@@ -3,6 +3,8 @@
 import { deflateRawSync, inflateRawSync } from "node:zlib";
 
 type Entry = { name: string; data: Buffer };
+const MAX_ENTRY_BYTES = 25 * 1024 * 1024;
+const MAX_TOTAL_BYTES = 60 * 1024 * 1024;
 
 function readZip(buf: Buffer): Entry[] {
   let eocd = -1;
@@ -10,6 +12,7 @@ function readZip(buf: Buffer): Entry[] {
   if (eocd < 0) throw new Error("XLSX_INVALID");
   const count = buf.readUInt16LE(eocd + 10); let p = buf.readUInt32LE(eocd + 16);
   const out: Entry[] = [];
+  let total = 0;
   for (let k = 0; k < count; k += 1) {
     if (buf.readUInt32LE(p) !== 0x02014b50) throw new Error("XLSX_INVALID");
     const method = buf.readUInt16LE(p + 10), csize = buf.readUInt32LE(p + 20), nlen = buf.readUInt16LE(p + 28), xlen = buf.readUInt16LE(p + 30), clen = buf.readUInt16LE(p + 32), off = buf.readUInt32LE(p + 42);
@@ -17,7 +20,11 @@ function readZip(buf: Buffer): Entry[] {
     const lnlen = buf.readUInt16LE(off + 26), lxlen = buf.readUInt16LE(off + 28);
     const start = off + 30 + lnlen + lxlen;
     const raw = buf.subarray(start, start + csize);
-    out.push({ name, data: method === 8 ? inflateRawSync(raw) : Buffer.from(raw) });
+    // Tope contra "zip bombs": 25 MB por entrada y 60 MB en total ya descomprimidos (2-oct, auditoría).
+    const data = method === 8 ? inflateRawSync(raw, { maxOutputLength: MAX_ENTRY_BYTES }) : Buffer.from(raw);
+    total += data.length;
+    if (data.length > MAX_ENTRY_BYTES || total > MAX_TOTAL_BYTES) throw new Error("XLSX_TOO_LARGE");
+    out.push({ name, data });
     p += 46 + nlen + xlen + clen;
   }
   return out;

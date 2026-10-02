@@ -13,6 +13,7 @@ export function createSupabaseBrowserClient() {
   }
 
   return createBrowserClient(url, publishableKey, {
+    cookieOptions: { secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/" },
     cookies: { encode: "tokens-only" },
   });
 }

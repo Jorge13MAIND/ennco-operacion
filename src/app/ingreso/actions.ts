@@ -4,6 +4,7 @@ import { z } from "zod";
 import { redirectTo } from "@/lib/auth/navigation";
 import { safeInternalNextPath } from "@/lib/auth/policy";
 import { getRuntimeConfig, hasDedicatedSupabase } from "@/lib/runtime/config";
+import { authAttemptAllowed } from "@/lib/security/auth-throttle";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const credentialsSchema = z.object({
@@ -24,6 +25,8 @@ export async function signIn(formData: FormData) {
   if (!hasDedicatedSupabase(config) || config.demoMode) {
     redirectTo("/ingreso?reason=unavailable");
   }
+
+  if (!(await authAttemptAllowed("login", parsed.data.email))) redirectTo("/ingreso?reason=throttled");
 
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.signInWithPassword({

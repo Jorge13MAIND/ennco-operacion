@@ -1,4 +1,5 @@
 import "server-only";
+import { sniffMime } from "@/lib/productos/sniff";
 import { z } from "zod";
 
 import type { OperationsAccessContext } from "@/lib/auth/authorization";
@@ -111,6 +112,7 @@ export async function setProductFavorite(access: OperationsAccessContext, id: st
   if (error) fail(error); return data;
 }
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const FILE_RULES = {
   photo: { mimes: ["image/png", "image/jpeg", "image/webp"], maxBytes: 5 * 1024 * 1024, ext: { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp" } as Record<string, string>, name: "foto" },
   datasheet: { mimes: ["application/pdf"], maxBytes: 10 * 1024 * 1024, ext: { "application/pdf": "pdf" } as Record<string, string>, name: "ficha" },
@@ -120,14 +122,23 @@ const FILE_RULES = {
 export async function uploadProductFile(access: OperationsAccessContext, id: string, kind: "photo" | "datasheet", file: File) {
   writable(access); const org = organization(access);
   const rule = FILE_RULES[kind];
+  if (!UUID.test(id)) throw new Error("PRODUCT_NOT_FOUND");
   if (!(rule.mimes as readonly string[]).includes(file.type)) throw new Error("PRODUCT_FILE_TYPE_INVALID");
   if (file.size > rule.maxBytes) throw new Error("PRODUCT_FILE_TOO_LARGE");
+  // El tipo lo declara el navegador; se comprueba con los primeros bytes reales del archivo (2-oct, auditoría).
+  const head = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+  if (sniffMime(head) !== file.type) throw new Error("PRODUCT_FILE_TYPE_INVALID");
   const client = await createSupabaseServerClient();
   const path = `${org}/${id}/${rule.name}.${rule.ext[file.type]}`;
   const { error: uploadError } = await client.storage.from(PRODUCTS_BUCKET).upload(path, file, { contentType: file.type, upsert: true });
   if (uploadError) throw new Error("PRODUCT_FILE_UPLOAD_FAILED");
   const { data, error } = await client.rpc("product_set_file", { target_organization_id: org, target_id: id, target_kind: kind, target_path: path });
-  if (error) fail(error); return data;
+  if (error) {
+    // Si el producto no existe o no se pudo ligar, el archivo no se queda huérfano en el bucket.
+    await client.storage.from(PRODUCTS_BUCKET).remove([path]).catch(() => undefined);
+    fail(error);
+  }
+  return data;
 }
 
 export async function signedProductUrl(access: OperationsAccessContext, path: string): Promise<string> {

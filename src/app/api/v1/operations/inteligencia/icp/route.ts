@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { requireOperationsAccess } from "@/lib/auth/authorization";
+import { requireWritableOperationsRequest } from "@/lib/operations/route";
 import { scoreAccountV2, type IcpV2Input } from "@/lib/inteligencia/icp-v2";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -24,11 +24,10 @@ const BATCH_LIMIT = 500;
  * Idempotente por (cuenta, versión de rúbrica). La escritura pasa por el RPC, que revalida
  * tenant y rol; esta ruta no escribe directo a la tabla.
  */
-export async function POST(): Promise<NextResponse> {
-  const access = await requireOperationsAccess();
-  if (access.evidenceClass !== "live" || !access.organizationId) {
-    return NextResponse.json({ error: "LIVE_ACCESS_REQUIRED" }, { status: 403, headers: privateHeaders });
-  }
+export async function POST(request: Request): Promise<NextResponse> {
+  const gate = await requireWritableOperationsRequest(request);
+  if (!gate.ok) return gate.response;
+  const access = gate.access;
 
   const client = await createSupabaseServerClient();
   const { data, error } = await client
@@ -100,7 +99,7 @@ export async function POST(): Promise<NextResponse> {
   });
 
   if (writeError) {
-    return NextResponse.json({ error: "ICP_WRITE_REJECTED", reason: writeError.message.slice(0, 120) }, { status: 422, headers: privateHeaders });
+    return NextResponse.json({ error: "ICP_WRITE_REJECTED" }, { status: 422, headers: privateHeaders });
   }
 
   const bands = scores.reduce<Record<string, number>>((acc, s) => ({ ...acc, [s.band]: (acc[s.band] ?? 0) + 1 }), {});

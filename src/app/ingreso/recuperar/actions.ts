@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { redirectTo } from "@/lib/auth/navigation";
 import { getRuntimeConfig, hasDedicatedSupabase } from "@/lib/runtime/config";
+import { authAttemptAllowed } from "@/lib/security/auth-throttle";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const recoverySchema = z.object({
@@ -17,6 +18,9 @@ export async function requestPasswordRecovery(formData: FormData) {
   if (!hasDedicatedSupabase(config) || config.demoMode) {
     redirectTo("/ingreso?reason=unavailable");
   }
+
+  // Con demasiados intentos se responde igual que siempre, pero sin mandar correo.
+  if (!(await authAttemptAllowed("recovery", parsed.data.email))) redirectTo("/ingreso/recuperar?status=sent");
 
   const supabase = await createSupabaseServerClient();
   await supabase.auth.resetPasswordForEmail(parsed.data.email, {

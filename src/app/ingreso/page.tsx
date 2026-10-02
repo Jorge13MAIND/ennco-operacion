@@ -15,6 +15,7 @@ const reasonMessages: Record<string, string> = {
   signed_out: "La sesión se cerró correctamente.",
   signout_failed: "No pudimos cerrar la sesión. Vuelve a intentarlo.",
   unavailable: "El acceso seguro todavía no está disponible.",
+  throttled: "Demasiados intentos. Espera 15 minutos y vuelve a intentarlo.",
 };
 
 export default async function SignInPage({ searchParams }: { searchParams: SearchParams }) {
@@ -53,7 +54,7 @@ export default async function SignInPage({ searchParams }: { searchParams: Searc
                 <label htmlFor="password">Contraseña</label>
                 <input autoComplete="current-password" id="password" minLength={12} name="password" required type="password" />
                 <button className="button" type="submit">Entrar de forma segura</button>
-                <Link className="auth-help-link" href={"/ingreso/recuperar" as Route}>Crear o recuperar acceso</Link>
+                <Link className="auth-help-link" href={"/ingreso/recuperar" as Route}>¿Olvidaste tu contraseña?</Link>
               </form>
             ) : (
               <div className="notice">
