@@ -1,22 +1,17 @@
 import { OperationsNav } from "@/components/OperationsNav";
 import { SiteHeader } from "@/components/SiteHeader";
 import { signOut } from "@/app/operacion/actions";
-import { getRuntimeConfig, hasDedicatedSupabase, type RuntimeConfig } from "@/lib/runtime/config";
+import { requireOperationsAccess } from "@/lib/auth/authorization";
+import { getRuntimeConfig } from "@/lib/runtime/config";
 import { SIGN_OUT_CSRF_FIELD, signOutCsrfToken } from "@/lib/security/csrf";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-
-// Sujeto al que se ata el token anti-CSRF del cierre de sesión. Mismo origen
-// que usa la action (claims de la sesión); sin Supabase dedicado no hay sesión.
-async function signOutSubject(config: RuntimeConfig): Promise<string> {
-  if (config.demoMode || !hasDedicatedSupabase(config)) return "anonymous";
-  const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.auth.getClaims();
-  return data?.claims?.sub ?? "anonymous";
-}
 
 export default async function OperationsLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // Sin sesión válida y pertenencia activa no se dibuja nada del hub, ni el menú (2-oct: la
+  // precarga del router mostraba el esqueleto a visitantes anónimos). Cada página lo vuelve a exigir.
+  const access = await requireOperationsAccess();
   const config = getRuntimeConfig();
-  const csrfToken = signOutCsrfToken(await signOutSubject(config), config);
+  // El token anti-CSRF del cierre de sesión se ata al mismo sujeto que usa la action.
+  const csrfToken = signOutCsrfToken(access.userId ?? "anonymous", config);
   return (
     <div className="cr-root" data-cr-skin="atlas">
       <SiteHeader

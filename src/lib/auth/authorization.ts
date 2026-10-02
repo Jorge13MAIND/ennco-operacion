@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { evaluateOperationsAccess, type UserRole } from "@/lib/auth/policy";
 import { redirectTo } from "@/lib/auth/navigation";
 import { getRuntimeConfig, hasDedicatedSupabase } from "@/lib/runtime/config";
@@ -10,7 +11,8 @@ export type OperationsAccessContext = {
   role: UserRole | "synthetic_admin";
 };
 
-export async function requireOperationsAccess(): Promise<OperationsAccessContext> {
+// Memoizada por petición: el layout de /operacion y cada página la llaman, y solo se consulta una vez.
+export const requireOperationsAccess = cache(async function requireOperationsAccess(): Promise<OperationsAccessContext> {
   const config = getRuntimeConfig();
   if (config.demoMode && config.appEnv !== "production") {
     return {
@@ -59,4 +61,4 @@ export async function requireOperationsAccess(): Promise<OperationsAccessContext
     organizationId: decision.organizationId,
     role: decision.role,
   };
-}
+});

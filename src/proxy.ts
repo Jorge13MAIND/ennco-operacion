@@ -17,11 +17,16 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [{
-    source: "/((?!api|_next/static|_next/image|favicon.ico).*)",
-    missing: [
-      { type: "header", key: "next-router-prefetch" },
-      { type: "header", key: "purpose", value: "prefetch" },
-    ],
-  }],
+  matcher: [
+    // /operacion pasa SIEMPRE por el guardia, también las precargas del router: excluirlas
+    // dejaba ver el esqueleto del hub sin sesión (2-oct).
+    "/operacion/:path*",
+    {
+      source: "/((?!api|operacion|_next/static|_next/image|favicon.ico).*)",
+      missing: [
+        { type: "header", key: "next-router-prefetch" },
+        { type: "header", key: "purpose", value: "prefetch" },
+      ],
+    },
+  ],
 };
