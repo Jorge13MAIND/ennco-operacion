@@ -46,41 +46,47 @@ export function commercialText(body: string): string {
   return body.trim();
 }
 export type PositiveSubtype = "POSITIVE_VISIT" | "POSITIVE_ACCEPT";
-// Positivo claro para respuesta automática (Grant, 30-sep): pide visita o acepta la oferta, sin nada
-// que requiera criterio humano. Ante cualquier duda devuelve null y el caso va a revisión.
-export function positiveSubtype(body: string): PositiveSubtype | null {
+// 6-oct (Grant): "prefiero falsos positivos". Toda respuesta humana es positiva salvo que sea
+// claramente negativa (baja, rechazo, "ahora no", persona equivocada o que ya no está, queja,
+// fuera de oficina). Preguntas de precio, alta de proveedor, referidos y respuestas con más gente en
+// copia también reciben el correo simple con copia a Paco: el texto solo agradece y lo presenta.
+const NEGATIVE = {
+  WRONG_PERSON: /\b(no (me encuentro|estoy|vivo|radico) en|vivo en|radico en|persona (equivocada|incorrecta)|ya no (trabajo|laboro|colaboro|pertenezco|estoy|formo parte)|ya no (trabaja|labora|colabora)|deje de (laborar|trabajar)|no longer (with|work|working|employed)|left the company|wrong person|cuenta (deshabilitada|inhabilitada|desactivada)|account (has been )?(disabled|deactivated))\b/,
+  NO_SOY: /\bno soy (la persona|el (encargado|responsable|indicado)|la (encargada|responsable|indicada)|quien ve)\b/,
+  REFERRAL_HINT: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}|\b(contacta a|contactar a|escribe(le)? a|escribele|comunicate con|habla con|te copio|te canalizo|mi colega|mi companero|el encargado es|la encargada es|en copia)\b/,
+  NOT_NOW: /\b(ahorita no|ahora no|por (el )?momento no|por ahora no|de momento no|en este momento no|mas adelante|el proximo ano|el siguiente ano|el ano que entra|en otro momento|no tenemos presupuesto|sin presupuesto|not now|maybe later|next year|not at this time)\b/,
+  REJECTION: /\b(no (me |nos )?interesa|no estamos interesad|no es de nuestro interes|no gracias|no, gracias|no requerimos|no lo requerimos|no necesitamos|no lo necesitamos|no lo necesito|ya (contamos|tenemos|trabajamos) con|ya tenemos (proveedor|quien)|no aplica|no es necesario|not interested|no thank|we are not interested|we already have)\b|^\s*no\s*[.!,]?\s*$/,
+  COMPLAINT: /\b(queja|spam|denuncia|acoso|como obtuvieron mi correo|de donde sacaron mi correo|no autorice|reportare|complaint)\b/,
+  OOO: /\b(fuera de (la )?oficina|estare fuera|estoy de vacaciones|acceso limitado|out of (the )?office|automatic reply|respuesta automatica|i will be back|back in the office)\b/,
+};
+const INTEREST = /\b(me interesa|nos interesa|podemos (hablar|platicar|vernos)|agend\w*|cotiza\w*|llamame|marcame|hablemos|platiquemos|mandame|enviame|me (mandas|envias))\b|[?¿]/;
+const MEETING = /\b(podemos (hablar|platicar|vernos|reunirnos|agendar|ver)|hablemos|platiquemos|llamada|llamame|marcame|te (llamo|marco)|me (llamas|marcas)|reunion|junta|cita|visita|visitarnos|venir|vengan|pasar a|agend\w*|program\w* (la|una) (visita|llamada|reunion)|(los|te) esperamos|manana|lunes|martes|miercoles|jueves|viernes|a las \d|\d{1,2}:\d{2}|\d{1,2} ?(am|pm|hrs?)|mi (celular|telefono|numero|cel)|whatsapp|zoom|teams|meet)\b/;
+export function classifyReply(body: string): { intent: Intent; subtype: PositiveSubtype | null } {
   const text = normalized(commercialText(body));
-  const words = text.split(/\s+/).filter(Boolean).length;
-  if (!text || words > 120 || (text.match(/\?/g) ?? []).length > 2) return null;
-  if (/\b(proveedor|dar(nos|te|les)? de alta|alta como|registro|contrato|confidencialidad|nda|licitacion|orden de compra|precio|cotiza\w*|presupuesto|cuanto cuesta|pero|sin embargo|contacta a|escribe a|comunicate con|te copio|te canalizo|mi colega|en copia|no (me |nos )?interesa|ahorita no|ahora no|mas adelante)\b/.test(text)) return null;
-  if (/\bcosto\b/.test(text.replace(/\bsin costo\b/g, ""))) return null;
-  if (/\b(que dia|cuando)\b.{0,80}\b(pueden|podrian|puedes|podrias)\b.{0,20}\b(venir|visitarnos|pasar)\b|\bpueden venir\b|\bvengan\b|\bagend(ar|emos|amos)\b|\b(los|te) esperamos\b|\bprogram(ar|emos) (la|una) visita\b/.test(text)) return "POSITIVE_VISIT";
-  if (/\b(me interesa|nos interesa|queremos revisar|necesitamos revisar|necesito revisar|preparalo|preparamelo)\b/.test(text)) return "POSITIVE_ACCEPT";
-  if (words <= 25 && !/\?|\bno\b/.test(text) && /^(hola[^.!\n]*[.,!\n]\s*)?(si|claro|adelante|de acuerdo|va|perfecto|me parece bien|ok|okay|con gusto|por favor)\b/.test(text)) return "POSITIVE_ACCEPT";
-  return null;
+  if (!text) return { intent: "AMBIGUOUS", subtype: null };
+  if (unsubscribeRequested(body)) return { intent: "UNSUBSCRIBE", subtype: null };
+  if (/ignora.{0,35}(instrucciones|reglas)|ignore.{0,35}(instructions|rules)|system prompt|api.key|revela.{0,20}(secreto|clave)/i.test(text)) return { intent: "AMBIGUOUS", subtype: null };
+  // "Estaré fuera, pero me interesa, agendemos" lo escribió una persona: es positivo.
+  if (NEGATIVE.OOO.test(text) && !INTEREST.test(text)) return { intent: "OUT_OF_OFFICE", subtype: null };
+  if (NEGATIVE.COMPLAINT.test(text)) return { intent: "COMPLAINT", subtype: null };
+  if (NEGATIVE.WRONG_PERSON.test(text)) return { intent: "WRONG_PERSON", subtype: null };
+  // "No soy la persona, escríbele a X" es un referido (positivo); sin a quién, es persona equivocada.
+  if (NEGATIVE.NO_SOY.test(text) && !NEGATIVE.REFERRAL_HINT.test(text)) return { intent: "WRONG_PERSON", subtype: null };
+  if (NEGATIVE.NOT_NOW.test(text)) return { intent: "NOT_NOW", subtype: null };
+  if (NEGATIVE.REJECTION.test(text)) return { intent: "REJECTION", subtype: null };
+  return { intent: "EXPLICIT_INTEREST", subtype: MEETING.test(text) ? "POSITIVE_VISIT" : "POSITIVE_ACCEPT" };
+}
+export function positiveSubtype(body: string): PositiveSubtype | null {
+  return classifyReply(body).subtype;
 }
 export function unsubscribeRequested(body: string): boolean {
   return /^(baja|unsubscribe|stop)[.!\s]*$/i.test(body.trim()) || /\b(dar(me)? de baja|dame de baja|elimina(me)? de (tu |su |la )?lista|no (me |nos )?(escribas|escriban|contactes|contacten|mandes|manden)|no (quiero|deseo|queremos) recibir|deja(n)? de (escribir|enviar)|remove me|stop (emailing|contacting)|unsubscribe me)\b/i.test(normalized(body));
 }
 export function deterministicProposal(body: string): Proposal {
   const reply = commercialText(body);
-  const text = normalized(reply);
-  const positive = positiveSubtype(body);
-  let intent: Intent = "AMBIGUOUS";
-  if (unsubscribeRequested(body)) intent = "UNSUBSCRIBE";
-  else if (/ignora.{0,35}(instrucciones|reglas)|ignore.{0,35}(instructions|rules)|system prompt|api.key|revela.{0,20}(secreto|clave)/i.test(text)) intent = "AMBIGUOUS";
-  else if (/\b(precio|costo|descuento|cotiza|cotizacion|cuanto cuesta|presupuesto|price|pricing)\b/i.test(text)) intent = "PRICE";
-  else if (/\b(queja|molestia|spam|denuncia|complaint)\b/i.test(text)) intent = "COMPLAINT";
-  else if (/\b(garantia|garantiza|cumplimiento|deducible|ahorro|fecha de entrega|condiciones|nom[- ]?029)\b/i.test(text)) intent = "TECHNICAL_COMMITMENT";
-  else if (/\b(fuera de (la )?oficina|vacaciones|out of office|automatic reply|respuesta automatica)\b/i.test(text)) intent = "OUT_OF_OFFICE";
-  else if (/\b(contacta a|escribe a|comunicate con|te copio|te canalizo|mi colega|en copia a)\b/i.test(text)) intent = "REFERRAL";
-  else if (/\b(no (me encuentro|estoy) en|vivo en|no soy (la persona|el encargado)|persona (equivocada|incorrecta)|wrong person)\b/i.test(text)) intent = "WRONG_PERSON";
-  else if (/\b(ahorita no|ahora no|no.{0,20}(necesitamos|necesito)|mas adelante|not now)\b/i.test(text)) intent = "NOT_NOW";
-  else if (/\b(no (me |nos )?interesa|no gracias|not interested)\b/i.test(text)) intent = "REJECTION";
-  else if (positive || /\b(me interesa|nos interesa|queremos revisar|necesitamos revisar|necesito revisar)\b/i.test(text)) intent = "EXPLICIT_INTEREST";
-  else if (/\b(contexto|mas informacion|que hacen|que servicios|de que se trata|explica(me)?|informacion del servicio)\b/i.test(text)) intent = "CONTEXT";
-  const clearPositive = intent === "EXPLICIT_INTEREST" && positive !== null;
-  return { intent, confidence: clearPositive ? 0.95 : intent === "AMBIGUOUS" ? 0 : 0.8, evidence: [reply.slice(0, 500) || "BODY_MISSING"], fact_ids: intent === "CONTEXT" ? ["services-v1", "report-v1"] : [], draft: templates[intent] ?? "", escalation_reason: clearPositive ? "" : "Revisión humana pendiente" };
+  const { intent, subtype } = classifyReply(body);
+  const clearPositive = intent === "EXPLICIT_INTEREST" && subtype !== null;
+  return { intent, confidence: clearPositive ? 0.95 : intent === "AMBIGUOUS" ? 0 : 0.9, evidence: [reply.slice(0, 500) || "BODY_MISSING"], fact_ids: [], draft: templates[intent] ?? "", escalation_reason: clearPositive ? "" : "Revisión humana pendiente" };
 }
 function email(value: string) { return (/<([^>]+)>/.exec(value)?.[1] ?? value).trim().toLowerCase(); }
 export function evaluateConversation(context: ConversationContext): { gates: string[]; threadHash: string; latestText: string | null; manualReply: boolean } {
@@ -95,8 +101,6 @@ export function evaluateConversation(context: ConversationContext): { gates: str
   const recipients = inbound?.payload.headers.filter(h => ["to", "cc", "delivered-to"].includes(h.name.toLowerCase())).map(h => h.value.toLowerCase()).join(" ") ?? "";
   const recipientAddresses: string[] = recipients.match(/[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9.-]+/g) ?? [];
   if (!recipientAddresses.includes(context.mailboxEmail.toLowerCase())) gates.push("MAILBOX_IDENTITY_UNCERTAIN");
-  const visible = inbound?.payload.headers.filter(h => ["to", "cc"].includes(h.name.toLowerCase())).map(h => h.value.toLowerCase()).join(" ") ?? "";
-  if ((visible.match(/[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9.-]+/g) ?? []).some(a => a !== context.mailboxEmail.toLowerCase() && !/@(ennco\.com\.mx|enncoenergia\.com|enncoindustrial\.com)$/.test(a))) gates.push("EXTRA_RECIPIENTS");
   const latestText = inbound ? extractReplyText(inbound) : null;
   if (!latestText || !context.body) gates.push("BODY_MISSING");
   if (latestText !== context.body) gates.push("BODY_CHANGED");

@@ -146,6 +146,37 @@ describe("direct lane sync", () => {
     expect(applyEvent).not.toHaveBeenCalled();
   });
 
+  it("handles an out-of-thread Outlook automatic reply without sending it to the SDR", async () => {
+    const applyEvent = vi.fn();
+    const recordRecovery = vi.fn();
+    const applyAutoReply = vi.fn(async () => ({ status: "OOO_RESCHEDULED" }));
+    const summary = await runDirectLaneSync(config, {
+      ...baseDeps,
+      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: { last_history_id: "5000" } })], totals: {}, flags: {} }) as never),
+      transport: () => ({
+        getProfile: async () => ({ status: 200, body: { emailAddress: "francisco@enncoindustrial.com", historyId: "5000" } }),
+        listHistory: async () => ({ status: 200, body: { historyId: "5400", history: [{ id: "5080", messagesAdded: [{ message: { id: "m-4", threadId: "t-nuevo" } }] }] } }),
+        getMessageFull: async () => ({ status: 200, body: { payload: { mimeType: "text/plain", body: { data: Buffer.from("I am out of the office. I will be back in the office on October 12th.").toString("base64url") } } } }),
+        getMessage: async () => ({ status: 200, body: {
+          id: "m-4", threadId: "t-nuevo", internalDate: String(Date.UTC(2026, 9, 5, 14)),
+          payload: { mimeType: "text/plain", headers: [
+            { name: "From", value: "Monserrath <m.ordonez@planta.test>" },
+            { name: "Subject", value: "Respuesta automática: Monserrath, sé que ves muchos proveedores" },
+            { name: "Auto-Submitted", value: "auto-replied" },
+          ] },
+        } }),
+      }),
+      applyEvent: applyEvent as never, resolveOutbound: vi.fn(async () => null), recordRecovery, applyAutoReply,
+      updateCursor: vi.fn(async () => ({ status: "ADVANCED" }) as never),
+    });
+    expect(applyAutoReply).toHaveBeenCalledWith(config, expect.objectContaining({
+      kind: "OOO", returnDate: "2026-10-12", relatedOutboundMessageId: null, normalizedFrom: "m.ordonez@planta.test",
+    }));
+    expect(applyEvent).not.toHaveBeenCalled();
+    expect(recordRecovery).not.toHaveBeenCalled();
+    expect(summary.mailboxes[0]?.events).toBe(1);
+  });
+
   it("requires reconciliation without resetting a 404 history cursor", async () => {
     const updateCursor = vi.fn(async () => ({ status: "ADVANCED" }) as never);
     const summary = await runDirectLaneSync(config, {

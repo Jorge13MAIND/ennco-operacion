@@ -253,6 +253,33 @@ export async function resolveDirectLaneOutbound(config: RuntimeConfig, input: {
   return parsed.message_id;
 }
 
+/**
+ * Respuesta automática (fuera de la oficina o ya no trabaja ahí). La base la enlaza por hilo o, si
+ * Outlook la mandó como correo nuevo, por remitente; reprograma o detiene la secuencia (migración 104).
+ * NO_MATCH: no es de un contacto al que este buzón le escribió; el sync la manda a revisión.
+ */
+export async function applyDirectLaneAutoReply(config: RuntimeConfig, input: {
+  mailboxId: string;
+  providerMessageId: string;
+  providerThreadId: string | null;
+  relatedOutboundMessageId: string | null;
+  normalizedFrom: string;
+  subject: string | null;
+  bodyText: string | null;
+  observedAtEpoch: number;
+  kind: "OOO" | "GONE";
+  returnDate: string | null;
+  referrals: string[];
+}): Promise<{ status: string }> {
+  requireConfig(config);
+  const text = JSON.stringify({ kind: input.kind, provider_message_id: input.providerMessageId, provider_thread_id: input.providerThreadId,
+    related_outbound_id: input.relatedOutboundMessageId, from_email: input.normalizedFrom, subject: input.subject, body_text: input.bodyText,
+    observed_at_epoch: input.observedAtEpoch, return_date: input.returnDate, referrals: input.referrals });
+  return z.object({ status: z.string() }).passthrough().parse(await callRpc(config, "apply_direct_lane_auto_reply",
+    [config.organizationId, input.mailboxId, createHash("sha256").update(text).digest("hex")],
+    { target_mailbox_id: input.mailboxId, target_payload: text }));
+}
+
 /** Marca que el mensaje salió con pixel (denominador de la tasa de apertura). */
 export async function markDirectLaneOpenTracked(config: RuntimeConfig, messageId: string): Promise<{ status: string }> {
   requireConfig(config);

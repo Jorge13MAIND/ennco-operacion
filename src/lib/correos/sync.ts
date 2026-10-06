@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-import { recordEmailRecovery, annotateDirectLaneInbound, readDirectLaneCredential, readDirectLaneHealth, resolveDirectLaneOutbound, type DirectLaneMailboxHealth } from "@/lib/correos/client";
+import { applyDirectLaneAutoReply, recordEmailRecovery, annotateDirectLaneInbound, readDirectLaneCredential, readDirectLaneHealth, resolveDirectLaneOutbound, type DirectLaneMailboxHealth } from "@/lib/correos/client";
+import { detectAutoReply } from "@/lib/correos/auto-reply";
 import { openDirectLaneSecret } from "@/lib/correos/vault";
 import { applyDispatchProviderEvent, updateDispatchSyncCursor } from "@/lib/dispatch/client";
 import { getGmailAccessToken } from "@/lib/dispatch/gmail-token";
@@ -67,6 +68,7 @@ type SyncDependencies = {
   annotate?: typeof annotateDirectLaneInbound;
   resolveOutbound?: typeof resolveDirectLaneOutbound;
   recordRecovery?: typeof recordEmailRecovery;
+  applyAutoReply?: typeof applyDirectLaneAutoReply;
 };
 
 export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDependencies = {}): Promise<DirectLaneSyncSummary> {
@@ -79,6 +81,7 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
   const annotate = deps.annotate ?? annotateDirectLaneInbound;
   const resolveOutbound = deps.resolveOutbound ?? resolveDirectLaneOutbound;
   const recordRecovery = deps.recordRecovery ?? recordEmailRecovery;
+  const applyAutoReply = deps.applyAutoReply ?? applyDirectLaneAutoReply;
   const summary: DirectLaneSyncSummary = { mailboxes: [], appliedReplyEvents: 0 };
   if (!config.directLaneVaultKey || !config.googleOauthClientId || !config.googleOauthClientSecret) return summary;
 
@@ -127,29 +130,48 @@ export async function runDirectLaneSync(config: RuntimeConfig, deps: SyncDepende
         if (!relatedOutbound && message.threadId) {
           relatedOutbound = await resolveOutbound(config, { mailboxId: mailbox.mailbox_id, providerThreadId: message.threadId });
         }
-        // Sin enlace por encabezado NI por hilo no es respuesta a algo nuestro.
-        if (!relatedOutbound || kind === "UNKNOWN") {
-          if (!transport.getMessageFull) throw new Error("GMAIL_FULL_MESSAGE_REQUIRED");
-          const full = await transport.getMessageFull(message.id);
-          if (full.status !== 200) throw new Error("GMAIL_FULL_MESSAGE_UNAVAILABLE");
-          await recordRecovery(config, mailbox.mailbox_id, { kind: "UNMATCHED", provider_message_id: message.id,
-            provider_thread_id: message.threadId, from_email: context.normalizedFrom, subject: context.subject, body_text: extractReplyText(full.body) });
-          continue;
-        }
         let bodyText: string | null = null;
-        if (kind === "REPLY" || kind === "AUTO_REPLY" || kind === "HARD_BOUNCE") {
+        if (kind !== "HARD_BOUNCE") {
           if (!transport.getMessageFull) throw new Error("GMAIL_FULL_MESSAGE_REQUIRED");
           const full = await transport.getMessageFull(message.id);
           if (full.status !== 200) throw new Error("GMAIL_FULL_MESSAGE_UNAVAILABLE");
-          if (kind === "HARD_BOUNCE") {
-            const diagnostic = deliveryDiagnostic(full.body);
-            await recordRecovery(config, mailbox.mailbox_id, { kind: "DELIVERY", outbound_id: relatedOutbound,
-              provider_message_id: message.id, provider_thread_id: message.threadId, category: diagnostic.category,
-              smtp_status: diagnostic.status, body_text: diagnostic.text });
-            if (!diagnostic.permanent) continue;
-          }
           bodyText = extractReplyText(full.body);
-          if (!bodyText && kind !== "HARD_BOUNCE") throw new Error("GMAIL_REPLY_BODY_MISSING");
+          // Fuera de la oficina o ya no trabaja ahí: la base reprograma o detiene la secuencia, en el hilo
+          // o fuera de él (Outlook la manda como correo nuevo). No pasa al SDR (6-oct, Grant).
+          const auto = context.normalizedFrom ? detectAutoReply({ subject: context.subject, headers: message.payload.headers, body: bodyText,
+            senderEmail: context.normalizedFrom, receivedAt: new Date(Number(message.internalDate)) }) : null;
+          if (auto && context.normalizedFrom) {
+            const handled = await applyAutoReply(config, { mailboxId: mailbox.mailbox_id, providerMessageId: message.id, providerThreadId: message.threadId,
+              relatedOutboundMessageId: relatedOutbound, normalizedFrom: context.normalizedFrom, subject: context.subject, bodyText,
+              observedAtEpoch: context.internalDateEpoch, kind: auto.kind, returnDate: auto.returnDate, referrals: auto.referrals });
+            if (handled.status === "NO_MATCH") {
+              await recordRecovery(config, mailbox.mailbox_id, { kind: "UNMATCHED", provider_message_id: message.id,
+                provider_thread_id: message.threadId, from_email: context.normalizedFrom, subject: context.subject, body_text: bodyText });
+            } else entry.events += 1;
+            continue;
+          }
+          // Sin enlace por encabezado NI por hilo no es respuesta a algo nuestro.
+          if (!relatedOutbound || kind === "UNKNOWN") {
+            await recordRecovery(config, mailbox.mailbox_id, { kind: "UNMATCHED", provider_message_id: message.id,
+              provider_thread_id: message.threadId, from_email: context.normalizedFrom, subject: context.subject, body_text: bodyText });
+            continue;
+          }
+          if (!bodyText) throw new Error("GMAIL_REPLY_BODY_MISSING");
+        } else {
+          if (!transport.getMessageFull) throw new Error("GMAIL_FULL_MESSAGE_REQUIRED");
+          const full = await transport.getMessageFull(message.id);
+          if (full.status !== 200) throw new Error("GMAIL_FULL_MESSAGE_UNAVAILABLE");
+          if (!relatedOutbound) {
+            await recordRecovery(config, mailbox.mailbox_id, { kind: "UNMATCHED", provider_message_id: message.id,
+              provider_thread_id: message.threadId, from_email: context.normalizedFrom, subject: context.subject, body_text: extractReplyText(full.body) });
+            continue;
+          }
+          const diagnostic = deliveryDiagnostic(full.body);
+          await recordRecovery(config, mailbox.mailbox_id, { kind: "DELIVERY", outbound_id: relatedOutbound,
+            provider_message_id: message.id, provider_thread_id: message.threadId, category: diagnostic.category,
+            smtp_status: diagnostic.status, body_text: diagnostic.text });
+          if (!diagnostic.permanent) continue;
+          bodyText = extractReplyText(full.body);
         }
         const applied = await applyEvent(config, {
           mailboxId: mailbox.mailbox_id,
