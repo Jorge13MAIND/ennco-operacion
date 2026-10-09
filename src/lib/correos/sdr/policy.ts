@@ -53,7 +53,7 @@ export type PositiveSubtype = "POSITIVE_VISIT" | "POSITIVE_ACCEPT";
 const NEGATIVE = {
   WRONG_PERSON: /\b(no (me encuentro|estoy|vivo|radico) en|vivo en|radico en|persona (equivocada|incorrecta)|ya no (trabajo|laboro|colaboro|pertenezco|estoy|formo parte)|ya no (trabaja|labora|colabora)|deje de (laborar|trabajar)|no longer (with|work|working|employed)|left the company|wrong person|cuenta (deshabilitada|inhabilitada|desactivada)|account (has been )?(disabled|deactivated))\b/,
   NO_SOY: /\bno soy (la persona|el (encargado|responsable|indicado)|la (encargada|responsable|indicada)|quien ve)\b/,
-  REFERRAL_HINT: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}|\b(contacta a|contactar a|escribe(le)? a|escribele|comunicate con|habla con|te copio|te canalizo|mi colega|mi companero|el encargado es|la encargada es|en copia)\b/,
+  REFERRAL_HINT: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}|\b(contacta a|contactar a|escribe(le)? a|escribele|comunicate con|habla con|te copio|te canalizo|mi colega|mi companero|el encargado es|la encargada es|en copia|te paso (el|su) (contacto|correo)|te comparto (el|su) (contacto|correo)|la persona que (lo|los|la|las) (lleva|ve|atiende|maneja))\b/,
   NOT_NOW: /\b(ahorita no|ahora no|por (el )?momento no|por ahora no|de momento no|en este momento no|mas adelante|el proximo ano|el siguiente ano|el ano que entra|en otro momento|no tenemos presupuesto|sin presupuesto|not now|maybe later|next year|not at this time)\b/,
   REJECTION: /\b(no (me |nos )?interesa|no estamos interesad|no es de nuestro interes|no gracias|no, gracias|no requerimos|no lo requerimos|no necesitamos|no lo necesitamos|no lo necesito|ya (contamos|tenemos|trabajamos) con|ya tenemos (proveedor|quien)|no aplica|no es necesario|not interested|no thank|we are not interested|we already have)\b|^\s*no\s*[.!,]?\s*$/,
   COMPLAINT: /\b(queja|spam|denuncia|acoso|como obtuvieron mi correo|de donde sacaron mi correo|no autorice|reportare|complaint)\b/,
@@ -69,8 +69,9 @@ export function classifyReply(body: string): { intent: Intent; subtype: Positive
   // "Estaré fuera, pero me interesa, agendemos" lo escribió una persona: es positivo.
   if (NEGATIVE.OOO.test(text) && !INTEREST.test(text)) return { intent: "OUT_OF_OFFICE", subtype: null };
   if (NEGATIVE.COMPLAINT.test(text)) return { intent: "COMPLAINT", subtype: null };
-  if (NEGATIVE.WRONG_PERSON.test(text)) return { intent: "WRONG_PERSON", subtype: null };
-  // "No soy la persona, escríbele a X" es un referido (positivo); sin a quién, es persona equivocada.
+  // "Ya no veo esos temas, te paso el contacto de X" o "No soy la persona, escríbele a X" es un
+  // referido (positivo, Grant 6-oct); sin a quién, es persona equivocada. VW, 8-oct, se clasificó mal.
+  if (NEGATIVE.WRONG_PERSON.test(text) && !NEGATIVE.REFERRAL_HINT.test(text)) return { intent: "WRONG_PERSON", subtype: null };
   if (NEGATIVE.NO_SOY.test(text) && !NEGATIVE.REFERRAL_HINT.test(text)) return { intent: "WRONG_PERSON", subtype: null };
   if (NEGATIVE.NOT_NOW.test(text)) return { intent: "NOT_NOW", subtype: null };
   if (NEGATIVE.REJECTION.test(text)) return { intent: "REJECTION", subtype: null };

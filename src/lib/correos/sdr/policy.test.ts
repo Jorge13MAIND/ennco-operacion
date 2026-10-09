@@ -82,6 +82,7 @@ describe("SDR positivos: todo lo no negativo (Grant, 6-oct)", () => {
     ["Sí, pero ¿cuánto cuesta?", "POSITIVE_ACCEPT"], ["Sí me interesa, ¿nos mandas la cotización?", "POSITIVE_ACCEPT"],
     ["¿Qué día pueden venir? Necesito saber el precio antes", "POSITIVE_VISIT"], ["Me interesa, contacta a mi colega Juan", "POSITIVE_ACCEPT"],
     ["No soy la persona, escríbele a juan.perez@cliente.mx", "POSITIVE_ACCEPT"], ["Buen día", "POSITIVE_ACCEPT"],
+    ["Hola Paco.\n\nYa no estoy viendo esos temas pero te paso el contacto de la persona que los lleva\njanet.serrano@vw.com.mx\n\nSaludos.", "POSITIVE_ACCEPT"],
     ["Mándame más información", "POSITIVE_ACCEPT"], ["Llámame al 442 467 9790", "POSITIVE_VISIT"],
     ["Estaré fuera la próxima semana pero me interesa, agendemos para el 20", "POSITIVE_VISIT"],
     ["Estoy fuera de la oficina hasta el jueves, ¿me mandas la información?", "POSITIVE_VISIT"],

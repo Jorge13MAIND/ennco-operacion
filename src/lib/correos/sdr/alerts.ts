@@ -2,10 +2,12 @@ import { z } from "zod";
 import type { RuntimeConfig } from "@/lib/runtime/config";
 import { sdrCommand } from "@/lib/correos/sdr/client";
 import { sendSdrAlertEmail } from "@/lib/correos/sdr/alert-email";
+import { caseContextSchema } from "@/lib/correos/sdr/case-context";
 
 const alertSchema = z.object({ case_id: z.uuid(), stage: z.enum(["PRIMARY", "BACKUP", "NO_BACKUP", "OVERDUE"]),
   pending_minutes: z.number().int().nonnegative(), backup_configured: z.boolean(),
-  owner_email: z.string().nullable(), backup_email: z.string().nullable() });
+  owner_email: z.string().nullable(), backup_email: z.string().nullable(),
+  cc_emails: z.array(z.string()).optional(), context: caseContextSchema.nullable().optional() });
 const workSchema = z.object({ status: z.literal("ALERT_WORK"), alerts: z.array(alertSchema).max(10),
   oldest_pending_minutes: z.number().int().nonnegative() });
 

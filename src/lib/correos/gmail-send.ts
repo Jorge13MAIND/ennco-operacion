@@ -30,7 +30,8 @@ export const directLaneSendInputSchema = z.object({
   cc_emails: z.array(emailSchema).max(5).default([]),
   subject: safeHeaderSchema,
   body_text: z.string().trim().min(1).max(20_000),
-  kind: z.enum(["TOUCH", "REPLY"]),
+  // INTERNAL: aviso al equipo de ENNCO (no a un prospecto); sin el tope de 120 palabras de un toque.
+  kind: z.enum(["TOUCH", "REPLY", "INTERNAL"]),
   touch_number: z.number().int().min(1).max(8).nullable(),
   thread: z.object({
     provider_thread_id: z.string().trim().min(1).max(256),
@@ -56,6 +57,9 @@ export const directLaneSendInputSchema = z.object({
     if (value.touch_number !== null && value.touch_number > 1 && !value.thread) {
       context.addIssue({ code: "custom", message: "DIRECT_LANE_FOLLOW_UP_THREAD_REQUIRED" });
     }
+  }
+  if (value.kind === "INTERNAL" && (value.thread || value.touch_number !== null)) {
+    context.addIssue({ code: "custom", message: "DIRECT_LANE_INTERNAL_SHAPE_INVALID" });
   }
   if (value.kind === "REPLY" && !value.thread) {
     context.addIssue({ code: "custom", message: "DIRECT_LANE_REPLY_THREAD_REQUIRED" });
