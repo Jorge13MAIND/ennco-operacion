@@ -177,6 +177,49 @@ describe("direct lane sync", () => {
     expect(summary.mailboxes[0]?.events).toBe(1);
   });
 
+  it("un correo que la base rechaza va a revisión y no traba el buzón (fcuellar@, 7-oct)", async () => {
+    const applyEvent = vi.fn(async () => { throw new Error("DISPATCH_RPC_APPLY_DISPATCH_PROVIDER_EVENT_FAILED:PROVIDER_EVENT_MESSAGE_INVALID"); });
+    const recordRecovery = vi.fn(async () => ({ status: "FAILED_REVIEW_REQUIRED" }));
+    const updateCursor = vi.fn(async () => ({ status: "ADVANCED" }) as never);
+    const summary = await runDirectLaneSync(config, {
+      ...baseDeps,
+      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: { last_history_id: "5000" } })], totals: {}, flags: {} }) as never),
+      transport: () => ({
+        getProfile: async () => ({ status: 200, body: { emailAddress: "francisco@enncoindustrial.com", historyId: "5000" } }),
+        listHistory: async () => ({ status: 200, body: { historyId: "5500", history: [{ id: "5090", messagesAdded: [{ message: { id: "m-5", threadId: "t-5" } }] }] } }),
+        getMessageFull: async () => ({ status: 200, body: { payload: { mimeType: "text/plain", body: { data: Buffer.from("Le paso tu correo a mi jefe").toString("base64url") } } } }),
+        getMessage: async () => ({ status: 200, body: { id: "m-5", threadId: "t-5", internalDate: "1756900000000",
+          payload: { mimeType: "text/plain", headers: [{ name: "From", value: "Colega <colega@planta.test>" }, { name: "Subject", value: "RE: Juan, pregunta rápida" },
+            { name: "In-Reply-To", value: "<msg-41000000-0000-4000-8000-000000000303@enncoindustrial.com>" }] } } }),
+      }),
+      applyEvent: applyEvent as never, recordRecovery, updateCursor,
+    });
+    expect(recordRecovery).toHaveBeenCalledWith(config, expect.any(String), expect.objectContaining({ kind: "FAILED", provider_message_id: "m-5",
+      from_email: "colega@planta.test", body_text: "Le paso tu correo a mi jefe", error: expect.stringContaining("PROVIDER_EVENT_MESSAGE_INVALID") }));
+    expect(updateCursor).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ historyId: "5500" }));
+    expect(summary.mailboxes[0]).toMatchObject({ result: "OK", failedMessages: 1 });
+  });
+
+  it("un fallo de Gmail detiene el buzón, se reintenta y queda guardado en la base", async () => {
+    const recordSyncError = vi.fn(async () => ({ status: "RECORDED" }));
+    const updateCursor = vi.fn();
+    const summary = await runDirectLaneSync(config, {
+      ...baseDeps,
+      readHealth: vi.fn(async () => ({ mailboxes: [mailbox({ sync: { last_history_id: "5000" } })], totals: {}, flags: {} }) as never),
+      transport: () => ({
+        getProfile: async () => ({ status: 200, body: {} }),
+        listHistory: async () => ({ status: 200, body: { historyId: "5600", history: [{ id: "5091", messagesAdded: [{ message: { id: "m-6", threadId: "t-6" } }] }] } }),
+        getMessageFull: async () => ({ status: 500, body: null }),
+        getMessage: async () => ({ status: 200, body: { id: "m-6", threadId: "t-6", internalDate: "1756900000000",
+          payload: { mimeType: "text/plain", headers: [{ name: "From", value: "a@planta.test" }, { name: "In-Reply-To", value: "<x@planta.test>" }] } } }),
+      }),
+      resolveOutbound: vi.fn(async () => "41000000-0000-4000-8000-000000000304"), recordSyncError, updateCursor: updateCursor as never,
+    });
+    expect(summary.mailboxes[0]).toMatchObject({ result: "SYNC_FAILED", detail: "GMAIL_FULL_MESSAGE_UNAVAILABLE" });
+    expect(recordSyncError).toHaveBeenCalledWith(config, "41000000-0000-4000-8000-000000000201", "GMAIL_FULL_MESSAGE_UNAVAILABLE", "GMAIL_FULL_MESSAGE_UNAVAILABLE");
+    expect(updateCursor).not.toHaveBeenCalled();
+  });
+
   it("requires reconciliation without resetting a 404 history cursor", async () => {
     const updateCursor = vi.fn(async () => ({ status: "ADVANCED" }) as never);
     const summary = await runDirectLaneSync(config, {

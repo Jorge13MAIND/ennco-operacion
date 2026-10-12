@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
+import { rpcErrorCode } from "@/lib/dispatch/rpc-error";
 
 import { createDispatchProof, dispatchPayloads } from "@/lib/dispatch/proof";
 import { hasDedicatedSupabase, type RuntimeConfig } from "@/lib/runtime/config";
@@ -75,7 +76,7 @@ async function callRpc(config: RuntimeConfig, rpcName: string, payloadParts: rea
     ...args,
     ...proof,
   });
-  if (error) throw new DispatchClientError(`DISPATCH_RPC_${rpcName.toUpperCase()}_FAILED`);
+  if (error) throw new DispatchClientError(`DISPATCH_RPC_${rpcName.toUpperCase()}_FAILED:${rpcErrorCode(error)}`);
   return data;
 }
 

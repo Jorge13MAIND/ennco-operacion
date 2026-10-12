@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { rpcErrorCode } from "@/lib/dispatch/rpc-error";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 
@@ -132,7 +133,7 @@ async function callRpc(config: RuntimeConfig, rpcName: string, payloadParts: rea
     auth: { autoRefreshToken: false, detectSessionInUrl: false, persistSession: false },
   });
   const { data, error } = await client.rpc(rpcName, { target_organization_id: config.organizationId, ...args, ...proof });
-  if (error) throw new DirectLaneClientError(`DIRECT_LANE_RPC_${rpcName.toUpperCase()}_FAILED`);
+  if (error) throw new DirectLaneClientError(`DIRECT_LANE_RPC_${rpcName.toUpperCase()}_FAILED:${rpcErrorCode(error)}`);
   return data;
 }
 
@@ -278,6 +279,13 @@ export async function applyDirectLaneAutoReply(config: RuntimeConfig, input: {
   return z.object({ status: z.string() }).passthrough().parse(await callRpc(config, "apply_direct_lane_auto_reply",
     [config.organizationId, input.mailboxId, createHash("sha256").update(text).digest("hex")],
     { target_mailbox_id: input.mailboxId, target_payload: text }));
+}
+
+/** Guarda en la base por qué falló el sync de un buzón (migración 107). */
+export async function recordDirectLaneSyncError(config: RuntimeConfig, mailboxId: string, errorCode: string, detail: string) {
+  requireConfig(config);
+  return callRpc(config, "record_direct_lane_sync_error", [config.organizationId, mailboxId, errorCode, detail],
+    { target_mailbox_id: mailboxId, target_error_code: errorCode, target_detail: detail });
 }
 
 /** Marca que el mensaje salió con pixel (denominador de la tasa de apertura). */
