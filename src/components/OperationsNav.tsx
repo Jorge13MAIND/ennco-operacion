@@ -20,6 +20,7 @@ const moduleLabels: Record<OperationModuleKey, string> = {
 type NavKey =
   | "home"
   | "correos"
+  | "crm"
   | "estadisticas"
   | "actividad"
   | "inteligencia"
@@ -49,6 +50,7 @@ const groups: Array<{
     label: "Comercial",
     items: [
       { key: "correos", href: "/operacion/correos" },
+      { key: "crm", href: "/operacion/crm" },
       { key: "estadisticas", href: "/operacion/correos/estadisticas" },
       { key: "actividad", href: "/operacion/correos/actividad" },
       { key: "respuestas", href: "/operacion/respuestas" },
@@ -80,6 +82,7 @@ function NavIcon({ id }: { id: NavKey }) {
     cadencia: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M8 3v4M16 3v4M3 10h18" /><path d="M12 13v3l2 1.5" /></>,
     infraestructura: <><rect x="3" y="4" width="18" height="6" rx="1.5" /><rect x="3" y="14" width="18" height="6" rx="1.5" /><path d="M7 7h.01M7 17h.01" /></>,
     correos: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
+    crm: <><rect x="3" y="4" width="5" height="16" rx="1.5" /><rect x="10" y="4" width="5" height="11" rx="1.5" /><rect x="17" y="4" width="4" height="7" rx="1.5" /></>,
     estadisticas: <><path d="M4 20V10M10 20V4M16 20v-8M22 20H2" /></>,
     actividad: <><path d="M3 12h4l3-7 4 14 3-7h4" /></>,
     respuestas: <><path d="M9 14 4 9l5-5" /><path d="M4 9h9a7 7 0 0 1 7 7v4" /></>,
@@ -99,6 +102,7 @@ function NavIcon({ id }: { id: NavKey }) {
 function itemLabel(key: NavKey): string {
   if (key === "home") return "Hoy";
   if (key === "correos") return "Correos";
+  if (key === "crm") return "CRM";
   if (key === "estadisticas") return "Estadísticas";
   if (key === "actividad") return "Actividad";
   if (key === "inteligencia") return "Inteligencia";

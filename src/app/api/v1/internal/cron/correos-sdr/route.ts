@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { runEmailSdr } from "@/lib/correos/sdr/runner";
 import { runSdrAlerts } from "@/lib/correos/sdr/alerts";
 import { runPositiveTelegram } from "@/lib/correos/sdr/telegram";
+import { runCrmReminders } from "@/lib/crm/reminders";
 import { authorizeCronRequest } from "@/lib/dispatch/cron-auth";
 import { getRuntimeConfig } from "@/lib/runtime/config";
 export const runtime = "nodejs";
@@ -14,6 +15,7 @@ export async function GET(request: Request) {
   let work: unknown;
   let alerts: unknown;
   let telegram: unknown;
+  let reminders: unknown;
   try { work = await runEmailSdr(config); }
   catch { work = { state: "ERROR", reason: "SDR_WORKER_FAILED" }; }
   try { alerts = await runSdrAlerts(config); }
@@ -21,6 +23,8 @@ export async function GET(request: Request) {
   // Telegram es un canal extra: si falla, no marca la vuelta del SDR como caída.
   try { telegram = await runPositiveTelegram(config); }
   catch { telegram = { state: "ERROR", reason: "SDR_TELEGRAM_FAILED" }; }
+  try { reminders = await runCrmReminders(config); }
+  catch { reminders = { state: "ERROR", reason: "CRM_REMINDERS_FAILED" }; }
   const failed = (work as { state: string }).state === "ERROR" || ["ERROR", "DEGRADED"].includes((alerts as { state: string }).state);
-  return NextResponse.json({ work, alerts, telegram }, { status: failed ? 503 : 200, headers });
+  return NextResponse.json({ work, alerts, telegram, reminders }, { status: failed ? 503 : 200, headers });
 }
