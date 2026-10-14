@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { commercialText, deterministicProposal, evaluateConversation, evaluateProposal, positiveSubtype, unsubscribeRequested, type ConversationContext } from "@/lib/correos/sdr/policy";
+import { commercialText, deterministicProposal, evaluateConversation, evaluateProposal, positiveSubtype, stopsContact, unsubscribeRequested, type ConversationContext } from "@/lib/correos/sdr/policy";
 
 const inbound = (body: string) => ({ id: "reply", threadId: "thread", internalDate: "1000", labelIds: ["INBOX"], payload: { mimeType: "text/plain", body: { data: Buffer.from(body).toString("base64url") }, headers: [{ name: "From", value: "Buyer <buyer@example.test>" }, { name: "To", value: "sender@example.test" }] } });
 const ctx = (body = "Necesito contexto") => ({ body, providerMessageId: "reply", providerThreadId: "thread", mailboxEmail: "sender@example.test", contactEmail: "buyer@example.test", ownerId: "owner", suppressed: false, thread: { id: "thread", messages: [inbound(body)] }, ownSdrMessageIds: [], now: 2000, capturedAt: 2000 }) satisfies ConversationContext;
@@ -94,5 +94,33 @@ describe("SDR positivos: todo lo no negativo (Grant, 6-oct)", () => {
     const c = ctx("Sí, por favor");
     c.thread.messages[0]!.payload.headers.push({ name: "Cc", value: "jefe@example.test" });
     expect(evaluateConversation(c).gates).toEqual([]);
+  });
+});
+
+describe("bajas y rechazos firmes (Grant, 14-oct)", () => {
+  const aviso = "\n\nEl mié, 14 oct 2026 a la(s) 9:14 a.m., Francisco Cuellar (\nfrancisco@enncoenergia.com) escribió:\n\n--\n\nEste\ncorreo electrónico puede contener información confidencial y\nrestringida que\nestá destinada únicamente para el uso exclusivo del\nindividuo o entidad al que\nvan dirigidos. Si ha\nrecibido este mensaje de correo\nelectrónico por error, debe notificar al\nremitente por esta misma vía.";
+  it.each([
+    "baja" + aviso,
+    "Como? si te mencione que dieran de baja mi cuenta" + aviso,
+    "Buenas tardes,\n\nFavor de darme de baja de su lista de distribución.",
+    "Quítenme de su lista por favor", "No me vuelvan a escribir", "Ya no me envíen correos", "Please remove me from your list",
+    "Baja.", "BAJA por favor",
+  ])("es baja: %s", (body) => {
+    expect(unsubscribeRequested(body)).toBe(true);
+    expect(deterministicProposal(body).intent).toBe("UNSUBSCRIBE");
+    expect(stopsContact(body)).toBe(true);
+    expect(positiveSubtype(body)).toBeNull();
+  });
+  it("un rechazo firme también deja de escribirle; un 'ahora no' no", () => {
+    expect(stopsContact("No me interesa, gracias")).toBe(true);
+    expect(stopsContact("Ya contamos con proveedor")).toBe(true);
+    expect(stopsContact("Gracias por tu información, pero ahorita no lo necesitamos")).toBe(false);
+  });
+  it("no confunde usos técnicos ni avisos legales con una baja", () => {
+    expect(unsubscribeRequested("Necesitamos revisar la subestación de baja tensión de la planta, ¿cuándo pueden venir?")).toBe(false);
+    expect(positiveSubtype("Necesitamos revisar la subestación de baja tensión de la planta, ¿cuándo pueden venir?")).toBe("POSITIVE_VISIT");
+    const natural = "¿Qué día pueden venir a nuestras instalaciones?\n\nSaludos\n\nAVISO DE PRIVACIDAD\nPara dejar de recibir nuestra correspondencia solo responda éste correo con el asunto Quitarme.";
+    expect(unsubscribeRequested(natural)).toBe(false);
+    expect(stopsContact(natural)).toBe(false);
   });
 });

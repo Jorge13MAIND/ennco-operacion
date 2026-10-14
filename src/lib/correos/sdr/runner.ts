@@ -5,7 +5,7 @@ import { getGmailAccessToken } from "@/lib/dispatch/gmail-token";
 import { extractReplyText } from "@/lib/gmail/body";
 import type { RuntimeConfig } from "@/lib/runtime/config";
 import { sdrCommand, sdrEnvironment, workSchema, type SdrWorkItem } from "@/lib/correos/sdr/client";
-import { POLICY_VERSION, deterministicProposal, evaluateConversation, evaluateProposal, positiveSubtype, proposalSchema, threadSchema, unsubscribeRequested } from "@/lib/correos/sdr/policy";
+import { POLICY_VERSION, deterministicProposal, evaluateConversation, evaluateProposal, positiveSubtype, proposalSchema, stopsContact, threadSchema, unsubscribeRequested } from "@/lib/correos/sdr/policy";
 import { proposeWithModel } from "@/lib/correos/sdr/model";
 
 export async function readSdrThread(token: string, threadId: string) {
@@ -63,10 +63,12 @@ export async function runEmailSdr(config: RuntimeConfig) {
         mailboxEmail: item.mailbox_email, contactEmail: item.contact_email, ownerId: item.owner_id, suppressed: item.suppressed,
         thread, ownSdrMessageIds: item.own_sdr_message_ids, now: Date.now(), capturedAt });
       const identityUncertain = context.gates.some(g => ["THREAD_IDENTITY_MISMATCH", "SENDER_IDENTITY_UNCERTAIN", "MAILBOX_IDENTITY_UNCERTAIN", "BODY_MISSING", "BODY_CHANGED"].includes(g));
-      if (unsubscribeRequested(body) && !identityUncertain) {
+      // 14-oct (Grant): una baja o un rechazo firme deja de escribirle para siempre a esa persona: se
+      // suprime su correo, se cierran sus secuencias y no recibe respuesta automática.
+      if (stopsContact(body) && !identityUncertain) {
         await applyDispatchProviderEvent(config, { mailboxId: item.mailbox_id, externalEventId: "sdr-unsubscribe:" + item.provider_message_id,
           providerMessageId: item.provider_message_id, relatedOutboundMessageId: item.related_outbound_id, eventKind: "UNSUBSCRIBE",
-          normalizedFrom: item.contact_email, subject: "Baja solicitada por email", bodyText: body, observedAtEpoch: Math.floor(Number(incoming!.internalDate) / 1000) });
+          normalizedFrom: item.contact_email, subject: unsubscribeRequested(body) ? "Baja solicitada por email" : "Rechazo por email: no volver a escribir", bodyText: body, observedAtEpoch: Math.floor(Number(incoming!.internalDate) / 1000) });
         await sdrCommand(config, { op: "SUPPRESSED", case_id: item.case_id });
         results.push({ case_id: item.case_id, state: "SUPPRESSED" }); continue;
       }

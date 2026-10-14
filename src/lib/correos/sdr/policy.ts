@@ -72,8 +72,36 @@ export function classifyReply(body: string): { intent: Intent; subtype: Positive
 export function positiveSubtype(body: string): PositiveSubtype | null {
   return classifyReply(body).subtype;
 }
+// 14-oct (Grant): Byanet (Envases) contestó "baja" arriba del texto citado y del aviso legal, y
+// "si te mencioné que dieran de baja mi cuenta"; ninguna se reconoció y recibió dos respuestas
+// automáticas. Ahora se busca en lo que la persona escribió (sin firma, aviso ni cita), en sentido amplio.
+const UNSUBSCRIBE_PHRASES = new RegExp([
+  "\\b(dar|darme|darnos|den|denme|dennos|dieran|diera|de|des|das|dan|dar de)\\s+de\\s+baja\\b",
+  "\\bde baja (mi|el|este|nuestro|su) (correo|cuenta|contacto|direccion|mail|email)",
+  "\\bbaja (de|en) (su|la|sus|tu|tus|esta|esa) (lista|listas|base|bases|correos|distribucion|envios)",
+  "\\b(quit|saqu|elimin|remuev|borr|retir)\\w* de (su|la|sus|tu|tus|esta|esa) (lista|listas|base|bases|correos|distribucion|envios|mailing)",
+  "\\b(quitenme|saquenme|eliminenme|borrenme|remuevanme|quiteme|saqueme|elimineme)\\b",
+  "\\b(no|ya no) (me|nos) (escriba|escriban|escribas|envie|envien|envies|mande|manden|mandes|contacte|contacten|contactes|busquen)\\b",
+  "\\bno (me |nos )?(vuelvan|vuelvas|vuelva) a (escribir|escribirme|escribirnos|enviar|mandar|contactar)",
+  "\\bdej(en|a|e) de (escribir|escribirme|enviar|enviarme|mandar|contactar)",
+  "\\bno (quiero|deseo|queremos|deseamos) (recibir|seguir recibiendo|mas correos|que me (escriban|envien|contacten))",
+  "\\bunsubscribe\\b", "\\bremove me\\b", "\\btake me off\\b", "\\bstop (emailing|sending|contacting)\\b",
+  "\\bdo not (contact|email|e-mail) (me|us)\\b", "\\bopt[- ]?out\\b",
+].join("|"));
 export function unsubscribeRequested(body: string): boolean {
-  return /^(baja|unsubscribe|stop)[.!\s]*$/i.test(body.trim()) || /\b(dar(me)? de baja|dame de baja|elimina(me)? de (tu |su |la )?lista|no (me |nos )?(escribas|escriban|contactes|contacten|mandes|manden)|no (quiero|deseo|queremos) recibir|deja(n)? de (escribir|enviar)|remove me|stop (emailing|contacting)|unsubscribe me)\b/i.test(normalized(body));
+  if (/^(baja|unsubscribe|stop)[.!\s]*$/i.test(body.trim())) return true;
+  if (/\b(dar(me)? de baja|dame de baja|elimina(me)? de (tu |su |la )?lista|no (me |nos )?(escribas|escriban|contactes|contacten|mandes|manden)|no (quiero|deseo|queremos) recibir|deja(n)? de (escribir|enviar)|remove me|stop (emailing|contacting)|unsubscribe me)\b/i.test(normalized(body))) return true;
+  const text = normalized(commercialText(body));
+  if (!text) return false;
+  // "baja" al principio o al final de una respuesta corta que no es pregunta ("Baja", "BAJA por
+  // favor", "Favor de baja"); no "¿Cómo baja el costo?" ni "baja tensión".
+  const words = text.replace(/[^a-z0-9ñ\s]/g, " ").split(/\s+/).filter(Boolean);
+  if (words.length <= 8 && !/[?¿]/.test(text) && (words[0] === "baja" || words.at(-1) === "baja") && !/baja (tension|voltaje)|media y baja/.test(text)) return true;
+  return UNSUBSCRIBE_PHRASES.test(text);
+}
+/** Baja o rechazo firme: se deja de escribir para siempre a esa persona (Grant, 14-oct). */
+export function stopsContact(body: string): boolean {
+  return unsubscribeRequested(body) || ["REJECTION", "COMPLAINT"].includes(classifyReply(body).intent);
 }
 export function deterministicProposal(body: string): Proposal {
   const reply = commercialText(body);
