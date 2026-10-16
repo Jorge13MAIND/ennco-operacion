@@ -14,8 +14,8 @@ export default async function CrmPage() {
       <header className="operations-page-heading">
         <div>
           <p className="eyebrow">Control Room · CRM</p>
-          <h1>Los contactos que <span className="cr-accent-text">respondieron</span>.</h1>
-          <p>Cada respuesta humana a los correos entra sola, con su empresa, lo que escribió y el responsable. Para pasar a Calificado se marcan las condiciones del informe de Paco y una siguiente acción con fecha. Los negativos quedan en Descartados con su motivo.</p>
+          <h1>Los prospectos, del correo y del <span className="cr-accent-text">directorio</span>.</h1>
+          <p>Cada respuesta humana a los correos entra sola, con su empresa, lo que escribió y el responsable. Las empresas del directorio esperan en Por contactar hasta que se consigue a la persona. Para pasar a Calificado se marcan las condiciones del informe de Paco y una siguiente acción con fecha. Los negativos quedan en Descartados con su motivo.</p>
         </div>
         {screen.evidenceClass === "live" ? null : <span className="badge">{operationalLabel(screen.evidenceClass)}</span>}
       </header>

@@ -62,7 +62,7 @@ function syntheticBoard(): CrmBoardData {
       first_reply_at: row.body ? iso(row.hours) : null, last_reply_at: row.body ? iso(row.hours) : null, created_at: iso(row.hours), updated_at: iso(row.hours),
       next_action: "next" in row ? row.next : null, next_action_at: "nextAt" in row ? iso(row.nextAt) : null,
       value_mxn: "value" in row ? row.value : null, close_reason: "reason" in row ? row.reason : null,
-      qualification: row.stage === "RESPONDIO" || row.stage === "DESCARTADO" ? {} : { mercado: true, contacto: true, necesidad: true, avance: true },
+      qualification: row.stage === "RESPONDIO" || row.stage === "DESCARTADO" || row.stage === "POR_CONTACTAR" ? {} : { mercado: true, contacto: true, necesidad: true, avance: true },
     })),
     users: [{ id: SYNTHETIC_USER, email: "oscar.ojeda@ennco.com.mx", role: "ennco_admin" }],
     default_owner_user_id: SYNTHETIC_USER,
