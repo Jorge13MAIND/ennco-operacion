@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "rea
 
 import { isoToLocal, localToIso, sendCrmCommand } from "@/components/crm/crm-client";
 import {
-  QUALIFICATION_KEYS, QUALIFICATION_LABELS, SERVICES, SERVICE_LABELS, STAGE_LABELS, personName, stageRequirements,
+  QUALIFICATION_KEYS, QUALIFICATION_LABELS, SERVICES, SERVICE_LABELS, STAGE_LABELS, displayName, personName, stageRequirements,
   type CrmRecord, type CrmService, type CrmStage, type CrmUser, type QualificationKey,
 } from "@/lib/crm/model";
 
@@ -64,7 +64,7 @@ export function MoveDialog({ record, stage, users, onClose, onDone }: {
   return (
     <Modal open title={`Mover a ${STAGE_LABELS[stage]}`} onClose={onClose}>
       <form className="crm-form" onSubmit={submit}>
-        <p className="crm-dialog-lead"><strong>{record.full_name}</strong>{record.company_name ? ` · ${record.company_name}` : ""}</p>
+        <p className="crm-dialog-lead"><strong>{displayName(record)}</strong>{record.full_name && record.company_name ? ` · ${record.company_name}` : ""}</p>
         {missing.includes("calificacion") ? (
           <fieldset className="crm-fieldset">
             <legend>Condiciones de calificación (informe de Paco)</legend>

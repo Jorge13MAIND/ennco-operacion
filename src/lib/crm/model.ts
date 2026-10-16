@@ -5,15 +5,16 @@ import { z } from "zod";
  * "Descartado" para los negativos. La base (migración 109) es la que manda: aquí solo se espejean las
  * reglas para guiar a quien mueve una tarjeta antes de que la base la rechace.
  */
-export const CRM_STAGES = ["RESPONDIO", "CALIFICADO", "LLAMADA_VISITA", "LEVANTAMIENTO", "PROPUESTA", "NEGOCIACION", "GANADO", "PERDIDO", "DESCARTADO"] as const;
+export const CRM_STAGES = ["POR_CONTACTAR", "RESPONDIO", "CALIFICADO", "LLAMADA_VISITA", "LEVANTAMIENTO", "PROPUESTA", "NEGOCIACION", "GANADO", "PERDIDO", "DESCARTADO"] as const;
 export type CrmStage = typeof CRM_STAGES[number];
 
 /** Columnas del tablero: todo menos Descartado, que vive en su propia vista. */
 export const BOARD_STAGES: readonly CrmStage[] = CRM_STAGES.filter((s) => s !== "DESCARTADO");
-export const OPEN_STAGES: readonly CrmStage[] = ["RESPONDIO", "CALIFICADO", "LLAMADA_VISITA", "LEVANTAMIENTO", "PROPUESTA", "NEGOCIACION"];
+export const OPEN_STAGES: readonly CrmStage[] = ["POR_CONTACTAR", "RESPONDIO", "CALIFICADO", "LLAMADA_VISITA", "LEVANTAMIENTO", "PROPUESTA", "NEGOCIACION"];
 export const QUALIFIED_STAGES: readonly CrmStage[] = ["CALIFICADO", "LLAMADA_VISITA", "LEVANTAMIENTO", "PROPUESTA", "NEGOCIACION", "GANADO"];
 
 export const STAGE_LABELS: Record<CrmStage, string> = {
+  POR_CONTACTAR: "Por contactar",
   RESPONDIO: "Respondió",
   CALIFICADO: "Calificado",
   LLAMADA_VISITA: "Llamada o visita",
@@ -26,6 +27,7 @@ export const STAGE_LABELS: Record<CrmStage, string> = {
 };
 
 export const STAGE_HINTS: Record<CrmStage, string> = {
+  POR_CONTACTAR: "Del directorio; nadie le ha escrito",
   RESPONDIO: "Llegó la respuesta; falta validarla",
   CALIFICADO: "Cumple las condiciones de Paco",
   LLAMADA_VISITA: "Llamada o visita agendada",
@@ -39,9 +41,19 @@ export const STAGE_HINTS: Record<CrmStage, string> = {
 
 export type StageTone = "neutral" | "info" | "warn" | "good" | "bad";
 export const STAGE_TONES: Record<CrmStage, StageTone> = {
+  POR_CONTACTAR: "neutral",
   RESPONDIO: "neutral", CALIFICADO: "info", LLAMADA_VISITA: "info", LEVANTAMIENTO: "info",
   PROPUESTA: "warn", NEGOCIACION: "warn", GANADO: "good", PERDIDO: "bad", DESCARTADO: "bad",
 };
+
+/** De dónde llegó el lead (16-oct, Grant: distinguir correo y directorio). */
+export const SOURCES = ["CORREO", "DIRECTORIO", "MANUAL", "REFERIDO"] as const;
+export type CrmSource = typeof SOURCES[number];
+export const SOURCE_LABELS: Record<CrmSource, string> = { CORREO: "Correo", DIRECTORIO: "Directorio", MANUAL: "A mano", REFERIDO: "Referido" };
+export type OriginFilter = "todos" | "CORREO" | "DIRECTORIO" | "OTROS";
+export function matchesOrigin(record: { source: CrmSource }, origin: OriginFilter): boolean {
+  return origin === "todos" || (origin === "OTROS" ? record.source === "MANUAL" || record.source === "REFERIDO" : record.source === origin);
+}
 
 export const SERVICES = ["TERMOGRAFIA_DRON", "MANTENIMIENTO", "SUBESTACION", "PANELES_SOLARES", "NOM_029", "CALIDAD_ENERGIA", "OTRO"] as const;
 export type CrmService = typeof SERVICES[number];
@@ -91,10 +103,12 @@ export const crmRecordSchema = z.object({
   id: z.uuid(),
   contact_id: z.uuid().nullable().optional().transform((v) => v ?? null),
   account_id: z.uuid().nullable().optional().transform((v) => v ?? null),
-  source: z.enum(["CORREO", "MANUAL", "REFERIDO"]),
-  full_name: z.string(),
+  source: z.enum(SOURCES),
+  full_name: nullableText,
   email: nullableText, phone: nullableText, role_title: nullableText, company_name: nullableText,
   city: nullableText, state: nullableText,
+  industrial_park: nullableText, address: nullableText, sector: nullableText, source_url: nullableText, import_batch: nullableText,
+  in_email_campaign: z.boolean().catch(false),
   stage: z.enum(CRM_STAGES),
   owner_user_id: z.uuid().nullable().optional().transform((v) => v ?? null),
   owner_email: nullableText,
@@ -147,12 +161,27 @@ export type CrmTask = z.infer<typeof crmTaskSchema>;
 export type CrmActivity = z.infer<typeof crmActivitySchema>;
 export type CrmEmail = z.infer<typeof crmEmailSchema>;
 
+/** Una fila de directorio para importar (columnas del Excel ya mapeadas). */
+export const crmImportRowSchema = z.object({
+  company_name: z.string().max(300), city: z.string().max(300).optional(), state: z.string().max(300).optional(),
+  industrial_park: z.string().max(400).optional(), address: z.string().max(600).optional(), sector: z.string().max(600).optional(),
+  source_url: z.string().max(800).optional(), full_name: z.string().max(300).optional(), role_title: z.string().max(300).optional(),
+  email: z.string().max(300).optional(), phone: z.string().max(80).optional(),
+}).strict();
+export type CrmImportRow = z.infer<typeof crmImportRowSchema>;
+export const crmImportPreviewSchema = z.array(z.object({
+  index: z.number().int(), company_name: z.string().nullable(), status: z.enum(["NUEVA", "YA_EN_CRM", "REPETIDA_EN_ARCHIVO", "SIN_NOMBRE"]),
+  account_name: z.string().nullable(), in_email_campaign: z.boolean(),
+}));
+export type CrmImportPreview = z.infer<typeof crmImportPreviewSchema>;
+
 /** Comandos que acepta /api/v1/operations/crm (la base vuelve a validar todo). */
 const isoDate = z.string().max(40).refine((v) => v === "" || !Number.isNaN(Date.parse(v)), "FECHA_INVALIDA");
 const optionalText = (max: number) => z.string().max(max).optional();
 export const crmFields = z.object({
   full_name: optionalText(200), email: z.union([z.email(), z.literal("")]).optional(), phone: optionalText(40),
   role_title: optionalText(200), company_name: optionalText(200), city: optionalText(120), state: optionalText(120),
+  industrial_park: optionalText(200), address: optionalText(400), sector: optionalText(300),
   service_interest: z.union([z.enum(SERVICES), z.literal("")]).optional(),
   value_mxn: z.union([z.number().nonnegative().max(1e12), z.literal("")]).optional(),
   owner_user_id: z.union([z.uuid(), z.literal("")]).optional(),
@@ -170,11 +199,12 @@ export const crmCommandSchema = z.discriminatedUnion("op", [
   z.object({ op: z.literal("NOTA"), payload: z.object({ record_id: z.uuid(), kind: z.enum(NOTE_KINDS), body: z.string().trim().min(1).max(5000) }).strict() }).strict(),
   z.object({ op: z.literal("TAREA_CREAR"), payload: z.object({ record_id: z.uuid(), title: z.string().trim().min(2).max(300),
     due_at: isoDate.optional(), owner_user_id: z.union([z.uuid(), z.literal("")]).optional() }).strict() }).strict(),
+  z.object({ op: z.literal("IMPORTAR"), payload: z.object({ file_name: z.string().max(200), rows: z.array(crmImportRowSchema).min(1).max(200) }).strict() }).strict(),
   z.object({ op: z.literal("TAREA_ESTADO"), payload: z.object({ task_id: z.uuid(), status: z.enum(["PENDIENTE", "HECHA", "CANCELADA"]) }).strict() }).strict(),
 ]);
 export type CrmCommand = z.infer<typeof crmCommandSchema>;
 export const crmCommandResultSchema = z.object({
-  ok: z.literal(true), record_id: z.uuid().optional(), task_id: z.uuid().optional(), revision: z.number().int().optional(),
+  ok: z.literal(true), record_id: z.uuid().optional(), inserted: z.number().int().optional(), duplicates: z.number().int().optional(), task_id: z.uuid().optional(), revision: z.number().int().optional(),
   stage: z.string().optional(), message: z.string(), replayed: z.boolean().optional(),
 }).passthrough();
 
@@ -194,6 +224,11 @@ export const CRM_ERROR_MESSAGES: Record<string, string> = {
 };
 export function crmErrorMessage(code: string | undefined): string {
   return (code && CRM_ERROR_MESSAGES[code]) ?? "No se pudo guardar. Intenta de nuevo.";
+}
+
+/** Lo que se muestra como título: la persona o, si es de directorio sin contacto, la empresa. */
+export function displayName(record: Pick<CrmRecord, "full_name" | "company_name">): string {
+  return record.full_name?.trim() || record.company_name?.trim() || "Sin nombre";
 }
 
 export function isQualified(record: Pick<CrmRecord, "qualification">): boolean {
@@ -261,15 +296,16 @@ export function daysUntouched(record: CrmRecord, now: Date = new Date()): number
   return Math.max(0, Math.floor((now.getTime() - new Date(ref).getTime()) / DAY));
 }
 
-export type CrmView = "abiertos" | "por_calificar" | "mis" | "vencidos" | "ganados" | "cerrados" | "descartados" | "todos";
+export type CrmView = "abiertos" | "por_contactar" | "por_calificar" | "mis" | "vencidos" | "ganados" | "cerrados" | "descartados" | "todos";
 export const VIEW_LABELS: Record<CrmView, string> = {
-  abiertos: "Abiertos", por_calificar: "Por calificar", mis: "Míos", vencidos: "Vencidos",
+  abiertos: "Abiertos", por_contactar: "Por contactar", por_calificar: "Por calificar", mis: "Míos", vencidos: "Vencidos",
   ganados: "Ganados", cerrados: "Perdidos", descartados: "Descartados", todos: "Todos",
 };
 export function inView(record: CrmRecord, view: CrmView, me: string | null, now: Date = new Date()): boolean {
   switch (view) {
     case "abiertos": return OPEN_STAGES.includes(record.stage);
     case "por_calificar": return record.stage === "RESPONDIO";
+    case "por_contactar": return record.stage === "POR_CONTACTAR";
     case "mis": return record.owner_user_id === me && record.stage !== "DESCARTADO";
     case "vencidos": return OPEN_STAGES.includes(record.stage) && (isOverdue(record.next_action_at, now) || isOverdue(record.next_task_at, now));
     case "ganados": return record.stage === "GANADO";
@@ -281,7 +317,8 @@ export function inView(record: CrmRecord, view: CrmView, me: string | null, now:
 export function matchesSearch(record: CrmRecord, query: string): boolean {
   const q = query.trim().toLowerCase().normalize("NFD").replace(/\p{M}/gu, "");
   if (!q) return true;
-  return [record.full_name, record.email, record.phone, record.company_name, record.role_title, record.city, record.state, record.next_action]
+  return [record.full_name, record.email, record.phone, record.company_name, record.role_title, record.city, record.state, record.next_action,
+    record.industrial_park, record.sector]
     .some((v) => v?.toLowerCase().normalize("NFD").replace(/\p{M}/gu, "").includes(q));
 }
 

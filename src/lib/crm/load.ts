@@ -41,20 +41,25 @@ function syntheticBoard(): CrmBoardData {
     owner_user_id: SYNTHETIC_USER, owner_email: "oscar.ojeda@ennco.com.mx", service_interest: null, value_mxn: null,
     next_action: null, next_action_at: null, close_reason: null, qualification: {}, last_touch_at: null,
     mailbox_email: "contacto@ennco.com.mx", open_tasks: 0, next_task_at: null, revision: 1,
+    industrial_park: null, address: null, sector: null, source_url: null, import_batch: null, in_email_campaign: true,
   };
   const rows = [
     { name: "SIMULACION Ana Pérez", company: "SIMULACION Planta Norte", stage: "RESPONDIO", intent: "POSITIVE_VISIT", body: "¿Podemos hablar el jueves a las 10?", hours: -3 },
     { name: "SIMULACION Luis Gómez", company: "SIMULACION Alimentos del Bajío", stage: "CALIFICADO", intent: "POSITIVE_ACCEPT", body: "Sí, mándame la propuesta.", hours: -30, next: "Llamar para agendar el levantamiento", nextAt: 20, value: 180000 },
     { name: "SIMULACION Marta Ruiz", company: "SIMULACION Plásticos Querétaro", stage: "PROPUESTA", intent: "POSITIVE_VISIT", body: "Vengan el martes a la planta.", hours: -120, next: "Seguimiento a la cotización", nextAt: -5, value: 420000 },
     { name: "SIMULACION Jorge Díaz", company: "SIMULACION Metalúrgica Celaya", stage: "DESCARTADO", intent: "REJECTION", body: "No nos interesa, gracias.", hours: -48, reason: "No le interesa" },
+    { name: null, company: "SIMULACION Autopartes del Bajío", stage: "POR_CONTACTAR", intent: null, body: null, hours: -2, directory: true },
   ] as const;
   return {
     records: rows.map((row, index) => ({
       ...base,
+      ...("directory" in row ? { source: "DIRECTORIO" as const, city: "Silao", industrial_park: "SIMULACION Puerto Interior", sector: "Automotriz",
+        address: "SIMULACION Av. Ejemplo 100", source_url: "https://ejemplo.test", import_batch: "Directorio de ejemplo", owner_email: "oscar.ojeda@ennco.com.mx",
+        mailbox_email: null, first_reply_at: null, last_reply_at: null } : {}),
       id: `00000000-0000-4000-8000-00000000c00${index}`,
-      full_name: row.name, email: `simulacion${index}@ejemplo.test`, role_title: "Gerente de mantenimiento",
+      full_name: row.name, email: row.name ? `simulacion${index}@ejemplo.test` : null, role_title: row.name ? "Gerente de mantenimiento" : null,
       company_name: row.company, stage: row.stage, reply_intent: row.intent, last_reply_body: row.body,
-      first_reply_at: iso(row.hours), last_reply_at: iso(row.hours), created_at: iso(row.hours), updated_at: iso(row.hours),
+      first_reply_at: row.body ? iso(row.hours) : null, last_reply_at: row.body ? iso(row.hours) : null, created_at: iso(row.hours), updated_at: iso(row.hours),
       next_action: "next" in row ? row.next : null, next_action_at: "nextAt" in row ? iso(row.nextAt) : null,
       value_mxn: "value" in row ? row.value : null, close_reason: "reason" in row ? row.reason : null,
       qualification: row.stage === "RESPONDIO" || row.stage === "DESCARTADO" ? {} : { mercado: true, contacto: true, necesidad: true, avance: true },

@@ -6,14 +6,18 @@ import { useCallback, useEffect, useMemo, useState, type DragEvent } from "react
 import { sendCrmCommand } from "@/components/crm/crm-client";
 import { CrmDrawer } from "@/components/crm/CrmDrawer";
 import { MoveDialog, NewContactDialog } from "@/components/crm/CrmDialogs";
+import { ImportDialog } from "@/components/crm/CrmImport";
 import {
-  BOARD_STAGES, INTENT_LABELS, OPEN_STAGES, STAGE_HINTS, STAGE_LABELS, STAGE_TONES, VIEW_LABELS, byUrgency, daysUntouched,
-  formatMxn, inView, initials, isOverdue, isQualified, matchesSearch, personName, relativeDay, stageRequirements,
-  type CrmBoardData, type CrmRecord, type CrmStage, type CrmView,
+  BOARD_STAGES, INTENT_LABELS, OPEN_STAGES, SOURCE_LABELS, STAGE_HINTS, STAGE_LABELS, STAGE_TONES, VIEW_LABELS, byUrgency, daysUntouched,
+  displayName, formatMxn, inView, initials, isOverdue, isQualified, matchesOrigin, matchesSearch, personName, relativeDay, stageRequirements,
+  type CrmBoardData, type CrmRecord, type CrmStage, type CrmView, type OriginFilter,
 } from "@/lib/crm/model";
 
 type Layout = "tablero" | "tabla";
-const VIEWS: CrmView[] = ["abiertos", "por_calificar", "mis", "vencidos", "ganados", "cerrados", "descartados", "todos"];
+const ORIGINS: Array<{ value: OriginFilter; label: string }> = [
+  { value: "todos", label: "Todos" }, { value: "CORREO", label: "Correo" }, { value: "DIRECTORIO", label: "Directorio" }, { value: "OTROS", label: "A mano" },
+];
+const VIEWS: CrmView[] = ["abiertos", "por_contactar", "por_calificar", "mis", "vencidos", "ganados", "cerrados", "descartados", "todos"];
 
 function avatarTone(id: string | null): string { return String(id ? [...id].reduce((n, c) => n + c.charCodeAt(0), 0) % 6 : 6); }
 
@@ -23,6 +27,8 @@ export function CrmApp({ data, me, canEdit }: { data: CrmBoardData; me: string |
   const [layout, setLayout] = useState<Layout>("tablero");
   const [query, setQuery] = useState("");
   const [owner, setOwner] = useState("todos");
+  const [origin, setOrigin] = useState<OriginFilter>("todos");
+  const [importing, setImporting] = useState(false);
   const [stageFilter, setStageFilter] = useState<CrmStage | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [move, setMove] = useState<{ record: CrmRecord; stage: CrmStage } | null>(null);
@@ -42,9 +48,9 @@ export function CrmApp({ data, me, canEdit }: { data: CrmBoardData; me: string |
     return data.records.map((r) => (optimistic[r.id] ? { ...r, stage: optimistic[r.id]! } : r));
   }, [data.records, data.generated_at, pending]);
   const visible = useMemo(() => records
-    .filter((r) => inView(r, view, me, now) && matchesSearch(r, query) && (owner === "todos" || (owner === "sin" ? !r.owner_user_id : r.owner_user_id === owner))
+    .filter((r) => inView(r, view, me, now) && matchesOrigin(r, origin) && matchesSearch(r, query) && (owner === "todos" || (owner === "sin" ? !r.owner_user_id : r.owner_user_id === owner))
       && (!stageFilter || r.stage === stageFilter))
-    .sort(byUrgency(now)), [records, view, me, now, query, owner, stageFilter]);
+    .sort(byUrgency(now)), [records, view, me, now, origin, query, owner, stageFilter]);
 
   const kpis = useMemo(() => {
     const open = records.filter((r) => OPEN_STAGES.includes(r.stage));
@@ -52,6 +58,9 @@ export function CrmApp({ data, me, canEdit }: { data: CrmBoardData; me: string |
     return {
       openValue: open.reduce((n, r) => n + (r.value_mxn ?? 0), 0), openCount: open.length,
       toQualify: records.filter((r) => r.stage === "RESPONDIO").length,
+      toContact: records.filter((r) => r.stage === "POR_CONTACTAR").length,
+      directory: records.filter((r) => r.source === "DIRECTORIO").length,
+      directoryInCampaign: records.filter((r) => r.source === "DIRECTORIO" && r.in_email_campaign).length,
       overdue: open.filter((r) => isOverdue(r.next_action_at, now) || isOverdue(r.next_task_at, now)).length,
       wonValue: won.reduce((n, r) => n + (r.value_mxn ?? 0), 0), wonCount: won.length,
       replied: records.filter((r) => r.source === "CORREO").length,
@@ -82,7 +91,7 @@ export function CrmApp({ data, me, canEdit }: { data: CrmBoardData; me: string |
     setPending((p) => ({ key, stages: { ...(p.key === key ? p.stages : {}), [record.id]: stage } }));
     const outcome = await sendCrmCommand({ op: "MOVER", payload: { record_id: record.id, stage, expected_revision: record.revision } });
     if (!outcome.ok) setPending((p) => ({ key: p.key, stages: Object.fromEntries(Object.entries(p.stages).filter(([id]) => id !== record.id)) }));
-    refresh(outcome.ok ? `${record.full_name}: ${STAGE_LABELS[stage]}.` : outcome.message, outcome.ok ? "ok" : "bad");
+    refresh(outcome.ok ? `${displayName(record)}: ${STAGE_LABELS[stage]}.` : outcome.message, outcome.ok ? "ok" : "bad");
   }, [canEdit, refresh, data.generated_at]);
 
   function onDrop(event: DragEvent, stage: CrmStage) {
@@ -102,12 +111,14 @@ export function CrmApp({ data, me, canEdit }: { data: CrmBoardData; me: string |
     <div className="crm-app" data-drawer={selected ? "open" : "closed"}>
       <section className="crm-kpis" aria-label="Resumen del CRM">
         <div className="crm-kpi"><span>Pipeline abierto</span><strong>{formatMxn(kpis.openValue)}</strong><em>{kpis.openCount} contactos en proceso</em></div>
+        <button type="button" className="crm-kpi" data-origin="directorio" onClick={() => changeView("por_contactar")} aria-pressed={view === "por_contactar"}>
+          <span>Por contactar</span><strong>{kpis.toContact}</strong><em>del directorio · {kpis.directoryInCampaign} también en correo</em></button>
         <button type="button" className="crm-kpi" onClick={() => changeView("por_calificar")} aria-pressed={view === "por_calificar"}>
           <span>Por calificar</span><strong>{kpis.toQualify}</strong><em>respondieron y nadie los ha validado</em></button>
         <button type="button" className="crm-kpi" data-tone={kpis.overdue ? "bad" : undefined} onClick={() => changeView("vencidos")} aria-pressed={view === "vencidos"}>
           <span>Acciones vencidas</span><strong>{kpis.overdue}</strong><em>siguiente acción o tarea atrasada</em></button>
         <div className="crm-kpi" data-tone={kpis.wonCount ? "good" : undefined}><span>Ganado</span><strong>{formatMxn(kpis.wonValue)}</strong><em>{kpis.wonCount} ventas cerradas</em></div>
-        <div className="crm-kpi"><span>Respondieron</span><strong>{kpis.replied}</strong><em>{kpis.discarded} descartados</em></div>
+        <div className="crm-kpi" data-origin="correo"><span>Respondieron al correo</span><strong>{kpis.replied}</strong><em>{kpis.discarded} descartados</em></div>
       </section>
 
       <section className="crm-funnel" aria-label="Embudo por etapa">
@@ -134,6 +145,14 @@ export function CrmApp({ data, me, canEdit }: { data: CrmBoardData; me: string |
           ))}
         </div>
         <div className="crm-toolbar-row">
+          <div className="crm-segmented crm-origin-filter" role="radiogroup" aria-label="Origen">
+            {ORIGINS.map((o) => (
+              <button key={o.value} type="button" role="radio" aria-checked={origin === o.value} data-origin={o.value.toLowerCase()} onClick={() => setOrigin(o.value)}>
+                {o.value !== "todos" ? <span className="crm-origin-dot" aria-hidden="true" /> : null}{o.label}
+                <span className="crm-view-count">{records.filter((r) => matchesOrigin(r, o.value) && inView(r, view, me, now)).length}</span>
+              </button>
+            ))}
+          </div>
           <input className="crm-search" type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar nombre, empresa, correo…" aria-label="Buscar en el CRM" />
           <select className="crm-select" value={owner} onChange={(e) => setOwner(e.target.value)} aria-label="Responsable">
             <option value="todos">Todos los responsables</option>
@@ -145,6 +164,7 @@ export function CrmApp({ data, me, canEdit }: { data: CrmBoardData; me: string |
             <button type="button" role="radio" aria-checked={layout === "tabla"} onClick={() => changeLayout("tabla")}>Tabla</button>
           </div>
           <a className="crm-button" href="/api/v1/operations/crm/export" download>Exportar Excel</a>
+          {canEdit ? <button type="button" className="crm-button" onClick={() => setImporting(true)}>Importar directorio</button> : null}
           {canEdit ? <button type="button" className="crm-button" data-primary="true" onClick={() => setCreating(true)}>+ Nuevo contacto</button> : null}
         </div>
         {stageFilter ? <p className="crm-filter-note">Filtrando por <strong>{STAGE_LABELS[stageFilter]}</strong>. <button type="button" className="crm-text-button" onClick={() => setStageFilter(null)}>Quitar filtro</button></p> : null}
@@ -193,6 +213,7 @@ export function CrmApp({ data, me, canEdit }: { data: CrmBoardData; me: string |
 
       {move ? <MoveDialog key={`${move.record.id}:${move.stage}`} record={move.record} stage={move.stage} users={data.users}
         onClose={() => setMove(null)} onDone={(message) => { setMove(null); refresh(message); }} /> : null}
+      {importing ? <ImportDialog onClose={() => setImporting(false)} onDone={(message) => { setImporting(false); setOrigin("DIRECTORIO"); changeView("por_contactar"); refresh(message); }} /> : null}
       {creating ? <NewContactDialog users={data.users} defaultOwner={data.default_owner_user_id}
         onClose={() => setCreating(false)} onDone={(message, recordId) => { setCreating(false); refresh(message); if (recordId) setSelected(recordId); }} /> : null}
     </div>
@@ -208,22 +229,27 @@ function Card({ record, now, canDrag, selected, onOpen, onDragStart, onDragEnd }
   const untouched = daysUntouched(record, now);
   const name = personName(record.owner_email);
   return (
-    <article className="crm-card" data-selected={selected} data-overdue={overdue} draggable={canDrag}
+    <article className="crm-card" data-selected={selected} data-overdue={overdue} data-origin={record.source.toLowerCase()} draggable={canDrag}
       onDragStart={onDragStart} onDragEnd={onDragEnd}>
-      <button type="button" className="crm-card-open" onClick={onOpen} aria-label={`Abrir ${record.full_name}`}>
-        <span className="crm-card-name">{record.full_name}</span>
-        <span className="crm-card-company">{[record.company_name, record.role_title].filter(Boolean).join(" · ") || "Sin empresa"}</span>
+      <button type="button" className="crm-card-open" onClick={onOpen} aria-label={`Abrir ${displayName(record)}`}>
+        <span className="crm-card-name">{displayName(record)}</span>
+        <span className="crm-card-company">{record.full_name
+          ? [record.company_name, record.role_title].filter(Boolean).join(" · ") || "Sin empresa"
+          : [record.industrial_park, record.city].filter(Boolean).join(" · ") || "Sin contacto todavía"}</span>
       </button>
+      {record.source === "DIRECTORIO" && record.sector && record.stage === "POR_CONTACTAR" ? <p className="crm-card-sector">{record.sector}</p> : null}
       {record.stage === "RESPONDIO" && record.reply_intent ? <p className="crm-card-intent">{INTENT_LABELS[record.reply_intent] ?? record.reply_intent}</p> : null}
       {record.next_action ? (
         <p className="crm-card-next" data-overdue={overdue}><span>{record.next_action}</span>{due ? <em>{relativeDay(due, now)}</em> : null}</p>
       ) : null}
       <div className="crm-card-foot">
         <span className="crm-avatar" data-tone={avatarTone(record.owner_user_id)} title={name} aria-label={`Responsable: ${name}`}>{initials(name)}</span>
+        <span className="crm-origin" data-origin={record.source.toLowerCase()}>{SOURCE_LABELS[record.source]}</span>
+        {record.source === "DIRECTORIO" && record.in_email_campaign ? <span className="crm-chip" data-tone="info" title="Esta empresa también recibe la campaña de correo">En correo</span> : null}
         {record.value_mxn ? <span className="crm-card-value">{formatMxn(record.value_mxn)}</span> : null}
         {OPEN_STAGES.includes(record.stage) && isQualified(record) ? <span className="crm-chip" data-tone="good">Calificado</span> : null}
         {record.open_tasks ? <span className="crm-chip">{record.open_tasks} tarea{record.open_tasks === 1 ? "" : "s"}</span> : null}
-        {OPEN_STAGES.includes(record.stage) && untouched >= 7 ? <span className="crm-chip" data-tone="warn">sin tocar {untouched} días</span> : null}
+        {OPEN_STAGES.includes(record.stage) && record.stage !== "POR_CONTACTAR" && untouched >= 7 ? <span className="crm-chip" data-tone="warn">sin tocar {untouched} días</span> : null}
       </div>
     </article>
   );
@@ -234,7 +260,7 @@ function Table({ records, now, selected, onOpen }: { records: CrmRecord[]; now: 
     <div className="table-wrap crm-table-wrap" role="region" tabIndex={0} aria-label="Contactos del CRM">
       <table className="crm-table">
         <thead><tr>
-          <th scope="col">Contacto</th><th scope="col">Empresa</th><th scope="col">Etapa</th><th scope="col">Responsable</th>
+          <th scope="col">Contacto</th><th scope="col">Origen</th><th scope="col">Empresa</th><th scope="col">Etapa</th><th scope="col">Responsable</th>
           <th scope="col">Siguiente acción</th><th scope="col" className="num">Valor</th><th scope="col">Respondió</th><th scope="col">Clasificación</th>
         </tr></thead>
         <tbody>
@@ -243,15 +269,18 @@ function Table({ records, now, selected, onOpen }: { records: CrmRecord[]; now: 
             return (
               <tr key={r.id} data-selected={selected === r.id}>
                 <td data-label="Contacto"><button type="button" className="crm-row-open" onClick={() => onOpen(r.id)}>
-                  <strong>{r.full_name}</strong><span>{r.email ?? r.phone ?? ""}</span></button></td>
-                <td data-label="Empresa">{r.company_name ?? ""}{r.role_title ? <span className="crm-muted"> · {r.role_title}</span> : null}</td>
+                  <strong>{r.full_name ?? "Sin contacto todavía"}</strong><span>{r.email ?? r.phone ?? ""}</span></button></td>
+                <td data-label="Origen"><span className="crm-origin" data-origin={r.source.toLowerCase()}>{SOURCE_LABELS[r.source]}</span>
+                  {r.source === "DIRECTORIO" && r.in_email_campaign ? <span className="crm-chip" data-tone="info">En correo</span> : null}</td>
+                <td data-label="Empresa">{r.company_name ?? ""}{r.role_title ? <span className="crm-muted"> · {r.role_title}</span> : null}
+                  {r.source === "DIRECTORIO" && (r.industrial_park || r.city) ? <span className="crm-muted crm-block">{[r.industrial_park, r.city].filter(Boolean).join(" · ")}</span> : null}</td>
                 <td data-label="Etapa"><span className="crm-stage" data-tone={STAGE_TONES[r.stage]}>{STAGE_LABELS[r.stage]}</span>
                   {r.close_reason && (r.stage === "PERDIDO" || r.stage === "DESCARTADO") ? <span className="crm-muted"> · {r.close_reason}</span> : null}</td>
                 <td data-label="Responsable">{personName(r.owner_email)}</td>
                 <td data-label="Siguiente acción">{r.next_action ? <>{r.next_action} {r.next_action_at ? <span className={overdue ? "crm-due" : "crm-muted"}>· {relativeDay(r.next_action_at, now)}</span> : null}</> : <span className="crm-muted">Sin definir</span>}</td>
                 <td data-label="Valor" className="num">{r.value_mxn ? formatMxn(r.value_mxn) : ""}</td>
-                <td data-label="Respondió">{relativeDay(r.last_reply_at ?? r.created_at, now)}</td>
-                <td data-label="Clasificación">{r.reply_intent ? INTENT_LABELS[r.reply_intent] ?? r.reply_intent : r.source === "CORREO" ? "" : r.source === "REFERIDO" ? "Referido" : "Agregado a mano"}</td>
+                <td data-label="Respondió">{r.last_reply_at ? relativeDay(r.last_reply_at, now) : <span className="crm-muted">No ha respondido</span>}</td>
+                <td data-label="Clasificación">{r.reply_intent ? INTENT_LABELS[r.reply_intent] ?? r.reply_intent : r.source === "DIRECTORIO" ? (r.sector ?? "") : ""}</td>
               </tr>
             );
           })}

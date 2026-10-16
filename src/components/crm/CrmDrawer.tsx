@@ -6,7 +6,7 @@ import { fetchCrmDetail, isoToLocal, localToIso, sendCrmCommand } from "@/compon
 import { commercialText } from "@/lib/correos/sdr/reply-text";
 import {
   ACTIVITY_LABELS, CRM_STAGES, INTENT_LABELS, NOTE_KINDS, QUALIFICATION_KEYS, QUALIFICATION_LABELS, SERVICES, SERVICE_LABELS,
-  STAGE_LABELS, STAGE_TONES, formatDateTime, formatMxn, isOverdue, isQualified, personName, relativeDay, whatsappLink,
+  SOURCE_LABELS, STAGE_LABELS, STAGE_TONES, displayName, formatDateTime, formatMxn, isOverdue, isQualified, personName, relativeDay, whatsappLink,
   type CrmDetail, type CrmEmail, type CrmActivity, type CrmRecord, type CrmService, type CrmStage, type CrmUser, type NoteKind,
 } from "@/lib/crm/model";
 
@@ -50,8 +50,10 @@ export function CrmDrawer({ recordId, fallback, users, canEdit, refreshKey, onCl
     <aside className="crm-drawer" aria-labelledby="crm-drawer-title">
       <div className="crm-drawer-head">
         <div className="crm-drawer-title">
-          <h2 id="crm-drawer-title" ref={heading} tabIndex={-1}>{record.full_name}</h2>
-          <p>{[record.role_title, record.company_name].filter(Boolean).join(" · ") || "Sin empresa"}</p>
+          <h2 id="crm-drawer-title" ref={heading} tabIndex={-1}>{displayName(record)}</h2>
+          <p>{record.full_name
+            ? [record.role_title, record.company_name].filter(Boolean).join(" · ") || "Sin empresa"
+            : [record.industrial_park, record.city, record.state].filter(Boolean).join(" · ") || "Sin contacto todavía"}</p>
         </div>
         <button type="button" className="crm-icon-button" onClick={onClose} aria-label="Cerrar ficha">×</button>
       </div>
@@ -74,8 +76,9 @@ export function CrmDrawer({ recordId, fallback, users, canEdit, refreshKey, onCl
         {record.email ? <a href={`mailto:${record.email}`} className="crm-chip" data-tone="info">{record.email}</a> : null}
         {record.phone ? <a href={`tel:${record.phone}`} className="crm-chip">{record.phone}</a> : null}
         {wa ? <a href={wa} target="_blank" rel="noreferrer" className="crm-chip" data-tone="good">WhatsApp</a> : null}
+        <span className="crm-origin" data-origin={record.source.toLowerCase()}>{SOURCE_LABELS[record.source]}</span>
+        {record.source === "DIRECTORIO" && record.in_email_campaign ? <span className="crm-chip" data-tone="info">También en campaña de correo</span> : null}
         {record.reply_intent ? <span className="crm-chip">{INTENT_LABELS[record.reply_intent] ?? record.reply_intent}</span> : null}
-        {record.source !== "CORREO" ? <span className="crm-chip">{record.source === "REFERIDO" ? "Referido" : "Agregado a mano"}</span> : null}
       </div>
 
       {notice ? <p className={notice.tone === "ok" ? "crm-ok" : "crm-error"} role="status">{notice.text}</p> : null}
@@ -112,13 +115,26 @@ function Summary({ record, canEdit, run }: { record: CrmRecord; canEdit: boolean
   }
   async function saveFields(event: FormEvent) {
     event.preventDefault();
-    await run({ op: "ACTUALIZAR", payload: { record_id: record.id, ...fields, email: fields.email.trim(),
+    await run({ op: "ACTUALIZAR", payload: { record_id: record.id, ...fields, full_name: fields.full_name.trim(), email: fields.email.trim(),
       value_mxn: fields.value_mxn === "" ? "" : Number(fields.value_mxn), service_interest: fields.service_interest as CrmService | "" } });
   }
   const set = (key: keyof ReturnType<typeof fieldsOf>) => (e: { target: { value: string } }) => setFields({ ...fields, [key]: e.target.value });
 
   return (
     <div className="crm-summary">
+      {record.source === "DIRECTORIO" ? (
+        <section className="crm-section crm-directory">
+          <h3>Del directorio {record.import_batch ? <span className="crm-muted">{record.import_batch}</span> : null}</h3>
+          <dl className="crm-facts">
+            {record.industrial_park ? <><dt>Parque o zona</dt><dd>{record.industrial_park}</dd></> : null}
+            {record.address ? <><dt>Dirección</dt><dd>{record.address}</dd></> : null}
+            {record.sector ? <><dt>Sector o nota</dt><dd>{record.sector}</dd></> : null}
+            {record.source_url ? <><dt>Fuente</dt><dd><a href={record.source_url} target="_blank" rel="noreferrer">{record.source_url.replace(/^https?:\/\/(www\.)?/, "").slice(0, 60)}</a></dd></> : null}
+          </dl>
+          {!record.full_name ? <p className="crm-muted">Sin contacto todavía: cuando Oscar consiga a la persona, captura su nombre, puesto, correo y teléfono en Datos.</p> : null}
+        </section>
+      ) : null}
+
       {record.last_reply_body ? (
         <section className="crm-section">
           <h3>Lo que respondió <span className="crm-muted">{relativeDay(record.last_reply_at)}{record.mailbox_email ? ` · a ${record.mailbox_email}` : ""}</span></h3>
@@ -158,7 +174,7 @@ function Summary({ record, canEdit, run }: { record: CrmRecord; canEdit: boolean
         <h3>Datos</h3>
         <form className="crm-form" onSubmit={saveFields}>
           <div className="crm-field-row">
-            <label className="crm-field"><span>Nombre</span><input required maxLength={200} value={fields.full_name} disabled={!canEdit} onChange={set("full_name")} /></label>
+            <label className="crm-field"><span>Nombre del contacto</span><input required={record.source !== "DIRECTORIO"} maxLength={200} value={fields.full_name} disabled={!canEdit} onChange={set("full_name")} placeholder={record.source === "DIRECTORIO" ? "Aún sin contacto" : undefined} /></label>
             <label className="crm-field"><span>Puesto</span><input maxLength={200} value={fields.role_title} disabled={!canEdit} onChange={set("role_title")} /></label>
           </div>
           <div className="crm-field-row">
@@ -171,6 +187,15 @@ function Summary({ record, canEdit, run }: { record: CrmRecord; canEdit: boolean
               <span className="crm-pair"><input aria-label="Ciudad" maxLength={120} value={fields.city} disabled={!canEdit} onChange={set("city")} />
               <input aria-label="Estado" maxLength={120} value={fields.state} disabled={!canEdit} onChange={set("state")} /></span></label>
           </div>
+          {record.source === "DIRECTORIO" || record.industrial_park || record.address || record.sector ? (
+            <>
+              <div className="crm-field-row">
+                <label className="crm-field"><span>Parque o zona industrial</span><input maxLength={200} value={fields.industrial_park} disabled={!canEdit} onChange={set("industrial_park")} /></label>
+                <label className="crm-field"><span>Sector o nota</span><input maxLength={300} value={fields.sector} disabled={!canEdit} onChange={set("sector")} /></label>
+              </div>
+              <label className="crm-field"><span>Dirección</span><input maxLength={400} value={fields.address} disabled={!canEdit} onChange={set("address")} /></label>
+            </>
+          ) : null}
           <div className="crm-field-row">
             <label className="crm-field"><span>Servicio de interés</span>
               <select value={fields.service_interest} disabled={!canEdit} onChange={set("service_interest")}>
@@ -188,7 +213,7 @@ function Summary({ record, canEdit, run }: { record: CrmRecord; canEdit: boolean
 
 function fieldsOf(record: CrmRecord) {
   return {
-    full_name: record.full_name, role_title: record.role_title ?? "", company_name: record.company_name ?? "", phone: record.phone ?? "",
+    full_name: record.full_name ?? "", industrial_park: record.industrial_park ?? "", address: record.address ?? "", sector: record.sector ?? "", role_title: record.role_title ?? "", company_name: record.company_name ?? "", phone: record.phone ?? "",
     email: record.email ?? "", city: record.city ?? "", state: record.state ?? "", service_interest: record.service_interest ?? "",
     value_mxn: record.value_mxn === null ? "" : String(record.value_mxn),
   };
