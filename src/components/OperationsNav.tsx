@@ -30,6 +30,7 @@ type NavKey =
   | "projects-list"
   | "projects-catalogs"
   | "projects-products"
+  | "medidores"
   | OperationModuleKey;
 
 const groups: Array<{
@@ -69,6 +70,10 @@ const groups: Array<{
       { key: "projects-catalogs", href: "/operacion/proyectos/catalogos" },
     ],
   },
+  {
+    label: "Energía",
+    items: [{ key: "medidores", href: "/operacion/medidores" }],
+  },
 ];
 
 
@@ -94,6 +99,7 @@ function NavIcon({ id }: { id: NavKey }) {
     "projects-engineering": <><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.1-2.1 2.5-2.4z" /></>,
     "projects-list": <><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></>,
     "projects-products": <><path d="M12 3 4 7v10l8 4 8-4V7l-8-4Z" /><path d="M4 7l8 4 8-4M12 11v10" /></>,
+    medidores: <><path d="M4 16a8 8 0 1 1 16 0" /><path d="M12 16l4-5" /><circle cx="12" cy="16" r="1.4" /><path d="M7 20h10" /></>,
     "projects-catalogs": <><path d="M12 3v18" /><path d="M16.5 7.5c0-1.7-2-3-4.5-3S7.5 5.8 7.5 7.5 9.5 10 12 10s4.5 1.3 4.5 3-2 3-4.5 3-4.5-1.3-4.5-3" /></>,
   };
   return <svg aria-hidden="true" className="nav-icon" {...c}>{paths[id] ?? paths.home}</svg>;
@@ -111,6 +117,7 @@ function itemLabel(key: NavKey): string {
   if (key === "projects-engineering") return "Ingeniería básica";
   if (key === "projects-list") return "Proyectos";
   if (key === "projects-products") return "Productos";
+  if (key === "medidores") return "Medidores";
   if (key === "projects-catalogs") return "Precios y proveedores";
   return moduleLabels[key];
 }
