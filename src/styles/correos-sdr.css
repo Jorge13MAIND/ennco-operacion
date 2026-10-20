@@ -44,9 +44,13 @@
 .sdr-search input { width: 100%; }
 .sdr-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* Bandeja + detalle */
-.sdr-split { display: grid; grid-template-columns: minmax(280px, 380px) minmax(0, 1fr); min-height: 520px; }
-.sdr-list { list-style: none; margin: 0; padding: 10px; border-right: 1px solid var(--sdr-line); background: var(--sdr-canvas); overflow-y: auto; max-height: 820px; align-self: start; position: sticky; top: 0; display: flex; flex-direction: column; gap: 8px; }
+/* Bandeja + detalle: un solo bloque del alto de la pantalla (20-oct, Grant). Cada columna se
+   desplaza por dentro; la página no se estira con conversaciones largas. */
+.sdr-split {
+  display: grid; grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+  height: clamp(520px, calc(100dvh - var(--cr-header-h, 64px) - 32px), 1100px);
+}
+.sdr-list { list-style: none; margin: 0; padding: 10px; border-right: 1px solid var(--sdr-line); background: var(--sdr-canvas); overflow-y: auto; min-height: 0; display: flex; flex-direction: column; gap: 8px; overscroll-behavior: contain; }
 .sdr-card { width: 100%; text-align: left; font: inherit; color: inherit; background: #fff; border: 1px solid var(--sdr-line); border-left: 4px solid var(--sdr-p2); border-radius: 12px; padding: 10px 12px; cursor: pointer; display: grid; gap: 4px; transition: box-shadow 0.15s, border-color 0.15s; }
 .sdr-card[data-priority="1"] { border-left-color: var(--sdr-p1); }
 .sdr-card[data-priority="3"] { border-left-color: var(--sdr-p3); }
@@ -65,9 +69,12 @@
 .sdr-chip[data-tone="3"] { background: var(--sdr-p3-bg); color: var(--sdr-p3-fg); }
 .sdr-chip[data-tone="state"] { background: var(--sdr-soft); color: var(--sdr-accent); }
 
-.sdr-detail { min-width: 0; padding: 20px 24px; }
+.sdr-detail { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
 .sdr-back { display: none; }
-.sdr-detail-body { display: grid; gap: 14px; }
+.sdr-detail-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.sdr-detail-top { flex: none; display: grid; gap: 10px; padding: 18px 24px 14px; border-bottom: 1px solid var(--sdr-line); }
+.sdr-detail-foot { flex: none; display: grid; gap: 8px; padding: 10px 24px 14px; border-top: 1px solid var(--sdr-line); background: #fff; }
+.sdr-foot-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .sdr-detail-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .sdr-detail-who h3 { margin: 0; font-size: 1.05rem; overflow-wrap: anywhere; }
 .sdr-detail-who p { margin: 2px 0 0; color: var(--sdr-muted); font-size: 0.84rem; overflow-wrap: anywhere; }
@@ -80,35 +87,26 @@
 .sdr-hint { margin: 0; color: var(--sdr-muted); font-size: 0.8rem; }
 
 /* Conversación */
-.sdr-thread { display: grid; gap: 10px; }
-.sdr-msg { max-width: 88%; justify-self: start; background: #fff; border: 1px solid var(--sdr-line); border-radius: 14px 14px 14px 4px; padding: 10px 12px; }
-.sdr-msg[data-ours] { justify-self: end; background: var(--sdr-canvas); border-radius: 14px 14px 4px 14px; }
+.sdr-thread { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 10px; padding: 16px 24px; background: var(--sdr-canvas); }
+.sdr-thread:focus-visible { outline: 2px solid var(--sdr-accent); outline-offset: -2px; }
+.sdr-thread > .sdr-msg { flex: none; }
+.sdr-msg { max-width: 88%; align-self: flex-start; background: #fff; border: 1px solid var(--sdr-line); border-radius: 14px 14px 14px 4px; padding: 10px 12px; }
+.sdr-msg[data-ours] { align-self: flex-end; background: var(--sdr-soft); border-color: transparent; border-radius: 14px 14px 4px 14px; }
+.sdr-msg-more { margin-top: 6px; padding: 0; font: inherit; font-size: 0.76rem; font-weight: 600; color: var(--sdr-accent); background: none; border: 0; cursor: pointer; }
+.sdr-msg-more:hover { text-decoration: underline; }
 .sdr-msg-meta { margin: 0 0 4px; color: var(--sdr-muted); font-size: 0.72rem; overflow-wrap: anywhere; }
 .sdr-msg-text { margin: 0; white-space: pre-wrap; font-size: 0.88rem; line-height: 1.5; overflow-wrap: anywhere; }
 
+.sdr-evidence summary { cursor: pointer; font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--sdr-accent); }
+.sdr-evidence[open] summary { margin-bottom: 6px; }
 .sdr-evidence blockquote { margin: 0 0 6px; padding: 8px 12px; border-left: 3px solid var(--sdr-line); color: var(--sdr-ink); font-size: 0.84rem; background: var(--sdr-canvas); border-radius: 0 8px 8px 0; }
-.sdr-draft { border: 1px solid var(--sdr-line); border-radius: 12px; padding: 10px 14px; }
-.sdr-draft summary { cursor: pointer; font-weight: 600; font-size: 0.86rem; }
-.sdr-draft p { white-space: pre-wrap; margin: 10px 0 0; font-size: 0.88rem; line-height: 1.5; }
 
 /* Acciones */
-.sdr-actions { display: grid; gap: 10px; border-top: 1px solid var(--sdr-line); padding-top: 14px; }
-.sdr-note { display: grid; gap: 6px; font-size: 0.82rem; color: var(--sdr-muted); }
-.sdr-note textarea { font: inherit; font-size: 0.88rem; min-height: 72px; resize: vertical; border: 1px solid var(--sdr-line); border-radius: 10px; padding: 10px 12px; color: var(--sdr-ink); }
-.sdr-note textarea:focus { outline: 2px solid var(--sdr-accent); outline-offset: 0; }
 .sdr-actions-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .sdr-btn { font: inherit; font-size: 0.85rem; font-weight: 600; border-radius: 10px; padding: 9px 14px; border: 1px solid var(--sdr-line); background: #fff; color: var(--sdr-ink); cursor: pointer; }
 .sdr-btn:hover:not(:disabled) { border-color: var(--sdr-accent); }
 .sdr-btn[data-primary] { background: var(--sdr-accent); border-color: var(--sdr-accent); color: #fff; }
 .sdr-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.sdr-menu { position: relative; }
-.sdr-menu summary { list-style: none; cursor: pointer; font-size: 0.85rem; font-weight: 600; border: 1px solid var(--sdr-line); border-radius: 10px; padding: 9px 14px; background: #fff; }
-.sdr-menu summary::-webkit-details-marker { display: none; }
-.sdr-menu summary::after { content: " ▾"; color: var(--sdr-muted); }
-.sdr-menu-list { position: absolute; z-index: 5; bottom: calc(100% + 6px); left: 0; min-width: 240px; background: #fff; border: 1px solid var(--sdr-line); border-radius: 12px; box-shadow: 0 12px 28px -8px rgba(15, 23, 42, 0.25); padding: 6px; display: grid; }
-.sdr-menu-list button { text-align: left; font: inherit; font-size: 0.85rem; border: 0; background: transparent; padding: 9px 10px; border-radius: 8px; cursor: pointer; color: var(--sdr-ink); }
-.sdr-menu-list button:hover:not(:disabled) { background: var(--sdr-canvas); }
-.sdr-menu-list button:disabled { opacity: 0.45; cursor: not-allowed; }
 .sdr-status { margin: 0; font-size: 0.84rem; color: var(--sdr-accent); }
 .sdr-fine { margin: 0; color: var(--sdr-muted); font-size: 0.74rem; }
 
@@ -123,12 +121,13 @@
 .sdr-inventory td small { display: block; color: #6b7280; }
 
 @media (max-width: 900px) {
-  .sdr-split { grid-template-columns: 1fr; }
-  .sdr-list { border-right: 0; max-height: none; }
-  .sdr-detail { display: none; max-height: none; padding: 16px; }
+  .sdr-split { grid-template-columns: 1fr; height: clamp(480px, calc(100dvh - var(--cr-header-h, 64px) - 24px), 900px); }
+  .sdr-list { border-right: 0; }
+  .sdr-detail { display: none; }
   .sdr-split[data-open] .sdr-list { display: none; }
-  .sdr-split[data-open] .sdr-detail { display: block; }
-  .sdr-back { display: inline-block; margin-bottom: 12px; font: inherit; font-size: 0.85rem; border: 0; background: none; color: var(--sdr-accent); cursor: pointer; padding: 0; }
+  .sdr-split[data-open] .sdr-detail { display: flex; }
+  .sdr-detail-top, .sdr-thread, .sdr-detail-foot { padding-left: 16px; padding-right: 16px; }
+  .sdr-back { display: inline-block; justify-self: start; font: inherit; font-size: 0.85rem; border: 0; background: none; color: var(--sdr-accent); cursor: pointer; padding: 0; }
   .sdr-head, .sdr-tabs, .sdr-filters { padding-left: 16px; padding-right: 16px; }
   .sdr-msg { max-width: 100%; }
 }

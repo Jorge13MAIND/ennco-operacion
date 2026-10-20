@@ -1,12 +1,14 @@
 "use client";
 import { useMemo, useState } from "react";
+import { commercialText } from "@/lib/correos/sdr/reply-text";
 import { useRouter } from "next/navigation";
 import type { SdrCaseView, SdrScreen } from "@/lib/correos/sdr/overview";
 import type { RecoveryOverview } from "@/lib/correos/recovery-overview";
 
 /* Atención de respuestas: bandeja a la izquierda y conversación a la derecha (29-sep, Grant).
-   Solo presentación: las acciones, sus cuerpos y sus validaciones son las mismas que definió el
-   SDR (REVIEWED, RETRY, APPROVE, ACK y la revisión de correos sin vínculo). */
+   Desde el 20-oct es solo para ver al lead y lo que mandó el motor: las respuestas se contestan desde
+   el correo (Grant). Por eso no hay caja para escribir ni acciones que manden algo; queda solo
+   confirmar un aviso (ACK). El bloque mide lo que la pantalla y cada columna se desplaza por dentro. */
 
 const intentLabels: Record<string, string> = { CONTEXT: "Pide contexto", EXPLICIT_INTEREST: "Expresa interés", PRICE: "Pregunta precio", UNSUBSCRIBE: "Solicita baja", OUT_OF_OFFICE: "Ausencia temporal", REFERRAL: "Refiere a otra persona", WRONG_PERSON: "Persona o ubicación incorrecta", NOT_NOW: "Ahora no lo necesita", REJECTION: "Rechazo", COMPLAINT: "Queja", TECHNICAL_COMMITMENT: "Requiere validación técnica", AMBIGUOUS: "Requiere lectura humana" };
 const stateLabels: Record<string, string> = { READY: "Pendiente de procesar", REVIEW: "Por revisar", BLOCKED: "Bloqueado", NO_ACTION: "Revisado", SUPPRESSED: "Baja aplicada", MANUAL_HANDLED: "Respondido por una persona", QUEUED: "En cola de envío", SENT: "Enviado" };
@@ -85,128 +87,94 @@ function IntentChip({ row }: { row: Row }) {
   return <span className="sdr-chip" data-tone={row.priority}>{intentLabels[row.intent] ?? "Respuesta pendiente"}</span>;
 }
 
-function ActionBar({ actions, note, setNote, busy, needsNote }: {
-  actions: Array<{ key: string; label: string; run: () => void; needsNote: boolean }>;
-  note: string; setNote: (v: string) => void; busy: boolean; needsNote: boolean;
-}) {
-  const [primary, ...rest] = actions;
-  if (!primary) return null;
-  const noteOk = note.trim().length >= 5;
+/** Lo que escribió la persona, sin firma, avisos legales, imágenes incrustadas ni el correo citado. */
+function visibleText(text: string): string {
+  return commercialText(text)
+    .replace(/\[(cid:[^\]]*|confidential|confidencial|external|externo|ext)\]/gi, "")
+    .replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
+function Message({ from, date, text, ours }: { from: string; date: string | null; text: string; ours: boolean }) {
+  const [full, setFull] = useState(false);
+  const short = visibleText(text);
+  const trimmed = short.length > 0 && short.length < text.trim().length - 8;
   return (
-    <div className="sdr-actions">
-      {needsNote ? (
-        <label className="sdr-note">
-          <span>Nota de revisión</span>
-          <textarea aria-label="Nota de revisión" maxLength={1000} onChange={e => setNote(e.target.value)} placeholder="Qué decidiste y por qué (mínimo 5 caracteres)" value={note} />
-        </label>
-      ) : null}
-      <div className="sdr-actions-row">
-        <button className="sdr-btn" data-primary="" disabled={busy || (primary.needsNote && !noteOk)} onClick={primary.run} type="button">{primary.label}</button>
-        {rest.length > 0 ? (
-          <details className="sdr-menu">
-            <summary aria-label="Más acciones">Más acciones</summary>
-            <div className="sdr-menu-list" role="menu">
-              {rest.map(a => <button disabled={busy || (a.needsNote && !noteOk)} key={a.key} onClick={a.run} role="menuitem" type="button">{a.label}</button>)}
-            </div>
-          </details>
-        ) : null}
-      </div>
+    <div className="sdr-msg" data-ours={ours ? "" : undefined}>
+      <p className="sdr-msg-meta">{ours ? "ENNCO" : from}{date ? ` · ${fullDate(date)}` : ""}</p>
+      <p className="sdr-msg-text">{full || !trimmed ? text.trim() : short}</p>
+      {trimmed ? <button className="sdr-msg-more" onClick={() => setFull(v => !v)} type="button">{full ? "Ver menos" : "Ver completo"}</button> : null}
     </div>
   );
 }
 
-function CaseDetail({ row, canOperate }: { row: Extract<Row, { kind: "case" }>; canOperate: boolean }) {
+/** Abre la conversación en el último mensaje. */
+const scrollToEnd = (el: HTMLDivElement | null) => { if (el) el.scrollTop = el.scrollHeight; };
+
+function CaseDetail({ row, canOperate, onBack }: { row: Extract<Row, { kind: "case" }>; canOperate: boolean; onBack: (() => void) | null }) {
   const item = row.item;
-  const router = useRouter(); const [note, setNote] = useState(""); const [status, setStatus] = useState(""); const [busy, setBusy] = useState(false);
-  const reviewable = !["QUEUED", "SENT", "SUPPRESSED"].includes(item.state);
-  async function act(action: string) {
+  const router = useRouter(); const [status, setStatus] = useState(""); const [busy, setBusy] = useState(false);
+  async function ack() {
     setBusy(true); setStatus("");
-    try { await mutate({ action, case_id: item.id, ...(action === "ACK" ? {} : { thread_hash: item.thread_hash, note }) }); setStatus(action === "ACK" ? "Aviso recibido y registrado." : "Revisión guardada."); router.refresh(); }
+    try { await mutate({ action: "ACK", case_id: item.id }); setStatus("Aviso recibido y registrado."); router.refresh(); }
     catch (error) { setStatus(error instanceof Error ? error.message : "No se pudo guardar."); }
     finally { setBusy(false); }
   }
-  const actions: Array<{ key: string; label: string; run: () => void; needsNote: boolean }> = [];
-  if (canOperate && reviewable && item.decision?.eligible) actions.push({ key: "APPROVE", label: "Aprobar borrador para envío", run: () => void act("APPROVE"), needsNote: true });
-  if (canOperate && item.can_ack) actions.push({ key: "ACK", label: "Confirmar recepción del aviso", run: () => void act("ACK"), needsNote: false });
-  if (canOperate && reviewable) {
-    actions.push({ key: "REVIEWED", label: "Registrar revisión y siguiente acción", run: () => void act("REVIEWED"), needsNote: true });
-    actions.push({ key: "RETRY", label: "Revisar de nuevo el hilo", run: () => void act("RETRY"), needsNote: true });
-  }
   return (
     <article className="sdr-detail-body" aria-label={intentLabels[row.intent] ?? "Respuesta pendiente"}>
-      <header className="sdr-detail-head">
-        <div className="sdr-detail-who">
-          <h3>{row.who}</h3>
-          <p>{row.company} · respondió a <strong>{item.mailbox_email}</strong></p>
-        </div>
-        <div className="sdr-detail-chips">
-          <IntentChip row={row} />
-          <span className="sdr-chip" data-tone="state">{stateLabels[item.state] ?? "Por revisar"}</span>
-        </div>
-      </header>
-      <p className="sdr-subject">{row.subject}{Number.isFinite(row.at) ? <span> · {ago(row.at)}</span> : null}</p>
-
-      <div className="sdr-next"><span>Siguiente acción</span><p>{item.next_action}</p></div>
-      {item.reply_classification === "UNREVIEWED" ? <p className="sdr-hint">Clasificación comercial pendiente: se registra en Respuestas; la sugerencia del SDR no la sustituye.</p> : null}
-
-      <div className="sdr-thread" aria-label="Conversación">
-        {item.conversation.length === 0 ? <p className="sdr-hint">Sin mensajes recuperados de este hilo.</p> : null}
-        {item.conversation.map((m, i) => {
-          const ours = m.from.toLowerCase().includes(item.mailbox_email.toLowerCase());
-          return (
-            <div className="sdr-msg" data-ours={ours ? "" : undefined} key={i}>
-              <p className="sdr-msg-meta">{ours ? "ENNCO" : m.from} · {fullDate(m.date)}</p>
-              <p className="sdr-msg-text">{m.text}</p>
-            </div>
-          );
-        })}
+      <div className="sdr-detail-top">
+        {onBack ? <button className="sdr-back" onClick={onBack} type="button">← Volver a la bandeja</button> : null}
+        <header className="sdr-detail-head">
+          <div className="sdr-detail-who">
+            <h3>{row.who}</h3>
+            <p>{row.company} · respondió a <strong>{item.mailbox_email}</strong></p>
+          </div>
+          <div className="sdr-detail-chips">
+            <IntentChip row={row} />
+            <span className="sdr-chip" data-tone="state">{stateLabels[item.state] ?? "Por revisar"}</span>
+          </div>
+        </header>
+        <p className="sdr-subject">{row.subject}{Number.isFinite(row.at) ? <span> · {ago(row.at)}</span> : null}</p>
+        <div className="sdr-next"><span>Siguiente acción</span><p>{item.next_action}</p></div>
       </div>
 
-      {item.decision?.evidence?.length ? (
-        <div className="sdr-evidence"><span>Por qué lo clasificó así</span>{item.decision.evidence.map((text, i) => <blockquote key={i}>{text}</blockquote>)}</div>
-      ) : null}
-      {item.decision?.draft ? <details className="sdr-draft" open><summary>Borrador sugerido</summary><p>{item.decision.draft}</p></details> : null}
+      <div className="sdr-thread" aria-label="Conversación" ref={scrollToEnd} tabIndex={0}>
+        {item.conversation.length === 0 ? <p className="sdr-hint">Sin mensajes recuperados de este hilo.</p> : null}
+        {item.conversation.map((m, i) => (
+          <Message date={m.date} from={m.from} key={i} ours={m.from.toLowerCase().includes(item.mailbox_email.toLowerCase())} text={m.text} />
+        ))}
+      </div>
 
-      <ActionBar actions={actions} busy={busy} needsNote={actions.some(a => a.needsNote)} note={note} setNote={setNote} />
-      {status ? <p className="sdr-status" role="status">{status}</p> : null}
-      <p className="sdr-fine">La sugerencia del SDR no crea un lead ni una obligación contractual. La clasificación comercial se revisa por separado.</p>
+      <footer className="sdr-detail-foot">
+        {item.decision?.evidence?.length ? (
+          <details className="sdr-evidence"><summary>Por qué lo clasificó así</summary>{item.decision.evidence.map((text, i) => <blockquote key={i}>{text}</blockquote>)}</details>
+        ) : null}
+        <div className="sdr-foot-row">
+          <p className="sdr-fine">Solo lectura: las respuestas se contestan desde el correo. La clasificación del SDR no crea un lead ni una obligación contractual.</p>
+          {canOperate && item.can_ack ? <button className="sdr-btn" data-primary="" disabled={busy} onClick={() => void ack()} type="button">Confirmar aviso</button> : null}
+        </div>
+        {status ? <p className="sdr-status" role="status">{status}</p> : null}
+      </footer>
     </article>
   );
 }
 
-function UnmatchedDetail({ row, canOperate }: { row: Extract<Row, { kind: "unmatched" }>; canOperate: boolean }) {
+function UnmatchedDetail({ row, onBack }: { row: Extract<Row, { kind: "unmatched" }>; onBack: (() => void) | null }) {
   const item = row.item;
-  const router = useRouter(); const [note, setNote] = useState(""); const [status, setStatus] = useState(""); const [busy, setBusy] = useState(false);
-  async function review(decision: "REVIEWED" | "UNRELATED" | "NEEDS_CONTEXT") {
-    setBusy(true); setStatus("");
-    try {
-      const body = { decision, note: note.trim() };
-      const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(JSON.stringify(body) + crypto.randomUUID()));
-      const key = Array.from(new Uint8Array(digest)).map(v => v.toString(16).padStart(2, "0")).join("");
-      const response = await fetch(`/api/v1/operations/correos/sdr/unmatched/${item.id}/review`, {
-        method: "POST", headers: { "Content-Type": "application/json", "Idempotency-Key": key }, body: JSON.stringify(body),
-      });
-      if (!response.ok) throw new Error("No se pudo registrar la revisión. Comprueba el correo antes de reintentar.");
-      setStatus("Revisión registrada."); router.refresh();
-    } catch (error) { setStatus(error instanceof Error ? error.message : "No se pudo registrar."); }
-    finally { setBusy(false); }
-  }
-  const actions = canOperate ? [
-    { key: "REVIEWED", label: "Registrar revisión", run: () => void review("REVIEWED"), needsNote: true },
-    { key: "NEEDS_CONTEXT", label: "Falta contexto", run: () => void review("NEEDS_CONTEXT"), needsNote: true },
-    { key: "UNRELATED", label: "No comercial", run: () => void review("UNRELATED"), needsNote: true },
-  ] : [];
   return (
     <article className="sdr-detail-body">
-      <header className="sdr-detail-head">
-        <div className="sdr-detail-who"><h3>{row.who}</h3><p>Correo recuperado fuera del hilo registrado</p></div>
-        <div className="sdr-detail-chips"><IntentChip row={row} /><span className="sdr-chip" data-tone="state">{item.decision === "NEEDS_CONTEXT" ? "Falta contexto" : "Sin revisar"}</span></div>
-      </header>
-      <p className="sdr-subject">{row.subject}</p>
-      <div className="sdr-next"><span>Siguiente acción</span><p>{item.next_action}</p></div>
-      <div className="sdr-thread"><div className="sdr-msg"><p className="sdr-msg-meta">{row.who}</p><p className="sdr-msg-text">{item.body_text ?? "Cuerpo pendiente de recuperación"}</p></div></div>
-      <ActionBar actions={actions} busy={busy} needsNote note={note} setNote={setNote} />
-      {status ? <p className="sdr-status" role="status">{status}</p> : null}
+      <div className="sdr-detail-top">
+        {onBack ? <button className="sdr-back" onClick={onBack} type="button">← Volver a la bandeja</button> : null}
+        <header className="sdr-detail-head">
+          <div className="sdr-detail-who"><h3>{row.who}</h3><p>Correo recuperado fuera del hilo registrado</p></div>
+          <div className="sdr-detail-chips"><IntentChip row={row} /><span className="sdr-chip" data-tone="state">{item.decision === "NEEDS_CONTEXT" ? "Falta contexto" : "Sin revisar"}</span></div>
+        </header>
+        <p className="sdr-subject">{row.subject}</p>
+        <div className="sdr-next"><span>Siguiente acción</span><p>{item.next_action}</p></div>
+      </div>
+      <div className="sdr-thread" aria-label="Conversación" ref={scrollToEnd} tabIndex={0}>
+        <Message date={null} from={row.who} ours={false} text={item.body_text ?? "Cuerpo pendiente de recuperación"} />
+      </div>
+      <footer className="sdr-detail-foot"><p className="sdr-fine">Solo lectura: este correo no quedó ligado a un envío del motor; se atiende desde el correo.</p></footer>
     </article>
   );
 }
@@ -325,10 +293,10 @@ export function CorreosSdr({ screen, canOperate, canAdmin }: { screen: SdrScreen
             ))}
           </ul>
           <div className="sdr-detail">
-            {selectedId ? <button className="sdr-back" onClick={() => setSelectedId(null)} type="button">← Volver a la bandeja</button> : null}
             {!selected ? <p className="sdr-empty">Elige una respuesta para leerla.</p>
-              : selected.kind === "case" ? <CaseDetail canOperate={canOperate} key={selected.id} row={selected} />
-              : <UnmatchedDetail canOperate={canOperate} key={selected.id} row={selected} />}
+              // La llave cambia al abrir en celular: el detalle se vuelve a montar visible y abre en el último mensaje.
+              : selected.kind === "case" ? <CaseDetail canOperate={canOperate} key={`${selected.id}:${selectedId ? "abierto" : "bandeja"}`} onBack={selectedId ? () => setSelectedId(null) : null} row={selected} />
+              : <UnmatchedDetail key={`${selected.id}:${selectedId ? "abierto" : "bandeja"}`} onBack={selectedId ? () => setSelectedId(null) : null} row={selected} />}
           </div>
         </div>
       </section>
