@@ -33,14 +33,15 @@ type NavKey =
   | "medidores"
   | OperationModuleKey;
 
+// Un grupo sin label se pinta sin título (Inicio va solo, arriba de Control).
 const groups: Array<{
-  label: string;
+  label?: string;
   items: Array<{ key: NavKey; href: string }>;
 }> = [
+  { items: [{ key: "home", href: "/operacion" }] },
   {
     label: "Control",
     items: [
-      { key: "home", href: "/operacion" },
       { key: "inteligencia", href: "/operacion/inteligencia" },
       { key: "alertas", href: "/operacion/alertas" },
       { key: "cadencia", href: "/operacion/cadencia" },
@@ -106,7 +107,7 @@ function NavIcon({ id }: { id: NavKey }) {
 }
 
 function itemLabel(key: NavKey): string {
-  if (key === "home") return "Hoy";
+  if (key === "home") return "Inicio";
   if (key === "correos") return "Correos";
   if (key === "crm") return "CRM";
   if (key === "estadisticas") return "Estadísticas";
@@ -144,8 +145,8 @@ export function OperationsNav({ variant }: { variant: "desktop" | "mobile" }) {
     }
   }, [pathname, variant]);
   const links = groups.map((group) => (
-    <section className="operations-nav-group" key={group.label}>
-      <h2>{group.label}</h2>
+    <section className="operations-nav-group" key={group.label ?? "inicio"}>
+      {group.label ? <h2>{group.label}</h2> : null}
       <div>
         {group.items.map((item) => {
           const active =

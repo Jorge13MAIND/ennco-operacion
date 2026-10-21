@@ -14,7 +14,7 @@ export function SiteHeader({
     <header className={`site-header ${isOperations ? "site-header-operations" : ""}`}>
       <div className="shell topbar">
         <div className="site-brand-cluster">
-          <Link aria-label={isOperations ? "ENNCO Control Room, Hoy" : "ENNCO, inicio"} className="brand" href={isOperations ? "/operacion" : "/"}>
+          <Link aria-label={isOperations ? "ENNCO Control Room, Inicio" : "ENNCO, inicio"} className="brand" href={isOperations ? "/operacion" : "/"}>
             <img alt="" className="brand-lockup" height="85" src="/brand/ennco-lockup.svg" width="160" />
           </Link>
           {isOperations ? (
@@ -27,7 +27,7 @@ export function SiteHeader({
         <nav aria-label="Navegación principal" className="navlinks">
           {!isOperations ? <Link className="nav-capabilities" href="/#capacidades">Capacidades</Link> : null}
           <Link className="nav-diagnostic" href="/diagnostico">Diagnóstico</Link>
-          <Link className="nav-private-link" href="/operacion">{isOperations ? "Hoy" : "Acceso privado"}</Link>
+          <Link className="nav-private-link" href="/operacion">{isOperations ? "Inicio" : "Acceso privado"}</Link>
           {isOperations ? operationsAction : null}
         </nav>
       </div>
