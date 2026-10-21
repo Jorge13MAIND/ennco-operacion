@@ -52,11 +52,11 @@ const groups: Array<{
     label: "Comercial",
     items: [
       { key: "correos", href: "/operacion/correos" },
+      { key: "leads", href: "/operacion/leads" },
       { key: "crm", href: "/operacion/crm" },
       { key: "estadisticas", href: "/operacion/correos/estadisticas" },
       { key: "actividad", href: "/operacion/correos/actividad" },
       { key: "respuestas", href: "/operacion/respuestas" },
-      { key: "leads", href: "/operacion/leads" },
       { key: "campanas", href: "/operacion/campanas" },
     ],
   },

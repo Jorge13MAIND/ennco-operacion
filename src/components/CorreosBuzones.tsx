@@ -7,6 +7,7 @@ import type { DirectLaneOverview } from "@/lib/correos/overview";
    el detalle y las acciones de siempre; lo que hace cada acción no cambia. */
 
 type Mailbox = DirectLaneOverview["mailboxes"][number];
+type Round = DirectLaneOverview["mailbox_rounds"][number];
 
 const statusLabels: Record<string, string> = { DISCONNECTED: "Sin conectar", CONNECTED: "Conectado", PAUSED: "En pausa", KILLED: "Apagado" };
 const stamp = new Intl.DateTimeFormat("es-MX", { dateStyle: "short", timeStyle: "short", timeZone: "America/Mexico_City" });
@@ -23,7 +24,24 @@ function since(iso: string | null | undefined) {
 }
 const rampText = (m: Mailbox) => m.ramp_mode === "SCHEDULE" ? `Semanal ${(m.ramp_schedule ?? []).join("→")} (semana ${(m.ramp_week ?? 0) + 1})` : m.ramp_mode === "AUTO" ? "Automática" : `Fija ${m.fixed_cap}`;
 
-function Card({ m, onOpen }: { m: Mailbox; onOpen: () => void }) {
+/* Rotación (21-oct, Grant): cuántas personas lleva el buzón en cada ronda y cuántos toques de hoy fueron de cada una. */
+function Rotation({ rounds, compact }: { rounds: Round[]; compact?: boolean }) {
+  if (rounds.length === 0) return compact ? null : <span className="bz-rot-empty">Sin personas en rondas abiertas</span>;
+  return (
+    <span className="bz-rot" data-compact={compact ? "true" : undefined}>
+      {compact ? <span className="bz-rot-head">Rotación</span> : null}
+      {rounds.map(r => (
+        <span className="bz-rot-row" key={r.round}>
+          <b>{compact ? `R${r.round}` : `Ronda ${r.round}`}</b>
+          <span>{r.open.toLocaleString("es-MX")}{compact ? "" : r.open === 1 ? " persona" : " personas"}</span>
+          <small>{r.today} hoy</small>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function Card({ m, rounds, onOpen }: { m: Mailbox; rounds: Round[]; onOpen: () => void }) {
   const cap = m.ceiling ?? m.cap_max;
   const pct = cap > 0 ? Math.min(100, Math.round((m.sent_today / cap) * 100)) : 0;
   const [user, domain] = m.normalized_email.split("@");
@@ -36,6 +54,7 @@ function Card({ m, onOpen }: { m: Mailbox; onOpen: () => void }) {
       <span className="bz-count"><span>Hoy</span><strong>{m.sent_today}</strong><span>/ {cap}</span></span>
       {/* <progress> y no un div con style={{ width }}: la CSP del hub bloquea estilos en línea y la barra salía llena. */}
       <progress aria-hidden="true" className="bz-bar" max={100} value={pct} />
+      <Rotation compact rounds={rounds} />
       <span className="bz-foot">
         {m.status !== "CONNECTED" ? <em>{statusLabels[m.status] ?? m.status}</em> : m.last_error ? <em>Con error</em> : <span>{since(m.sync?.last_synced_at)}</span>}
         <span>{m.sent_total} env.</span>
@@ -44,7 +63,7 @@ function Card({ m, onOpen }: { m: Mailbox; onOpen: () => void }) {
   );
 }
 
-export function MailboxDetail({ m, canOperate, canApprove, onClose }: { m: Mailbox; canOperate: boolean; canApprove: boolean; onClose: () => void }) {
+export function MailboxDetail({ m, rounds = [], canOperate, canApprove, onClose }: { m: Mailbox; rounds?: Round[]; canOperate: boolean; canApprove: boolean; onClose: () => void }) {
   return (
     <div className="bz-dialog-body">
       <header className="bz-dialog-head">
@@ -58,6 +77,7 @@ export function MailboxDetail({ m, canOperate, canApprove, onClose }: { m: Mailb
 
       <dl className="bz-facts">
         <div><dt>Hoy</dt><dd>{m.sent_today} de {m.ceiling ?? m.cap_max}{typeof m.new_today === "number" ? <small>nuevos {m.new_today}/{m.new_cap ?? m.effective_cap}</small> : null}{m.queued > 0 ? <small>{m.queued} en cola</small> : null}</dd></div>
+        <div><dt>Rotación</dt><dd><Rotation rounds={rounds} /></dd></div>
         <div><dt>Tope</dt><dd>{rampText(m)} · techo {m.cap_max}{m.first_send_at ? <small>primer envío {stamp.format(new Date(m.first_send_at))}</small> : null}</dd></div>
         <div><dt>Sincronización</dt><dd>{m.sync?.last_synced_at ? stamp.format(new Date(m.sync.last_synced_at)) : "Sin sync"}{m.sync?.last_error_code ? <small className="bz-err">{m.sync.last_error_code}</small> : null}</dd></div>
         <div><dt>Actividad</dt><dd>{m.sent_total} enviados{m.last_error ? <small className="bz-err">{m.last_error}</small> : null}</dd></div>
@@ -80,13 +100,15 @@ export function MailboxDetail({ m, canOperate, canApprove, onClose }: { m: Mailb
   );
 }
 
-export function CorreosBuzones({ mailboxes, canOperate, canApprove }: { mailboxes: Mailbox[]; canOperate: boolean; canApprove: boolean }) {
+export function CorreosBuzones({ mailboxes, rounds = [], canOperate, canApprove }: { mailboxes: Mailbox[]; rounds?: Round[]; canOperate: boolean; canApprove: boolean }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [openId, setOpenId] = useState<string | null>(null);
   const m = mailboxes.find(x => x.mailbox_id === openId) ?? null;
   const connected = mailboxes.filter(x => x.status === "CONNECTED" && x.credential_active).length;
   const sentToday = mailboxes.reduce((s, x) => s + x.sent_today, 0);
   const capToday = mailboxes.filter(x => x.status === "CONNECTED").reduce((s, x) => s + (x.ceiling ?? x.cap_max), 0);
+
+  const roundsOf = (id: string) => rounds.filter(r => r.mailbox_id === id).sort((a, b) => a.round - b.round);
 
   function open(id: string) { setOpenId(id); dialog.current?.showModal(); }
   function close() { dialog.current?.close(); }
@@ -98,11 +120,11 @@ export function CorreosBuzones({ mailboxes, canOperate, canApprove }: { mailboxe
         <span>{connected}/{mailboxes.length} conectados · {sentToday} de {capToday} enviados hoy</span>
       </header>
       <div className="bz-row">
-        {mailboxes.map(x => <Card key={x.mailbox_id} m={x} onOpen={() => open(x.mailbox_id)} />)}
+        {mailboxes.map(x => <Card key={x.mailbox_id} m={x} onOpen={() => open(x.mailbox_id)} rounds={roundsOf(x.mailbox_id)} />)}
       </div>
 
       <dialog className="bz-dialog" onClick={e => { if (e.target === e.currentTarget) close(); }} onClose={() => setOpenId(null)} ref={dialog}>
-        {m ? <MailboxDetail canApprove={canApprove} canOperate={canOperate} m={m} onClose={close} /> : null}
+        {m ? <MailboxDetail canApprove={canApprove} canOperate={canOperate} m={m} onClose={close} rounds={roundsOf(m.mailbox_id)} /> : null}
       </dialog>
     </section>
   );

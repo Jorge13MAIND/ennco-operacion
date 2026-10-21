@@ -143,7 +143,7 @@ export default async function CorreosPage() {
         <div className="metric"><span>Secuencias activas</span><strong><MetricValue value={sumEnrollments(overview, ["PENDING", "ACTIVE"])} /></strong></div>
       </section>
 
-      <CorreosBuzones canApprove={screen.canApprove} canOperate={canOperate} mailboxes={overview.mailboxes} />
+      <CorreosBuzones canApprove={screen.canApprove} canOperate={canOperate} mailboxes={overview.mailboxes} rounds={overview.mailbox_rounds} />
 
       <CorreosSdr screen={sdr} canOperate={canOperate} canAdmin={canOperate && screen.canApprove} userId={access.userId} />
 

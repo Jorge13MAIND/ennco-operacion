@@ -41,6 +41,17 @@
 .bz-bar::-moz-progress-bar { background: currentColor; border-radius: 999px; }
 .bz-card[data-tone="warn"] .bz-bar { color: var(--bz-warn); }
 .bz-card[data-tone="bad"] .bz-bar { color: var(--bz-bad); }
+/* Rotación: personas por ronda y toques de hoy por ronda (21-oct). */
+.bz-rot { display: grid; gap: 3px; font-size: 0.74rem; font-variant-numeric: tabular-nums; min-width: 0; }
+.bz-rot-head { color: var(--bz-muted); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.bz-rot-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; align-items: baseline; }
+.bz-rot-row b { color: var(--bz-accent); font-weight: 700; min-width: 1.9em; }
+.bz-rot-row span { color: var(--bz-ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bz-rot-row small { color: var(--bz-muted); font-size: 0.7rem; white-space: nowrap; }
+.bz-rot:not([data-compact]) { font-size: 0.86rem; gap: 4px; }
+.bz-rot:not([data-compact]) .bz-rot-row b { min-width: 4.6em; }
+.bz-rot:not([data-compact]) .bz-rot-row small { font-size: 0.78rem; }
+.bz-rot-empty { color: var(--bz-muted); font-size: 0.84rem; }
 .bz-foot { display: flex; justify-content: space-between; gap: 6px; font-size: 0.72rem; color: var(--bz-muted); min-width: 0; }
 .bz-foot > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bz-foot em { font-style: normal; font-weight: 600; color: #92400e; }

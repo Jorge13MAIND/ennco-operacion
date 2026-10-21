@@ -64,6 +64,8 @@ export const directLaneOverviewSchema = directLaneHealthSchema.extend({
   pending_replies: z.array(pendingReplySchema).default([]),
   upcoming: z.array(z.object({ day: z.string(), touches: z.number() })).default([]),
   recent_ticks: z.array(z.object({ tick_kind: z.string(), outcome: z.string(), created_at: z.string(), mailbox_id: z.uuid().nullable().optional(), detail: z.unknown().optional() })).default([]),
+  // Rotación por buzón (114): personas abiertas por ronda y toques de hoy por ronda.
+  mailbox_rounds: z.array(z.object({ mailbox_id: z.uuid(), round: z.number().int(), open: z.number().int(), today: z.number().int() })).default([]),
 });
 
 export type DirectLaneOverview = z.infer<typeof directLaneOverviewSchema>;
@@ -106,6 +108,10 @@ export function getSyntheticDirectLaneOverview(now = new Date()): DirectLaneOver
       },
     ],
     totals: { sent_today: 2, shadow_today: 0, queued: 1, failed_today: 0, sent_total: 12, replies_unreviewed: 1, due_now: 3 },
+    mailbox_rounds: [
+      { mailbox_id: "41000000-0000-4000-8000-000000000201", round: 1, open: 6, today: 2 },
+      { mailbox_id: "41000000-0000-4000-8000-000000000201", round: 2, open: 3, today: 0 },
+    ],
     flags: { global_kill_switch: false, external_send_allowed: true, annex_a_ready: true, send_window_open: true, running_campaigns: 1 },
     last_tick: { tick_kind: "CLAIM", outcome: "CLAIMED_TOUCH", created_at: iso(-2), mailbox_id: "41000000-0000-4000-8000-000000000201" },
     campaigns: [{
