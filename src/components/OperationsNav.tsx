@@ -33,21 +33,12 @@ type NavKey =
   | "medidores"
   | OperationModuleKey;
 
-// Un grupo sin label se pinta sin título (Inicio va solo, arriba de Control).
+// Un grupo sin label se pinta sin título (Inicio va solo, arriba de todo). Control va debajo de Comercial (21-oct).
 const groups: Array<{
   label?: string;
   items: Array<{ key: NavKey; href: string }>;
 }> = [
   { items: [{ key: "home", href: "/operacion" }] },
-  {
-    label: "Control",
-    items: [
-      { key: "inteligencia", href: "/operacion/inteligencia" },
-      { key: "alertas", href: "/operacion/alertas" },
-      { key: "cadencia", href: "/operacion/cadencia" },
-      { key: "infraestructura", href: "/operacion/infraestructura" },
-    ],
-  },
   {
     label: "Comercial",
     items: [
@@ -58,6 +49,15 @@ const groups: Array<{
       { key: "actividad", href: "/operacion/correos/actividad" },
       { key: "respuestas", href: "/operacion/respuestas" },
       { key: "campanas", href: "/operacion/campanas" },
+    ],
+  },
+  {
+    label: "Control",
+    items: [
+      { key: "inteligencia", href: "/operacion/inteligencia" },
+      { key: "alertas", href: "/operacion/alertas" },
+      { key: "cadencia", href: "/operacion/cadencia" },
+      { key: "infraestructura", href: "/operacion/infraestructura" },
     ],
   },
   {
